@@ -20,12 +20,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'phone',
-        'signature',
-        'designation',
+        'contact',
         'is_manager',
         'is_admin',
-        'image',
+        'photo',
+        'token',
     ];
 
     /**
@@ -46,4 +45,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function restaurant(){
+      return  $this->hasOne(Restaurant::class);
+    }
 }

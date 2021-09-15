@@ -17,7 +17,7 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between mb-4">
                                 <div class="ms-header-text">
-                                    <h4 class="mt-0 header-title">Home hero Section</h4>
+                                    <h4 class="mt-0 header-title">Home Hero Section</h4>
                                 </div>
 
                                 <button type="button" class="btn btn-outline-purple float-right waves-effect waves-light"
@@ -35,9 +35,10 @@
                                     style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                     <thead>
                                         <tr>
+                                            <th>Photo</th>
                                             <th>Heading</th>
                                             <th>Description</th>
-                                            <th>Photo</th>
+                                          
 
                                             <th>Action</th>
                                         </tr>
@@ -46,11 +47,13 @@
                                         @if (!empty($hero_sections))
                                             @foreach ($hero_sections as $hero_section)
                                                 <tr class="hero_section{{ $hero_section->home_hero_section_id }}">
+                                                    <td><img class="img-fluid"
+                                                        src="{{ asset('images/' . $hero_section->pic) }}"
+                                                        style="width: 60px; height: 55px;">
+                                                     </td>
                                                     <td>{{ $hero_section->heading }}</td>
                                                     <td>{{ $hero_section->formated_description }}...</td>
-                                                    <td><img class="img-fluid"
-                                                            src="{{ asset('images/' . $hero_section->pic) }}"
-                                                            style="width: 60px; height: 55px;"></td>
+                                                  
                                                     <td>
 
                                                         <button type='button' class='btn btn-outline-purple'
@@ -91,7 +94,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-block">
-                    <h5 class="modal-title mt-0 text-center">Add New</h5>
+                    <h5 class="modal-title mt-0 text-center">Add a new Home Hero Slider</h5>
                     <button type="button" class="close modal_close_icon" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
@@ -109,7 +112,7 @@
 
 
                         <div class="form-group ">
-                            <label>Image</label>
+                            <label>Photo</label>
                             <div class="custom-file">
                                 <input type="file" name="pic" class="custom-file-input dropify"
                                     data-errors-position="outside" data-allowed-file-extensions='["jpg", "png"]'
@@ -137,7 +140,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-block">
-                    <h5 class="modal-title mt-0 text-center">Update Hero Section's Info</h5>
+                    <h5 class="modal-title mt-0 text-center">Update a Home Hero Slider's Info</h5>
                     <button type="button" class="close modal_close_icon" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
@@ -157,7 +160,7 @@
 
 
                         <div class="form-group ">
-                            <label>Image</label>
+                            <label>Photo</label>
                             <div class="custom-file edit_hero_section_photo">
                                 <input type="file" name="pic" id="edit_hero_section_photo" class="custom-file-input dropify"
                                     data-max-file-size="0.6M" data-errors-position="outside"
@@ -184,7 +187,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-block">
-                    <h5 class="modal-title mt-0 text-center">Hero Section's Details</h5>
+                    <h5 class="modal-title mt-0 text-center">Home Hero Slider's Details</h5>
                     <button type="button" class="close modal_close_icon" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
@@ -324,10 +327,11 @@
                     if (response.success == true) {
                         var heroSectionTable = $('#heroSectionTable').DataTable();
                         var row = $('<tr>')
-                            .append(`<td>` + response.data.heading + `</td>`)
-                            .append(`<td>` + response.data.description + `</td>`)
                             .append(`<td><img class="img-fluid" src="${imagesUrl}` +
                                 `${response.data.image}" style='width: 60px; height: 55px;'></td>`)
+                            .append(`<td>` + response.data.heading + `</td>`)
+                            .append(`<td>` + response.data.description + `</td>`)
+                          
                             .append(`<td><button type='button' class='btn btn-outline-purple' onclick='viewHeroSection(${response.data.id})'>
                                 <i class='fa fa-eye'></i>
                             </button>
@@ -487,9 +491,10 @@
                         if (response.success == true) {
                             $('.hero_section' + response.data.id).html(
                                 `
+                                <td><img class="img-fluid" src="${imagesUrl}` + `${response.data.image}" style='width: 60px; height: 55px;'></td>   
                                 <td>${response.data.heading}</td>
                                 <td>${response.data.description}...</td>
-                                <td><img class="img-fluid" src="${imagesUrl}` + `${response.data.image}" style='width: 60px; height: 55px;'></td>     
+                                  
                                 <td><button type='button' class='btn btn-outline-purple' onclick='viewHeroSection(${response.data.id})'>
                                 <i class='fa fa-eye'></i>
                             </button>

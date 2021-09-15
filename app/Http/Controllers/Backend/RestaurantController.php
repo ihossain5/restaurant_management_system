@@ -7,6 +7,7 @@ use App\Http\Requests\RestaurantStoreRequest;
 use App\Models\AssetRestaurant;
 use App\Models\AssetType;
 use App\Models\Restaurant;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 

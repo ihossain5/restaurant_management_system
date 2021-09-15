@@ -68,16 +68,13 @@
                             <span> Admin Management </span>
                         </a>
                     </li> --}}
-        {{-- <li class="has_sub">
-                                <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-user"></i><span> User Management <span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
+        <li class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-user"></i><span> Users <span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                                 <ul class="list-unstyled">
-                                   
-                                    <li><a href="{{ route('admin.users') }}">Users</a></li>
-                                     @if (Auth::user()->is_super_admin == 1 || Auth::user()->is_admin == 1)
                                     <li><a href="{{ route('admin.admins') }}">Admins</a></li>
-                                   @endif
+                                    <li><a href="{{ route('restaurant.manager') }}">Restaurant Managers</a></li>
                                 </ul>
-                            </li> --}}
+                            </li>
         <li class="has_sub">
             <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-web"></i><span>Website
                     Content<span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>

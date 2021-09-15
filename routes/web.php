@@ -5,6 +5,7 @@ use App\Http\Controllers\Backend\AboutUsController;
 use App\Http\Controllers\Backend\AssetTypeController;
 use App\Http\Controllers\Backend\ContactUsController;
 use App\Http\Controllers\Backend\HomeHeroSectionController;
+use App\Http\Controllers\Backend\ManagerController;
 use App\Http\Controllers\Backend\RestaurantController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\UserController;
@@ -93,7 +94,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
 
     });  //* Asset Type route end */
 
-    //* Asset Type route start */
+    //* Restaurant route start */
     Route::group(['prefix' => 'restaurants'], function () {
         Route::get('/', [RestaurantController::class, 'index'])->name('restaurant.index');
         Route::post('/store', [RestaurantController::class, 'store'])->name('restaurant.store');
@@ -103,7 +104,21 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
         Route::post('/delete', [RestaurantController::class, 'destroy'])->name('restaurant.delete');
         Route::post('/deleteAsset', [RestaurantController::class, 'deleteAsset'])->name('restaurant.asset.delete');
 
-    });  //* Asset Type route end */
+    });  //* Restaurant route end */
+
+    //* Restaurant Manager route start */
+    Route::group(['prefix' => 'managers'], function () {
+        Route::get('/', [ManagerController::class, 'index'])->name('restaurant.manager');
+        Route::post('/store', [ManagerController::class, 'store'])->name('restaurant.manager.store');
+        Route::post('/edit', [ManagerController::class, 'edit'])->name('restaurant.manager.edit');
+        Route::post('/show', [ManagerController::class, 'show'])->name('restaurant.manager.show');
+        Route::post('/update', [ManagerController::class, 'update'])->name('restaurant.manager.update');
+        Route::post('/delete', [ManagerController::class, 'destroy'])->name('restaurant.manager.delete');
+
+      
+
+
+    });  //* Restaurant Manager route end */
   
 
 });
@@ -118,3 +133,6 @@ Route::group(['prefix' => 'admin'], function () {
 
 Route::get('/super-admin', [UserController::class, 'superAdmin']);
 Route::post('/make/super/admin', [UserController::class, 'makeSuperAdmin'])->name('is.superadmin');
+
+Route::get('/send-email/{token}', [ManagerController::class, 'registerNewManager'])->name('send.email');
+Route::post('/sign-up', [ManagerController::class, 'userSignUp'])->name('user.sign.up');

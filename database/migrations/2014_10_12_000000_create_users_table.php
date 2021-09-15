@@ -18,8 +18,10 @@ class CreateUsersTable extends Migration {
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->string('phone');
-            $table->boolean('is_admin')->default('0');
+            $table->string('contact');
+            $table->string('photo');
+            $table->boolean('is_manager')->default('0');
+            $table->boolean('is_super_admin')->default('0');
             $table->timestamps();
         });
     }

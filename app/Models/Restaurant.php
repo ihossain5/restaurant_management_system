@@ -17,6 +17,8 @@ class Restaurant extends Model
         'contact',
         'email',
         'address',
+        'user_id',
+        'logo',
     ];
 
     public function assets(){

@@ -40,6 +40,9 @@
             text-align: center;
             vertical-align: middle !important;
         }
+        td img {
+            border-radius: 50%;
+        }
 
         .modal_close_icon {
             padding: 2px 15px !important;

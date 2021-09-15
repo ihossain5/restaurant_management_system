@@ -209,8 +209,18 @@
                             <label>Address</label>
                             <textarea name="address" id="" class="form-control" cols="30" rows="3"></textarea>
                         </div>
-
+                        <div class="form-group">
+                            <label>Logo</label>
+                            <div class="custom-file">
+                                <input type="file" name="logo" class="custom-file-input dropify"
+                                    data-id="0" data-errors-position="outside"
+                                    data-allowed-file-extensions='["jpg", "png"]' data-max-file-size="0.6M"
+                                  >
+                            </div>
+                        </div>
+                        <label for="">Image</label>
                         <div class="row asset_row  asset_div0">
+                          
                             <div class="col-md-5">
                                 <div class="form-group">
                                     <select class="form-control asset error0" name="asset[][asset_type_id]" id="asset0"
@@ -242,6 +252,7 @@
                                         class="mdi mdi-close close_icon_add_form"></i></div>
                             </div>
                         </div>
+             
                         <div class="float-right" onclick="addRow()"><i class="mdi mdi-plus add_new_row_btn"></i></div>
 
                         <div class="form-group mt-5">
@@ -312,6 +323,15 @@
                         <div class="form-group">
                             <label>Address</label>
                             <textarea name="address" class="form-control" id="edit_address" cols="30" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Logo</label>
+                            <div class="custom-file">
+                                <input type="file" name="logo" class="custom-file-input dropify"
+                                    data-id="0" data-errors-position="outside"
+                                    data-allowed-file-extensions='["jpg", "png"]' data-max-file-size="0.6M"
+                                  >
+                            </div>
                         </div>
                         <span id="append_restaurant_assets"></span>
                         <div class="float-right" onclick="addRowEdit()"><i class="mdi mdi-plus add_new_row_btn"></i>
@@ -425,29 +445,65 @@
         $(document).ready(function() {
             // add form validation
             $(".restaurantAddForm").validate({
+                ignore: [],
                 rules: {
-                    heading: {
+                    name: {
                         required: true,
+                        maxlength: 100,
+                    },
+                    'asset[][asset_type_id]': {
+                            required: true
+                            },
+                    'asset[][asset]': {
+                            required: true
+                            },
+                    type: {
+                        required: true,
+                        maxlength: 100,
+                    },
+                    contact: {
+                        required: true,
+                        maxlength: 100,
+                    },
+                    email: {
+                        required: true,
+                        email: true,
                         maxlength: 100,
                     },
                     description: {
                         required: true,
                         maxlength: 10000,
                     },
-
-                    pic: {
+                    address: {
+                        required: true,
+                        maxlength: 10000,
+                    },
+                    logo: {
                         required: true,
                     },
                 },
                 messages: {
-                    heading: {
-                        required: 'Please insert hero section heading',
+                    name: {
+                        required: 'Please insert restaurant name',
+                    },
+                    type: {
+                        required: 'Please insert restaurant type',
+                    },
+                    contact: {
+                        required: 'Please insert restaurant contact number',
+                    },
+                    email: {
+                        required: 'Please insert restaurant email',
+                        email: 'Email must be valid',
                     },
                     description: {
-                        required: 'Please insert hero section description',
+                        required: 'Please insert restaurant description',
                     },
-                    pic: {
-                        required: 'Please upload hero section photo',
+                    address: {
+                        required: 'Please insert restaurant address',
+                    },
+                    logo: {
+                        required: 'Please upload restaurant logo',
                     },
                 },
                 errorPlacement: function(label, element) {
@@ -458,22 +514,54 @@
             // update form validation
             $(".updaterestaurantForm").validate({
                 rules: {
-                    heading: {
+                    name: {
                         required: true,
+                        maxlength: 100,
+                    },
+                    type: {
+                        required: true,
+                        maxlength: 100,
+                    },
+                    contact: {
+                        required: true,
+                        maxlength: 100,
+                    },
+                    email: {
+                        required: true,
+                        email: true,
                         maxlength: 100,
                     },
                     description: {
                         required: true,
                         maxlength: 10000,
                     },
+                    address: {
+                        required: true,
+                        maxlength: 10000,
+                    },
+
                 },
                 messages: {
-                    heading: {
-                        required: 'Please insert hero section heading',
+                    name: {
+                        required: 'Please insert restaurant name',
+                    },
+                    type: {
+                        required: 'Please insert restaurant type',
+                    },
+                    contact: {
+                        required: 'Please insert restaurant contact number',
+                    },
+                    email: {
+                        required: 'Please insert restaurant email',
+                        email: 'Email must be valid',
                     },
                     description: {
-                        required: 'Please insert hero section description',
+                        required: 'Please insert restaurant description',
                     },
+                    address: {
+                        required: 'Please insert restaurant address',
+                    },
+
                 },
                 errorPlacement: function(label, element) {
                     label.addClass('mt-2 text-danger');
@@ -1029,10 +1117,6 @@
                 },
             }); //ajax end
             }
-
-        
-
-
 
         }
     </script>

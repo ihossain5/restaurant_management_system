@@ -17,7 +17,7 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between mb-4">
                                 <div class="ms-header-text">
-                                    <h4 class="mt-0 header-title">About Us</h4>
+                                    <h4 class="mt-0 header-title">About Us Section</h4>
                                 </div>
 
                                 {{-- <button type="button" class="btn btn-outline-purple float-right waves-effect waves-light"
@@ -35,9 +35,9 @@
                                     style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                     <thead>
                                         <tr>
+                                            <th>Photo</th>
                                             <th>Heading</th>
                                             <th>Description</th>
-                                            <th>Photo</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -45,24 +45,19 @@
                                         @if (!empty($abouts))
                                             @foreach ($abouts as $about)
                                                 <tr class="hero_section{{ $about->about_us_id }}">
-                                                    <td>{{ $about->heading }}</td>
-                                                    <td>{{ $about->formated_description }}...</td>
                                                     <td><img class="img-fluid"
-                                                            src="{{ asset('images/' . $about->pic) }}"
-                                                            style="width: 60px; height: 55px;"></td>
+                                                        src="{{ asset('images/' . $about->pic) }}"
+                                                        style="width: 60px; height: 55px;">
+                                                    </td>
+                                                    <td>{{ $about->heading }}</td>
+                                                    <td>{{ $about->formated_description }}...</td>                                          
                                                     <td>
-
                                                         <button type='button' class='btn btn-outline-purple'
                                                             onclick='viewAboutUs({{ $about->about_us_id }})'><i
                                                                 class='fa fa-eye'></i></button>
                                                         <button type='button' class='btn btn-outline-purple '
                                                             onclick='editAboutUs({{ $about->about_us_id }})'><i
-                                                                class='mdi mdi-pencil'></i></button>
-                                                        {{-- <button type='button' name='delete' class="btn btn-outline-danger "
-                                                            onclick="deleteAboutUs({{ $about->id }})"><i
-                                                                class="mdi mdi-delete "></i></button> --}}
-
-
+                                                                class='mdi mdi-pencil'></i></button>  
                                                     </td>
 
                                                 </tr>
@@ -322,10 +317,11 @@
                     if (response.success == true) {
                         var AboutUsTable = $('#AboutUsTable').DataTable();
                         var row = $('<tr>')
-                            .append(`<td>` + response.data.heading + `</td>`)
-                            .append(`<td>` + response.data.description + `</td>`)
                             .append(`<td><img class="img-fluid" src="${imagesUrl}` +
                                 `${response.data.image}" style='width: 60px; height: 55px;'></td>`)
+                            .append(`<td>` + response.data.heading + `</td>`)
+                            .append(`<td>` + response.data.description + `</td>`)
+                          
                             .append(`<td><button type='button' class='btn btn-outline-purple' onclick='viewAboutUs(${response.data.id})'>
                                 <i class='fa fa-eye'></i>
                             </button>
@@ -486,9 +482,10 @@
                         if (response.success == true) {
                             $('.hero_section' + response.data.id).html(
                                 `
+                                <td><img class="img-fluid" src="${imagesUrl}` + `${response.data.image}" style='width: 60px; height: 55px;'></td>   
                                 <td>${response.data.heading}</td>
                                 <td>${response.data.description}...</td>
-                                <td><img class="img-fluid" src="${imagesUrl}` + `${response.data.image}" style='width: 60px; height: 55px;'></td>     
+                                  
                                 <td><button type='button' class='btn btn-outline-purple' onclick='viewAboutUs(${response.data.id})'>
                                 <i class='fa fa-eye'></i>
                             </button>
