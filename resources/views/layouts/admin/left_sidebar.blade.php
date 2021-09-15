@@ -61,20 +61,14 @@
                     Business Overview </span></a>
         </li>
 
-
-        {{-- <li>
-                        <a href="{{ route('admin.index') }}" class="waves-effect">
-                            <i class="dripicons-calendar"></i>
-                            <span> Admin Management </span>
-                        </a>
-                    </li> --}}
         <li class="has_sub">
-                                <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-user"></i><span> Users <span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
-                                <ul class="list-unstyled">
-                                    <li><a href="{{ route('admin.admins') }}">Admins</a></li>
-                                    <li><a href="{{ route('restaurant.manager') }}">Restaurant Managers</a></li>
-                                </ul>
-                            </li>
+            <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-user"></i><span> Users <span
+                        class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
+            <ul class="list-unstyled">
+                <li><a href="{{ route('admin.admins') }}">Admins</a></li>
+                <li><a href="{{ route('restaurant.manager') }}">Restaurant Managers</a></li>
+            </ul>
+        </li>
         <li class="has_sub">
             <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-web"></i><span>Website
                     Content<span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>

@@ -326,8 +326,8 @@
                         </div>
                         <div class="form-group">
                             <label>Logo</label>
-                            <div class="custom-file">
-                                <input type="file" name="logo" class="custom-file-input dropify"
+                            <div class="custom-file edit_logo">
+                                <input type="file" name="logo" id="edit_logo" class="custom-file-input dropify"
                                     data-id="0" data-errors-position="outside"
                                     data-allowed-file-extensions='["jpg", "png"]' data-max-file-size="0.6M"
                                   >
@@ -741,6 +741,22 @@
                         $('#edit_address').val(response.data.address)
                         $('#edit_description').val(response.data.description)
                         $('#hidden_id').val(response.data.restaurant_id)
+                        if (response.data.logo) {
+                            var photo = imagesUrl + response.data.logo;
+                            $("#edit_logo").attr("data-height", 150);
+                            $("#edit_logo").attr("data-min-width", 450);
+                            $("#edit_logo").attr("data-default-file", photo);
+                            $('.edit_logo').find(".dropify-wrapper").removeClass(
+                                "dropify-wrapper").addClass(
+                                "dropify-wrapper has-preview");
+                            $('.edit_logo').find(".dropify-preview").css('display', 'block');
+                            $('.edit_logo').find('.dropify-render').html('').html('<img src=" ' +
+                                photo +
+                                '">')
+                        } else {
+                            $(".dropify-preview .dropify-render img").attr("src", "");
+                            $('.dropify-preview').hide();
+                        }
                         $('#append_restaurant_assets').empty();
                         $.each(response.data.assets, function(key, value) {
                             $('#append_restaurant_assets').append(

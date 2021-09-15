@@ -7,7 +7,6 @@ use App\Http\Requests\RestaurantStoreRequest;
 use App\Models\AssetRestaurant;
 use App\Models\AssetType;
 use App\Models\Restaurant;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -16,17 +15,30 @@ class RestaurantController extends Controller {
         $asset_types = AssetType::get();
         $restaurants = Restaurant::with('assets')->latest()->get();
         foreach ($restaurants as $restaurant) {
-            $description                            = substr($restaurant->description, 0, 25);
+            $description                      = substr($restaurant->description, 0, 25);
             $restaurant->formated_description = $description;
             foreach ($restaurant->assets as $asset) {
                 $restaurant->asset = $asset->pivot->asset;
             }
-            $file_type                      = File::extension($restaurant->asset);
+            $file_type = File::extension($restaurant->asset);
         }
-        return view('admin.restaurant.restaurants', compact('asset_types','restaurants'));
+        return view('admin.restaurant.restaurants', compact('asset_types', 'restaurants'));
     }
     public function store(RestaurantStoreRequest $request) {
-        $restaurant        = Restaurant::create($request->validated());
+        $logo       = $request->logo;
+        if ($logo) {
+            $path     = 'restaurant-logo/';
+            $logo_url = storeImage($logo, $path, 80, 60);
+        }
+        $restaurant        = Restaurant::create([
+            'name'        => $request->name,
+            'type'        => $request->type,
+            'contact'     => $request->contact,
+            'email'       => $request->email,
+            'description' => $request->description,
+            'address'     => $request->address,
+            'logo'        => $logo_url,
+        ]);
         $restaurant_assets = $request->asset;
         $this->storeAssets($restaurant_assets, $restaurant);
         $description = substr($restaurant->description, 0, 25);
@@ -41,12 +53,12 @@ class RestaurantController extends Controller {
         $data['contact']     = $restaurant->contact;
         $data['email']       = $restaurant->email;
         $data['id']          = $restaurant->restaurant_id;
-    
+
         foreach ($restaurant->assets as $image) {
             $data['image'] = $image->pivot->asset;
         }
         foreach ($restaurant->assets as $image) {
-            $data['image'] = $image->pivot->asset;
+            $data['image']     = $image->pivot->asset;
             $data['file_type'] = File::extension($image->pivot->asset);
         }
 
@@ -56,16 +68,16 @@ class RestaurantController extends Controller {
         ]);
     }
 
-    public function show(Request $request){
+    public function show(Request $request) {
         $restaurant = Restaurant::with('assets')->findOrFail($request->id);
         return response()->json([
             'success' => true,
             'data'    => $restaurant,
         ]);
     }
-    public function edit(Request $request){
+    public function edit(Request $request) {
         $restaurant = Restaurant::with('assets')->findOrFail($request->id);
-        foreach($restaurant->assets as $asset){
+        foreach ($restaurant->assets as $asset) {
             $asset->id = $asset->pivot->asset_restaurant_id;
         }
         // dd($restaurant->assets);
@@ -74,11 +86,28 @@ class RestaurantController extends Controller {
             'data'    => $restaurant,
         ]);
     }
-    public function update(RestaurantStoreRequest $request){
+    public function update(RestaurantStoreRequest $request) {
         // dd($request->all());
         $restaurant = Restaurant::findOrFail($request->hidden_id);
+        $logo       = $request->logo;
+        if ($logo) {
+            deleteImage($restaurant->logo);
+            $path     = 'restaurant-logo/';
+            $logo_url = storeImage($logo, $path, 80, 60);
+        } else {
+            $logo_url = $restaurant->logo;
+        }
+        $restaurant->update([
+            'name'        => $request->name,
+            'type'        => $request->type,
+            'contact'     => $request->contact,
+            'email'       => $request->email,
+            'description' => $request->description,
+            'address'     => $request->address,
+            'logo'        => $logo_url,
+        ]);
         $item_assets_old = $request->asset;
-        $item_assets = $request->new_asset;
+        $item_assets     = $request->new_asset;
 
         foreach ($item_assets_old as $old_item_assets) {
             // dd();
@@ -113,7 +142,7 @@ class RestaurantController extends Controller {
                 File::delete(public_path('/images/' . $asset->asset));
 
                 $asset_item = AssetRestaurant::where('asset_restaurant_id', $old_item_assets['id'])->update([
-                    "restaurant_id"       => $restaurant->restaurant_id,
+                    "restaurant_id" => $restaurant->restaurant_id,
                     "asset_type_id" => $old_item_assets['asset_type_id'],
                     "asset"         => $url,
 
@@ -123,7 +152,7 @@ class RestaurantController extends Controller {
 
                 $asset_item = AssetRestaurant::where('asset_restaurant_id', $old_item_assets['id'])->update([
 
-                    "restaurant_id"       => $restaurant->restaurant_id,
+                    "restaurant_id" => $restaurant->restaurant_id,
                     "asset_type_id" => $old_item_assets['asset_type_id'],
                     // "url" => $url,
                     // "link" => $url,
@@ -168,7 +197,7 @@ class RestaurantController extends Controller {
                 // dd($work_asset['title']);
 
                 $asset                = new AssetRestaurant();
-                $asset->restaurant_id       = $restaurant->restaurant_id;
+                $asset->restaurant_id = $restaurant->restaurant_id;
                 $asset->asset_type_id = $asset_new['asset_type_id'];
                 $asset->asset         = $url;
                 $asset->save();
@@ -176,10 +205,7 @@ class RestaurantController extends Controller {
             }
         }
 
-      
-
-
-        $description = substr($restaurant->description, 0, 25);
+        $description         = substr($restaurant->description, 0, 25);
         $data                = array();
         $data['message']     = 'Restaurant updated successfully';
         $data['name']        = $restaurant->name;
@@ -190,17 +216,17 @@ class RestaurantController extends Controller {
         $data['contact']     = $restaurant->contact;
         $data['email']       = $restaurant->email;
         $data['id']          = $restaurant->restaurant_id;
-    
+
         foreach ($restaurant->assets as $image) {
             $data['image'] = $image->pivot->asset;
-            $fileType                      = File::extension($image->pivot->asset);
+            $fileType      = File::extension($image->pivot->asset);
         }
-        $data['file_type']   = $fileType;
+        $data['file_type'] = $fileType;
         return response()->json([
             'success' => true,
             'data'    => $data,
         ]);
-        
+
     }
     // public function update(RestaurantStoreRequest $request){
     //     $restaurant = Restaurant::findOrFail($request->hidden_id);
@@ -223,7 +249,7 @@ class RestaurantController extends Controller {
     //                 $url          = $upload_path . $filename;
     //                 $asset->move($upload_path1, $filename);
     //             }
-                
+
     //             $restaurant_data = AssetRestaurant::where('asset_type_id', $restaurant_asset['asset_type_id'])->first();
     //             if($restaurant_data){
     //                 deleteImage($restaurant_data->asset);
@@ -234,9 +260,6 @@ class RestaurantController extends Controller {
     //                 'asset' => $url,
     //             ];
     //             $restaurant->assets()->attach($values);
-              
-              
-                  
 
     //                 // $asset_item = AssetRestaurant::where('asset_type_id', $restaurant_asset['asset_type_id'])
     //                 // ->where('restaurant_id',$restaurant->restaurant_id)
@@ -246,7 +269,7 @@ class RestaurantController extends Controller {
 
     //                 // ]);
     //         }else{
-              
+
     //             // foreach($restaurant->assets as $asset){
     //             //     $url = $asset->pivot->asset;
 
@@ -258,14 +281,11 @@ class RestaurantController extends Controller {
     //             $values[] = $restaurant_asset['asset_type_id'];
     //             $restaurant->assets()->sync($values,true);
     //         }
-         
 
     //     }
     //     if($restaurant_new_assets){
     //         $this->storeAssets($restaurant_new_assets, $restaurant);
     //     }
-      
-
 
     //     $description = substr($restaurant->description, 0, 25);
     //     $data                = array();
@@ -278,7 +298,7 @@ class RestaurantController extends Controller {
     //     $data['contact']     = $restaurant->contact;
     //     $data['email']       = $restaurant->email;
     //     $data['id']          = $restaurant->restaurant_id;
-    
+
     //     foreach ($restaurant->assets as $image) {
     //         $data['image'] = $image->pivot->asset;
     //         $fileType                      = File::extension($image->pivot->asset);
@@ -288,9 +308,9 @@ class RestaurantController extends Controller {
     //         'success' => true,
     //         'data'    => $data,
     //     ]);
-        
+
     // }
-    public function destroy(Request $request){
+    public function destroy(Request $request) {
         $restaurant = Restaurant::findOrFail($request->id);
         foreach ($restaurant->assets as $asset) {
             deleteImage($asset->pivot->asset);
@@ -304,11 +324,11 @@ class RestaurantController extends Controller {
             'data'    => $data,
         ]);
     }
-    public function deleteAsset(Request $request){
+    public function deleteAsset(Request $request) {
         $asset = AssetRestaurant::findOrFail($request->id);
         deleteImage($asset->asset);
         $asset->delete();
-        $data['id']      = $request->id;
+        $data['id'] = $request->id;
 
         return response()->json([
             'success' => true,
@@ -316,7 +336,7 @@ class RestaurantController extends Controller {
         ]);
     }
 
-    public function storeAssets($restaurant_assets,$restaurant){
+    public function storeAssets($restaurant_assets, $restaurant) {
         foreach ($restaurant_assets as $restaurant_asset) {
             $asset     = $restaurant_asset['asset'];
             $file_type = $asset->getClientOriginalExtension();
@@ -336,5 +356,5 @@ class RestaurantController extends Controller {
 
         }
     }
-    
+
 }

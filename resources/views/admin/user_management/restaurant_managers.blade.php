@@ -143,7 +143,7 @@
                                                 <td>
 
                                                     <button type='button' class='btn btn-outline-purple'
-                                                        onclick='viewRestaurant({{ $manager->id }})'><i
+                                                        onclick='viewManager({{ $manager->id }})'><i
                                                             class='fa fa-eye'></i></button>
                                                     <button type='button' class='btn btn-outline-info '
                                                         onclick='editManager({{ $manager->id }})'><i
@@ -271,7 +271,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-block">
-                    <h5 class="modal-title mt-0 text-center">manager's Details</h5>
+                    <h5 class="modal-title mt-0 text-center">Manager's Details</h5>
                     <button type="button" class="close modal_close_icon" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
@@ -281,7 +281,7 @@
                             <img src="" id="view_image" class="view_employee_signature">
                         </div>
                     </div>
-                    <div class="col-xl-12 col-md-12 text-center mb-3">
+                    <div class="col-xl-12 col-md-12 text-center mb-3 role_div">
                         <div class="ms-form-group" style="font-size: 16px;">
                             <span class="badge badge-primary  p-1 view_role"></span>
                         </div>
@@ -303,6 +303,12 @@
                         <div class="ms-form-group">
                             <label for="name"><strong>Phone:</strong></label>
                             <p id="view_phone"></p>
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-md-12">
+                        <div class="ms-form-group">
+                            <label for="name"><strong>Restaurant Name:</strong></label>
+                            <p id="view_restaurant_name"></p>
                         </div>
                     </div>
 
@@ -441,7 +447,7 @@
                             .append(`<td>` + response.data.phone + `</td>`)
 
 
-                            .append(`<td><button type='button' class='btn btn-outline-purple' onclick='viewmanager(${response.data.id})'>
+                            .append(`<td><button type='button' class='btn btn-outline-purple' onclick='viewManager(${response.data.id})'>
                                 <i class='fa fa-eye'></i>
                             </button>
                             <button type='button' class='btn btn-outline-info' onclick='editManager(${response.data.id})'>
@@ -497,7 +503,7 @@
 
 
         // view single 
-        function viewmanager(id) {
+        function viewManager(id) {
             $.ajax({
                 url: config.routes.view,
                 method: "POST",
@@ -508,22 +514,23 @@
                 dataType: "json",
                 success: function(response) {
                     if (response.success == true) {
-                        if (response.data.is_admin == 1) {
-                            var role = 'Admin'
-
-                        } else {
-                            var role = 'manager'
+                        if (response.data.is_manager == 1) {
+                            $('.view_role').html('Manager');
+                        } else{
+                            alert('sds');
+                            $('.role_div').hide();
                         }
-                        $('.view_role').text(role);
+                        
                         $('#view_name').text(response.data.name);
                         $('#view_email').text(response.data.email);
-                        $('#view_phone').text(response.data.phone);
+                        $('#view_phone').text(response.data.contact ?? 'N/A');
+                        $('#view_restaurant_name').text(response.data.restaurant? response.data.restaurant.name : 'N/A' );
 
 
-                        if (response.data.image === null) {
-                            $('#view_image').removeAttr('src');
+                        if (response.data.photo === null) {
+                            $('#view_image').attr('src','/images/default.png');
                         } else {
-                            $('#view_image').attr('src', '/images/' + response.data.image);
+                            $('#view_image').attr('src', '/images/' + response.data.photo);
                         }
 
 
