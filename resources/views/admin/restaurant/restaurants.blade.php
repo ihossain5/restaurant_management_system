@@ -1,4 +1,7 @@
 @extends('layouts.admin.master')
+@section('page-header')
+    Restaurants Section
+@endsection
 @section('pageCss')
     <style>
         .btn_disabled {
@@ -19,8 +22,8 @@
             font-size: 25px;
             cursor: pointer;
             position: absolute;
-            margin: 4px -10px;
-            border: 1px solid #f24734;
+            margin: 35px -10px;
+            /* border: 1px solid #f24734; */
             color: #f24734;
         }
 
@@ -62,7 +65,10 @@
         .restaurant_image img {
             width: 100%;
         }
-
+        .add_row_btn{
+            padding:  3px 25px;
+            margin-right:40px;
+        }
     </style>
 @endsection
 @section('content')
@@ -128,10 +134,10 @@
 
                                                     <td>
 
-                                                        <button type='button' class='btn btn-outline-purple'
+                                                        <button type='button' class='btn btn-outline-dark'
                                                             onclick='viewRestaurant({{ $restaurant->restaurant_id }})'><i
                                                                 class='fa fa-eye'></i></button>
-                                                        <button type='button' class='btn btn-outline-purple '
+                                                        <button type='button' class='btn btn-outline-info '
                                                             onclick='editRestaurant({{ $restaurant->restaurant_id }})'><i
                                                                 class='mdi mdi-pencil'></i></button>
                                                         <button type='button' name='delete' class="btn btn-outline-danger "
@@ -214,14 +220,14 @@
                             <div class="custom-file">
                                 <input type="file" name="logo" class="custom-file-input dropify"
                                     data-id="0" data-errors-position="outside"
-                                    data-allowed-file-extensions='["jpg", "png"]' data-max-file-size="0.6M"
+                                    data-allowed-file-extensions='["jpg", "png"]' data-max-file-size="0.6M" data-height="80"
                                   >
                             </div>
                         </div>
-                        <label for="">Image</label>
+                        <label for="">Photos</label>
                         <div class="row asset_row  asset_div0">
                           
-                            <div class="col-md-5">
+                            {{-- <div class="col-md-5">
                                 <div class="form-group">
                                     <select class="form-control asset error0" name="asset[][asset_type_id]" id="asset0"
                                         data-id="0">
@@ -233,31 +239,31 @@
                                     </select>
                                     <span class="error_msg0 text-danger"></span>
                                 </div>
-                            </div>
-                            <div class="col-md-5">
+                            </div> --}}
+                            <div class="col-md-11">
                                 <div class="form-group ">
-                                    {{-- <label>Image</label> --}}
                                     <div class="custom-file">
-                                        <input type="file" name="asset[][asset]" class="custom-file-input dropify"
+                                        <input type="file" name="asset[][asset]" class="custom-file-input dropify" id="asset0"
                                             data-id="0" data-errors-position="outside"
                                             data-allowed-file-extensions='["jpg", "png"]' data-max-file-size="0.6M"
-                                            data-height="22">
+                                            data-height="80">
                                     </div>
                                     <span class="error_msg0 text-danger"></span>
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <div class=" remove_row0" onclick="remove(0)"><i
-                                        class="mdi mdi-close close_icon_add_form"></i></div>
+                                        class="mdi mdi-delete close_icon_add_form"></i></div>
                             </div>
                         </div>
              
-                        <div class="float-right" onclick="addRow()"><i class="mdi mdi-plus add_new_row_btn"></i></div>
+                        {{-- <div class="float-right" onclick="addRow()"><i class="mdi mdi-plus add_new_row_btn"></i>asdsad</div> --}}
+                        <button class="btn btn-primary add_row_btn float-right" onclick="addRow()" type="button"><i class="fa fa-plus"></i>   Add</button>
 
                         <div class="form-group mt-5">
                             <div>
-                                <button type="submit" class="btn btn-block btn-purple waves-effect waves-light">
+                                <button type="submit" class="btn btn-block btn-success waves-effect waves-light">
                                     Submit
                                 </button>
 
@@ -329,17 +335,20 @@
                             <div class="custom-file edit_logo">
                                 <input type="file" name="logo" id="edit_logo" class="custom-file-input dropify"
                                     data-id="0" data-errors-position="outside"
-                                    data-allowed-file-extensions='["jpg", "png"]' data-max-file-size="0.6M"
+                                    data-allowed-file-extensions='["jpg", "png"]' data-max-file-size="0.6M" data-height="80"
                                   >
                             </div>
                         </div>
+                        <label for="">Photos</label>
                         <span id="append_restaurant_assets"></span>
-                        <div class="float-right" onclick="addRowEdit()"><i class="mdi mdi-plus add_new_row_btn"></i>
-                        </div>
+                        {{-- <div class="float-right" onclick="addRowEdit()"><i class="mdi mdi-plus add_new_row_btn"></i>
+                        </div> --}}
+                        <button class="btn btn-primary add_row_btn float-right" onclick="addRowEdit()" type="button"><i class="fa fa-plus"></i>   Add</button>
+
 
                         <div class="form-group mt-5">
                             <div>
-                                <button type="submit" class="btn btn-block btn-purple waves-effect waves-light">
+                                <button type="submit" class="btn btn-block btn-success waves-effect waves-light">
                                     Update
                                 </button>
 
@@ -407,6 +416,11 @@
 
 
                 </div>
+                <div class="modal-footer">
+                    <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
+                        Done
+                    </button>
+                  </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
@@ -605,10 +619,10 @@
                             .append(`<td>` + response.data.contact + `</td>`)
                             .append(`<td>` + response.data.email + `</td>`)
                             .append(`<td>` + response.data.address + `</td>`)
-                            .append(`<td><button type='button' class='btn btn-outline-purple' onclick='viewRestaurant(${response.data.id})'>
+                            .append(`<td><button type='button' class='btn btn-outline-dark' onclick='viewRestaurant(${response.data.id})'>
                                             <i class='fa fa-eye'></i>
                                         </button>
-                                        <button type='button' class='btn btn-outline-purple' onclick='editRestaurant(${response.data.id})'>
+                                        <button type='button' class='btn btn-outline-info' onclick='editRestaurant(${response.data.id})'>
                                             <i class='mdi mdi-pencil'></i>
                                         </button>  <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteRestaurant(${response.data.id})">
                                             <i class="mdi mdi-delete "></i>
@@ -761,34 +775,20 @@
                         $.each(response.data.assets, function(key, value) {
                             $('#append_restaurant_assets').append(
                                 ` <div class="row area_row_edit  asset_div_edit${key}">                         
-                                        <div class="col-md-5">
-                                            <div class="form-group">
-                                                <input type="hidden" name="asset[` + key + `][id]" value="` + value
-                                .id + `">
-                                                <select class="form-control area error${key}" name="asset[${key}][asset_type_id]" id="area_edit${key}" data-id="${key}">
-                                                    <option value="">Choose Area</option>
-                                                    @foreach ($asset_types as $asset_type)
-                                                        <option value="{{ $asset_type->asset_type_id }}" ${value.asset_type_id=={{ $asset_type->asset_type_id }}
-                                                            ? 'Selected' : '' }>{{ $asset_type->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                                <span class="edit_error_msg${key} text-danger"></span>
-                                            </div>
-                                        </div>  
-                                        <div class="col-md-5"> 
+                                        <div class="col-md-11"> 
                                             <div class="form-group">
                                                 <div class="custom-file url${key}">
                                                     <input type="file" name="asset[${key}][asset]" id="urla${key}"
                                                                 class="custom-file-input linkImage link_img${key}"
-                                                                data-height="22" data-errors-position="outside"
+                                                                data-height="80" data-errors-position="outside"
                                                                 data-allowed-file-extensions='["jpg","png","webp","gif","mp4","mpeg","webm","3gp","avi"]'>
                                                           
                                                 </div>
                                             </div>
                                         </div>  
 
-                                        <div class="col-md-2">
-                                            <div class=" remove_row${key}" onclick="remove_row_edit(${key},${value.id})" data-id="${value.id}"><i class="mdi mdi-close close_icon_add_form"></i></div>
+                                        <div class="col-md-1">
+                                            <div class=" remove_row${key}" onclick="remove_row_edit(${key},${value.id})" data-id="${value.id}"><i class="mdi mdi-delete close_icon_add_form"></i></div>
                                         </div> 
                                     </div>`
                             );
@@ -796,7 +796,7 @@
                                 var img_url = imagesUrl + value.pivot.asset;
                                 // alert(img_url);
 
-                                $('.link_img' + key).attr("data-height", 25);
+                                $('.link_img' + key).attr("data-height", 80);
                                 $('.link_img' + key).attr("data-default-file", img_url);
 
                                 $('.link_image' + key).find(".dropify-wrapper").removeClass(
@@ -864,10 +864,10 @@
                                 <td>${response.data.contact}</td>
                                 <td>${response.data.email}</td>
                                 <td>${response.data.address}</td>   
-                                <td><button type='button' class='btn btn-outline-purple' onclick='viewRestaurant(${response.data.id})'>
+                                <td><button type='button' class='btn btn-outline-dark' onclick='viewRestaurant(${response.data.id})'>
                                 <i class='fa fa-eye'></i>
                             </button>
-                            <button type='button' class='btn btn-outline-purple' onclick='editRestaurant(${response.data.id})'>
+                            <button type='button' class='btn btn-outline-info' onclick='editRestaurant(${response.data.id})'>
                                 <i class='mdi mdi-pencil'></i>
                             </button>
                             <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteRestaurant(${response.data.id})">
@@ -907,7 +907,16 @@
                             });
 
 
-                        }
+                        }else if (error.status == 422) {
+                        $.each(error.responseJSON.errors, function(i, message) {
+                            toastMixin.fire({
+                                icon: 'error',
+                                animation: true,
+                                title: "" + message + ""
+                            });
+                        });
+
+                    }
                     },
 
                 });
@@ -981,7 +990,7 @@
             if (asset === "") {
                 $(".error_msg" + i)
                     .addClass("mt-1")
-                    .text("This field is required");
+                    .text("Please upload photo");
                 $(".error_msg" + i).show();
 
             } else {
@@ -991,32 +1000,19 @@
                 $(".error_msg" + new_i).hide();
                 $(".asset_row:last")
                     .after(` <div class="row asset_row test_row asset_div${i}">                         
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <select class="form-control asset error0" name="asset[][asset_type_id]" id="asset${i}" data-id="${i}">
-                                    <option value="">Choose Asset Type</option>
-                                    @foreach ($asset_types as $asset_type)
-                                        <option value="{{ $asset_type->asset_type_id }}">{{ $asset_type->name }}</option>
-                                    @endforeach
-
-                                </select>
-                                 <span class="error_msg${i} text-danger"></span>
-                             </div>
-
-                        </div>  
-                        <div class="col-md-5">
+                        <div class="col-md-11">
                         <div class="form-group ">
                             <div class="custom-file">
-                                <input type="file" name="asset[][asset]" class="custom-file-input dropify${i}" data-id="${i}"
+                                <input type="file" name="asset[][asset]" class="custom-file-input dropify${i}" data-id="${i}" id="asset${i}"
                                     data-errors-position="outside" data-allowed-file-extensions='["jpg", "png"]'
-                                    data-max-file-size="0.6M" data-height="22">
+                                    data-max-file-size="0.6M" data-height="80">
                             </div>
-                            <span class="error_msg0 text-danger"></span>
+                            <span class="error_msg${i} text-danger"></span>
                         </div>
                     </div> 
 
-                        <div class="col-md-2">
-                            <div class="remove_row${i}" onclick="remove(${i})"><i class="mdi mdi-close close_icon_add_form"></i></div>
+                        <div class="col-md-1">
+                            <div class="remove_row${i}" onclick="remove(${i})"><i class="mdi mdi-delete close_icon_add_form"></i></div>
                         </div> 
                     </div>`);
                 $('.dropify' + i).dropify();
@@ -1046,7 +1042,7 @@
             if (area_edit === "") {
                 $(".edit_row_error_msg" + i)
                     .addClass("mt-1")
-                    .text("This field is required");
+                    .text("Please upload photo");
                 $(".edit_row_error_msg" + i).show();
 
             } else {
@@ -1056,32 +1052,20 @@
                 $(".edit_row_error_msg" + new_i).hide();
                 $(".area_row_edit:last")
                     .after(` <div class="row area_row_edit  asset_div_edit${i}">                         
-            <div class="col-md-5">
-                            <div class="form-group">
-                                <select class="form-control asset error0" name="new_asset[${i}][asset_type_id]" id="asset${i}" data-id="${i}">
-                                    <option value="">Choose Asset Type</option>
-                                    @foreach ($asset_types as $asset_type)
-                                        <option value="{{ $asset_type->asset_type_id }}">{{ $asset_type->name }}</option>
-                                    @endforeach
 
-                                </select>
-                                 <span class="error_msg${i} text-danger"></span>
-                             </div>
-
-                        </div>  
-                        <div class="col-md-5">
+                        <div class="col-md-11">
                         <div class="form-group ">
                             <div class="custom-file">
-                                <input type="file" name="new_asset[${i}][asset]" class="custom-file-input dropify${i}" data-id="${i}"
+                                <input type="file" name="new_asset[${i}][asset]" class="custom-file-input dropify${i}" data-id="${i}" id="area_new_edit${i}"
                                     data-errors-position="outside" data-allowed-file-extensions='["jpg", "png"]'
-                                    data-max-file-size="0.6M" data-height="22">
+                                    data-max-file-size="0.6M" data-height="80">
                             </div>
-                            <span class="error_msg0 text-danger"></span>
+                            <span class="edit_row_error_msg${i} text-danger"></span>
                         </div>
                     </div> 
 
-                        <div class="col-md-2">
-                            <div class="remove_row${i}" onclick="remove_edit_row(${i})"><i class="mdi mdi-close close_icon_add_form"></i></div>
+                        <div class="col-md-1">
+                            <div class="remove_row${i}" onclick="remove_edit_row(${i})"><i class="mdi mdi-delete close_icon_add_form"></i></div>
                         </div> 
                             </div>`);
                 $('.dropify' + i).dropify();

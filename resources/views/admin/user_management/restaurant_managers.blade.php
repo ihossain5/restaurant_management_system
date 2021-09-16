@@ -1,4 +1,7 @@
 @extends('layouts.admin.master')
+@section('page-header')
+    Restaurant Managers
+@endsection
 @section('pageCss')
     <style>
         .employee_signature {
@@ -117,6 +120,7 @@
                                         <th>Photo</th>
                                         <th>Restaurant Name</th>
                                         <th>Name</th>
+                                        <th>Sex</th>
                                         <th>Email</th>
                                         <th>Phone</th>
                                         <th>Action</th>
@@ -137,12 +141,13 @@
                                                     @endif
                                                 </td>
                                                 <td>{{ $manager->restaurant->name ?? 'N/A' }}</td>
-                                                <td>{{ $manager->name }}</td>
-                                                <td>{{ $manager->email }}</td>
+                                                <td>{{ $manager->name ?? 'N/A' }}</td>
+                                                <td>{{ $manager->sex ?? 'N/A'}}</td>
+                                                <td>{{ $manager->email ?? 'N/A'}}</td>
                                                 <td>{{ $manager->contact ?? 'N/A' }}</td>
                                                 <td>
 
-                                                    <button type='button' class='btn btn-outline-purple'
+                                                    <button type='button' class='btn btn-outline-dark'
                                                         onclick='viewManager({{ $manager->id }})'><i
                                                             class='fa fa-eye'></i></button>
                                                     <button type='button' class='btn btn-outline-info '
@@ -207,7 +212,7 @@
 
                         <div class="form-group mt-3">
                             <div>
-                                <button type="submit" class="btn btn-block btn-purple waves-effect waves-light">
+                                <button type="submit" class="btn btn-block btn-success waves-effect waves-light">
                                     Submit
                                 </button>
 
@@ -226,7 +231,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-block">
-                    <h5 class="modal-title mt-0 text-center">Update manager's Info</h5>
+                    <h5 class="modal-title mt-0 text-center">Update Manager's Info</h5>
                     <button type="button" class="close modal_close_icon" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
@@ -253,7 +258,7 @@
 
                         <div class="form-group">
                             <div>
-                                <button type="submit" class="btn btn-block btn-purple waves-effect waves-light">
+                                <button type="submit" class="btn btn-block btn-success ">
                                     Update
                                 </button>
 
@@ -271,51 +276,36 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-block">
-                    <h5 class="modal-title mt-0 text-center">Manager's Details</h5>
+                    <h5 class="modal-title mt-0 text-center">Restaurant Manager Details</h5>
                     <button type="button" class="close modal_close_icon" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
-                    <div class="col-xl-12 col-md-12 text-center signature_row mb-3">
-                        <div class="ms-form-group">
-                            {{-- <label for="name"><strong>Logo:</strong></label> --}}
-                            <img src="" id="view_image" class="view_employee_signature">
-                        </div>
-                    </div>
-                    <div class="col-xl-12 col-md-12 text-center mb-3 role_div">
-                        <div class="ms-form-group" style="font-size: 16px;">
-                            <span class="badge badge-primary  p-1 view_role"></span>
-                        </div>
-                    </div>
-
                     <div class="col-xl-12 col-md-12">
                         <div class="ms-form-group">
-                            <label for="name"><strong>Name:</strong></label>
-                            <p id="view_name"></p>
+                            <p class="pt-2 pb-2">
+                                <strong>Name:</strong> <span id="view_name"></span> <br>
+                                <strong>Restaurant Name:</strong> <span id="view_restaurant_name"></span><br>
+                                <strong>Gender:</strong> <span id="view_gender"></span><br>
+                                <strong>Email:</strong> <span id="view_email"></span><br>
+                                <strong>Phone:</strong> <span id="view_phone"></span><br>
+                                <label for="name"><strong>Photo:</strong></label> <br>
+                            <img src="" id="view_image">
+                            </p>
                         </div>
-                    </div>
-                    <div class="col-xl-12 col-md-12">
-                        <div class="ms-form-group">
-                            <label for="name"><strong>Email:</strong></label>
-                            <p id="view_email"></p>
-                        </div>
-                    </div>
-                    <div class="col-xl-12 col-md-12">
-                        <div class="ms-form-group">
-                            <label for="name"><strong>Phone:</strong></label>
-                            <p id="view_phone"></p>
-                        </div>
-                    </div>
-                    <div class="col-xl-12 col-md-12">
-                        <div class="ms-form-group">
-                            <label for="name"><strong>Restaurant Name:</strong></label>
-                            <p id="view_restaurant_name"></p>
-                        </div>
-                    </div>
+                        <div class="form-group">
+                            <div>
+                               
 
-
-
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
+                <div class="modal-footer">
+                    <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
+                        Done
+                    </button>
+                  </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
@@ -443,18 +433,19 @@
                             )
                             .append(`<td>` + response.data.restaurant_name + `</td>`)
                             .append(`<td>` + response.data.name + `</td>`)
+                            .append(`<td>` + response.data.sex + `</td>`)
                             .append(`<td>` + response.data.email + `</td>`)
                             .append(`<td>` + response.data.phone + `</td>`)
 
 
-                            .append(`<td><button type='button' class='btn btn-outline-purple' onclick='viewManager(${response.data.id})'>
+                            .append(`<td><button type='button' class='btn btn-outline-dark' onclick='viewManager(${response.data.id})'>
                                 <i class='fa fa-eye'></i>
                             </button>
                             <button type='button' class='btn btn-outline-info' onclick='editManager(${response.data.id})'>
                                 <i class='mdi mdi-pencil'></i>
                             </button>
                            
-                            <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deletemanager(${response.data.id})">
+                            <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteManager(${response.data.id})">
                                 <i class="mdi mdi-delete "></i>
                             </button></td>`)
 
@@ -523,6 +514,7 @@
                         
                         $('#view_name').text(response.data.name);
                         $('#view_email').text(response.data.email);
+                        $('#view_gender').text(response.data.sex ?? 'N/A');
                         $('#view_phone').text(response.data.contact ?? 'N/A');
                         $('#view_restaurant_name').text(response.data.restaurant? response.data.restaurant.name : 'N/A' );
 
@@ -656,17 +648,18 @@
                                 `${response.data.photo !=null ? response.data.photo : 'default.png'}" style='width: 60px; height: 55px;'></td>
                                 <td>${response.data.restaurant_name}</td>
                                 <td>${response.data.name}</td>
+                                <td>${response.data.sex}</td>
                                 <td>${response.data.email}</td>
                                 <td>${response.data.contact}</td>
     
-                                <td><button type='button' class='btn btn-outline-purple' onclick='viewmanager(${response.data.id})'>
+                                <td><button type='button' class='btn btn-outline-dark' onclick='viewManager(${response.data.id})'>
                                 <i class='fa fa-eye'></i>
                             </button>
                             <button type='button' class='btn btn-outline-info' onclick='editManager(${response.data.id})'>
                                 <i class='mdi mdi-pencil'></i>
                             </button>
                            
-                            <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deletemanager(${response.data.id})">
+                            <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteManager(${response.data.id})">
                                 <i class="mdi mdi-delete "></i>
                             </button></td>
                                 `
@@ -696,6 +689,14 @@
                                         title: "" + message + ""
                                     });
                                 });
+
+                            }else if (error.status == 404) {
+                                toastMixin.fire({
+                                    icon: 'error',
+                                    animation: true,
+                                    title: "" + 'Data not found' + ""
+                                });
+
 
                             }
                         },

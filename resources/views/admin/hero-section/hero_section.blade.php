@@ -1,4 +1,7 @@
 @extends('layouts.admin.master')
+@section('page-header')
+    Home Hero Section
+@endsection
 @section('pageCss')
     <style>
 
@@ -56,10 +59,10 @@
                                                   
                                                     <td>
 
-                                                        <button type='button' class='btn btn-outline-purple'
+                                                        <button type='button' class='btn btn-outline-dark'
                                                             onclick='viewHeroSection({{ $hero_section->home_hero_section_id }})'><i
                                                                 class='fa fa-eye'></i></button>
-                                                        <button type='button' class='btn btn-outline-purple '
+                                                        <button type='button' class='btn btn-outline-info '
                                                             onclick='editHeroSection({{ $hero_section->home_hero_section_id }})'><i
                                                                 class='mdi mdi-pencil'></i></button>
                                                         <button type='button' name='delete' class="btn btn-outline-danger "
@@ -121,7 +124,7 @@
                         </div>
                         <div class="form-group">
                             <div>
-                                <button type="submit" class="btn btn-block btn-purple waves-effect waves-light">
+                                <button type="submit" class="btn btn-block btn-success waves-effect waves-light">
                                     Submit
                                 </button>
 
@@ -169,7 +172,7 @@
                         </div>
                         <div class="form-group">
                             <div>
-                                <button type="submit" class="btn btn-block btn-purple waves-effect waves-light">
+                                <button type="submit" class="btn btn-block btn-success waves-effect waves-light">
                                     Update
                                 </button>
 
@@ -187,7 +190,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-block">
-                    <h5 class="modal-title mt-0 text-center">Home Hero Slider's Details</h5>
+                    <h5 class="modal-title mt-0 text-center">Home Hero Slider Details</h5>
                     <button type="button" class="close modal_close_icon" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
@@ -216,6 +219,11 @@
                         </div>
                     </div>
                 </div>
+                <div class="modal-footer">
+                    <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
+                        Done
+                    </button>
+                  </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
@@ -332,10 +340,10 @@
                             .append(`<td>` + response.data.heading + `</td>`)
                             .append(`<td>` + response.data.description + `</td>`)
                           
-                            .append(`<td><button type='button' class='btn btn-outline-purple' onclick='viewHeroSection(${response.data.id})'>
+                            .append(`<td><button type='button' class='btn btn-outline-dark' onclick='viewHeroSection(${response.data.id})'>
                                 <i class='fa fa-eye'></i>
                             </button>
-                            <button type='button' class='btn btn-outline-purple' onclick='editHeroSection(${response.data.id})'>
+                            <button type='button' class='btn btn-outline-info' onclick='editHeroSection(${response.data.id})'>
                                 <i class='mdi mdi-pencil'></i>
                             </button>
                            
@@ -495,10 +503,10 @@
                                 <td>${response.data.heading}</td>
                                 <td>${response.data.description}...</td>
                                   
-                                <td><button type='button' class='btn btn-outline-purple' onclick='viewHeroSection(${response.data.id})'>
+                                <td><button type='button' class='btn btn-outline-dark' onclick='viewHeroSection(${response.data.id})'>
                                 <i class='fa fa-eye'></i>
                             </button>
-                            <button type='button' class='btn btn-outline-purple' onclick='editHeroSection(${response.data.id})'>
+                            <button type='button' class='btn btn-outline-info' onclick='editHeroSection(${response.data.id})'>
                                 <i class='mdi mdi-pencil'></i>
                             </button>
                            

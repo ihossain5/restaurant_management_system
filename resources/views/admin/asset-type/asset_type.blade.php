@@ -46,10 +46,10 @@
                                                     <td>{{ $asset_type->name }}</td>
                                                     <td>
 
-                                                        <button type='button' class='btn btn-outline-purple'
+                                                        <button type='button' class='btn btn-outline-dark'
                                                             onclick='viewAssetType({{ $asset_type->asset_type_id }})'><i
                                                                 class='fa fa-eye'></i></button>
-                                                        <button type='button' class='btn btn-outline-purple '
+                                                        <button type='button' class='btn btn-outline-info '
                                                             onclick='editAssetType({{ $asset_type->asset_type_id }})'><i
                                                                 class='mdi mdi-pencil'></i></button>
                                                         <button type='button' class="btn btn-outline-danger "
@@ -94,7 +94,7 @@
                         </div>
                         <div class="form-group">
                             <div>
-                                <button type="submit" class="btn btn-block btn-purple waves-effect waves-light">
+                                <button type="submit" class="btn btn-block btn-success waves-effect waves-light">
                                     Submit
                                 </button>
 
@@ -128,7 +128,7 @@
 
                         <div class="form-group">
                             <div>
-                                <button type="submit" class="btn btn-block btn-purple waves-effect waves-light">
+                                <button type="submit" class="btn btn-block btn-success waves-effect waves-light">
                                     Update
                                 </button>
 
@@ -157,6 +157,11 @@
                         </div>
                     </div>
                 </div>
+                <div class="modal-footer">
+                    <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
+                        Done
+                    </button>
+                  </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
@@ -243,10 +248,10 @@
                         var AssetTypeTable = $('#AssetTypeTable').DataTable();
                         var row = $('<tr>')
                             .append(`<td>` + response.data.name + `</td>`)
-                            .append(`<td><button type='button' class='btn btn-outline-purple' onclick='viewAssetType(${response.data.id})'>
+                            .append(`<td><button type='button' class='btn btn-outline-dark' onclick='viewAssetType(${response.data.id})'>
                                 <i class='fa fa-eye'></i>
                             </button>
-                            <button type='button' class='btn btn-outline-purple' onclick='editAssetType(${response.data.id})'>
+                            <button type='button' class='btn btn-outline-info' onclick='editAssetType(${response.data.id})'>
                                 <i class='mdi mdi-pencil'></i>
                             </button>      <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteAssetType(${response.data.id})">
                                 <i class="mdi mdi-delete "></i>
@@ -378,10 +383,10 @@
                                 `
                                 <td>${response.data.name}</td> 
                                 <td>
-                                    <button type='button' class='btn btn-outline-purple' onclick='viewAssetType(${response.data.id})'>
+                                    <button type='button' class='btn btn-outline-dark' onclick='viewAssetType(${response.data.id})'>
                                          <i class='fa fa-eye'></i>
                                     </button>
-                                    <button type='button' class='btn btn-outline-purple' onclick='editAssetType(${response.data.id})'>
+                                    <button type='button' class='btn btn-outline-info' onclick='editAssetType(${response.data.id})'>
                                         <i class='mdi mdi-pencil'></i>
                                     </button>
                                    <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteAssetType(${response.data.id})">

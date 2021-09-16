@@ -1,4 +1,7 @@
 @extends('layouts.admin.master')
+@section('page-header')
+    Contact Us Section
+@endsection
 @section('pageCss')
     <style>
 
@@ -48,15 +51,12 @@
                                                     <td>{{ $contact->email }}</td>
                                                     <td>
 
-                                                        <button type='button' class='btn btn-outline-purple'
+                                                        <button type='button' class='btn btn-outline-dark'
                                                             onclick='viewContactUs({{ $contact->contact_us_id }})'><i
                                                                 class='fa fa-eye'></i></button>
-                                                        <button type='button' class='btn btn-outline-purple '
+                                                        <button type='button' class='btn btn-outline-info '
                                                             onclick='editContactUs({{ $contact->contact_us_id }})'><i
                                                                 class='mdi mdi-pencil'></i></button>
-                                                        {{-- <button type='button' name='delete' class="btn btn-outline-danger "
-                                                            onclick="deleteContactUs({{ $about->id }})"><i
-                                                                class="mdi mdi-delete "></i></button> --}}
 
 
                                                     </td>
@@ -108,7 +108,7 @@
 
                         <div class="form-group">
                             <div>
-                                <button type="submit" class="btn btn-block btn-purple waves-effect waves-light">
+                                <button type="submit" class="btn btn-block btn-success waves-effect waves-light">
                                     Update
                                 </button>
 
@@ -155,6 +155,11 @@
                         </div>
                     </div>
                 </div>
+                <div class="modal-footer">
+                    <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
+                        Done
+                    </button>
+                  </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
@@ -269,10 +274,10 @@
                             .append(`<td>` + response.data.description + `</td>`)
                             .append(`<td><img class="img-fluid" src="${imagesUrl}` +
                                 `${response.data.image}" style='width: 60px; height: 55px;'></td>`)
-                            .append(`<td><button type='button' class='btn btn-outline-purple' onclick='viewContactUs(${response.data.id})'>
+                            .append(`<td><button type='button' class='btn btn-outline-dark' onclick='viewContactUs(${response.data.id})'>
                                 <i class='fa fa-eye'></i>
                             </button>
-                            <button type='button' class='btn btn-outline-purple' onclick='editContactUs(${response.data.id})'>
+                            <button type='button' class='btn btn-outline-info' onclick='editContactUs(${response.data.id})'>
                                 <i class='mdi mdi-pencil'></i>
                             </button>
                            
@@ -408,10 +413,10 @@
                                 `
                                 <td>${response.data.contact}</td>
                                 <td>${response.data.email}</td>   
-                                <td><button type='button' class='btn btn-outline-purple' onclick='viewContactUs(${response.data.id})'>
+                                <td><button type='button' class='btn btn-outline-dark' onclick='viewContactUs(${response.data.id})'>
                                 <i class='fa fa-eye'></i>
                             </button>
-                            <button type='button' class='btn btn-outline-purple' onclick='editContactUs(${response.data.id})'>
+                            <button type='button' class='btn btn-outline-info' onclick='editContactUs(${response.data.id})'>
                                 <i class='mdi mdi-pencil'></i>
                             </button>
                            

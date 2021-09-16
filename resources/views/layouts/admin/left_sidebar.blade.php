@@ -22,12 +22,12 @@
                     <div class="card-body">
 
                         <div class="media justify-content-center">
-                            @if (Auth::user()->image == null)
+                            @if (Auth::user()->photo == null)
                                 <img src="{{ asset('images/default.png') }}" class="left_sidebar_image"
                                     alt="user-profle" style="max-width: 100px;height: auto;">
                             @else
                                 <img class="d-flex mr-2 rounded-circle thumb-lg"
-                                    src="{{ asset('images/' . Auth::user()->image) }}" alt="Generic placeholder image"
+                                    src="{{ asset('images/' . Auth::user()->photo) }}" alt="Generic placeholder image"
                                     style="max-width: 100px;height: auto;">
                             @endif
                         </div>
@@ -65,7 +65,7 @@
             <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-user"></i><span> Users <span
                         class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
             <ul class="list-unstyled">
-                <li><a href="{{ route('admin.admins') }}">Admins</a></li>
+                {{-- <li><a href="{{ route('admin.admins') }}">Admins</a></li> --}}
                 <li><a href="{{ route('restaurant.manager') }}">Restaurant Managers</a></li>
             </ul>
         </li>
@@ -76,7 +76,7 @@
                 <li><a href="{{ route('home.hero.section') }}">Home Hero Section</a></li>
                 <li><a href="{{ route('about.us') }}">About Us</a></li>
                 <li><a href="{{ route('contact.us') }}">Contact Us</a></li>
-                <li><a href="{{ route('asset.type') }}">Asset Type</a></li>
+                {{-- <li><a href="{{ route('asset.type') }}">Asset Type</a></li> --}}
                 <li><a href="{{ route('restaurant.index') }}">Restaurants</a></li>
             </ul>
         </li>

@@ -25,12 +25,12 @@ class RestaurantController extends Controller {
         return view('admin.restaurant.restaurants', compact('asset_types', 'restaurants'));
     }
     public function store(RestaurantStoreRequest $request) {
-        $logo       = $request->logo;
+        $logo = $request->logo;
         if ($logo) {
             $path     = 'restaurant-logo/';
             $logo_url = storeImage($logo, $path, 80, 60);
         }
-        $restaurant        = Restaurant::create([
+        $restaurant = Restaurant::create([
             'name'        => $request->name,
             'type'        => $request->type,
             'contact'     => $request->contact,
@@ -109,59 +109,61 @@ class RestaurantController extends Controller {
         $item_assets_old = $request->asset;
         $item_assets     = $request->new_asset;
 
-        foreach ($item_assets_old as $old_item_assets) {
-            // dd();
-            if (array_key_exists("asset", $old_item_assets)) {
-                $asset = $old_item_assets['asset'];
-                // dd($asset);
-                $file_type = $asset->getClientOriginalExtension();
-                if ($file_type == 'jpg' || $file_type == 'png' || $file_type == 'gif' || $file_type == 'webp') {
+        if ($item_assets_old) {
 
-                    $image_name = hexdec(uniqid());
-                    $ext        = strtolower($file_type);
+            foreach ($item_assets_old as $old_item_assets) {
+                // dd();
+                if (array_key_exists("asset", $old_item_assets)) {
+                    $asset = $old_item_assets['asset'];
+                    // dd($asset);
+                    $file_type = $asset->getClientOriginalExtension();
+                    if ($file_type == 'jpg' || $file_type == 'png' || $file_type == 'gif' || $file_type == 'webp') {
 
-                    $image_full_name = $image_name . '.' . $ext;
-                    $upload_path     = 'restaurant-assets/';
-                    $upload_path1    = 'images/restaurant-assets';
+                        $image_name = hexdec(uniqid());
+                        $ext        = strtolower($file_type);
 
-                    $url = $upload_path . $image_full_name;
-                    // $success         = $logo->move($upload_path1, $image_full_name);
-                    $success = $asset->move($upload_path1, $image_full_name);
+                        $image_full_name = $image_name . '.' . $ext;
+                        $upload_path     = 'restaurant-assets/';
+                        $upload_path1    = 'images/restaurant-assets';
+
+                        $url = $upload_path . $image_full_name;
+                        // $success         = $logo->move($upload_path1, $image_full_name);
+                        $success = $asset->move($upload_path1, $image_full_name);
+
+                    } else {
+                        $filename = time() . '.' . $file_type;
+                        // $path     = '/backend/work/work_asset/video/';
+                        $upload_path  = 'restaurant-assets/';
+                        $upload_path1 = 'images/restaurant-assets/';
+                        $url          = $upload_path . $filename;
+                        $asset->move($upload_path1, $filename);
+
+                    }
+
+                    $asset = AssetRestaurant::where('asset_restaurant_id', $old_item_assets['id'])->first();
+                    File::delete(public_path('/images/' . $asset->asset));
+
+                    $asset_item = AssetRestaurant::where('asset_restaurant_id', $old_item_assets['id'])->update([
+                        "restaurant_id" => $restaurant->restaurant_id,
+                        "asset_type_id" => 9,
+                        "asset"         => $url,
+
+                    ]);
 
                 } else {
-                    $filename = time() . '.' . $file_type;
-                    // $path     = '/backend/work/work_asset/video/';
-                    $upload_path  = 'restaurant-assets/';
-                    $upload_path1 = 'images/restaurant-assets/';
-                    $url          = $upload_path . $filename;
-                    $asset->move($upload_path1, $filename);
 
+                    $asset_item = AssetRestaurant::where('asset_restaurant_id', $old_item_assets['id'])->update([
+
+                        "restaurant_id" => $restaurant->restaurant_id,
+                        "asset_type_id" => 9,
+                        // "url" => $url,
+                        // "link" => $url,
+
+                    ]);
                 }
 
-                $asset = AssetRestaurant::where('asset_restaurant_id', $old_item_assets['id'])->first();
-                File::delete(public_path('/images/' . $asset->asset));
-
-                $asset_item = AssetRestaurant::where('asset_restaurant_id', $old_item_assets['id'])->update([
-                    "restaurant_id" => $restaurant->restaurant_id,
-                    "asset_type_id" => $old_item_assets['asset_type_id'],
-                    "asset"         => $url,
-
-                ]);
-
-            } else {
-
-                $asset_item = AssetRestaurant::where('asset_restaurant_id', $old_item_assets['id'])->update([
-
-                    "restaurant_id" => $restaurant->restaurant_id,
-                    "asset_type_id" => $old_item_assets['asset_type_id'],
-                    // "url" => $url,
-                    // "link" => $url,
-
-                ]);
             }
-
-        }
-        if ($item_assets) {
+        } else if ($item_assets) {
             foreach ($item_assets as $asset_new) {
 
                 $asset = $asset_new['asset'];
@@ -198,7 +200,7 @@ class RestaurantController extends Controller {
 
                 $asset                = new AssetRestaurant();
                 $asset->restaurant_id = $restaurant->restaurant_id;
-                $asset->asset_type_id = $asset_new['asset_type_id'];
+                $asset->asset_type_id = 9;
                 $asset->asset         = $url;
                 $asset->save();
 
@@ -350,7 +352,7 @@ class RestaurantController extends Controller {
                 $url          = $upload_path . $filename;
                 $asset->move($upload_path1, $filename);
             }
-            $restaurant->assets()->attach([$restaurant_asset['asset_type_id'] => [
+            $restaurant->assets()->attach([9 => [
                 'asset' => $url,
             ]]);
 

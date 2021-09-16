@@ -27,7 +27,7 @@ class RestaurantStoreRequest extends FormRequest {
             'type'        => 'required|max:255|string',
             'description' => 'required|max:10000|string',
             'address'     => 'required|max:10000|string',
-            'logo'     => 'required|max:600|image|mimes:png,jpg',
+            'logo'     => 'nullable|max:600|image|mimes:png,jpg',
         ];
     }
     public function messages() {

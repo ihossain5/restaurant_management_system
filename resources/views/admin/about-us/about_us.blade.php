@@ -1,4 +1,7 @@
 @extends('layouts.admin.master')
+@section('page-header')
+    About Us Section
+@endsection
 @section('pageCss')
     <style>
 
@@ -52,10 +55,10 @@
                                                     <td>{{ $about->heading }}</td>
                                                     <td>{{ $about->formated_description }}...</td>                                          
                                                     <td>
-                                                        <button type='button' class='btn btn-outline-purple'
+                                                        <button type='button' class='btn btn-outline-dark'
                                                             onclick='viewAboutUs({{ $about->about_us_id }})'><i
                                                                 class='fa fa-eye'></i></button>
-                                                        <button type='button' class='btn btn-outline-purple '
+                                                        <button type='button' class='btn btn-outline-info '
                                                             onclick='editAboutUs({{ $about->about_us_id }})'><i
                                                                 class='mdi mdi-pencil'></i></button>  
                                                     </td>
@@ -112,7 +115,7 @@
                         </div>
                         <div class="form-group">
                             <div>
-                                <button type="submit" class="btn btn-block btn-purple waves-effect waves-light">
+                                <button type="submit" class="btn btn-block btn-success waves-effect waves-light">
                                     Submit
                                 </button>
 
@@ -131,7 +134,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-block">
-                    <h5 class="modal-title mt-0 text-center">Update About Us Info</h5>
+                    <h5 class="modal-title mt-0 text-center">Update About Us</h5>
                     <button type="button" class="close modal_close_icon" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
@@ -160,7 +163,7 @@
                         </div>
                         <div class="form-group">
                             <div>
-                                <button type="submit" class="btn btn-block btn-purple waves-effect waves-light">
+                                <button type="submit" class="btn btn-block btn-success waves-effect waves-light">
                                     Update
                                 </button>
 
@@ -207,6 +210,11 @@
                         </div>
                     </div>
                 </div>
+                <div class="modal-footer">
+                    <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
+                        Done
+                    </button>
+                  </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
@@ -322,10 +330,10 @@
                             .append(`<td>` + response.data.heading + `</td>`)
                             .append(`<td>` + response.data.description + `</td>`)
                           
-                            .append(`<td><button type='button' class='btn btn-outline-purple' onclick='viewAboutUs(${response.data.id})'>
+                            .append(`<td><button type='button' class='btn btn-outline-dark' onclick='viewAboutUs(${response.data.id})'>
                                 <i class='fa fa-eye'></i>
                             </button>
-                            <button type='button' class='btn btn-outline-purple' onclick='editAboutUs(${response.data.id})'>
+                            <button type='button' class='btn btn-outline-info' onclick='editAboutUs(${response.data.id})'>
                                 <i class='mdi mdi-pencil'></i>
                             </button>
                            
@@ -486,10 +494,10 @@
                                 <td>${response.data.heading}</td>
                                 <td>${response.data.description}...</td>
                                   
-                                <td><button type='button' class='btn btn-outline-purple' onclick='viewAboutUs(${response.data.id})'>
+                                <td><button type='button' class='btn btn-outline-dark' onclick='viewAboutUs(${response.data.id})'>
                                 <i class='fa fa-eye'></i>
                             </button>
-                            <button type='button' class='btn btn-outline-purple' onclick='editAboutUs(${response.data.id})'>
+                            <button type='button' class='btn btn-outline-info' onclick='editAboutUs(${response.data.id})'>
                                 <i class='mdi mdi-pencil'></i>
                             </button>
                            
