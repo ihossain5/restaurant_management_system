@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\AssetTypeController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\ContactUsController;
 use App\Http\Controllers\Backend\HomeHeroSectionController;
+use App\Http\Controllers\Backend\ItemController;
 use App\Http\Controllers\Backend\ManagerController;
 use App\Http\Controllers\Backend\RestaurantController;
 use App\Http\Controllers\ForgotPasswordController;
@@ -116,7 +117,20 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
         Route::post('/update', [ManagerController::class, 'update'])->name('restaurant.manager.update');
         Route::post('/delete', [ManagerController::class, 'destroy'])->name('restaurant.manager.delete');
     });  //* Restaurant Manager route end */
-    //* Restaurant Manager route start */
+
+    //* Item route start */
+    Route::group(['prefix' => 'items'], function () {
+        Route::get('/', [ItemController::class, 'index'])->name('item.index');
+        Route::post('/store', [ItemController::class, 'store'])->name('item.store');
+        Route::post('/edit', [ItemController::class, 'edit'])->name('item.edit');
+        Route::post('/show', [ItemController::class, 'show'])->name('item.show');
+        Route::post('/update', [ItemController::class, 'update'])->name('item.update');
+        Route::post('/delete', [ItemController::class, 'destroy'])->name('item.delete');
+        Route::post('/restaurant-items', [ItemController::class, 'getItemsByRestaurant'])->name('item.restaurant');
+        Route::post('/available-status/update', [ItemController::class, 'updateAvailableStatus'])->name('item.available.status.update');
+    });  //* Item route end */
+
+    //* Category route start */
     Route::group(['prefix' => 'categories'], function () {
         Route::get('/', [CategoryController::class, 'index'])->name('item.category.index');
         Route::post('/store', [CategoryController::class, 'store'])->name('item.category.store');
@@ -125,7 +139,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
         Route::post('/update', [CategoryController::class, 'update'])->name('item.category.update');
         Route::post('/delete', [CategoryController::class, 'destroy'])->name('item.category.delete');
         Route::post('/restaurant-categories', [CategoryController::class, 'getCategoriesByRestaurant'])->name('item.category.restaurant');
-    });  //* Restaurant Manager route end */
+       
+    });  //* Category route end */
   
 
 });

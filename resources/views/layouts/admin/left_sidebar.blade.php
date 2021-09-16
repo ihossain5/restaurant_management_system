@@ -101,7 +101,7 @@
                 Management<span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
             <ul class="list-unstyled">
                 <li><a href="{{ route('item.category.index') }}"><i class="fa fa-cutlery"></i>Item Categories</a></li>
-                <li><a href="{{ route('about.us') }}"><i class="fa fa-cutlery"></i>Items</a></li>
+                <li><a href="{{ route('item.index') }}"><i class="fa fa-cutlery"></i>Items</a></li>
             </ul>
         </li>
 
