@@ -13,30 +13,18 @@
             </div> --}}
 
             <ul class="list-inline float-right mb-0">
-                <!-- Search -->
-                {{-- <li class="list-inline-item dropdown notification-list">
-                    <a class="nav-link waves-effect toggle-search" href="#"  data-target="#search-wrap">
-                        <i class="mdi mdi-magnify noti-icon"></i>
-                    </a>
-                </li> --}}
-                <!-- Fullscreen -->
-                {{-- <li class="list-inline-item dropdown notification-list hidden-xs-down">
-                    <a class="nav-link waves-effect" href="#" id="btn-fullscreen">
-                        <i class="mdi mdi-fullscreen noti-icon"></i>
-                    </a>
-                </li> --}}
+              
                 <!-- notification-->
-                {{-- <li class="list-inline-item dropdown notification-list">
-                    <a class="nav-link dropdown-toggle arrow-none waves-effect" data-toggle="dropdown" href="#" role="button"
+                <li class="list-inline-item dropdown notification-list">
+                    {{-- <a class="nav-link dropdown-toggle arrow-none waves-effect" data-toggle="dropdown" href="#" role="button"
                        aria-haspopup="false" aria-expanded="false">
                         <i class="ion-ios7-bell noti-icon"></i>
+                        
+               
                         <span class="badge badge-danger noti-icon-badge">3</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right dropdown-arrow dropdown-menu-lg">
-                        <!-- item-->
-                        <div class="dropdown-item noti-title">
-                            <h5>Notification (3)</h5>
-                        </div>
+
 
                         <!-- item-->
                         <a href="javascript:void(0);" class="dropdown-item notify-item active">
@@ -61,8 +49,9 @@
                             View All
                         </a>
 
-                    </div>
-                </li> --}}
+                    </div> --}}
+                    <p>@yield('restaurant_list')</p>
+                </li>
                 <!-- User-->
                 <li class="list-inline-item dropdown notification-list">
                     <a class="nav-link dropdown-toggle arrow-none waves-effect nav-user" data-toggle="dropdown" href="#" role="button"

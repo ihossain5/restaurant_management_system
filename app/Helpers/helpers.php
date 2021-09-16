@@ -23,3 +23,11 @@ function deleteImage($image){
     File::delete('images/'.$image);
 }
 
+// succes function 
+function success($data) {
+    return response()->json([
+        'success' => true,
+        'data'    => $data,
+    ]);
+}
+

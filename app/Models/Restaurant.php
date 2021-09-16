@@ -24,4 +24,8 @@ class Restaurant extends Model
     public function assets(){
         return $this->belongsToMany(AssetType::class,'asset_restaurants','restaurant_id','asset_type_id')->withPivot('asset_restaurant_id','asset')->withTimestamps();
     }
+    public function restaurant_categories(){
+        return $this->hasMany(Category::class,'restaurant_id')->orderBy('created_at','DESC');
+    }
 }
+

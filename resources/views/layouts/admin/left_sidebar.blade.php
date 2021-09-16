@@ -61,6 +61,20 @@
                     Business Overview </span></a>
         </li>
 
+        {{-- <li class="has_sub">
+            <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-user"></i><span>My Restaurants
+                    <span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
+            <ul class="list-unstyled">
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-cutlery" aria-hidden="true"></i><span>Items
+                            Management<span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ route('home.hero.section') }}">Home Hero Section</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li> --}}
+
         <li class="has_sub">
             <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-user"></i><span> Users <span
                         class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
@@ -80,14 +94,16 @@
                 <li><a href="{{ route('restaurant.index') }}">Restaurants</a></li>
             </ul>
         </li>
-        {{-- <li class="has_sub">
-            <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-user"></i><span>Restaurant
-                    Management<span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
+
+
+        <li class="has_sub">
+            <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-cutlery"></i><span>Item
+                Management<span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
             <ul class="list-unstyled">
-
+                <li><a href="{{ route('item.category.index') }}"><i class="fa fa-cutlery"></i>Item Categories</a></li>
+                <li><a href="{{ route('about.us') }}"><i class="fa fa-cutlery"></i>Items</a></li>
             </ul>
-        </li> --}}
-
+        </li>
 
 
 
