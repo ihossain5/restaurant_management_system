@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 @section('page-header')
-  Business Overview
+ {{Auth::user()->is_super_admin == 1 ?  'Business Overview' : 'Dashboard'}}
 @endsection
 @section('pageCss')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css"

@@ -37,18 +37,23 @@
                                 </div>
                                 
                                                                    
-
+                                <button type="button" class="btn btn-outline-purple float-right waves-effect waves-light"
+                                name="button" id="addButton" data-toggle="modal" data-target="#add"> Add
+                                New
+                            </button>
                             </div>
 
                             <span class="showError"></span>
-                            <table id="userTable" class="table table-bordered dt-responsive nowrap"
+                            <table id="adminTable" class="table table-bordered dt-responsive nowrap"
                                 style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
                                        
+                                        <th>Photo</th>
                                         <th>Name</th>
+                                        <th>Gender</th>
                                         <th>Email</th>
-                                        <th>Phone</th>                  
+                                        <th>Phone</th>              
                                         
                                         <th>Action</th>
                                     </tr>
@@ -56,18 +61,30 @@
                                 <tbody>
                                     @if (!empty($users))
                                         @foreach ($users as $user)
-                                            <tr class="user{{ $user->id }}">
-                                              
+                                            <tr class="admin{{ $user->id }}">
+                                                <td>
+                                                    @if ($user->photo == null)
+                                                        <img class='img-fluid' src="{{ asset('images/default.png') }}"
+                                                            alt="{{ $user->name }}" style='width: 60px; height: 55px;'>
+                                                    @else
+                                                        <img class='img-fluid'
+                                                            src="{{ asset('images/' . $user->photo) }}"
+                                                            alt="{{ $user->name }}" style='width: 60px; height: 55px;'>
+                                                    @endif
+                                                </td>
                                                 <td>{{ $user->name }}</td>
+                                                <td>{{ $user->sex }}</td>
                                                 <td>{{ $user->email }}</td>
-                                                <td>{{ $user->phone }}</td>
+                                                <td>{{ $user->contact }}</td>
                                                                                                
                                                 <td>
-                                                    <button type='button' class='btn btn-outline-purple'
-                                                        onclick='viewEmployee({{ $user->id }})'><i
+                                                    <button type='button' class='btn btn-outline-dark'
+                                                        onclick='viewAdmin({{ $user->id }})'><i
                                                             class='fa fa-eye'></i></button>
                                                     
-
+                                                            <button type='button' name='delete' class="btn btn-outline-danger "
+                                                            onclick="deleteAdmin({{ $user->id }})"><i
+                                                                class="mdi mdi-delete "></i></button>
                                                 </td>
 
                                             </tr>
@@ -90,6 +107,40 @@
     </div> <!-- Page content Wrapper -->
 
 
+    <!-- Add  Modal -->
+    <div class="modal fade bs-example-modal-center" id="add" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-block">
+                    <h5 class="modal-title mt-0 text-center">Add a new Admin</h5>
+                    <button type="button" class="close modal_close_icon" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <form class="adminAddForm" method="POST"> @csrf
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control" name="name" placeholder="Type name" />
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="text" class="form-control" name="email" placeholder="Type email" />
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <div>
+                                <button type="submit" class="btn btn-block btn-success waves-effect waves-light">
+                                    Submit
+                                </button>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!-- Add  Modal End -->    
     <!-- view  Modal -->
     <div class="modal fade bs-example-modal-center" id="viewModal" tabindex="-1" role="dialog"
         aria-labelledby="mySmallModalLabel" aria-hidden="true">
@@ -138,36 +189,125 @@
 @section('pageScripts')
 
     <script type='text/javascript'>
-        var toastMixin = Swal.mixin({
-            toast: true,
-            title: 'General Title',
-            animation: false,
-            position: 'top-right',
-            showConfirmButton: false,
-            timer: 5000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        });
         var config = {
             routes: {
-                
+                add: "{!! route('admin.store') !!}",
                 view: "{!! route('admin.show') !!}",
-                
+                delete: "{!! route('admin.delete') !!}",
             }
         };
+        // add form validation
+        $(document).ready(function() {
+            $(".adminAddForm").validate({
+                rules: {
+                    name: {
+                        required: true,
+                        maxlength: 50,
+                    },
+                    email: {
+                        required: true,
+                        email: true,
+                        maxlength: 50,
+                    },
 
+                },
+                messages: {
+                    name: {
+                        required: 'Please insert admin name',
+                    },
+                    email: {
+                        required: 'Please insert admin email',
+                    },
+                },
+                errorPlacement: function(label, element) {
+                    label.addClass('mt-2 text-danger');
+                    label.insertAfter(element);
+                },
+            });
+        });
+        //end
        
 
-      $('#userTable').DataTable({
+      $('#adminTable').DataTable({
                 "ordering": false,
             });
 
 
+            $(document).on('submit', '.adminAddForm', function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: config.routes.add,
+                method: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json",
+                success: function(response) {
+
+                    if (response.success == true) {
+                        var managerTable = $('#adminTable').DataTable();
+                        var row = $('<tr>')
+                            .append(`<td><img class="img-fluid" src="${imagesUrl}` + '/' +
+                                `${response.data.photo !=null ? response.data.photo : 'default.png'}" style='width: 60px; height: 55px;'></td>`
+                            )
+                            .append(`<td>` + response.data.name + `</td>`)
+                            .append(`<td>` + response.data.sex + `</td>`)
+                            .append(`<td>` + response.data.email + `</td>`)
+                            .append(`<td>` + response.data.phone + `</td>`)
+
+
+                            .append(`<td><button type='button' class='btn btn-outline-dark' onclick='viewAdmin(${response.data.id})'>
+                                <i class='fa fa-eye'></i>
+                            </button>
+
+                           
+                            <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteAdmin(${response.data.id})">
+                                <i class="mdi mdi-delete "></i>
+                            </button></td>`)
+
+
+                        var manager_row = managerTable.row.add(row).draw().node();
+                        $('#adminTable tbody').prepend(row);
+                        $(manager_row).addClass('manager' + response.data.id + '');
+
+                        $('.adminAddForm').trigger('reset');
+                        if (response.data.message) {
+                            $('#add').modal('hide');
+                            toastMixin.fire({
+                                icon: 'success',
+                                animation: true,
+                                title: "" + response.data.message + ""
+                            });
+
+                        }
+
+
+                    } else {
+                        toastMixin.fire({
+                            icon: 'error',
+                            animation: true,
+                            title: "" + response.data.message + ""
+                        });
+
+                    }
+                }, //success end
+                error: function(error) {
+                    if (error.status == 422) {
+                        $.each(error.responseJSON.errors, function(i, message) {
+                            toastMixin.fire({
+                                icon: 'error',
+                                animation: true,
+                                title: "" + message + ""
+                            });
+                        });
+
+                    }
+                },
+            });
+        });
         // view single 
-        function viewEmployee(id) {
+        function viewAdmin(id) {
             $.ajax({
                 url: config.routes.view,
                 method: "POST",
@@ -200,7 +340,58 @@
         }
 
 
+    // delete 
+    function deleteAdmin(id) {
+            // alert(id)
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: config.routes.delete,
+                        data: {
+                            id: id,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        dataType: 'JSON',
+                        success: function(response) {
+                            if (response.success === true) {
+                                $('#adminTable').DataTable().row('.admin' + response.data.id)
+                                    .remove()
+                                    .draw();
+                                toastMixin.fire({
+                                    icon: 'success',
+                                    animation: true,
+                                    title: "" + response.data.message + ""
+                                });
+                            }
+                        },
+                        error: function(error) {
+                            if (error.status == 404) {
+                                toastMixin.fire({
+                                    icon: 'error',
+                                    animation: true,
+                                    title: "" + 'Data not found' + ""
+                                });
 
+
+                            }
+                        },
+                    });
+
+                }
+            })
+
+
+        }
+        //end
 
         
         

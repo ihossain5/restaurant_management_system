@@ -73,7 +73,7 @@ class ManagerController extends Controller {
         $user = User::findOrfail($request->hidden_id);
         $user->update($request->validated());
         $restaurant = Restaurant::where('restaurant_id', $request->restaurant)->first();
-        if ($restaurant->user_id != null) {
+        if ($restaurant->user_id != null && $restaurant->user_id !=$user->id) {
             $data            = [];
             $data['message'] = 'Manager has already assigned';
             return response()->json([

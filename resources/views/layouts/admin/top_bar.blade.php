@@ -56,8 +56,8 @@
                 <li class="list-inline-item dropdown notification-list">
                     <a class="nav-link dropdown-toggle arrow-none waves-effect nav-user" data-toggle="dropdown" href="#" role="button"
                        aria-haspopup="false" aria-expanded="false">
-                       @if (Auth::user()->image != null)
-                        <img src="{{asset('images/'.Auth::user()->image)}}" alt="user" class="rounded-circle">
+                       @if (Auth::user()->photo != null)
+                        <img src="{{asset('images/'.Auth::user()->photo)}}" alt="user" class="rounded-circle">
                         @else 
                         <img src="{{asset('images/default.png')}}" alt="user" class="rounded-circle">
                        @endif

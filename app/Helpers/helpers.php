@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
 use Intervention\Image\ImageManagerStatic as Image;
 
 // store image
@@ -30,4 +31,6 @@ function success($data) {
         'data'    => $data,
     ]);
 }
+
+
 

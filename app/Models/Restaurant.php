@@ -27,6 +27,9 @@ class Restaurant extends Model {
         return $this->hasMany(Category::class, 'restaurant_id')->orderBy('created_at', 'DESC');
     }
     public function restaurant_items() {
-        return $this->hasManyThrough(Item::class, Category::class, 'restaurant_id', 'category_id')->with('category','item_assets')->orderBy('created_at', 'DESC');
+        return $this->hasManyThrough(Item::class, Category::class, 'restaurant_id', 'category_id')->with('category', 'item_assets')->orderBy('created_at', 'DESC');
     }
+    
+
+
 }

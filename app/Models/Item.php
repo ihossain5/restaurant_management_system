@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Item extends Model
 {
@@ -24,5 +25,19 @@ class Item extends Model
     }
     public function item_assets() {
         return $this->belongsToMany(AssetType::class, 'asset_items', 'item_id', 'asset_type_id')->withPivot('asset_item_id', 'asset')->withTimestamps();
+    }
+    public function orders(){
+        return $this->belongsToMany(Order::class,'order_items','item_id', 'order_id' )->withPivot('quantity','price')
+        ->with('items', 'status','customer');
+        // ->whereDate('created_at', '=', DB::raw('CURDATE()'))
+        // ->get();
+    }
+    
+    public static function findItemById($id){
+        $item = self::with('category', 'item_assets')->findOrFail($id);
+        foreach ($item->item_assets as $asset) {
+            $item->image = $asset->pivot->asset;
+        }
+        return $item;
     }
 }

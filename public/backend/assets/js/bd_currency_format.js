@@ -11,3 +11,7 @@ function bdCurrencyFormat(num) {
     // console.log("Output:", num)
     return num;
 }
+function two_decimal(number) {
+    var data = parseFloat(number);
+    return data.toFixed(2);
+}

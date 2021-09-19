@@ -85,7 +85,9 @@ class AdminController extends Controller {
     }
 
     public function allAdmin() {
-        $users = User::where('is_admin',1)->where('is_super_admin','!=',1)->orderBy('id','DESC')->get();
+        $users = User::where('is_super_admin',1)
+        ->where('id', '!=', auth()->user()->id)
+        ->orderBy('id','DESC')->get();
         // dd($users);
         return view('admin.user_management.admin', compact('users'));
     }
@@ -110,8 +112,6 @@ class AdminController extends Controller {
         $validator = Validator::make($request->all(), [
             'name'        => 'required|max:50',
             'email'       => 'required|max:50|email|unique:users',
-            'phone'       => 'required|max:50',
-            'profile_image'       => 'nullable|max:600|mimes:jpg,png,jpeg|dimensions:width=200px,height=200px',
         ]);
         if ($validator->fails()) {
             $data          = array();
@@ -122,27 +122,14 @@ class AdminController extends Controller {
             ]);
         } else {
             $profile_image = $request->profile_image;
-            
-            if ($profile_image) {
-                $profile_image_name = hexdec(uniqid());
-                $profile_image_ext  = strtolower($profile_image->getClientOriginalExtension());
-
-                $profile_image_image_full_name = $profile_image_name . '.' . $profile_image_ext;
-                $profile_image_upload_path     = 'avatar/';
-                $profile_image_upload_path1    = 'images/avatar';
-                $profile_image_image_url       = $profile_image_upload_path . $profile_image_image_full_name;
-                $success                       = $profile_image->move($profile_image_upload_path1, $profile_image_image_full_name);
-                // $img = Image::make($image)->resize(680, 437);
-                // $img->save($upload_path1 . $image_full_name, 60);
-            }
             $random   = Str::random(20);
             $employee = User::create([
                 'name'        => $request->name,
                 'email'       => $request->email,
-                'phone'       => $request->phone,
+                'contact'       => $request->phone,
                 'password'    => Hash::make($random),
-                'image'       => $profile_image_image_url,
-                'is_admin'    => $request->is_admin??0,
+                'image'       => null,
+                'is_super_admin'    => 1,
             ]);
             Mail::send('password_mail', ['password' => $random, 'email' => $request->email], function ($message) use ($request) {
                 $message->to($request->email);
@@ -299,7 +286,7 @@ class AdminController extends Controller {
             ]);
         }  else {
             $employee->delete();
-            File::delete(public_path('images/' . $employee->signature));
+            File::delete(public_path('images/' . $employee->photo));
             $data['message'] = 'Data deleted successfully';
             $data['id']      = $request->id;
 

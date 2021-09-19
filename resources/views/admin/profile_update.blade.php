@@ -168,9 +168,9 @@
         var data = {!! $user !!};
         var path = "{{ url('/') }}" + '/images/';
         console.log(path);
-        if (data.image) {
-            var img_url = path + data.image;
-            $("#profile_image").attr("data-height", 275);
+        if (data.photo) {
+            var img_url = path + data.photo;
+            $("#profile_image").attr("data-height", 200);
             // $("#profile_image").attr("data-min-width", 450);
             $("#profile_image").attr("data-default-file", img_url);
 

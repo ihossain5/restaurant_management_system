@@ -708,7 +708,7 @@
 
 
 
-        // delete slider
+        // delete 
         function deleteManager(id) {
             // alert(id)
             Swal.fire({

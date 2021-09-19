@@ -37,8 +37,8 @@
 
                                 @if (Auth::user()->is_super_admin == 1)
                                     <span class="badge badge-primary  p-1">Super Admin</span>
-                                @elseif(Auth::user()->is_admin==1)
-                                    <span class="badge badge-primary  p-1">Admin</span>
+                                @elseif(Auth::user()->is_manager==1)
+                                    <span class="badge badge-primary  p-1">Manager</span>
                                 @else
 
                                     <span class="badge badge-primary  p-1">User</span>
@@ -52,8 +52,7 @@
 
         </div>
 
-
-
+@if (Auth::user()->is_super_admin == 1)   
         {{-- <li class="menu-title">Main</li> --}}
 
         <li>
@@ -79,7 +78,7 @@
             <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-user"></i><span> Users <span
                         class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
             <ul class="list-unstyled">
-                {{-- <li><a href="{{ route('admin.admins') }}">Admins</a></li> --}}
+                <li><a href="{{ route('admin.admins') }}">Admins</a></li>
                 <li><a href="{{ route('restaurant.manager') }}">Restaurant Managers</a></li>
             </ul>
         </li>
@@ -100,12 +99,34 @@
             <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-cutlery"></i><span>Item
                 Management<span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
             <ul class="list-unstyled">
-                <li><a href="{{ route('item.category.index') }}"><i class="fa fa-cutlery"></i>Item Categories</a></li>
-                <li><a href="{{ route('item.index') }}"><i class="fa fa-cutlery"></i>Items</a></li>
+                {{-- <li><a href="{{ route('item.category.index') }}"><i class="fa fa-cutlery"></i>Item Categories</a></li> --}}
+                <li><a class="category_link" href="{{ route('item.category',[session()->get('restaurant_id')]) }}"><i class="fa fa-cutlery"></i>Item Categories</a></li>
+                {{-- <li><a href="{{ route('item.index') }}"><i class="fa fa-cutlery"></i>Items</a></li> --}}
+                <li><a  class="item_link" href="{{ route('item.index',[session()->get('restaurant_id')]) }}"><i class="fa fa-cutlery"></i>Items</a></li>
             </ul>
         </li>
 
+        <li class="has_sub">
+            <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-cutlery"></i><span>Orders<span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
+            <ul class="list-unstyled">
+                <li><a class="order_link" href="{{ route('orders.today',[session()->get('restaurant_id')]) }}"><i class="fa fa-cutlery"></i>Today's Orders</a></li>
+                <li><a  href="{{ route('orders.past') }}"><i class="fa fa-cutlery"></i>Past Orders</a></li>
+            </ul>
+        </li>
+        
+        @endif
 
+ <!-- Manager route start -->
+        @if (Auth::user()->is_manager == 1)
+        <li>
+            <a href="{{ route('dashboard') }}" class="waves-effect"><i class="dripicons-device-desktop "></i><span>
+                    Dashboard</span></a>
+        </li>
+         <li>
+            <a href="{{ route('restaurant.items') }}" class="waves-effect"><i class="fa fa-cutlery"></i><span>
+                    Item</span></a>
+        </li>
+        @endif
 
 
         </ul>

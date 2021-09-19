@@ -573,6 +573,10 @@
                     if (response.success === true) {
                         $('.restaurant_id').val(response.data.id);
                         $('#categoryTable').DataTable().clear().draw();
+                        var newUrl = '{{ route('item.category', ':id') }}';
+                        newUrl = newUrl.replace(':id', response.data.session_id);
+                         $('.item_link').attr("href", newUrl);
+
                         if($.trim(response.data) ){
                             var categoryTable = $('#categoryTable').DataTable();
                             $.each(response.data.categories,function(key,val){

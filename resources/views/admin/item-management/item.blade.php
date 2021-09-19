@@ -413,7 +413,7 @@
                     price: {
                         required: true,
                         maxlength: 50,
-                        digits :true,
+                        digits: true,
                     },
                     taste: {
                         required: true,
@@ -475,7 +475,7 @@
                     price: {
                         required: true,
                         maxlength: 50,
-                        digits:true,
+                        digits: true,
                     },
                     taste: {
                         required: true,
@@ -856,9 +856,13 @@
                         $('#itemTable').DataTable().clear().draw();
                         $('.category_select_box').empty();
                         $('.category_select_box').append(
-                                    `<option value=""></option>`
-                                );
-                        $.each(response.data.categories,function(i,category){
+                            `<option value=""></option>`
+                        );
+                        var newUrl = '{{ route('item.category', ':id') }}';
+                        newUrl = newUrl.replace(':id', response.data.session_id);
+                         $('.category_link').attr("href", newUrl)
+                         
+                        $.each(response.data.categories, function(i, category) {
                             console.log(category);
                             $('.category_select_box').append(
                                 `<option value="${category.category_id}">${category.name}</option>`
@@ -891,7 +895,7 @@
                                 $(trDOM).addClass('item' + val.item_id + '');
                             });
                         }
-                  
+
 
                     }
                 },
