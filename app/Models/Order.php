@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
@@ -33,5 +34,12 @@ class Order extends Model
     }
     public function customer(){
         return $this->belongsTo(Customer::class,'order_id','customer_id');
+    }
+
+    public static function todayOrdersByRestaurantId($id){
+        return Restaurant::with(['restaurant_items.orders' => function ($query)  {
+            $query->whereDate('orders.created_at', DB::raw('CURDATE()'))->get();
+        }])->find($id);
+
     }
 }

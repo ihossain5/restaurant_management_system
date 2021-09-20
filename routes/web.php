@@ -9,6 +9,7 @@ use App\Http\Controllers\Backend\HomeHeroSectionController;
 use App\Http\Controllers\Backend\ItemController;
 use App\Http\Controllers\Backend\ManagerController;
 use App\Http\Controllers\Backend\OrderController;
+use App\Http\Controllers\Backend\OrderPerformanceController;
 use App\Http\Controllers\Backend\RestaurantController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\UserController;
@@ -106,6 +107,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
         Route::post('/update', [RestaurantController::class, 'update'])->name('restaurant.update');
         Route::post('/delete', [RestaurantController::class, 'destroy'])->name('restaurant.delete');
         Route::post('/deleteAsset', [RestaurantController::class, 'deleteAsset'])->name('restaurant.asset.delete');
+        Route::get('/{id}/overview', [RestaurantController::class, 'restaurantOverview'])->name('restaurant.overview');
+        Route::post('/overview', [RestaurantController::class, 'orderReportByRestaurant'])->name('order.report.restaurant');
+        Route::get('{id}/daily-reports', [OrderPerformanceController::class, 'dailyReports'])->name('orders.daily.report');   
+        Route::post('daily-reports', [OrderPerformanceController::class, 'dailyReportByRestaurant'])->name('order.daily.report.restaurant');   
+        Route::post('order-reports', [OrderPerformanceController::class, 'dateWiseReportByRestaurant'])->name('order.daily.report.restaurant.date');   
+        Route::get('{id}/time-range/reports', [OrderPerformanceController::class, 'timeRangeReports'])->name('orders.time.range.report');   
+        Route::post('/time-range/reports', [OrderPerformanceController::class, 'timeRangeReportsByRestaurant'])->name('order.report.restaurant.date.range');   
       
 
     });  //* Restaurant route end */
@@ -149,10 +157,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
        
       });  //* Category route end */
     });
-    //* Category route start */
+    //* order route start */
      Route::group(['prefix' => 'orders'], function () {
-     Route::get('/{id}', [OrderController::class, 'getTodayOrders'])->name('orders.today');
-     Route::get('/past-orders', [OrderController::class, 'getPastOrders'])->name('orders.past');
+     Route::get('restaurant/{id}/today-orders', [OrderController::class, 'getTodayOrders'])->name('orders.today');
+     Route::get('restaurant/{id}/past-orders', [OrderController::class, 'getPastOrders'])->name('orders.past');
     //  Route::get('/{id}', [CategoryController::class, 'index'])->name('item.category');
      Route::post('/store', [CategoryController::class, 'store'])->name('item.category.store');
      Route::post('/edit', [CategoryController::class, 'edit'])->name('item.category.edit');
@@ -160,7 +168,14 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
      Route::post('/update', [CategoryController::class, 'update'])->name('item.category.update');
      Route::post('/delete', [CategoryController::class, 'destroy'])->name('item.category.delete');
      Route::post('/restaurant-orders', [OrderController::class, 'getOrdersByRestaurant'])->name('order.restaurant');          
-    });  //* Category route end */
+     Route::post('/restaurant-past-orders', [OrderController::class, 'getPastOrdersByRestaurant'])->name('order.past.restaurant');          
+    });  //* order route end */
+
+    //* performance route start */
+     Route::group(['prefix' => 'orders'], function () {
+           
+     Route::post('/restaurant-past-orders', [OrderController::class, 'getPastOrdersByRestaurant'])->name('order.past.restaurant');          
+    });  //* performance route end */
   
 
   

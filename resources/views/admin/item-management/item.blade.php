@@ -858,9 +858,7 @@
                         $('.category_select_box').append(
                             `<option value=""></option>`
                         );
-                        var newUrl = '{{ route('item.category', ':id') }}';
-                        newUrl = newUrl.replace(':id', response.data.session_id);
-                         $('.category_link').attr("href", newUrl)
+                        setSessionId(response.data.session_id);
                          
                         $.each(response.data.categories, function(i, category) {
                             console.log(category);

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Restaurant extends Model {
     use HasFactory;
@@ -29,7 +30,20 @@ class Restaurant extends Model {
     public function restaurant_items() {
         return $this->hasManyThrough(Item::class, Category::class, 'restaurant_id', 'category_id')->with('category', 'item_assets')->orderBy('created_at', 'DESC');
     }
-    
 
+    public static function ordersbyDate($date, $id) {
+       return self::with(['restaurant_items.orders' => function ($query) use ($date) {
+            $query->whereDate('orders.created_at', $date)->get();
+        }])->find($id);
+    }
+
+    public static function getOrdersByDateRange($start_date, $end_date, $id){
+        return self::with(['restaurant_items.orders' => function ($query) use ($start_date, $end_date) {
+            $query->whereDate('orders.created_at', '>=', $start_date)
+            ->whereDate('orders.created_at', '<=', $end_date)
+            ->get();
+        }])->find($id);
+        
+    }
 
 }

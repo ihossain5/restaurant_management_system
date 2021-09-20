@@ -8,7 +8,9 @@ use App\Models\AssetRestaurant;
 use App\Models\AssetType;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
 
 class RestaurantController extends Controller {
     public function index() {
@@ -355,8 +357,104 @@ class RestaurantController extends Controller {
             $restaurant->assets()->attach([9 => [
                 'asset' => $url,
             ]]);
-
         }
+    }
+
+    public function restaurantOverview($id) {
+        // $restaurant = Restaurant::find($id);
+        $restaurants         = Restaurant::get();
+        $new_orders          = $this->newOrders($id);
+        $ordersInPreparation = $this->ordersInPreparation($id);
+        $ordersInDelivery    = $this->ordersInDelivery($id);
+        $completedOrders     = $this->completedOrders($id);
+        $cancelledOrders     = $this->cancelledOrders($id);
+
+        $restaurant    = Restaurant::with('restaurant_items.orders')->find($id);
+        $all_orders    = ordersByRestaurant($restaurant);
+        $total_revenue = $restaurant->all_orders->sum('amount');
+        return view('admin.restaurant.restaurant_overview', compact(
+            'restaurant', 'restaurants', 'new_orders', 'ordersInPreparation', 'ordersInDelivery', 'completedOrders', 'cancelledOrders', 'total_revenue'
+        ));
+    }
+
+    public function orderReportByRestaurant(Request $request) {
+        // dd($request->all());
+        $new_orders          = $this->newOrders($request->id);
+        // dd($new_orders);
+        $ordersInPreparation = $this->ordersInPreparation($request->id);
+        $ordersInDelivery    = $this->ordersInDelivery($request->id);
+        $completedOrders     = $this->completedOrders($request->id);
+        $cancelledOrders     = $this->cancelledOrders($request->id);
+
+        $restaurant    = Restaurant::with('restaurant_items.orders')->find($request->id);
+        $all_orders    = ordersByRestaurant($restaurant);
+        $total_revenue = $restaurant->all_orders->sum('amount');
+
+        if (Session::has('restaurant_id')) {
+            Session::forget('restaurant_id');
+        }
+        Session::put('restaurant_id', $request->id);
+
+        $data                        = [];
+        $data['id']                  = $request->id;
+        $data['session_id']          = Session::get('restaurant_id');
+        $data['new_orders']          = $new_orders;
+        $data['ordersInPreparation'] = $ordersInPreparation;
+        $data['ordersInDelivery']    = $ordersInDelivery;
+        $data['completedOrders']     = $completedOrders;
+        $data['cancelledOrders']     = $cancelledOrders;
+        $data['total_revenue']       = $total_revenue;
+        return success($data);
+    }
+
+    public function newOrders($id) {
+        $restaurant = Restaurant::with(['restaurant_items.orders' => function ($query) {
+            $query->whereDate('orders.created_at', DB::raw('CURDATE()'))->get();
+        }])->find($id);
+        $all_orders = ordersByRestaurant($restaurant);
+        // dd();
+        $count      = count($restaurant->all_orders);
+        return $count;
+    }
+    public function ordersInPreparation($id) {
+        $restaurant = Restaurant::with(['restaurant_items.orders' => function ($query) {
+            $query->whereDate('orders.created_at', DB::raw('CURDATE()'))
+                ->where('orders.order_status_id', 1)->get();
+        }])->find($id);
+
+        $all_orders = ordersByRestaurant($restaurant);
+        $count      = count($restaurant->all_orders);
+        return $count;
+    }
+    public function ordersInDelivery($id) {
+        $restaurant = Restaurant::with(['restaurant_items.orders' => function ($query) {
+            $query->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            ->where('orders.order_status_id', 2)->get();
+        }])->find($id);
+
+        $all_orders = ordersByRestaurant($restaurant);
+        $count      = count($restaurant->all_orders);
+        return $count;
+    }
+    public function completedOrders($id) {
+        $restaurant = Restaurant::with(['restaurant_items.orders' => function ($query) {
+            $query->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            ->where('orders.order_status_id', 3);
+        }])->find($id);
+
+        $all_orders = ordersByRestaurant($restaurant);
+        $count      = count($restaurant->all_orders);
+        return $count;
+    }
+    public function cancelledOrders($id) {
+        $restaurant = Restaurant::with(['restaurant_items.orders' => function ($query) {
+            $query->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            ->where('orders.order_status_id', 4)->get();
+        }])->find($id);
+
+        $all_orders = ordersByRestaurant($restaurant);
+        $count      = count($restaurant->all_orders);
+        return $count;
     }
 
 }
