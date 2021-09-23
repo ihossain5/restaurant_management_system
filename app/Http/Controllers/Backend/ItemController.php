@@ -15,16 +15,16 @@ class ItemController extends Controller {
     public function index($id) {
         // dd( Session::get('restaurant_id'));
 
-        $new_restaurant = Restaurant::find($id);
+        $restaurant = Restaurant::find($id);
         $restaurants    = Restaurant::get();
-        $items          = $new_restaurant->restaurant_items;
-        $categories     = $new_restaurant->restaurant_categories;
+        $items          = $restaurant->restaurant_items;
+        $categories     = $restaurant->restaurant_categories;
         foreach ($items as $item) {
             foreach ($item->item_assets as $asset) {
                 $item->asset = $asset->pivot->asset;
             }
         }
-        return view('admin.item-management.item', compact('items', 'categories', 'new_restaurant', 'restaurants'));
+        return view('admin.item-management.item', compact('items', 'categories', 'restaurant', 'restaurants'));
     }
 
     public function store(ItemStoreRequest $request) {
@@ -133,6 +133,7 @@ class ItemController extends Controller {
         }
         $data               = [];
         $data['id']         = $request->id;
+        $data['name']         = $restaurant->name;
         $data['session_id'] = Session::get('restaurant_id');
         $data['categories'] = $categories;
         $data['items']      = $items;

@@ -17,6 +17,7 @@
     <link href="{{ asset('backend/assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('backend/assets/css/icons.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('backend/assets/css/style.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{asset('backend/assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css')}}" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.15.5/sweetalert2.min.css"
         integrity="sha512-gX6K9e/4ewXjtn8Q/oePzgIxs2KPrksR4S2NNMYLxenvF7n7eNon9XbqQxb+5jcqYBVCcncIxqF6fXJYgQtoAg=="
@@ -146,4 +147,261 @@
     border-color: #28a745;
         }
 
+
+ /* Super Admin Design CSS */
+
+.superAdminDesign {
+    display         : inline-block;
+    min-width       : 115px;
+    height          : 28px;
+    color           : #ffffff;
+    font-size       : 16px;
+    font-weight     : 400;
+    background      : #6FD088;
+    border-radius   : 0px 5px 5px 0px;
+    text-align      : center;
+    /* line-height  : 20px; */
+    position        : relative;
+    z-index         : 3;
+}
+
+.superAdminDesign::after {
+    content         : '';
+    position        : absolute;
+    top             : 0;
+    left            : -10px;
+    margin          : auto;
+    bottom          : 0;
+    height          : 20px;
+    width           : 20px;
+    background-color: #6FD088;
+    transform       : rotate(45deg);
+    z-index         : 1;
+}
+
+
+.superAdminDesign::before {
+    content         : '';
+    position        : absolute;
+    top             : 0;
+    left            : -5px;
+    bottom          : 0;
+    margin          : auto;
+    height          : 5px;
+    width           : 5px;
+    border-radius   : 50%;
+    background-color: #103863;
+    z-index         : 2;
+}
+
+
+.navbar-custom {
+    background-color: #818286;
+    color           : #FFFFFF;
+}
+
+
+.custom-drp {
+    color: #000000;
+    font-weight: 400;
+}
+
+.custom-drp img {
+    height     : 7px;
+    width      : 14px;
+    display    : inline-block;
+    margin-left: 5px;
+    margin-top : -3px;
+}
+
+.custom-drp:hover {
+    color: #FFFFFF;
+}
+
+.navbar-custom .dropdown.show .nav-link {
+    background-color: #818286;
+}
+
+
+.addRestaurent {
+    color      : #892D91;
+    font-weight: bold;
+}
+
+.customDatePicker {
+    display        : flex;
+    justify-content: left;
+    border         : 2px solid #892D91;
+    border-radius  : 5px;
+    max-width      : 176px;
+}
+
+
+.customDatePicker:first-child {
+    margin-right: 6px;
+}
+
+.customDatePicker:last-child {
+    margin-left: 6px;
+}
+
+
+
+.customDatePicker img {
+    margin-left : 12px;
+    margin-right: 12px;
+}
+
+.customDatePicker input {
+    border     : none;
+    color      : #892D91 !important;
+    font-weight: normal;
+    font-size  : 18px;
+    padding    : 0 !important;
+}
+
+.customDatePicker input::placeholder {
+    color      : #892D91 !important;
+    font-weight: normal;
+}
+
+.custom-select {
+    border          : 2px solid #892D91;
+    border-radius   : 5px;
+    height          : 100%;
+    background-image: url('{{asset('backend/assets/icons/color-arrow-down.svg')}}');
+    background-size : 14px 14px;
+    font-weight     : 500;
+    color           : #892D91;
+}
+
+
+.custom-select:focus {
+    border: 2px solid #892D91;
+    color : #892D91;
+
+}
+
+
+.close-btn {
+    position        : absolute;
+    top             : 0;
+    right           : 8px;
+    background-color: transparent;
+    border          : none;
+    font-size       : 30px;
+    cursor          : pointer;
+}
+
+.addModal .modal-title {
+    color      : #000000;
+    font-size  : 20px;
+    font-weight: bold;
+}
+
+
+.add-modal-input label {
+    font-size: 18px;
+    color    : #000000;
+}
+
+.add-modal-input input {
+    font-size: 18px;
+    color    : #000000;
+}
+
+
+.btn-success {
+    background-color: #52B85C;
+    border          : 1px solid #52B85C;
+}
+
+.csvDesign {
+    display        : flex;
+    justify-content: left;
+}
+
+.csvDesign select {
+    border            : none;
+    -webkit-appearance: none;
+    -moz-appearance   : none;
+}
+
+
+.downloadDropDown {
+    text-align: left;
+    height    : 100%;
+    font-size : 18px;
+    cursor    : pointer;
+}
+
+
+.downloadMenu button {
+    background-color: transparent;
+    border          : none;
+    font-size       : 24px;
+    font-weight     : 300;
+    line-height     : 29px;
+    color           : #000000;
+    cursor          : pointer;
+    margin-top      : 4px;
+    margin-bottom   : 4px;
+}
+
+.downloadMenu button img {
+    width : 15px;
+    height: 17px;
+}
+
+
+.btnOutlineOpen,
+.btnOutlineBusy,
+.btnOutlineClose {
+    font-weight   : bold;
+    font-size     : 20px;
+    color         : #00BA07;
+    padding       : 0 20px 3px 20px;
+    background    : #EBEBEB;
+    border        : 2px solid #00BA07;
+    border-radius : 5px;
+    cursor        : pointer;
+    text-transform: uppercase;
+}
+
+.btnOutlineBusy {
+    color       : #E39436;
+    border-color: #E39436;
+}
+
+
+.btnOutlineClose {
+    color       : #FF0000;
+    border-color: #FF0000;
+}
+
+
+.btnOpen,
+.btnBusy,
+.btnClose {
+    font-weight   : bold;
+    font-size     : 20px;
+    line-height   : 24px;
+    color         : #00BA07;
+    border        : 2px solid #00BA07;
+    border-radius : 5px;
+    padding       : 4px 20px;
+    width         : 108px;
+    text-transform: uppercase;
+    cursor        : pointer;
+}
+
+.btnBusy {
+    color       : #E39436;
+    border-color: #E39436;
+}
+
+.btnClose {
+    color       : #FF0000;
+    border-color: #FF0000;
+}    
     </style>

@@ -3,14 +3,7 @@
     Items
 @endsection
 @section('restaurant_list')
-    <select name="" class="form-control restaurant">
-        @foreach ($restaurants as $restaurant)
-            <option value="{{ $restaurant->restaurant_id }}"
-                {{ $new_restaurant->restaurant_id == $restaurant->restaurant_id ? 'selected' : '' }}>
-                {{ $restaurant->name }}
-            </option>
-        @endforeach
-    </select>
+@include('layouts.admin.restaurant_drop-down')
 @endsection
 @section('pageCss')
     <style>
@@ -193,7 +186,7 @@
                 </div>
                 <div class="modal-body">
                     <form class="itemAddForm" method="POST"> @csrf
-                        <input type="hidden" name="restaurant_id" value="{{ $new_restaurant->restaurant_id }}"
+                        <input type="hidden" name="restaurant_id" value="{{ $restaurant->restaurant_id }}"
                             class="restaurant_id">
                         <div class="form-group">
                             <label>Item Name</label>
@@ -266,7 +259,7 @@
                     <form class="updateIteform" method="POST"> @csrf
                         <input type="hidden" name="hidden_id" id="hidden_id">
                         <input type="hidden" name="restaurant_id" class="restaurant_id"
-                            value="{{ $new_restaurant->restaurant_id }}">
+                            value="{{ $restaurant->restaurant_id }}">
 
                         <div class="form-group">
                             <label>Item Name</label>
@@ -840,8 +833,8 @@
 
 
         // restaurant change
-        $(document).on('change', '.restaurant', function() {
-            var id = $(this).val();
+        $(document).on('click', '.restaurant', function() {
+            var id = $(this).data('id');
             $.ajax({
                 type: "POST",
                 url: config.routes.getItems,
@@ -858,7 +851,8 @@
                         $('.category_select_box').append(
                             `<option value=""></option>`
                         );
-                        setSessionId(response.data.session_id);
+                        setSessionId(response.data.session_id); // set restaurant id into session
+                        setRestaurant(response.data.name, response.data.id);  // set restaurant into topbar
                          
                         $.each(response.data.categories, function(i, category) {
                             console.log(category);

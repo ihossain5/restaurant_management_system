@@ -126,9 +126,9 @@
         <li class="has_sub">
             <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-cutlery"></i><span>Performance Report<span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
             <ul class="list-unstyled">
-                <li><a class="daily_report_route" href="{{ route('orders.daily.report',[session()->get('restaurant_id')]) }}"><i class="fa fa-cutlery"></i>Daily Report</a></li>
+                <li><a class="daily_report_route" href="{{ route('orders.daily.report',[session()->get('restaurant_id') ?? 1]) }}"><i class="fa fa-cutlery"></i>Daily Report</a></li>
                 <li><a class="time_range_eport_route" href="{{ route('orders.time.range.report',[session()->get('restaurant_id')?? 1]) }}"><i class="fa fa-cutlery"></i>Time Range Report</a></li>
-                <li><a class="monthly_report_route" href="{{ route('orders.past',[session()->get('restaurant_id')?? 1]) }}"><i class="fa fa-cutlery"></i>Monthly Report</a></li>
+                <li><a class="monthly_report_route" href="{{ route('order.report.restaurant.current.month',[session()->get('restaurant_id')?? 1]) }}"><i class="fa fa-cutlery"></i>Monthly Report</a></li>
                 <li><a class="item_performance_report_route" href="{{ route('orders.past',[session()->get('restaurant_id')?? 1]) }}"><i class="fa fa-cutlery"></i>Item Performance Report</a></li>
             </ul>
         </li>

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 class CategoryController extends Controller {
-    // public function index(Request $request) {    
+    // public function index(Request $request) {
     //     $new_restaurant = Restaurant::latest()->first();
     //     // $restaurants = Restaurant::where('restaurant_id', '!=', $new_restaurant->restaurant_id)->get();
     //     $restaurants = Restaurant::get();
@@ -21,15 +21,15 @@ class CategoryController extends Controller {
     //     }
     //     return view('admin.item-management.item_category', compact('categories', 'new_restaurant', 'restaurants'));
     // }
-    public function index($id) {    
-        $new_restaurant = Restaurant::find($id);
+    public function index($id) {
+        $restaurant  = Restaurant::find($id);
         $restaurants = Restaurant::get();
-        $categories  = $new_restaurant->restaurant_categories;
+        $categories  = $restaurant->restaurant_categories;
         foreach ($categories as $category) {
             $description                    = substr($category->description, 0, 25);
             $category->formated_description = $description;
         }
-        return view('admin.item-management.item_category', compact('categories', 'new_restaurant', 'restaurants'));
+        return view('admin.item-management.item_category', compact('categories', 'restaurant', 'restaurants'));
     }
 
     public function store(CategoryRequest $request) {
@@ -73,14 +73,13 @@ class CategoryController extends Controller {
             Session::forget('restaurant_id');
         }
         Session::put('restaurant_id', $request->id);
-        $categories = $restaurant->restaurant_categories;
-        $data            = [];
-        $data['id']      = $request->id;
+        $categories         = $restaurant->restaurant_categories;
+        $data               = [];
+        $data['id']         = $request->id;
+        $data['name']       = $restaurant->name;
         $data['session_id'] = Session::get('restaurant_id');
-        $data['categories']      = $categories;
+        $data['categories'] = $categories;
         return success($data);
     }
-
-
 
 }

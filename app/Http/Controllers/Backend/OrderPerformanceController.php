@@ -52,11 +52,14 @@ class OrderPerformanceController extends Controller {
         $data                 = [];
         $data['id']           = $request->id;
         $data['orders']       = $all_orders;
+        $data['total_order']  = $restaurant->all_orders ? $restaurant->all_orders->count() : 0;
+        $data['total_amount'] = $restaurant->all_orders ? $restaurant->all_orders->sum('amount') : 0;
         $data['current_date'] = formatDate($request->date);
         $data['session_id']   = Session::get('restaurant_id');
         return success($data);
     }
 
+    //reports by time range start
     public function timeRangeReports(Request $request, $id) {
         // dd($request->all());
         // if($request->start_date != null && $request->end_date != null){
@@ -88,12 +91,17 @@ class OrderPerformanceController extends Controller {
         $data                 = [];
         $data['id']           = $request->id;
         $data['orders']       = $all_orders;
-        $data['total_order']  = $restaurant->all_orders ? $restaurant->all_orders ->count() : 0;
+        $data['total_order']  = $restaurant->all_orders ? $restaurant->all_orders->count() : 0;
         $data['total_amount'] = $restaurant->all_orders ? $restaurant->all_orders->sum('amount') : 0;
         $data['start_date']   = formatDate($request->start_date);
         $data['end_date']     = formatDate($request->end_date);
         $data['session_id']   = Session::get('restaurant_id');
         return success($data);
-        // }
+    } // reports by time range end
+
+//monthly reports start
+    public function currentMonthReportsByRestaurant($id) {
+        // dd('sdsd');
+        return view('admin.performance-reports.monthly_report');
     }
 }

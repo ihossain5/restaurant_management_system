@@ -48,6 +48,8 @@ crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js"
 integrity="sha512-8QFTrG0oeOiyWo/VM9Y8kgxdlCryqhIxVeRpWSezdRRAvarxVtwLnGroJgnVW9/XBRduxO/z1GblzPrMQoeuew=="
 crossorigin="anonymous"></script>
+
+<script src="{{asset('backend/assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
 <script>
     $(document).ajaxStart(function() {
         $('.preloader').empty();
@@ -68,7 +70,7 @@ crossorigin="anonymous"></script>
         toast: true,
         title: 'General Title',
         animation: false,
-        position: 'top-right',
+        position: 'bottom-right',
         showConfirmButton: false,
         timer: 5000,
         timerProgressBar: true,
@@ -103,5 +105,50 @@ crossorigin="anonymous"></script>
         var daily_report_url = '{{ route('orders.daily.report', ':id') }}';
         daily_report_url = daily_report_url.replace(':id', session_id);
         $('.daily_report_route').attr("href", daily_report_url);
+
+        var time_range_eport_url = '{{ route('orders.time.range.report', ':id') }}';
+        time_range_eport_url = time_range_eport_url.replace(':id', session_id);
+        $('.time_range_eport_route').attr("href", time_range_eport_url);
     }
+
+function setRestaurant(name, id){
+    $('.restaurantName').html(name);
+    $('#restaurantId').val(id);
+    $('.restaurant-dropdown-menu').find('.restaurant').removeClass('active');
+    $('.restaurant-dropdown-menu').find('#restaurant_id'+id).addClass('active');
+}
+
+
+$('.dropify').dropify();
+var date = new Date();
+var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+$('#datepicker').datepicker({
+    autoclose: true,
+    // format: "dd-mm-yyyy",
+});
+
+
+
+
+$(".yearDate").datepicker({
+    // format: "yyyy",
+    // viewMode: "years",
+    // minViewMode: "years"
+
+    format: " yyyy",
+    viewMode: "years",
+    minViewMode: "years",
+    autoclose: true,
+    todayHighlight: true,
+});
+
+$("#monthYear").datepicker({
+    format: "mm-yyyy",
+    viewMode: "months",
+    minViewMode: "months"
+});
+
+
+$('#monthYear input').val(`${date.getMonth() + 1}-${date.getFullYear()}`)
 </script>

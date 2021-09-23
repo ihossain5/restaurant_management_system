@@ -3,14 +3,7 @@
     Past Orders
 @endsection
 @section('restaurant_list')
-    <select name="" class="form-control restaurant">
-        @foreach ($restaurants as $all_restaurant)
-            <option value="{{ $all_restaurant->restaurant_id }}"
-                {{ $restaurant->restaurant_id == $all_restaurant->restaurant_id ? 'selected' : '' }}>
-                {{ $all_restaurant->name }}
-            </option>
-        @endforeach
-    </select>
+@include('layouts.admin.restaurant_drop-down')
 @endsection
 @section('pageCss')
     <style>
@@ -65,6 +58,7 @@
                                         <tr>
                                             <th>Order Id</th>
                                             <th>Date</th>
+                                            <th>Status</th>
                                             <th>Customer Name</th>
                                             <th>Customer Contact</th>
                                             <th>Customer Address</th>
@@ -78,7 +72,8 @@
                                                 <tr class="order{{ $order->order_id }}">
                                                     <td>{{ $order->id }}</td>
                                                     <td> {{formatDate($order->created_at)}}</td>
-
+                                                    <td class="{{(($order->status->name == 'Preparing') ? 'txt-preparing'
+                                                        :(($order->status->name == 'Delivering') ? 'txt-delivering' : (($order->status->name == 'Completed') ? 'txt-completed' : 'txt-cancelled'  )))}}">{{ $order->status->name }}</td>
                                                     <td>{{ $order->is_default_name == 0 ? $order->name : $order->customer->name }}
                                                     </td>
                                                     <td>{{ $order->is_default_contact == 0 ? $order->contact : $order->customer->contact }}
@@ -273,8 +268,8 @@
         }
 
         // restaurant change
-        $(document).on('change', '.restaurant', function() {
-            var id = $(this).val();
+        $(document).on('click', '.restaurant', function() {
+            var id = $(this).data('id');
             $.ajax({
                 type: "POST",
                 url: config.routes.getOrders,
@@ -285,6 +280,7 @@
                 dataType: 'JSON',
                 success: function(response) {
                     if (response.success === true) {
+                        setRestaurant(response.data.orders.name, response.data.id);
                         $('.restaurant_id').val(response.data.id);
                         $('#orderTable').DataTable().clear().draw();
                         setSessionId(response.data.session_id);

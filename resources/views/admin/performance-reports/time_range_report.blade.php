@@ -6,16 +6,10 @@
     @include('layouts.admin.restaurant_drop-down')
 @endsection
 @section('pageCss')
-    <style>
-
-
-    </style>
+    <style></style>
 @endsection
 @section('content')
-    <div class="preloader">
-
-    </div>
-
+    <div class="preloader"> </div>
     <div class="page-content-wrapper">
         <div class="container-fluid">
             <div class="row">
@@ -24,7 +18,7 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between mb-4">
                                 <div class="ms-header-text">
-                                    <h4 class="mt-0 header-title">Time Range Report
+                                    <h4 class="mt-0 header-title">
                                         <span class="start_date"></span>
                                          <span class="end_date"></span>
                                     </h4>
@@ -34,8 +28,50 @@
                                     <input type="date" class="form-control mt-2 date_range" id="end_date">
                                 </div>
                             </div>
+                            <div class="row pb-5">
+                                <div class="col-lg-4">
+                                    <h4 class="mt-0 header-title">Time Range Report 
+                                        <span class="start_date"></span>
+                                         <span class="end_date"></span>
+                                    </h4>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                        </div> 
+                                        <div class="col-lg-2 pr-0">
+                                            <div class="dropdown">
+                                                <button class="custom-select downloadDropDown" type="button"
+                                                    id="dropdownMenuButton" data-toggle="dropdown"
+                                                    aria-haspopup="true" aria-expanded="false">
+                                                    <img src="{{asset('backend/assets/icons/download-icon.svg')}}" alt="">
+                                                </button>
+                                                <div class="dropdown-menu downloadMenu"
+                                                    aria-labelledby="dropdownMenuButton">
+                                                    <button><img src="{{asset('backend/assets/icons/pdf-icon.svg')}}" alt=""> PDF
+                                                        File</button>
+                                                    <button><img src="{{asset('backend/assets/icons/csv-icon.svg')}}" alt=""> CSV
+                                                        File</button>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                            <span class="showError"></span>
+                                        <div class="col-lg-4">
+                                            <div class="custom-date">
+                                                <div class="input-daterange input-group" >
+                                                    <div class="customDatePicker w-100"
+                                                        style="max-width: none;">
+                                                        <img src="{{asset('backend/assets/icons/dateicon.svg')}}" alt="">
+                                                        <input type="text" class="form-control" id="datepicker"
+                                                            name="fullDate" placeholder="Select Date"/>
+                                                        <img src="{{asset('backend/assets/icons/color-arrow-down.svg')}}" alt="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="table-responsive">
                                 <table id="orderTable" class="table table-bordered dt-responsive nowrap"
                                     style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -59,13 +95,7 @@
                                         @endif
                                     </tbody>
                                     <tfoot>
-        
-                                        <tr class="table-active">
-                                            <td class="col-3 font-weight-bold">Total</td>
-                                            <td class="col-3 font-weight-bold">Total Orders <span class="total_orders"></span></td>
-                                            <td class="col-3 font-weight-bold ">Total <span class="total_amount"></span></td>
-                                        </tr>
-    
+                                        @include('layouts.admin.table_footer_order_total')
                                     </tfoot>
                                 </table>
                             </div>
@@ -73,20 +103,11 @@
                     </div>
                 </div> <!-- end col -->
             </div> <!-- end row -->
-
-
-
-
         </div><!-- container -->
-
     </div> <!-- Page content Wrapper -->
-
-
-
 
 @endsection
 @section('pageScripts')
-
     <script type='text/javascript'>
         var config = {
             routes: {
@@ -105,8 +126,8 @@
 
 
         // restaurant change
-        $(document).on('change', '.restaurant', function() {
-            var id = $(this).val();
+        $(document).on('click', '.restaurant', function() {
+            var id = $(this).data('id');
             var end_date = $('#end_date').val();
             var start_date = $('#start_date').val();
 

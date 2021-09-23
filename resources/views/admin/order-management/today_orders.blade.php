@@ -3,14 +3,9 @@
     Today's Order
 @endsection
 @section('restaurant_list')
-    <select name="" class="form-control restaurant">
-        @foreach ($restaurants as $all_restaurant)
-            <option value="{{ $all_restaurant->restaurant_id }}"
-                {{ $restaurant->restaurant_id == $all_restaurant->restaurant_id ? 'selected' : '' }}>{{ $all_restaurant->name }}
-            </option>
-        @endforeach
-    </select>
+    @include('layouts.admin.restaurant_drop-down')
 @endsection
+
 @section('pageCss')
 <style>
     .txt-preparing{
@@ -260,8 +255,8 @@
         }
 
         // restaurant change
-        $(document).on('change', '.restaurant', function() {
-            var id = $(this).val();
+        $(document).on('click', '.restaurant', function() {
+            var id = $(this).data('id');
             $.ajax({
                 type: "POST",
                 url: config.routes.getOrders,
@@ -293,7 +288,7 @@
                                     $(trDOM).addClass('order' + val.order_id + '');
                           });
                         }
-              
+                        setRestaurant(response.data.orders.name, response.data.id);
 
                     } 
                 },
