@@ -16,18 +16,6 @@
                 <div class="col-12">
                     <div class="card m-b-30">
                         <div class="card-body">
-                            <div class="d-flex justify-content-between mb-4">
-                                <div class="ms-header-text">
-                                    <h4 class="mt-0 header-title">
-                                        <span class="start_date"></span>
-                                         <span class="end_date"></span>
-                                    </h4>
-                                </div>
-                                <div class="ms-header-text float-right">
-                                    <input type="date" class="form-control date_range" id="start_date">
-                                    <input type="date" class="form-control mt-2 date_range" id="end_date">
-                                </div>
-                            </div>
                             <div class="row pb-5">
                                 <div class="col-lg-4">
                                     <h4 class="mt-0 header-title">Time Range Report 
@@ -37,7 +25,7 @@
                                 </div>
                                 <div class="col-lg-8">
                                     <div class="row">
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-4">
                                         </div> 
                                         <div class="col-lg-2 pr-0">
                                             <div class="dropdown">
@@ -55,15 +43,20 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-6">
                                             <div class="custom-date">
-                                                <div class="input-daterange input-group" >
-                                                    <div class="customDatePicker w-100"
-                                                        style="max-width: none;">
+                                                <div class="input-daterange input-group" id="date-range">
+                                                    <div class="customDatePicker">
                                                         <img src="{{asset('backend/assets/icons/dateicon.svg')}}" alt="">
-                                                        <input type="text" class="form-control" id="datepicker"
-                                                            name="fullDate" placeholder="Select Date"/>
+                                                        <input type="text" class="form-control" name="start" id="start_date"
+                                                            placeholder="Start Date" />
+                                                            <img src="{{asset('backend/assets/icons/color-arrow-down.svg')}}" alt="">
+                                                    </div>
+
+                                                    <div class="customDatePicker">
+                                                        <img src="{{asset('backend/assets/icons/dateicon.svg')}}" alt="">
+                                                        <input type="text" class="form-control" name="end" id="end_date"
+                                                            placeholder="End Date" />
                                                         <img src="{{asset('backend/assets/icons/color-arrow-down.svg')}}" alt="">
                                                     </div>
                                                 </div>
@@ -84,8 +77,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if (!empty($restaurant->all_orders))
-                                            @foreach ($restaurant->all_orders as $order)
+                                        @if (!empty($restaurant->restaurant_orders))
+                                            @foreach ($restaurant->restaurant_orders as $order)
                                                 <tr class="order{{ $order->order_id }}">
                                                     <td> {{ formatDate($order->created_at) }}</td>
                                                     <td>{{ $order->id }}</td>
@@ -121,9 +114,6 @@
             });
         });
 
-// $('start_date').hide();
-// $('end_date').hide();
-
 
         // restaurant change
         $(document).on('click', '.restaurant', function() {
@@ -145,11 +135,12 @@
                     if (response.success === true) {
                         $('.restaurant_id').val(response.data.id);
                         $('#orderTable').DataTable().clear().draw();
-                        setSessionId(response.data.session_id);
+                        setSessionId(response.data.session_id); // set restaurant id into session
+                        setRestaurant(response.data.restaurant_name, response.data.id); // set restaurant into topbar
                         $('.start_date').html('- '+response.data.start_date+' -');
-                            $('.end_date').html(response.data.end_date);
-                        if ($.trim(response.data.orders.all_orders)) {
-                            ordersData(response.data.orders.all_orders)
+                        $('.end_date').html(response.data.end_date);
+                        if ($.trim(response.data.orders)) {
+                            ordersData(response.data.orders)
                         }
                         $('.total_orders').html(response.data.total_order);
                         $('.total_amount').html('৳ ' + bdCurrencyFormat(response.data.total_amount));
@@ -171,9 +162,9 @@
 
 
         // get orders by date
-        $(".date_range").on("change", function() {
+        $(".customDatePicker").on("change", function() {
             var end_date = $('#end_date').val();
-            var restaurant_id = $('#restaurant_drop_down').val();
+            var restaurant_id = $('#restaurantId').val();
             var start_date = $('#start_date').val();
 
             if (start_date != '' && end_date != '') {
@@ -196,8 +187,8 @@
                             $('.end_date').html(response.data.end_date);
                             $('.total_orders').html(response.data.total_order);
                             $('.total_amount').html('৳ ' + bdCurrencyFormat(response.data.total_amount));
-                            if ($.trim(response.data.orders.all_orders)) {
-                                ordersData(response.data.orders.all_orders)
+                            if ($.trim(response.data.orders)) {
+                                ordersData(response.data.orders)
                             }
 
 
@@ -229,8 +220,8 @@
                     "" + val.id + "",
                     "" + '৳ ' + bdCurrencyFormat(val.amount) + "",
                     `   <button type='button' class='btn btn-outline-dark' onclick='viewOrder(${val.order_id})'>
-                                                <i class='fa fa-eye'></i>
-                                            </button>`
+                             <i class='fa fa-eye'></i>
+                        </button>`
                 ]).draw().node();
                 $(trDOM).addClass('order' + val.order_id + '');
             });

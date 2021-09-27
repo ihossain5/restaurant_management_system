@@ -56,6 +56,7 @@
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                             <div class="table-responsive">
@@ -69,8 +70,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if (!empty($restaurant->all_orders))
-                                            @foreach ($restaurant->all_orders as $order)
+                                        @if (!empty($restaurant->restaurant_orders))
+                                            @foreach ($restaurant->restaurant_orders as $order)
                                                 <tr class="order{{ $order->order_id }}">
                                                     <td> {{ formatDate($order->created_at) }}</td>
                                                     <td>{{ $order->id }}</td>
@@ -122,12 +123,12 @@
                         $('.restaurant_id').val(response.data.id);
                         $('#orderTable').DataTable().clear().draw();
                         setSessionId(response.data.session_id); // set restaurant id into session
-                        setRestaurant(response.data.orders.name, response.data.id); // set restaurant into topbar
+                        setRestaurant(response.data.restaurant_name, response.data.id); // set restaurant into topbar
                         $('.total_orders').html(response.data.total_order);
                         $('.total_amount').html('৳ ' + bdCurrencyFormat(response.data.total_amount));
                         $('.current_date').html(response.data.current_date);
-                        if($.trim(response.data.orders.all_orders) ){
-                            ordersData(response.data.orders.all_orders)
+                        if($.trim(response.data.orders) ){
+                            ordersData(response.data.orders)
                         }
                         
                     }
@@ -168,8 +169,8 @@
                         $('.current_date').html(response.data.current_date);
                         $('.total_orders').html(response.data.total_order);
                         $('.total_amount').html('৳ ' + bdCurrencyFormat(response.data.total_amount));
-                        if($.trim(response.data.orders.all_orders) ){
-                            ordersData(response.data.orders.all_orders)
+                        if($.trim(response.data.orders) ){
+                            ordersData(response.data.orders)
                         }
 
 

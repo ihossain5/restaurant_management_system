@@ -1,3 +1,7 @@
+@php
+use App\Http\Controllers\Backend\RestaurantController;
+$restaurant_id = RestaurantController::getRestaurantIdBySession();
+@endphp
 <!-- ========== Left Sidebar Start ========== -->
 <div class="left side-menu">
 
@@ -98,7 +102,7 @@
             <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-device-desktop"></i><span>My Restaurant
                     <span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
             <ul class="list-unstyled">
-                <li><a class="restaurant_overview" href="{{ route('restaurant.overview',[session()->get('restaurant_id') ?? 1]) }}">Restaurant Overview</a></li>
+                <li><a class="restaurant_overview" href="{{ route('restaurant.overview',[$restaurant_id]) }}">Restaurant Overview</a></li>
             </ul>
         </li>
 
@@ -108,10 +112,10 @@
                 Management<span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
             <ul class="list-unstyled">
                 {{-- <li><a href="{{ route('item.category.index') }}"><i class="fa fa-cutlery"></i>Item Categories</a></li> --}}
-                <li><a class="category_link" href="{{ route('item.category',[session()->get('restaurant_id') ?? 1]) }}"><i class="fa fa-cutlery"></i>Item Categories</a></li>
+                <li><a class="category_link" href="{{ route('item.category',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Item Categories</a></li>
                 {{-- <li><a class="category_link" href="{{ route('item.category',[1]) }}"><i class="fa fa-cutlery"></i>Item Categories</a></li> --}}
                 {{-- <li><a href="{{ route('item.index') }}"><i class="fa fa-cutlery"></i>Items</a></li> --}}
-                <li><a  class="item_link" href="{{ route('item.index',[session()->get('restaurant_id') ?? 1]) }}"><i class="fa fa-cutlery"></i>Items</a></li>
+                <li><a  class="item_link" href="{{ route('item.index',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Items</a></li>
                 {{-- <li><a  class="item_link" href="{{ route('item.index',[9]) }}"><i class="fa fa-cutlery"></i>Items</a></li> --}}
             </ul>
         </li>
@@ -119,17 +123,17 @@
         <li class="has_sub">
             <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-cutlery"></i><span>Orders<span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
             <ul class="list-unstyled">
-                <li><a class="order_link" href="{{ route('orders.today',[session()->get('restaurant_id') ?? 1]) }}"><i class="fa fa-cutlery"></i>Today's Orders</a></li>
-                <li><a class="past_order_link" href="{{ route('orders.past',[session()->get('restaurant_id') ?? 1]) }}"><i class="fa fa-cutlery"></i>Past Orders</a></li>
+                <li><a class="order_link" href="{{ route('orders.today',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Today's Orders</a></li>
+                <li><a class="past_order_link" href="{{ route('orders.past',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Past Orders</a></li>
             </ul>
         </li>
         <li class="has_sub">
             <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-cutlery"></i><span>Performance Report<span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
             <ul class="list-unstyled">
-                <li><a class="daily_report_route" href="{{ route('orders.daily.report',[session()->get('restaurant_id') ?? 1]) }}"><i class="fa fa-cutlery"></i>Daily Report</a></li>
-                <li><a class="time_range_eport_route" href="{{ route('orders.time.range.report',[session()->get('restaurant_id')?? 1]) }}"><i class="fa fa-cutlery"></i>Time Range Report</a></li>
-                <li><a class="monthly_report_route" href="{{ route('order.report.restaurant.current.month',[session()->get('restaurant_id')?? 1]) }}"><i class="fa fa-cutlery"></i>Monthly Report</a></li>
-                <li><a class="item_performance_report_route" href="{{ route('orders.past',[session()->get('restaurant_id')?? 1]) }}"><i class="fa fa-cutlery"></i>Item Performance Report</a></li>
+                <li><a class="daily_report_route" href="{{ route('orders.daily.report',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Daily Report</a></li>
+                <li><a class="time_range_eport_route" href="{{ route('orders.time.range.report',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Time Range Report</a></li>
+                <li><a class="monthly_report_route" href="{{ route('order.report.restaurant.current.month',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Monthly Report</a></li>
+                <li><a class="item_performance_report_route" href="{{ route('order.report.item',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Item Performance Report</a></li>
             </ul>
         </li>
         

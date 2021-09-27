@@ -6,11 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class Order extends Model
-{
+class Order extends Model {
     use HasFactory;
     protected $primaryKey = 'order_id';
-    protected $fillable = [
+    protected $fillable   = [
         'customer_id',
         'order_status_id',
         'id',
@@ -25,19 +24,19 @@ class Order extends Model
         'apology_note',
         'special_notes',
     ];
-    public function items(){
-        return $this->belongsToMany(Item::class,'order_items', 'order_id', 'item_id')->withPivot('quantity','price')->withTimestamps();
+    public function items() {
+        return $this->belongsToMany(Item::class, 'order_items', 'order_id', 'item_id')->withPivot('quantity', 'price')->withTimestamps();
     }
 
-    public function status(){
-        return $this->belongsTo(OrderStatus::class,'order_status_id');
+    public function status() {
+        return $this->belongsTo(OrderStatus::class, 'order_status_id');
     }
-    public function customer(){
-        return $this->belongsTo(Customer::class,'order_id','customer_id');
+    public function customer() {
+        return $this->belongsTo(Customer::class,'customer_id');
     }
 
-    public static function todayOrdersByRestaurantId($id){
-        return Restaurant::with(['restaurant_items.orders' => function ($query)  {
+    public static function todayOrdersByRestaurantId($id) {
+        return Restaurant::with(['restaurant_items.orders' => function ($query) {
             $query->whereDate('orders.created_at', DB::raw('CURDATE()'))->get();
         }])->find($id);
 

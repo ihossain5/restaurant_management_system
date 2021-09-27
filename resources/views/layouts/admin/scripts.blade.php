@@ -49,7 +49,7 @@ crossorigin="anonymous"></script>
 integrity="sha512-8QFTrG0oeOiyWo/VM9Y8kgxdlCryqhIxVeRpWSezdRRAvarxVtwLnGroJgnVW9/XBRduxO/z1GblzPrMQoeuew=="
 crossorigin="anonymous"></script>
 
-<script src="{{asset('backend/assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
+<script src="{{ asset('backend/assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
 <script>
     $(document).ajaxStart(function() {
         $('.preloader').empty();
@@ -109,46 +109,60 @@ crossorigin="anonymous"></script>
         var time_range_eport_url = '{{ route('orders.time.range.report', ':id') }}';
         time_range_eport_url = time_range_eport_url.replace(':id', session_id);
         $('.time_range_eport_route').attr("href", time_range_eport_url);
+
+        var monthly_report_url = '{{ route('order.report.restaurant.current.month', ':id') }}';
+        monthly_report_url = monthly_report_url.replace(':id', session_id);
+        $('.monthly_report_route').attr("href", monthly_report_url);
+
+        var item_performance_report_url = '{{ route('order.report.item', ':id') }}';
+        item_performance_report_url = item_performance_report_url.replace(':id', session_id);
+        $('.item_performance_report_route').attr("href", item_performance_report_url);
     }
 
-function setRestaurant(name, id){
-    $('.restaurantName').html(name);
-    $('#restaurantId').val(id);
-    $('.restaurant-dropdown-menu').find('.restaurant').removeClass('active');
-    $('.restaurant-dropdown-menu').find('#restaurant_id'+id).addClass('active');
-}
-
-
-$('.dropify').dropify();
-var date = new Date();
-var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-
-$('#datepicker').datepicker({
-    autoclose: true,
-    // format: "dd-mm-yyyy",
-});
+    function setRestaurant(name, id) {
+        $('.restaurantName').html(name);
+        $('#restaurantId').val(id);
+        $('.restaurant-dropdown-menu').find('.restaurant').removeClass('active');
+        $('.restaurant-dropdown-menu').find('#restaurant_id' + id).addClass('active');
+    }
 
 
 
+    var date = new Date();
+    var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
-$(".yearDate").datepicker({
-    // format: "yyyy",
-    // viewMode: "years",
-    // minViewMode: "years"
-
-    format: " yyyy",
-    viewMode: "years",
-    minViewMode: "years",
-    autoclose: true,
-    todayHighlight: true,
-});
-
-$("#monthYear").datepicker({
-    format: "mm-yyyy",
-    viewMode: "months",
-    minViewMode: "months"
-});
+    $('#datepicker').datepicker({
+        autoclose: true,
+        // format: "dd-mm-yyyy",
+    });
 
 
-$('#monthYear input').val(`${date.getMonth() + 1}-${date.getFullYear()}`)
+
+
+    $(".yearDate").datepicker({
+        // format: "yyyy",
+        // viewMode: "years",
+        // minViewMode: "years"
+
+        format: " yyyy",
+        viewMode: "years",
+        minViewMode: "years",
+        autoclose: true,
+        todayHighlight: true,
+        
+    });
+
+    $("#monthYear").datepicker({
+        format: "mm-yyyy",
+        viewMode: "months",
+        minViewMode: "months",
+        autoclose: true,
+    });
+
+
+    $('#monthYear input').val(`${date.getMonth() + 1}-${date.getFullYear()}`);
+    $('#date-range').datepicker({
+        toggleActive: true,
+        autoclose: true,
+    });
 </script>

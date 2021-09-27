@@ -115,6 +115,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
         Route::get('{id}/time-range/reports', [OrderPerformanceController::class, 'timeRangeReports'])->name('orders.time.range.report');   
         Route::post('/time-range/reports', [OrderPerformanceController::class, 'timeRangeReportsByRestaurant'])->name('order.report.restaurant.date.range');   
         Route::get('/{id}/monthly-reports', [OrderPerformanceController::class, 'currentMonthReportsByRestaurant'])->name('order.report.restaurant.current.month');   
+        Route::post('monthly-reports', [OrderPerformanceController::class, 'monthlyOrdersReportByRestaurant'])->name('order.report.restaurant.month');   
+        Route::get('/{id}/item/performance-reports', [OrderPerformanceController::class, 'itemReportsByRestaurant'])->name('order.report.item');   
+        Route::post('item/performance-reports', [OrderPerformanceController::class, 'itemReportsByDate'])->name('order.report.item.date');   
       
 
     });  //* Restaurant route end */

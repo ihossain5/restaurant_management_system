@@ -7,28 +7,32 @@
 @endsection
 
 @section('pageCss')
-<style>
-    .txt-preparing{
-        color: rgb(38, 38, 160);
-        font-weight: 600;
-    }
-    .txt-cancelled{
-        color: rgb(255, 0, 0);
-        font-weight: 600;
-    }
-    .txt-delivering{
-        color: rgb(189, 179, 45);
-        font-weight: 600;
-    }
-    .txt-completed{
-        color: rgb(6, 78, 4);
-        font-weight: 600;
-    }
-    .view-modal p {
+    <style>
+        .txt-preparing {
+            color: rgb(38, 38, 160);
+            font-weight: 600;
+        }
+
+        .txt-cancelled {
+            color: rgb(255, 0, 0);
+            font-weight: 600;
+        }
+
+        .txt-delivering {
+            color: rgb(189, 179, 45);
+            font-weight: 600;
+        }
+
+        .txt-completed {
+            color: rgb(6, 78, 4);
+            font-weight: 600;
+        }
+
+        .view-modal p {
             line-height: 2;
         }
 
-</style>
+    </style>
 @endsection
 @section('content')
     <div class="preloader">
@@ -45,7 +49,7 @@
                                 <div class="ms-header-text">
                                     <h4 class="mt-0 header-title">All Today's Order</h4>
                                 </div>
-                          </div>
+                            </div>
 
                             <span class="showError"></span>
                             <div class="table-responsive">
@@ -63,20 +67,24 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if (!empty($new_restaurant->all_orders))
-                                            @foreach ($new_restaurant->all_orders as $order)
+                                        @if (!empty($restaurant->restaurant_orders))
+                                            @foreach ($restaurant->restaurant_orders as $order)
                                                 <tr class="order{{ $order->order_id }}">
                                                     <td>{{ $order->id }}</td>
-                                                    <td class="{{(($order->status->name == 'Preparing') ? 'txt-preparing'
-                                                    :(($order->status->name == 'Delivering') ? 'txt-delivering' : (($order->status->name == 'Completed') ? 'txt-completed' : 'txt-cancelled'  )))}}">{{ $order->status->name }}</td>
+                                                    <td
+                                                        class="{{ $order->status->name == 'Preparing' ? 'txt-preparing' : ($order->status->name == 'Delivering' ? 'txt-delivering' : ($order->status->name == 'Completed' ? 'txt-completed' : 'txt-cancelled')) }}">
+                                                        {{ $order->status->name }}</td>
 
-                                                    <td>{{ $order->is_default_name == 0 ? $order->name : $order->customer->name }}</td>
-                                                    <td>{{ $order->is_default_contact == 0 ? $order->contact : $order->customer->contact }}</td>
-                                                    <td>{{ $order->is_default_address == 0 ? $order->address : $order->customer->address }}</td>
-                                                    <td><span>৳</span> {{currency_format($order->amount)}}</td>
+                                                    <td>{{ $order->is_default_name == 0 ? $order->name : $order->customer->name }}
+                                                    </td>
+                                                    <td>{{ $order->is_default_contact == 0 ? $order->contact : $order->customer->contact }}
+                                                    </td>
+                                                    <td>{{ $order->is_default_address == 0 ? $order->address : $order->customer->address }}
+                                                    </td>
+                                                    <td><span>৳</span> {{ currency_format($order->amount) }}</td>
 
                                                     <td>
-                                                      <button type='button' class='btn btn-outline-dark'
+                                                        <button type='button' class='btn btn-outline-dark'
                                                             onclick='viewOrder({{ $order->order_id }})'><i
                                                                 class='fa fa-eye'></i></button>
                                                     </td>
@@ -118,14 +126,14 @@
                                 <strong>Customer Name:</strong> <span id="view_customer_name"></span><br>
                                 <strong>Customer Email:</strong> <span id="view_customer_email"></span><br>
                                 <strong>Customer Contact:</strong> <span id="view_customer_contact"></span><br>
+                                <button type="button" class="btn btn-outline-purple float-right waves-effect waves-light"
+                                    name="button" id="order_status">
+                                </button>
                                 <strong>Customer Address :</strong> <span id="view_customer_address"></span><br>
                                 <strong>Special Notes :</strong> <span id="view_notes"></span><br>
                             </p>
-                            <button type="button" class="btn btn-outline-purple float-right waves-effect waves-light"
-                            name="button" id="order_status">
-                        </button>  
                         </div>
-                                   
+
                     </div>
                     <div class="row p-3">
                         <div class="table-responsive">
@@ -155,8 +163,8 @@
                                         <td class="col-3 test"></td>
                                         <th class="col-3"></th>
                                         <td class="col-3 view_total"> </td>
-                                    </tr>    
-                                    
+                                    </tr>
+
                                 </tfoot>
 
                             </table>
@@ -187,7 +195,7 @@
             });
         });
 
-        
+
         // view single 
         function viewOrder(id) {
             $.ajax({
@@ -201,24 +209,27 @@
                 success: function(response) {
                     if (response.success == true) {
                         $('#view_order_id').text(response.data.id);
-                        $('#view_customer_name').text(response.data.is_default_name == 0 ? response.data.name : response.data.customer.name );
-                        $('#view_customer_contact').text(response.data.is_default_contact == 0 ? response.data.contact : response.data.customer.contact );
-                        $('#view_customer_address').text(response.data.is_default_address == 0 ? response.data.address : response.data.customer.address );
-                        $('#view_customer_email').text(response.data.customer.email );
-                        $('#view_customer_email').text(response.data.customer.email );
-                        $('#view_notes').text(response.data.special_notes ?? 'N/A' );
-                        
-                        if(response.data.status.name == 'Preparing'){
+                        $('#view_customer_name').text(response.data.is_default_name == 0 ? response.data.name :
+                            response.data.customer.name);
+                        $('#view_customer_contact').text(response.data.is_default_contact == 0 ? response.data
+                            .contact : response.data.customer.contact);
+                        $('#view_customer_address').text(response.data.is_default_address == 0 ? response.data
+                            .address : response.data.customer.address);
+                        $('#view_customer_email').text(response.data.customer.email ?? 'N/A');
+                        $('#view_notes').text(response.data.special_notes ?? 'N/A');
+
+                        if (response.data.status.name == 'Preparing') {
                             var class_name = 'primary';
-                        }else if(response.data.status.name == 'Delivering'){
+                        } else if (response.data.status.name == 'Delivering') {
                             var class_name = 'success';
-                        }else if(response.data.status.name == 'Completed'){
+                        } else if (response.data.status.name == 'Completed') {
                             var class_name = 'success';
-                        }else{
+                        } else {
                             var class_name = 'danger';
                         }
 
-                        $('#order_status').attr('class','btn float-right btn-outline-'+class_name + ' ' +response.data.class);
+                        $('#order_status').attr('class', 'btn float-right btn-outline-' + class_name + ' ' +
+                            response.data.class);
                         $('#order_status').text(response.data.status.name);
 
                         $('.apeend_tbody').empty();
@@ -232,8 +243,13 @@
                             );
 
                         });
-                        $('.view_total').html('৳ ' +bdCurrencyFormat(response.data.amount));
-                        $('.deleveryFee').html('৳ '+ bdCurrencyFormat(response.data.delivery_fee));
+                        $('.view_total').html('৳ ' + bdCurrencyFormat(response.data.amount));
+                        if(response.data.delivery_fee != null){
+                            $('.deleveryFee').html('৳ ' + bdCurrencyFormat(response.data.delivery_fee));
+                        }else{
+                            $('.deleveryFee').html('৳ ' + 0);
+                        }
+                       
 
                         $('#viewModal').modal('show');
 
@@ -269,28 +285,32 @@
                     if (response.success === true) {
                         $('.restaurant_id').val(response.data.id);
                         $('#orderTable').DataTable().clear().draw();
-                        setSessionId(response.data.session_id);
+                        setSessionId(response.data.session_id); // set restaurant id into session
+                        setRestaurant(response.data.restaurant_name, response.data.id); // set restaurant into topbar
 
-                        if($.trim(response.data.orders.all_orders) ){
+                        if ($.trim(response.data.orders)) {
                             var orderTable = $('#orderTable').DataTable();
-                            $.each(response.data.orders.all_orders,function(key,val){
+                            $.each(response.data.orders, function(key, val) {
                                 var trDOM = orderTable.row.add([
-                                        "" + val.name + "",
-                                        "" + val.status.name + "",
-                                        "" + val.is_default_name == 0 ? val.name : val.customer.name + "",
-                                        "" + val.is_default_contact == 0 ? val.contact : val.customer.contact + "",
-                                        "" + val.is_default_address == 0 ? val.address : val.customer.address + "",
-                                        "" + val.amount + "",
-                                        `   <button type='button' class='btn btn-outline-dark' onclick='viewOrder(${val.order_id})'>
+                                    "" + val.id + "",
+                                    "" + val.status.name + "",
+                                    "" + val.is_default_name == 0 ? val.name : val
+                                    .customer.name + "",
+                                    "" + val.is_default_contact == 0 ? val.contact : val
+                                    .customer.contact + "",
+                                    "" + val.is_default_address == 0 ? val.address : val
+                                    .customer.address + "",
+                                    "" + val.amount + "",
+                                    `   <button type='button' class='btn btn-outline-dark' onclick='viewOrder(${val.order_id})'>
                                                 <i class='fa fa-eye'></i>
                                             </button>`
-                                    ]).draw().node();
-                                    $(trDOM).addClass('order' + val.order_id + '');
-                          });
+                                ]).draw().node();
+                                $(trDOM).addClass('order' + val.order_id + '');
+                            });
                         }
                         setRestaurant(response.data.orders.name, response.data.id);
 
-                    } 
+                    }
                 },
                 error: function(error) {
                     if (error.status == 404) {

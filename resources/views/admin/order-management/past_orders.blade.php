@@ -67,8 +67,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if (!empty($restaurant->all_orders))
-                                            @foreach ($restaurant->all_orders as $order)
+                                        @if (!empty($restaurant->restaurant_orders))
+                                            @foreach ($restaurant->restaurant_orders as $order)
                                                 <tr class="order{{ $order->order_id }}">
                                                     <td>{{ $order->id }}</td>
                                                     <td> {{formatDate($order->created_at)}}</td>
@@ -216,8 +216,7 @@
                             .contact : response.data.customer.contact);
                         $('#view_customer_address').text(response.data.is_default_address == 0 ? response.data
                             .address : response.data.customer.address);
-                        $('#view_customer_email').text(response.data.customer.email);
-                        $('#view_customer_email').text(response.data.customer.email);
+                        $('#view_customer_email').text(response.data.customer.email ?? 'N/A');
                         $('#view_notes').text(response.data.special_notes ?? 'N/A');
 
                         if (response.data.status.name == 'Preparing') {
@@ -246,7 +245,12 @@
 
                         });
                         $('.view_total').html('৳ ' + bdCurrencyFormat(response.data.amount));
-                        $('.deleveryFee').html('৳ ' + bdCurrencyFormat(response.data.delivery_fee));
+                        if(response.data.delivery_fee != null){
+                            $('.deleveryFee').html('৳ ' + bdCurrencyFormat(response.data.delivery_fee));
+                        }else{
+                            $('.deleveryFee').html('৳ ' + 0);
+                        }
+
 
                         $('#viewModal').modal('show');
 
@@ -280,16 +284,17 @@
                 dataType: 'JSON',
                 success: function(response) {
                     if (response.success === true) {
-                        setRestaurant(response.data.orders.name, response.data.id);
                         $('.restaurant_id').val(response.data.id);
                         $('#orderTable').DataTable().clear().draw();
-                        setSessionId(response.data.session_id);
+                        setSessionId(response.data.session_id); // set restaurant id into session
+                        setRestaurant(response.data.restaurant_name, response.data.id); // set restaurant into topbar
 
-                        if ($.trim(response.data.orders.all_orders)) {
+                        if ($.trim(response.data.orders)) {
                             var orderTable = $('#orderTable').DataTable();
-                            $.each(response.data.orders.all_orders, function(key, val) {
+                            $.each(response.data.orders, function(key, val) {
                                 var trDOM = orderTable.row.add([
-                                    "" + val.name + "",
+                                    "" + val.id + "",
+                                    "" + response.data.date + "",
                                     "" + val.status.name + "",
                                     "" + val.is_default_name == 0 ? val.name : val
                                     .customer.name + "",

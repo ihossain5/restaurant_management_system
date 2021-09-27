@@ -31,19 +31,31 @@ class Restaurant extends Model {
         return $this->hasManyThrough(Item::class, Category::class, 'restaurant_id', 'category_id')->with('category', 'item_assets')->orderBy('created_at', 'DESC');
     }
 
+    public function restaurant_orders() {
+        return $this->hasMany(Order::class, 'restaurant_id')->with('status','customer')->orderBy('created_at', 'DESC');
+    }
+
     public static function ordersbyDate($date, $id) {
-       return self::with(['restaurant_items.orders' => function ($query) use ($date) {
+       return self::with(['restaurant_orders' => function ($query) use ($date) {
             $query->whereDate('orders.created_at', $date)->get();
         }])->find($id);
     }
 
     public static function getOrdersByDateRange($start_date, $end_date, $id){
-        return self::with(['restaurant_items.orders' => function ($query) use ($start_date, $end_date) {
+        return self::with(['restaurant_orders.items','restaurant_orders.items.category','restaurant_orders' => function ($query) use ($start_date, $end_date) {
             $query->whereDate('orders.created_at', '>=', $start_date)
             ->whereDate('orders.created_at', '<=', $end_date)
             ->get();
         }])->find($id);
         
+    }
+
+    public static function getOrdersByMonth($month, $year, $id){
+        return self::with(['restaurant_orders' => function ($query) use ($month, $year) {
+            $query->whereMonth('orders.created_at', $month)
+            ->whereYear('orders.created_at', $year)
+            ->get();
+        }])->find($id); 
     }
 
 }

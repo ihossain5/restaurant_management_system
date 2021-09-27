@@ -457,4 +457,10 @@ class RestaurantController extends Controller {
         return $count;
     }
 
+    public static function getRestaurantIdBySession(){
+        $restaurant = Restaurant::first();
+        $restaurant_id = Session::get('restaurant_id') ?? $restaurant->restaurant_id;
+        return $restaurant_id;
+    }
+
 }

@@ -3,7 +3,7 @@
     Daily Report
 @endsection
 @section('restaurant_list')
-    {{-- @include('layouts.admin.restaurant_drop-down') --}}
+    @include('layouts.admin.restaurant_drop-down')
 @endsection
 @section('pageCss')
     <style>
@@ -20,18 +20,51 @@
                 <div class="col-12">
                     <div class="card m-b-30">
                         <div class="card-body">
-                            <div class="d-flex justify-content-between mb-4">
-                                <div class="ms-header-text">
-                                    <h4 class="mt-0 header-title">Daily Report <span
-                                            class="current_date"></span></h4>
+                            <div class="row pb-5">
+                                <div class="col-lg-4">
+                                    <h4 class="mt-0 header-title">Monthly Report -
+                                        <span class="current_month">{{$current_month_name}},</span>
+                                        <span class="current_year">{{$year}}</span>
+                                    </h4>
                                 </div>
-                                <div class="ms-header-text float-right">
-                                    <input type="date" class="form-control" id="datepicker">
-                                    {{-- <input type="text" class="form-control" id="datepicker"/> --}}
+                                <div class="col-lg-8">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                        </div> 
+                                        <div class="col-lg-2 pr-0">
+                                            <div class="dropdown">
+                                                <button class="custom-select downloadDropDown" type="button"
+                                                    id="dropdownMenuButton" data-toggle="dropdown"
+                                                    aria-haspopup="true" aria-expanded="false">
+                                                    <img src="{{asset('backend/assets/icons/download-icon.svg')}}" alt="">
+                                                </button>
+                                                <div class="dropdown-menu downloadMenu"
+                                                    aria-labelledby="dropdownMenuButton">
+                                                    <button><img src="{{asset('backend/assets/icons/pdf-icon.svg')}}" alt=""> PDF
+                                                        File</button>
+                                                    <button><img src="{{asset('backend/assets/icons/csv-icon.svg')}}" alt=""> CSV
+                                                        File</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4">
+                                            <div class="custom-date">
+                                                <div class="input-daterange input-group" id="monthYear">
+                                                    <div class="customDatePicker w-100"
+                                                        style="max-width: none;">
+                                                        <img src="{{asset('backend/assets/icons/dateicon.svg')}}" alt="">
+                                                        <input type="text" class="form-control monthYear" name="monthYear"
+                                                            placeholder="Select Year Month" />
+                                                        <img src="{{asset('backend/assets/icons/color-arrow-down.svg')}}" alt="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-
-                            <span class="showError"></span>
+  
                             <div class="table-responsive">
                                 <table id="orderTable" class="table table-bordered dt-responsive nowrap"
                                     style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -44,8 +77,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if (!empty($restaurant->all_orders))
-                                            @foreach ($restaurant->all_orders as $order)
+                                        @if (!empty($restaurant->restaurant_orders))
+                                            @foreach ($restaurant->restaurant_orders as $order)
                                                 <tr class="order{{ $order->order_id }}">
                                                     <td> {{ formatDate($order->created_at) }}</td>
                                                     <td>{{ $order->id }}</td>
@@ -54,6 +87,13 @@
                                             @endforeach
                                         @endif
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="table-active">
+                                            <td class="col-3 font-weight-bold">TOTAL</td>
+                                            <td class="col-3 font-weight-bold">TOTAL <span class="total_orders">{{$total_order}}</span> ORDERS</td>
+                                            <td class="col-3 font-weight-bold ">TOTAL <span class="total_amount">৳ {{currency_format($total_amount)}}</span></td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -79,8 +119,7 @@
     <script type='text/javascript'>
         var config = {
             routes: {
-                getOrders: "{!! route('order.daily.report.restaurant') !!}",
-                getOrdersByDate: "{!! route('order.daily.report.restaurant.date') !!}",
+                getOrdersByMonth: "{!! route('order.report.restaurant.month') !!}",
             }
         };
         $(document).ready(function() {
@@ -92,12 +131,12 @@
 
 
         // restaurant change
-        $(document).on('change', '.restaurant', function() {
-            var id = $(this).val();
-            var date = $('#datepicker').val();
+        $(document).on('click', '.restaurant', function() {
+            var id = $(this).data('id');
+            var date = $('.monthYear').val();
             $.ajax({
                 type: "POST",
-                url: config.routes.getOrdersByDate,
+                url: config.routes.getOrdersByMonth,
                 data: {
                     id: id,
                     date: date,
@@ -108,10 +147,14 @@
                     if (response.success === true) {
                         $('.restaurant_id').val(response.data.id);
                         $('#orderTable').DataTable().clear().draw();
-                        setSessionId(response.data.session_id);
-                        $('.current_date').html(response.data.current_date);
-                        if($.trim(response.data.orders.all_orders) ){
-                            ordersData(response.data.orders.all_orders)
+                        setSessionId(response.data.session_id); // set restaurant id into session
+                        setRestaurant(response.data.restaurant_name, response.data.id); // set restaurant into topbar
+                        $('.current_year').html(response.data.year);
+                        $('.current_month').html(response.data.month + ',');
+                        $('.total_orders').html(response.data.total_order);
+                        $('.total_amount').html('৳ ' + bdCurrencyFormat(response.data.total_amount));
+                        if($.trim(response.data.orders) ){
+                            ordersData(response.data.orders)
                         }
                     }
                 },
@@ -131,12 +174,12 @@
 
 
         // get orders by date
-        $("#datepicker").on("change", function() {
+        $(".monthYear").on("change", function() {
             var date = $(this).val();
-            var restaurant_id = $('#restaurant_drop_down').val();
+            var restaurant_id = $('#restaurantId').val();
             $.ajax({
                 type: "POST",
-                url: config.routes.getOrdersByDate,
+                url: config.routes.getOrdersByMonth,
                 data: {
                     id: restaurant_id,
                     date: date,
@@ -148,9 +191,12 @@
                         $('.restaurant_id').val(response.data.id);
                         $('#orderTable').DataTable().clear().draw();
                         setSessionId(response.data.session_id);
-                        $('.current_date').html(response.data.current_date);
-                        if($.trim(response.data.orders.all_orders) ){
-                            ordersData(response.data.orders.all_orders)
+                        $('.current_year').html(response.data.year);
+                        $('.current_month').html(response.data.month + ',');
+                        $('.total_orders').html(response.data.total_order);
+                        $('.total_amount').html('৳ ' + bdCurrencyFormat(response.data.total_amount));
+                        if($.trim(response.data.orders) ){
+                            ordersData(response.data.orders)
                         }
 
 
