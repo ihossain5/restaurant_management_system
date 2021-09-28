@@ -8,12 +8,11 @@
         <!-- item-->
         @foreach ($restaurants as $data)
             <a href="javascript:void(0);" data-id="{{$data->restaurant_id}}" id="restaurant_id{{$data->restaurant_id}}"
-                class="dropdown-item notify-item  restaurant {{ $restaurant->restaurant_id == $data->restaurant_id ? 'active' : '' }}">
+                class="dropdown-item notify-item restaurant_list  restaurant {{ $restaurant->restaurant_id == $data->restaurant_id ? 'active' : '' }}">
                 {{ $data->name }} </a>
         @endforeach
         <!-- All-->
-        <a href="javascript:void(0);" class="dropdown-item notify-item text-right addRestaurent" data-toggle="modal"
-            data-target="#addRestaturentModal">
+        <a href="javascript:void(0);" class="dropdown-item notify-item text-right addRestaurent" data-toggle="modal" data-target="#RestaurantAdd">
             +add a new restaurant
         </a>
 

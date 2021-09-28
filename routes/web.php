@@ -63,7 +63,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
         Route::post('/delete', [HomeHeroSectionController::class, 'destroy'])->name('hero.section.delete');
 
     }); //* Home Hero section route end */
-    
 
     //* About us oute start */
     Route::group(['prefix' => 'about-us'], function () {
@@ -74,7 +73,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
         Route::post('/delete', [AboutUsController::class, 'destroy'])->name('about.us.delete');
 
     }); //* About us route end */
-   
 
     //* Contact us route start */
     Route::group(['prefix' => 'contact-us'], function () {
@@ -84,8 +82,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
         Route::post('/update', [ContactUsController::class, 'update'])->name('contact.us.update');
         Route::post('/delete', [ContactUsController::class, 'destroy'])->name('contact.us.delete');
 
-    });  //* Contact us route end */
-  
+    }); //* Contact us route end */
 
     //* Asset Type route start */
     Route::group(['prefix' => 'asset-types'], function () {
@@ -96,7 +93,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
         Route::post('/update', [AssetTypeController::class, 'update'])->name('asset.type.update');
         Route::post('/delete', [AssetTypeController::class, 'destroy'])->name('asset.type.delete');
 
-    });  //* Asset Type route end */
+    }); //* Asset Type route end */
 
     //* Restaurant route start */
     Route::group(['prefix' => 'restaurants'], function () {
@@ -109,18 +106,21 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
         Route::post('/deleteAsset', [RestaurantController::class, 'deleteAsset'])->name('restaurant.asset.delete');
         Route::get('/{id}/overview', [RestaurantController::class, 'restaurantOverview'])->name('restaurant.overview');
         Route::post('/overview', [RestaurantController::class, 'orderReportByRestaurant'])->name('order.report.restaurant');
-        Route::get('{id}/daily-reports', [OrderPerformanceController::class, 'dailyReports'])->name('orders.daily.report');   
-        Route::post('daily-reports', [OrderPerformanceController::class, 'dailyReportByRestaurant'])->name('order.daily.report.restaurant');   
-        Route::post('order-reports', [OrderPerformanceController::class, 'dateWiseReportByRestaurant'])->name('order.daily.report.restaurant.date');   
-        Route::get('{id}/time-range/reports', [OrderPerformanceController::class, 'timeRangeReports'])->name('orders.time.range.report');   
-        Route::post('/time-range/reports', [OrderPerformanceController::class, 'timeRangeReportsByRestaurant'])->name('order.report.restaurant.date.range');   
-        Route::get('/{id}/monthly-reports', [OrderPerformanceController::class, 'currentMonthReportsByRestaurant'])->name('order.report.restaurant.current.month');   
-        Route::post('monthly-reports', [OrderPerformanceController::class, 'monthlyOrdersReportByRestaurant'])->name('order.report.restaurant.month');   
-        Route::get('/{id}/item/performance-reports', [OrderPerformanceController::class, 'itemReportsByRestaurant'])->name('order.report.item');   
-        Route::post('item/performance-reports', [OrderPerformanceController::class, 'itemReportsByDate'])->name('order.report.item.date');   
-      
+        Route::get('{id}/daily-reports', [OrderPerformanceController::class, 'dailyReports'])->name('orders.daily.report');
 
-    });  //* Restaurant route end */
+        Route::get('{id}/daily/order-reports', [OrderPerformanceController::class, 'dailyOrderReports'])->name('daily.order.report.restaurant');
+        Route::get('date-wise/order-reports', [OrderPerformanceController::class, 'dailyOrderReportsByRestaurant'])->name('date.wise.order.report.restaurant');
+
+        Route::post('daily-reports', [OrderPerformanceController::class, 'dailyReportByRestaurant'])->name('order.daily.report.restaurant');
+        Route::post('order-reports', [OrderPerformanceController::class, 'dateWiseReportByRestaurant'])->name('order.daily.report.restaurant.date');
+        Route::get('{id}/time-range/reports', [OrderPerformanceController::class, 'timeRangeReports'])->name('orders.time.range.report');
+        Route::post('/time-range/reports', [OrderPerformanceController::class, 'timeRangeReportsByRestaurant'])->name('order.report.restaurant.date.range');
+        Route::get('/{id}/monthly-reports', [OrderPerformanceController::class, 'currentMonthReportsByRestaurant'])->name('order.report.restaurant.current.month');
+        Route::post('monthly-reports', [OrderPerformanceController::class, 'monthlyOrdersReportByRestaurant'])->name('order.report.restaurant.month');
+        Route::get('/{id}/item/performance-reports', [OrderPerformanceController::class, 'itemReportsByRestaurant'])->name('order.report.item');
+        Route::post('item/performance-reports', [OrderPerformanceController::class, 'itemReportsByDate'])->name('order.report.item.date');
+
+    }); //* Restaurant route end */
 
     //* Restaurant Manager route start */
     Route::group(['prefix' => 'managers'], function () {
@@ -130,7 +130,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
         Route::post('/show', [ManagerController::class, 'show'])->name('restaurant.manager.show');
         Route::post('/update', [ManagerController::class, 'update'])->name('restaurant.manager.update');
         Route::post('/delete', [ManagerController::class, 'destroy'])->name('restaurant.manager.delete');
-    });  //* Restaurant Manager route end */
+    }); //* Restaurant Manager route end */
 
     //* Item route start */
     Route::group(['middleware' => 'web'], function () {
@@ -146,43 +146,45 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
             Route::post('/restaurant-items', [ItemController::class, 'getItemsByRestaurant'])->name('item.restaurant');
             Route::post('/available-status/update', [ItemController::class, 'updateAvailableStatus'])->name('item.available.status.update');
             Route::get('/items', [ItemController::class, 'itemsByManager'])->name('restaurant.items');
-        });  //* Item route end */
+        }); //* Item route end */
 
-            //* Category route start */
-    Route::group(['prefix' => 'categories'], function () {
-        Route::get('/', [CategoryController::class, 'index'])->name('item.category.index');
-        Route::get('/{id}', [CategoryController::class, 'index'])->name('item.category');
-        Route::post('/store', [CategoryController::class, 'store'])->name('item.category.store');
-        Route::post('/edit', [CategoryController::class, 'edit'])->name('item.category.edit');
-        Route::post('/show', [CategoryController::class, 'show'])->name('item.category.show');
-        Route::post('/update', [CategoryController::class, 'update'])->name('item.category.update');
-        Route::post('/delete', [CategoryController::class, 'destroy'])->name('item.category.delete');
-        Route::post('/restaurant-categories', [CategoryController::class, 'getCategoriesByRestaurant'])->name('item.category.restaurant');
-       
-      });  //* Category route end */
+        //* Category route start */
+        Route::group(['prefix' => 'categories'], function () {
+            Route::get('/', [CategoryController::class, 'index'])->name('item.category.index');
+            Route::get('/{id}', [CategoryController::class, 'index'])->name('item.category');
+            Route::post('/store', [CategoryController::class, 'store'])->name('item.category.store');
+            Route::post('/edit', [CategoryController::class, 'edit'])->name('item.category.edit');
+            Route::post('/show', [CategoryController::class, 'show'])->name('item.category.show');
+            Route::post('/update', [CategoryController::class, 'update'])->name('item.category.update');
+            Route::post('/delete', [CategoryController::class, 'destroy'])->name('item.category.delete');
+            Route::post('/restaurant-categories', [CategoryController::class, 'getCategoriesByRestaurant'])->name('item.category.restaurant');
+
+        }); //* Category route end */
     });
     //* order route start */
-     Route::group(['prefix' => 'orders'], function () {
-     Route::get('restaurant/{id}/today-orders', [OrderController::class, 'getTodayOrders'])->name('orders.today');
-     Route::get('restaurant/{id}/past-orders', [OrderController::class, 'getPastOrders'])->name('orders.past');
-    //  Route::get('/{id}', [CategoryController::class, 'index'])->name('item.category');
-     Route::post('/store', [CategoryController::class, 'store'])->name('item.category.store');
-     Route::post('/edit', [CategoryController::class, 'edit'])->name('item.category.edit');
-     Route::post('/show', [OrderController::class, 'show'])->name('order.show');
-     Route::post('/update', [CategoryController::class, 'update'])->name('item.category.update');
-     Route::post('/delete', [CategoryController::class, 'destroy'])->name('item.category.delete');
-     Route::post('/restaurant-orders', [OrderController::class, 'getOrdersByRestaurant'])->name('order.restaurant');          
-     Route::post('/restaurant-past-orders', [OrderController::class, 'getPastOrdersByRestaurant'])->name('order.past.restaurant');          
-    });  //* order route end */
+    Route::group(['prefix' => 'orders'], function () {
+        Route::get('restaurant/{id}/today-orders', [OrderController::class, 'getTodayOrders'])->name('orders.today');
+        Route::get('restaurant/{id}/past-orders', [OrderController::class, 'getPastOrders'])->name('orders.past');
+        //  Route::get('/{id}', [CategoryController::class, 'index'])->name('item.category');
+        Route::post('/store', [CategoryController::class, 'store'])->name('item.category.store');
+        Route::post('/edit', [CategoryController::class, 'edit'])->name('item.category.edit');
+        Route::post('/show', [OrderController::class, 'show'])->name('order.show');
+        Route::post('/update', [CategoryController::class, 'update'])->name('item.category.update');
+        Route::post('/delete', [CategoryController::class, 'destroy'])->name('item.category.delete');
+        Route::post('/restaurant-orders', [OrderController::class, 'getOrdersByRestaurant'])->name('order.restaurant');
+        Route::get('/today/{id}', [OrderController::class, 'todayOrders'])->name('today.order.restaurant');
+        Route::get('/past/{id}', [OrderController::class, 'pastOrders'])->name('past.order.restaurant');
+        Route::post('/restaurant-past-orders', [OrderController::class, 'getPastOrdersByRestaurant'])->name('order.past.restaurant');
+    }); //* order route end */
 
     //* performance route start */
-     Route::group(['prefix' => 'orders'], function () {
-           
-     Route::post('/restaurant-past-orders', [OrderController::class, 'getPastOrdersByRestaurant'])->name('order.past.restaurant');          
-    });  //* performance route end */
-  
+    Route::group(['prefix' => 'orders'], function () {
 
-  
+        Route::post('/restaurant-past-orders', [OrderController::class, 'getPastOrdersByRestaurant'])->name('order.past.restaurant');
+    }); //* performance route end */
+
+    Route::get('test-orders', [OrderController::class, 'getAllOrders'])->name('order.test');
+    Route::get('orders', [OrderController::class, 'orders'])->name('orders.all');
 
 });
 

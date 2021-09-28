@@ -44,6 +44,7 @@
     </div>
     <!-- END wrapper -->
 
+
     @include('layouts.admin.scripts')
     @yield('pageScripts')
 </body>

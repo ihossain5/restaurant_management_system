@@ -404,4 +404,17 @@
     color       : #FF0000;
     border-color: #FF0000;
 }    
+
+.close_icon_add_form {
+            font-size: 25px;
+            cursor: pointer;
+            position: absolute;
+            margin: 35px -10px;
+            /* border: 1px solid #f24734; */
+            color: #f24734;
+        }
+        .add_row_btn{
+            padding:  3px 25px;
+            margin-right:40px;
+        }
     </style>

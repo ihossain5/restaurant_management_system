@@ -998,6 +998,7 @@
 
                 var new_i = i - 1;
                 $(".error_msg" + new_i).hide();
+                alert('sds');
                 $(".asset_row:last")
                     .after(` <div class="row asset_row test_row asset_div${i}">                         
                         <div class="col-md-11">

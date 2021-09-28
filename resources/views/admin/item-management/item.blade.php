@@ -353,6 +353,8 @@
         </div><!-- /.modal-dialog -->
     </div>
     <!-- view  Modal End -->
+
+    @include('layouts.admin.restaurant_add_modal')
 @endsection
 @section('pageScripts')
     <script type='text/javascript'>

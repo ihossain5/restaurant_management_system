@@ -50,6 +50,7 @@ integrity="sha512-8QFTrG0oeOiyWo/VM9Y8kgxdlCryqhIxVeRpWSezdRRAvarxVtwLnGroJgnVW9
 crossorigin="anonymous"></script>
 
 <script src="{{ asset('backend/assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+<script src="{{ asset('backend/assets/js/restaurant_add_row.js') }}"></script>
 <script>
     $(document).ajaxStart(function() {
         $('.preloader').empty();
@@ -126,7 +127,7 @@ crossorigin="anonymous"></script>
         $('.restaurant-dropdown-menu').find('#restaurant_id' + id).addClass('active');
     }
 
-
+    $('.dropify').dropify();
 
     var date = new Date();
     var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -165,4 +166,6 @@ crossorigin="anonymous"></script>
         toggleActive: true,
         autoclose: true,
     });
+
+    
 </script>
