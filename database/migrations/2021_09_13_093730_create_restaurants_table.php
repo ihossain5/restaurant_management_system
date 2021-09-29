@@ -18,7 +18,7 @@ class CreateRestaurantsTable extends Migration
             $table->string('name');
             $table->string('type');
             $table->text('description');
-            $table->boolean('is_open')->default(0);
+            $table->boolean('is_open')->default(1);
             $table->string('contact');
             $table->string('email');
             $table->text('address');

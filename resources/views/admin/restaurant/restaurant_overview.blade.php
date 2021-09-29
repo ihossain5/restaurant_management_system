@@ -182,8 +182,8 @@
             }
         };
            // restaurant change
-           $(document).on('change', '.restaurant', function() {
-            var id = $(this).val();
+           $(document).on('click', '.restaurant', function() {
+            var id = $(this).data('id');
             $.ajax({
                 type: "POST",
                 url: config.routes.getReport,
@@ -195,8 +195,9 @@
                 success: function(response) {
                     if (response.success === true) {
                         $('.restaurant_id').val(response.data.id);
-                        $('#categoryTable').DataTable().clear().draw();
-                        setSessionId(response.data.session_id);
+
+                        setSessionId(response.data.session_id); // set restaurant id into session
+                        setRestaurant(response.data.restaurant_name, response.data.id); // set restaurant into topbar
                         $('.new_orders').html(response.data.new_orders);
                         $('.ordersInDelivery').html(response.data.ordersInDelivery);
                         $('.ordersInDelivery').html(response.data.ordersInDelivery);

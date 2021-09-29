@@ -17,6 +17,68 @@
         .filter_by_role{
             width: 145px;
         }
+        #view_image{
+            width: 100%;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #dc3545;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked+.slider {
+            background-color: #198754;
+        }
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #018346;
+        }
+
+        input:checked+.slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
 
     </style>
 @endsection
@@ -54,7 +116,7 @@
                                         <th>Gender</th>
                                         <th>Email</th>
                                         <th>Phone</th>              
-                                        
+                                        <th>Active Status</th>              
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -73,18 +135,26 @@
                                                     @endif
                                                 </td>
                                                 <td>{{ $user->name }}</td>
-                                                <td>{{ $user->sex }}</td>
+                                                <td>{{ $user->sex ?? 'N/A' }}</td>
                                                 <td>{{ $user->email }}</td>
-                                                <td>{{ $user->contact }}</td>
+                                                <td>{{ $user->contact ?? 'N/A'}}</td>
+                                                <td>
+                                                    <label class="switch">
+                                                        <input class="is_active status{{ $user->id }}"
+                                                            type="checkbox" {{ $user->is_active == 1 ? 'checked' : '' }}
+                                                            data-id="{{ $user->id }}">
+                                                        <span class="slider round"></span>
+                                                    </label>
+                                                </td>
                                                                                                
                                                 <td>
                                                     <button type='button' class='btn btn-outline-dark'
                                                         onclick='viewAdmin({{ $user->id }})'><i
                                                             class='fa fa-eye'></i></button>
                                                     
-                                                            <button type='button' name='delete' class="btn btn-outline-danger "
+                                                    <button type='button' name='delete' class="btn btn-outline-danger "
                                                             onclick="deleteAdmin({{ $user->id }})"><i
-                                                                class="mdi mdi-delete "></i></button>
+                                                        class="mdi mdi-delete "></i></button>
                                                 </td>
 
                                             </tr>
@@ -147,40 +217,36 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-block">
-                    <h5 class="modal-title mt-0 text-center">Admin's Details</h5>
+                    <h5 class="modal-title mt-0 text-center">Restaurant Manager Details</h5>
                     <button type="button" class="close modal_close_icon" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
-                    <div class="col-xl-12 col-md-12 text-center signature_row mb-3">
-                        <div class="ms-form-group">
-                            {{-- <label for="name"><strong>Logo:</strong></label> --}}
-                            <img src="" id="view_image" class="view_employee_signature">
-                        </div>
-                    </div>
-
                     <div class="col-xl-12 col-md-12">
                         <div class="ms-form-group">
-                            <label for="name"><strong>Name:</strong></label>
-                            <p id="view_name"></p>
+                            <p class="pt-2 pb-2">
+                                <strong>Name:</strong> <span id="view_name"></span> <br>
+                                <strong>Restaurant Name:</strong> <span id="view_restaurant_name"></span><br>
+                                <strong>Gender:</strong> <span id="view_gender"></span><br>
+                                <strong>Email:</strong> <span id="view_email"></span><br>
+                                <strong>Phone:</strong> <span id="view_phone"></span><br>
+                                <label for="name"><strong>Photo:</strong></label> <br>
+                            <img src="" id="view_image">
+                            </p>
                         </div>
-                    </div>
-                    <div class="col-xl-12 col-md-12">
-                        <div class="ms-form-group">
-                            <label for="name"><strong>Email:</strong></label>
-                            <p id="view_email"></p>
-                        </div>
-                    </div>
-                    <div class="col-xl-12 col-md-12">
-                        <div class="ms-form-group">
-                            <label for="name"><strong>Phone:</strong></label>
-                            <p id="view_phone"></p>
-                        </div>
-                    </div>
-                   
+                        <div class="form-group">
+                            <div>
+                               
 
-
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
+                <div class="modal-footer">
+                    <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
+                        Done
+                    </button>
+                  </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
@@ -194,10 +260,13 @@
                 add: "{!! route('admin.store') !!}",
                 view: "{!! route('admin.show') !!}",
                 delete: "{!! route('admin.delete') !!}",
+                updateStatus: "{!! route('admin.status.update') !!}",
             }
         };
+        var imagesUrl = '{!! URL::asset('/images/') !!}';
         // add form validation
         $(document).ready(function() {
+             
             $(".adminAddForm").validate({
                 rules: {
                     name: {
@@ -232,7 +301,6 @@
                 "ordering": false,
             });
 
-
             $(document).on('submit', '.adminAddForm', function(event) {
             event.preventDefault();
             $.ajax({
@@ -254,22 +322,20 @@
                             .append(`<td>` + response.data.name + `</td>`)
                             .append(`<td>` + response.data.sex + `</td>`)
                             .append(`<td>` + response.data.email + `</td>`)
-                            .append(`<td>` + response.data.phone + `</td>`)
+                            .append(`<td>` + response.data.contact + `</td>`)
 
 
                             .append(`<td><button type='button' class='btn btn-outline-dark' onclick='viewAdmin(${response.data.id})'>
                                 <i class='fa fa-eye'></i>
                             </button>
-
                            
                             <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteAdmin(${response.data.id})">
                                 <i class="mdi mdi-delete "></i>
                             </button></td>`)
 
-
                         var manager_row = managerTable.row.add(row).draw().node();
                         $('#adminTable tbody').prepend(row);
-                        $(manager_row).addClass('manager' + response.data.id + '');
+                        $(manager_row).addClass('admin' + response.data.id + '');
 
                         $('.adminAddForm').trigger('reset');
                         if (response.data.message) {
@@ -287,7 +353,7 @@
                         toastMixin.fire({
                             icon: 'error',
                             animation: true,
-                            title: "" + response.data.message + ""
+                            title: "" + response.message + ""
                         });
 
                     }
@@ -320,18 +386,15 @@
                     if (response.success == true) {
                         $('#view_name').text(response.data.name);
                         $('#view_email').text(response.data.email);
-                        $('#view_phone').text(response.data.phone);
-                       
-
-                        if (response.data.image === null) {
-                            $('#view_image').removeAttr('src');
+                        $('#view_gender').text(response.data.sex ?? 'N/A');
+                        $('#view_phone').text(response.data.contact ?? 'N/A');
+                        $('#view_restaurant_name').text(response.data.restaurant? response.data.restaurant.name : 'N/A' );
+                        if (response.data.photo === null) {
+                            $('#view_image').attr('src','/images/default.png');
                         } else {
-                            $('#view_image').attr('src', '/images/' + response.data.image);
+                            $('#view_image').attr('src', '/images/' + response.data.photo);
                         }
-                        
-
-
-                        $('#viewModal').modal('show');
+                       $('#viewModal').modal('show');
 
                     } //success end
 
@@ -393,7 +456,59 @@
         }
         //end
 
-        
+
+      // active status change function
+        $(document.body).on('click', '.is_active', function() {
+            var id = $(this).attr('data-id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Change this status!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: config.routes.updateStatus,
+                        method: "POST",
+                        data: {
+                            id: id,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.success == true) {
+                                toastMixin.fire({
+                                    icon: 'success',
+                                    animation: true,
+                                    title: "" + response.data.message + ""
+                                });
+                            }
+                        }, //success end
+                        error: function(error) {
+                            if (error.status == 404) {
+                                toastMixin.fire({
+                                    icon: 'error',
+                                    animation: true,
+                                    title: "" + 'Data not found' + ""
+                                });
+
+
+                            }
+                        },
+
+                    }); //ajax end
+                } else {
+                    if ($('.status' + id + "").prop("checked") == true) {
+                        $('.status' + id + "").prop('checked', false);
+                    } else {
+                        $('.status' + id + "").prop('checked', true);
+                    }
+                }
+            })
+        });    
         
     </script>
 @endsection

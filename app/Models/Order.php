@@ -34,6 +34,9 @@ class Order extends Model {
     public function customer() {
         return $this->belongsTo(Customer::class,'customer_id');
     }
+    public function restaurant() {
+        return $this->belongsTo(Restaurant::class,'restaurant_id');
+    }
 
     public static function todayOrdersByRestaurantId($id) {
         return Restaurant::with(['restaurant_items.orders' => function ($query) {

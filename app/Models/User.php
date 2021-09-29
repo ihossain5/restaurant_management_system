@@ -22,10 +22,11 @@ class User extends Authenticatable
         'password',
         'contact',
         'is_manager',
-        'is_admin',
+        'is_super_admin',
         'photo',
         'token',
         'sex',
+        'is_active',
     ];
 
     /**

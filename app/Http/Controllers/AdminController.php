@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Http\Requests\AdminStoreRequest;
+use App\Mail\SendMail;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -49,10 +52,10 @@ class AdminController extends Controller {
     public function profileUpdate(Request $request) {
         $user = Auth::user();
         $this->validate($request, [
-            'name'        => 'required|max:100',
-            'phone'       => 'required|max:20',
-            'email'       => 'required|max:100|email|unique:users,email,' . $user->id,
-            'image'       => 'dimensions:width=200px,height=200px'
+            'name'  => 'required|max:100',
+            'phone' => 'required|max:20',
+            'email' => 'required|max:100|email|unique:users,email,' . $user->id,
+            'image' => 'dimensions:width=200px,height=200px',
 
         ]);
         $image = $request->image;
@@ -75,19 +78,19 @@ class AdminController extends Controller {
             $image_url = $user->image;
         }
         $user->update([
-            'name'        => $request->name,
-            'image'       => $image_url,
-            'phone'       => $request->phone,
-            'email'       => $request->email,
+            'name'  => $request->name,
+            'image' => $image_url,
+            'phone' => $request->phone,
+            'email' => $request->email,
 
         ]);
         return redirect()->back()->with('success', 'Profile has been updated');
     }
 
     public function allAdmin() {
-        $users = User::where('is_super_admin',1)
-        ->where('id', '!=', auth()->user()->id)
-        ->orderBy('id','DESC')->get();
+        $users = User::where('is_super_admin', 1)
+            ->where('id', '!=', auth()->user()->id)
+            ->orderBy('id', 'DESC')->get();
         // dd($users);
         return view('admin.user_management.admin', compact('users'));
     }
@@ -107,49 +110,29 @@ class AdminController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
-        // dd(Auth::user()->is_super_admin);
-        $validator = Validator::make($request->all(), [
-            'name'        => 'required|max:50',
-            'email'       => 'required|max:50|email|unique:users',
+    public function store(AdminStoreRequest $request) {
+        $token = Str::random(30);
+        $user  = User::create($request->validated() + [
+            'password'   => $token,
+            'token'      => $token,
+            'is_super_admin' => 1,
         ]);
-        if ($validator->fails()) {
-            $data          = array();
-            $data['error'] = $validator->errors()->all();
-            return response()->json([
-                'success' => false,
-                'data'    => $data,
-            ]);
-        } else {
-            $profile_image = $request->profile_image;
-            $random   = Str::random(20);
-            $employee = User::create([
-                'name'        => $request->name,
-                'email'       => $request->email,
-                'contact'       => $request->phone,
-                'password'    => Hash::make($random),
-                'image'       => null,
-                'is_super_admin'    => 1,
-            ]);
-            Mail::send('password_mail', ['password' => $random, 'email' => $request->email], function ($message) use ($request) {
-                $message->to($request->email);
-                $message->subject('Greetings');
-            });
-            $data                = array();
-            $data['message']     = $employee->is_admin==1?'Admin added successfully':'User added successfully';
-            $data['image']        = $employee->image;
-            $data['name']        = $employee->name;
-            $data['email']       = $employee->email;
-            $data['phone']       = $employee->phone;
-            $data['role']       = $employee->is_admin==1?'Admin':'User';
-            $data['id']          = $employee->id;
-            $data['super_admin']          = Auth::user()->is_super_admin;
+        $maildata = [
+            'title'   => 'Geetings from Emerald',
+            'message' => 'You are invited to use Emerald. You can now register here for free',
+            'url'     => route('send.email', [$token]),
+        ];
+        Mail::to($request->email)->send(new SendMail($maildata));
+        $data                = array();
+        $data['message']         = 'Admin added successfully';
+        $data['name']            = $user->name;
+        $data['email']           = $user->email;
+        $data['contact']         = $user->contact ?? 'N/A';
+        $data['photo']           = $user->photo;
+        $data['sex']             = $user->sex ??'N/A';
+        $data['id']              = $user->id;
+        return success($data);
 
-            return response()->json([
-                'success' => true,
-                'data'    => $data,
-            ]);
-        }
     }
 
     /**
@@ -184,7 +167,7 @@ class AdminController extends Controller {
     public function edit(Request $request) {
         $data = User::findOrFail($request->id);
         if ($data) {
-            
+
             return response()->json([
                 'success' => true,
                 'data'    => $data,
@@ -208,10 +191,10 @@ class AdminController extends Controller {
         // dd($request->all());
         $employee  = User::findOrFail($request->hidden_id);
         $validator = Validator::make($request->all(), [
-            'name'        => 'required|max:50',
-            'email'       => 'required|max:50|email|unique:users,email,' . $employee->id,
-            'phone'       => 'required|max:50',
-            'profile_image'       => 'nullable|max:600|mimes:jpg,png,jpeg|dimensions:width=200px,height=200px',
+            'name'          => 'required|max:50',
+            'email'         => 'required|max:50|email|unique:users,email,' . $employee->id,
+            'phone'         => 'required|max:50',
+            'profile_image' => 'nullable|max:600|mimes:jpg,png,jpeg|dimensions:width=200px,height=200px',
         ]);
         if ($validator->fails()) {
             $data          = array();
@@ -222,9 +205,8 @@ class AdminController extends Controller {
             ]);
         } else {
 
-            
             $profile_image = $request->profile_image;
-           
+
             if ($profile_image) {
                 File::delete(public_path('images/' . $employee->image));
                 $profile_image_name = hexdec(uniqid());
@@ -241,29 +223,27 @@ class AdminController extends Controller {
                 $profile_image_image_url = $employee->image;
             }
             $employee->update([
-                'name'        => $request->name,
-                'email'       => $request->email,
-                'phone'       => $request->phone,
-                'image'       => $profile_image_image_url,
-                'is_admin'    => $request->is_admin??0,
+                'name'     => $request->name,
+                'email'    => $request->email,
+                'phone'    => $request->phone,
+                'image'    => $profile_image_image_url,
+                'is_admin' => $request->is_admin ?? 0,
             ]);
-            
 
-            $data                = array();
+            $data = array();
             // $data['message']     = 'Data has been updated.';
             // $data['name']        = $employee->name;
             // $data['email']       = $employee->email;
             // $data['phone']       = $employee->phone;
             // $data['id']          = $employee->id;
-            $data['message']     = $employee->is_admin==1?'Admin info updated successfully':'User info updated successfully';
-            $data['image']        = $employee->image;
+            $data['message']     = $employee->is_admin == 1 ? 'Admin info updated successfully' : 'User info updated successfully';
+            $data['image']       = $employee->image;
             $data['name']        = $employee->name;
             $data['email']       = $employee->email;
             $data['phone']       = $employee->phone;
-            $data['role']       = $employee->is_admin==1?'Admin':'User';
+            $data['role']        = $employee->is_admin == 1 ? 'Admin' : 'User';
             $data['id']          = $employee->id;
-            $data['super_admin']  = Auth::user()->is_super_admin;
-            
+            $data['super_admin'] = Auth::user()->is_super_admin;
 
             return response()->json([
                 'success' => true,
@@ -284,10 +264,10 @@ class AdminController extends Controller {
             return response()->json([
                 'message' => 'You can not delete your own data',
             ]);
-        }  else {
+        } else {
             $employee->delete();
             File::delete(public_path('images/' . $employee->photo));
-            $data['message'] = 'Data deleted successfully';
+            $data['message'] = 'Admin deleted successfully';
             $data['id']      = $request->id;
 
             return response()->json([
@@ -348,7 +328,22 @@ class AdminController extends Controller {
 
         DB::table('password_resets')->where(['email' => $request->email])->delete();
 
+        return redirect('/')->with('success', 'Your password has been changed!');
+    }
 
-        return redirect('/login')->with('success', 'Your password has been changed!');
+    public function updateActiveStatus(Request $request){
+        $admin = User::findOrFail($request->id);
+        if($admin->is_active == 0){
+            $admin->update([
+                'is_active'=> 1
+            ]);
+        }else{
+            $admin->update([
+                'is_active'=> 0
+            ]);
+        }
+        $data = [];
+        $data['message'] = 'Status has been updated';
+        return success($data); 
     }
 }

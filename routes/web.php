@@ -5,6 +5,8 @@ use App\Http\Controllers\Backend\AboutUsController;
 use App\Http\Controllers\Backend\AssetTypeController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\ContactUsController;
+use App\Http\Controllers\Backend\CustomerController;
+use App\Http\Controllers\Backend\DashboarController;
 use App\Http\Controllers\Backend\HomeHeroSectionController;
 use App\Http\Controllers\Backend\ItemController;
 use App\Http\Controllers\Backend\ManagerController;
@@ -33,7 +35,7 @@ use Illuminate\Support\Facades\Route;
 require __DIR__ . '/auth.php';
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboarController::class, 'index'])->name('dashboard');
     Route::get('/password-update', [AdminController::class, 'passwordChange'])->name('password.change');
     Route::post('/password-update', [AdminController::class, 'updatePassword'])->name('password.update');
     Route::get('/profile-update', [AdminController::class, 'profile'])->name('user.profile');
@@ -46,6 +48,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
     Route::post('/admin/show', [AdminController::class, 'show'])->name('admin.show');
     Route::post('/admin/update', [AdminController::class, 'update'])->name('admin.update');
     Route::post('/admin/delete', [AdminController::class, 'destroy'])->name('admin.delete');
+    Route::post('/admin/status/update', [AdminController::class, 'updateActiveStatus'])->name('admin.status.update');
 //* admin route end */
 
     // user routes start
@@ -104,6 +107,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
         Route::post('/update', [RestaurantController::class, 'update'])->name('restaurant.update');
         Route::post('/delete', [RestaurantController::class, 'destroy'])->name('restaurant.delete');
         Route::post('/deleteAsset', [RestaurantController::class, 'deleteAsset'])->name('restaurant.asset.delete');
+        Route::post('/status/update', [RestaurantController::class, 'updateStatus'])->name('restaurant.status.update');
         Route::get('/{id}/overview', [RestaurantController::class, 'restaurantOverview'])->name('restaurant.overview');
         Route::post('/overview', [RestaurantController::class, 'orderReportByRestaurant'])->name('order.report.restaurant');
         Route::get('{id}/daily-reports', [OrderPerformanceController::class, 'dailyReports'])->name('orders.daily.report');
@@ -179,9 +183,19 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
 
     //* performance route start */
     Route::group(['prefix' => 'orders'], function () {
-
         Route::post('/restaurant-past-orders', [OrderController::class, 'getPastOrdersByRestaurant'])->name('order.past.restaurant');
     }); //* performance route end */
+
+    //* customer route start */
+    Route::group(['prefix' => 'customers'], function () {
+        Route::get('/', [CustomerController::class, 'index'])->name('customer.index');
+        Route::post('/show', [CustomerController::class, 'show'])->name('customer.show');
+        Route::post('/banned', [CustomerController::class, 'banCustomer'])->name('customer.banned');
+        Route::get('{id}/orders/', [CustomerController::class, 'customerOrders'])->name('customer.orders');
+        Route::post('/orders', [CustomerController::class, 'customerOrderByRestaurant'])->name('customer.order.restaurant');
+        Route::get('/order', [CustomerController::class, 'getOrders'])->name('customer.order');
+        Route::post('/delete', [ManagerController::class, 'destroy'])->name('restaurant.manager.delete');
+    }); //* customer route end */
 
     Route::get('test-orders', [OrderController::class, 'getAllOrders'])->name('order.test');
     Route::get('orders', [OrderController::class, 'orders'])->name('orders.all');

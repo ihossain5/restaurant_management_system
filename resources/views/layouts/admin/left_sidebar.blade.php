@@ -82,7 +82,8 @@ $restaurant_id = RestaurantController::getRestaurantIdBySession();
             <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-user"></i><span> Users <span
                         class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
             <ul class="list-unstyled">
-                {{-- <li><a href="{{ route('admin.admins') }}">Admins</a></li> --}}
+                <li><a href="{{ route('admin.admins') }}">Admins</a></li>
+                <li><a href="{{ route('customer.index') }}">Customers</a></li>
                 <li><a href="{{ route('restaurant.manager') }}">Restaurant Managers</a></li>
             </ul>
         </li>
