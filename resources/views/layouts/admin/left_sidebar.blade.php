@@ -14,6 +14,7 @@ $restaurant_id = RestaurantController::getRestaurantIdBySession();
                 {{-- <img src="{{asset('backend/assets/images/logo.png')}}" height="20" alt="logo"> --}}
             </a>
         </div>
+      
 
 
     </div>
@@ -35,9 +36,13 @@ $restaurant_id = RestaurantController::getRestaurantIdBySession();
                                     style="max-width: 100px;height: auto;">
                             @endif
                         </div>
-                        <div>
                             <h6 class="text-center user_name text-uppercase">{{ Auth::user()->name }}</h6>
-                            <div class="d-flex justify-content-center pt-2" style="font-size: 16px;">
+                            <div class="text-center">
+                                <div class="superAdminDesign">
+                                    <span>Super Admin</span>
+                                </div>
+                            </div>
+                            {{-- <div class="d-flex justify-content-center pt-2" style="font-size: 16px;">
 
                                 @if (Auth::user()->is_super_admin == 1)
                                     <span class="badge badge-primary  p-1">Super Admin</span>
@@ -47,8 +52,8 @@ $restaurant_id = RestaurantController::getRestaurantIdBySession();
 
                                     <span class="badge badge-primary  p-1">User</span>
                                 @endif
-                            </div>
-                        </div>
+                            </div> --}}
+
 
 
                     </div>

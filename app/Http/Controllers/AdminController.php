@@ -188,7 +188,6 @@ class AdminController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request) {
-        // dd($request->all());
         $employee  = User::findOrFail($request->hidden_id);
         $validator = Validator::make($request->all(), [
             'name'          => 'required|max:50',

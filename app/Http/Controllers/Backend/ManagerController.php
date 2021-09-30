@@ -11,6 +11,7 @@ use App\Models\Restaurant;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -137,10 +138,19 @@ class ManagerController extends Controller {
             'token'       => null,
             'photo'       => $img_url,
             'is_verified' => 1,
+            'password' => bcrypt($request->password),
         ]);
         if ($user) {
             Auth::login($user);
-            return redirect()->route('dashboard');
+            if(Auth::user()->is_super_admin ==1 && Auth::user()->is_active == 1){
+                return redirect()->route('dashboard');
+            }else if(Auth::user()->is_manager == 1){
+                return redirect()->route('manager.dashboard');
+            }else{
+                Auth::logout();
+                return redirect()->back()->with('Sorry, You have no permission to access this');
+            }
+            
         }
     }
 }

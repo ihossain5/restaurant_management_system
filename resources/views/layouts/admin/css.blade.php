@@ -96,7 +96,7 @@
         }
 
         .user_name {
-            color: #eaeaea;
+            /* color: #eaeaea; */
         }
 
         .btn_disabled {
@@ -420,128 +420,195 @@
             margin-right: 40px;
         }
 
-        .section-title {
-            font-weight: bold;
-            font-size: 20px;
-            line-height: 24px;
-            color: #000000;
-        }
 
 
-        .dashboardCard {
-            padding: 24px;
-            border-radius: 10px;
-        }
 
-        .card-content h4,
-        .tableCard h4 {
-            font-weight: bold;
-            font-size: 20px;
-            line-height: 24px;
-            text-align: center;
-            color: #507E6F;
-            margin: 0;
-        }
+/* Dashboard CSS */
+.section-title {
+    font-weight: bold;
+    font-size  : 20px;
+    line-height: 24px;
+    color      : #000000;
+}
 
 
-        .card-content h6 {
-            font-size: 16px;
-            font-weight: normal;
-            line-height: 20px;
-            text-align: center;
-            color: #507E6F;
-            margin: 0;
+.dashboardCard {
+    padding      : 24px;
+    border-radius: 10px;
+    box-shadow   : 0px 5px 5px rgba(0, 0, 0, 0.25);
+}
 
-        }
+.dashboardCard:hover {
+    background: #CBE2DC;
+    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
+}
 
-        .card-content h2 {
-            font-size: 40px;
-            line-height: 49px;
-            font-weight: normal;
-            text-align: center;
-            color: #000000;
-            margin-bottom: 22px;
-        }
-
-
-        .card-content p {
-            font-size: 16px;
-            line-height: 20px;
-            color: #818286;
-            margin: 0;
-        }
-
-        .card-content p img {
-            height: 13px;
-            width: 13px;
-            margin-top: -4px;
-            margin-right: 3px;
-        }
+.card-content h4,
+.tableCard h4 {
+    font-weight: bold;
+    font-size  : 20px;
+    line-height: 24px;
+    text-align : center;
+    color      : #507E6F;
+    margin     : 0;
+}
 
 
-        .tableCard {
-            padding: 25px;
-            border-radius: 10px;
-        }
+.card-content h6 {
+    font-size  : 16px;
+    font-weight: normal;
+    line-height: 20px;
+    text-align : center;
+    color      : #507E6F;
+    margin     : 0;
 
-        .tableCard h4 {
-            text-align: left;
-        }
+}
 
-        .performTable tbody th,
-        .performTable tbody td {
-            padding: 8px 0 20px 0 !important;
-
-        }
-
-        .performTable tbody tr:first-child th,
-        .performTable tbody tr:first-child td {
-            border-top: none;
-        }
-
-        .performTable .srNo {
-            font-weight: normal;
-            font-size: 20px;
-            line-height: 24px;
-            text-align: center;
-            color: #000000;
-        }
-
-        .performTable .shopInfo h5 {
-            margin: 0;
-            font-size: 20px;
-            line-height: 24px;
-            font-weight: normal;
-            color: #000000;
-        }
-
-        .performTable .shopInfo h6 {
-            margin: 0;
-            font-size: 14px;
-            line-height: 17px;
-            color: #A9A4A4;
-        }
-
-        .performTable .sellPrice,
-        .performTable .sellQty {
-            font-size: 18px;
-            line-height: 22px;
-            color: #000000;
-            font-weight: normal;
-        }
-
-        .performTable .sellQty {
-            text-align: right;
-        }
+.card-content h2 {
+    font-size    : 40px;
+    line-height  : 49px;
+    font-weight  : normal;
+    text-align   : center;
+    color        : #000000;
+    margin-bottom: 22px;
+}
 
 
-        .scrollTable {
-            max-height: 382px;
-        }
+.card-content p {
+    font-size  : 16px;
+    line-height: 20px;
+    color      : #818286;
+    margin     : 0;
+}
 
-        .scrollTable::-webkit-scrollbar {
-            width: 0;
-            background-color: transparent;
-        }
+.card-content p img {
+    height      : 13px;
+    width       : 13px;
+    margin-top  : -4px;
+    margin-right: 3px;
+}
+
+
+.tableCard {
+    padding      : 25px;
+    border-radius: 10px;
+}
+
+.tableCard h4 {
+    text-align: left;
+}
+
+.performTable tbody th,
+.performTable tbody td {
+    padding: 8px 0 20px 0 !important;
+
+}
+
+.performTable tbody tr:first-child th,
+.performTable tbody tr:first-child td {
+    border-top: none;
+}
+
+.performTable .srNo {
+    font-weight: normal;
+    font-size  : 20px;
+    line-height: 24px;
+    text-align : center;
+    color      : #000000;
+}
+
+.performTable .shopInfo h5 {
+    margin     : 0;
+    font-size  : 20px;
+    line-height: 24px;
+    font-weight: normal;
+    color      : #000000;
+}
+
+.performTable .shopInfo h6 {
+    margin     : 0;
+    font-size  : 14px;
+    line-height: 17px;
+    color      : #A9A4A4;
+}
+
+.performTable .sellPrice,
+.performTable .sellQty {
+    font-size  : 18px;
+    line-height: 22px;
+    color      : #000000;
+    font-weight: normal;
+}
+
+.performTable .sellQty {
+    text-align: right;
+}
+
+
+.scrollTable {
+    max-height: 382px;
+}
+
+.scrollTable::-webkit-scrollbar {
+    width           : 0;
+    background-color: transparent;
+}
+
+
+/* Second Card */
+.secondCardContent {
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    padding        : 38px 0;
+}
+
+.secondCardContent img {
+    max-width   : 64px;
+    margin-right: 15px;
+}
+
+.secondCardContent h1 {
+    font-size  : 40px;
+    line-height: 49px;
+    color      : #08601F;
+    font-weight: normal;
+    margin     : 0;
+}
+
+
+.secondCardContent h5 {
+    font-weight: bold;
+    font-size  : 20px;
+    line-height: 24px;
+    color      : #000000;
+    margin     : 0;
+}
+
+
+.activeOrderCard {
+    background: #F54949;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.25);
+}
+
+
+.activeOrderCard:hover {
+    background: #B90000;
+    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
+}
+
+.activeOrderCard h1,
+.activeOrderCard h5 {
+    color: white;
+}
+
+.activeOrderCard svg path {
+    fill: white;
+}
+
+
+.side-menu {
+    background: linear-gradient(183.46deg, #9AD5C3 0%, #9AD5C3 101.01%) !important;
+}
 
     </style>

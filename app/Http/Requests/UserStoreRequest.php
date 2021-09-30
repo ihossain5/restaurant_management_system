@@ -28,7 +28,7 @@ class UserStoreRequest extends FormRequest {
             'email'         => 'required|max:50|email',
             'contact'       => 'required|max:50',
             'password'      => 'required|string|min:6|confirmed',
-            'profile_image' => 'nullable|max:600|mimes:jpg,png,jpeg|dimensions:width=200px,height=200px',
+            // 'profile_image' => 'nullable|max:600|mimes:jpg,png,jpeg|dimensions:width=200px,height=200px',
         ];
     }
     public function messages() {

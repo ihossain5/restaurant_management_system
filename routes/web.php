@@ -14,6 +14,7 @@ use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\OrderPerformanceController;
 use App\Http\Controllers\Backend\RestaurantController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\Manager\ManagerDashboardController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -215,3 +216,8 @@ Route::post('/make/super/admin', [UserController::class, 'makeSuperAdmin'])->nam
 
 Route::get('/send-email/{token}', [ManagerController::class, 'registerNewManager'])->name('send.email');
 Route::post('/sign-up', [ManagerController::class, 'userSignUp'])->name('user.sign.up');
+
+Route::group(['prefix' => 'manager', 'middleware' => ['auth']], function () {
+    Route::get('dashboard', [ManagerDashboardController::class, 'index'])->name('manager.dashboard');
+
+});
