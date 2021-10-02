@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 
-class User extends Authenticatable
-{
+class User extends Authenticatable {
     use HasFactory, Notifiable;
 
     /**
@@ -48,7 +47,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function restaurant(){
-      return  $this->hasOne(Restaurant::class);
+    public function restaurant() {
+        return $this->hasOne(Restaurant::class);
+    }
+
+    public function setPasswordAttribute($pass) {
+        $this->attributes['password'] = Hash::make($pass);
     }
 }

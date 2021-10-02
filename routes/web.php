@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\ContactUsController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\DashboarController;
+use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\HomeHeroSectionController;
 use App\Http\Controllers\Backend\ItemController;
 use App\Http\Controllers\Backend\ManagerController;
@@ -36,7 +37,7 @@ use Illuminate\Support\Facades\Route;
 require __DIR__ . '/auth.php';
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
-    Route::get('/dashboard', [DashboarController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/password-update', [AdminController::class, 'passwordChange'])->name('password.change');
     Route::post('/password-update', [AdminController::class, 'updatePassword'])->name('password.update');
     Route::get('/profile-update', [AdminController::class, 'profile'])->name('user.profile');

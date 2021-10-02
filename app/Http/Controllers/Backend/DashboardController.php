@@ -5,17 +5,19 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Restaurant;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class DashboarController extends Controller {
+class DashboardController extends Controller
+{
     public $order;
     public function __construct(Order $order) {
         $this->order = $order;
     }
     public function index() {
-        $restaurants = Restaurant::with(['restaurant_completed_orders', 'restaurant_orders' => function ($query) {
+        $restaurants = Restaurant::with(['restaurant_completed_orders', 'restaurant_cancelled_orders', 'restaurant_orders' => function ($query) {
             $query->whereDate('orders.created_at', DB::raw('CURDATE()'))
                 ->where('order_status_id', 3)
                 ->get();
@@ -27,11 +29,28 @@ class DashboarController extends Controller {
         }
         $total_amount = $this->order->todaysRevenue();
         $orders       = $this->order->lastMonthOrders();
-        $order_items = Order::with('items')->whereMonth(
+
+        $order_items = Order::whereMonth(
             'created_at', '=', Carbon::now()->subMonth()->month
-        )->where('order_status_id', 3)->get();
-           
+        )->where('order_status_id', 3)  // this is a scope applied initially
+                ->with(['items' => function($query) {
+                    $query->groupBy('name')->get([
+                        'items.name',
+                        'items.category_id',
+                        DB::raw("SUM(order_items.price) as total_amount"),
+                        DB::raw("SUM(quantity) as total_quantity"),
+                    ]);
+                }])->get();
+
+       $data = OrderItem::groupBy('item_id')
+            ->get([
+                'item_id',
+                DB::raw("SUM(price) as total_amount"),
+                DB::raw("SUM(quantity) as total_quantity"),
+            ]);
+    
         // dd($order_items);
+        
         // $orderItmes = OrderItem::whereMonth(
         //     'created_at', '=', Carbon::now()->subMonth()->month
         // )->get();
@@ -43,5 +62,4 @@ class DashboarController extends Controller {
 
         return view('admin.dashboard', compact('restaurants', 'total_amount', 'orders','order_items'));
     }
-
 }

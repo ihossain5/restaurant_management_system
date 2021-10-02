@@ -15,6 +15,7 @@ class CreateRestaurantsTable extends Migration
     {
         Schema::create('restaurants', function (Blueprint $table) {
             $table->id('restaurant_id');
+            $table->foreignId('user_id')->references('id')->on('users')->nullable();
             $table->string('name');
             $table->string('type');
             $table->text('description');

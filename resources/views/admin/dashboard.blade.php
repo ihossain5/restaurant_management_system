@@ -91,8 +91,8 @@
                                         <h6>{{$item->category->restaurant->name}}</h6>
                                     </td>
                                     <td class="shopInfo text-right">
-                                        <h5>{{$item->pivot->quantity}} </h5>
-                                        <h6>1020</h6>
+                                        <h5>{{$item->total_quantity}} </h5>
+                                        <h6>{{$item->total_amount}}</h6>
                                     </td>
                                 </tr>
                                 @endforeach
