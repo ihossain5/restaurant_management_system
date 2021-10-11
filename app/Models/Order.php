@@ -44,11 +44,9 @@ class Order extends Model {
     }
 
     public static function todayOrdersByRestaurantId($id) {
-        return Restaurant::with(['restaurant_items.orders' => function ($query) {
-            $query->whereDate('orders.created_at', DB::raw('CURDATE()'))->get();
-        }])->find($id);
+        return Order::where('restaurant_id', $id)
+        ->whereDate('orders.created_at', DB::raw('CURDATE()'))->with('customer')->get();
     }
-
     public function todaysRevenue() {
         return $this->whereDate('created_at', DB::raw('CURDATE()'))
             ->where('order_status_id', 3)
@@ -64,6 +62,38 @@ class Order extends Model {
                 DB::raw("SUM(amount) as total_amount"),
                 DB::raw("COUNT(order_status_id) as completed"),
             ]);
+    }
+    public function todayOrdersInPreparationByRestaurantId($id) {
+        return Order::where('restaurant_id', $id)
+        ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+        ->where('orders.order_status_id', 1)->get();
+
+        // return Restaurant::with(['restaurant_orders' => function ($query) {
+        //     $query->whereDate('orders.created_at', DB::raw('CURDATE()'))
+        //         ->where('orders.order_status_id', 1)->get();
+        // }])->find($id);
+
+    }
+    public function todayOrdersInDeliveryByRestaurantId($id) {
+        return Order::where('restaurant_id', $id)
+        ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+        ->where('orders.order_status_id', 2)->get();
+        // return Restaurant::with(['restaurant_orders' => function ($query) {
+        //     $query->whereDate('orders.created_at', DB::raw('CURDATE()'))
+        //         ->where('orders.order_status_id', 2)->get();
+        // }])->find($id);
+    }
+    public function allOrdersInPreparationByRestaurant($id) {
+        return Order::where('restaurant_id', $id)
+        ->where('orders.order_status_id', 1)->get();
+    }
+    public function allOrdersInDeliveryByRestaurant($id) {
+        return Order::where('restaurant_id', $id)
+        ->where('orders.order_status_id', 2)->get();
+    }
+    public function allCompletedOrdersRestaurant($id) {
+        return Order::where('restaurant_id', $id)
+        ->where('orders.order_status_id', 3)->get();
     }
 
 }

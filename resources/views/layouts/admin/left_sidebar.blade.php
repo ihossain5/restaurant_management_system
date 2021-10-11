@@ -9,7 +9,7 @@ $restaurant_id = RestaurantController::getRestaurantIdBySession();
     <div class="topbar-left">
         <div class="">
             <!--<a href=" index.html" class="logo text-center">Fonik</a>-->
-            <a href="{{ route('dashboard') }}" class="logo">
+            <a href="{{ route(Auth::user()->is_manager == 1 ? 'manager.dashboard' : 'dashboard') }}" class="logo">
                 <h6 class="text-center">App Logo</h6>
                 {{-- <img src="{{asset('backend/assets/images/logo.png')}}" height="20" alt="logo"> --}}
             </a>
@@ -39,7 +39,7 @@ $restaurant_id = RestaurantController::getRestaurantIdBySession();
                             <h6 class="text-center user_name text-uppercase">{{ Auth::user()->name }}</h6>
                             <div class="text-center">
                                 <div class="superAdminDesign">
-                                    <span>Super Admin</span>
+                                    <span> {{Auth::user()->is_manager ==1 ? 'Manager' : 'Super Admin'}}</span>
                                 </div>
                             </div>
                             {{-- <div class="d-flex justify-content-center pt-2" style="font-size: 16px;">
@@ -148,12 +148,20 @@ $restaurant_id = RestaurantController::getRestaurantIdBySession();
  <!-- Manager route start -->
         @if (Auth::user()->is_manager == 1)
         <li>
-            <a href="{{ route('dashboard') }}" class="waves-effect"><i class="dripicons-device-desktop "></i><span>
+            <a href="{{ route('manager.dashboard') }}" class="waves-effect"><i class="dripicons-device-desktop "></i><span>
                     Dashboard</span></a>
         </li>
-         <li>
-            <a href="{{ route('restaurant.items') }}" class="waves-effect"><i class="fa fa-cutlery"></i><span>
-                    Item</span></a>
+     
+        <li class="has_sub">
+            <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-device-desktop"></i><span>Orders
+                    <span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
+            <ul class="list-unstyled">
+                <li><a  href="{{ route('manager.new.order')}}">New Orders </a></li>
+                <li><a  href="{{ route('manager.order.in.preparation')}}">Orders In Preparation </a></li>
+                <li><a  href="{{ route('manager.order.in.delivery')}}">Orders In Delivery </a></li>
+                <li><a  href="{{ route('manager.completed.order')}}">Completed Orders </a></li>
+                <li><a  href="{{ route('manager.cancelled.order')}}">Cancelled Orders </a></li>
+            </ul>
         </li>
         @endif
 

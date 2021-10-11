@@ -138,7 +138,6 @@ class ManagerController extends Controller {
             'token'       => null,
             'photo'       => $img_url,
             'is_verified' => 1,
-            'password' => bcrypt($request->password),
         ]);
         if ($user) {
             Auth::login($user);
@@ -148,7 +147,7 @@ class ManagerController extends Controller {
                 return redirect()->route('manager.dashboard');
             }else{
                 Auth::logout();
-                return redirect()->back()->with('Sorry, You have no permission to access this');
+                return redirect()->back()->withErrors(['error' => 'Sorry! You have no permission to access this']);
             }
             
         }

@@ -16,6 +16,7 @@ use App\Http\Controllers\Backend\OrderPerformanceController;
 use App\Http\Controllers\Backend\RestaurantController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\Manager\ManagerDashboardController;
+use App\Http\Controllers\Manager\ManagerOrdersController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -218,7 +219,16 @@ Route::post('/make/super/admin', [UserController::class, 'makeSuperAdmin'])->nam
 Route::get('/send-email/{token}', [ManagerController::class, 'registerNewManager'])->name('send.email');
 Route::post('/sign-up', [ManagerController::class, 'userSignUp'])->name('user.sign.up');
 
-Route::group(['prefix' => 'manager', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => 'manager', 'middleware' => ['auth','manager']], function () {
     Route::get('dashboard', [ManagerDashboardController::class, 'index'])->name('manager.dashboard');
+    Route::post('update/restaurant-status', [ManagerDashboardController::class, 'updateRestaurantStatus'])->name('manager.restaurant.status.update');
+
+    /* Order Route */
+    Route::get('/new-orders', [ManagerOrdersController::class, 'newOrders'])->name('manager.new.order');
+    Route::get('/order-in-preparation', [ManagerOrdersController::class, 'ordersInPreparation'])->name('manager.order.in.preparation');
+    Route::get('/order-in-delivery', [ManagerOrdersController::class, 'ordersInDelivery'])->name('manager.order.in.delivery');
+    Route::get('/completed-orders', [ManagerOrdersController::class, 'completedOrders'])->name('manager.completed.order');
+    Route::get('/cancelled-orders', [ManagerOrdersController::class, 'cancelledOrders'])->name('manager.cancelled.order');
+    
 
 });

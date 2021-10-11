@@ -116,6 +116,7 @@ class AdminController extends Controller {
             'password'   => $token,
             'token'      => $token,
             'is_super_admin' => 1,
+            'is_active' => 1,
         ]);
         $maildata = [
             'title'   => 'Geetings from Emerald',
@@ -131,6 +132,7 @@ class AdminController extends Controller {
         $data['photo']           = $user->photo;
         $data['sex']             = $user->sex ??'N/A';
         $data['id']              = $user->id;
+        $data['is_active']              = $user->is_active;
         return success($data);
 
     }

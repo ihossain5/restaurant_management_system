@@ -49,17 +49,23 @@ crossorigin="anonymous"></script>
 integrity="sha512-8QFTrG0oeOiyWo/VM9Y8kgxdlCryqhIxVeRpWSezdRRAvarxVtwLnGroJgnVW9/XBRduxO/z1GblzPrMQoeuew=="
 crossorigin="anonymous"></script>
 
-<script src="{{ asset('backend/assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+<script src="{{ asset('backend/assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}">
+</script>
 <script src="{{ asset('backend/assets/js/restaurant_add_row.js') }}"></script>
 <script>
+        var config = {
+            routes: {
+                updateStatus: "{!! route('manager.restaurant.status.update') !!}",
+            }
+        };
     $(document).ajaxStart(function() {
         $('.preloader').empty();
         $('.preloader').addClass('ajax_loader').append(
             `<div class='preloader'>
-                            <div id="status">
-                                <div class="spinner"></div>
-                            </div>
-                        </div>`
+                <div id="status">
+                    <div class="spinner"></div>
+                </div>
+            </div>`
         );
     });
 
@@ -150,7 +156,7 @@ crossorigin="anonymous"></script>
         minViewMode: "years",
         autoclose: true,
         todayHighlight: true,
-        
+
     });
 
     $("#monthYear").datepicker({
@@ -167,5 +173,35 @@ crossorigin="anonymous"></script>
         autoclose: true,
     });
 
-    
+    // restaurant status change
+    $(document).on('click', '.status_btn', function() {
+        var id = $(this).data('id');
+        $.ajax({
+            url: config.routes.updateStatus,
+            method: "POST",
+            data: {
+                id: id,
+                _token: "{{ csrf_token() }}"
+            },
+            dataType: "json",
+            success: function(response) {
+                if (response.success == true) {
+                   $('.btnOutlineOpen').html(response.data);
+                   $('#restaurentStatusModal').modal('hide');
+                }
+            }, //success end
+            error: function(error) {
+                if (error.status == 404) {
+                    toastMixin.fire({
+                        icon: 'error',
+                        animation: true,
+                        title: "" + 'Data not found' + ""
+                    });
+
+
+                }
+            },
+
+        }); //ajax end
+    });
 </script>

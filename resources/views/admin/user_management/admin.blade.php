@@ -325,7 +325,7 @@
                             .append(`<td>` + response.data.contact + `</td>`)
                             .append(`<td><label class="switch">
                                             <input class="is_active status${ response.data.id}"type="checkbox"
-                                                ${response.data.is_available == 1 ? 'checked' : ''}data-id="${response.data.id}">
+                                                ${response.data.is_active == 1 ? 'checked' : ''}data-id="${response.data.id}">
                                                      <span class="slider round"></span>
                                          </label></td>`)
                             .append(`<td><button type='button' class='btn btn-outline-dark' onclick='viewAdmin(${response.data.id})'>

@@ -19,6 +19,7 @@ class Restaurant extends Model {
         'address',
         'user_id',
         'logo',
+        'restaurant_status_id',
     ];
 
     public function assets() {
@@ -33,6 +34,9 @@ class Restaurant extends Model {
 
     public function restaurant_orders() {
         return $this->hasMany(Order::class, 'restaurant_id')->with('status', 'customer')->orderBy('created_at', 'DESC');
+    }
+    public function status() {
+        return $this->belongsTo(RestaurantStatus::class, 'restaurant_status_id');
     }
 
     public function restaurant_completed_orders() {

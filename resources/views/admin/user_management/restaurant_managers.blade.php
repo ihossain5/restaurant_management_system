@@ -105,18 +105,11 @@
                                     name="button" id="addButton" data-toggle="modal" data-target="#add"> Add
                                     New
                                 </button>
-
-
-
                             </div>
-
-                            <span class="showError"></span>
                             <table id="managerTable" class="table table-bordered dt-responsive nowrap"
                                 style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
-
-
                                         <th>Photo</th>
                                         <th>Restaurant Name</th>
                                         <th>Name</th>
@@ -142,8 +135,8 @@
                                                 </td>
                                                 <td>{{ $manager->restaurant->name ?? 'N/A' }}</td>
                                                 <td>{{ $manager->name ?? 'N/A' }}</td>
-                                                <td>{{ $manager->sex ?? 'N/A'}}</td>
-                                                <td>{{ $manager->email ?? 'N/A'}}</td>
+                                                <td>{{ $manager->sex ?? 'N/A' }}</td>
+                                                <td>{{ $manager->email ?? 'N/A' }}</td>
                                                 <td>{{ $manager->contact ?? 'N/A' }}</td>
                                                 <td>
 
@@ -161,21 +154,12 @@
                                         @endforeach
                                     @endif
                                 </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th></th>
-                                    </tr>
-                                </tfoot>
                             </table>
 
                         </div>
                     </div>
                 </div> <!-- end col -->
             </div> <!-- end row -->
-
-
-
-
         </div><!-- container -->
 
     </div> <!-- Page content Wrapper -->
@@ -289,12 +273,12 @@
                                 <strong>Email:</strong> <span id="view_email"></span><br>
                                 <strong>Phone:</strong> <span id="view_phone"></span><br>
                                 <label for="name"><strong>Photo:</strong></label> <br>
-                            <img src="" id="view_image">
+                                <img src="" id="view_image">
                             </p>
                         </div>
                         <div class="form-group">
                             <div>
-                               
+
 
                             </div>
                         </div>
@@ -305,7 +289,7 @@
                     <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
                         Done
                     </button>
-                  </div>
+                </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
@@ -507,20 +491,21 @@
                     if (response.success == true) {
                         if (response.data.is_manager == 1) {
                             $('.view_role').html('Manager');
-                        } else{
+                        } else {
                             alert('sds');
                             $('.role_div').hide();
                         }
-                        
+
                         $('#view_name').text(response.data.name);
                         $('#view_email').text(response.data.email);
                         $('#view_gender').text(response.data.sex ?? 'N/A');
                         $('#view_phone').text(response.data.contact ?? 'N/A');
-                        $('#view_restaurant_name').text(response.data.restaurant? response.data.restaurant.name : 'N/A' );
+                        $('#view_restaurant_name').text(response.data.restaurant ? response.data.restaurant
+                            .name : 'N/A');
 
 
                         if (response.data.photo === null) {
-                            $('#view_image').attr('src','/images/default.png');
+                            $('#view_image').attr('src', '/images/default.png');
                         } else {
                             $('#view_image').attr('src', '/images/' + response.data.photo);
                         }
@@ -530,20 +515,20 @@
                         $('#viewModal').modal('show');
 
                     }
-      
+
 
                 },
                 error: function(error) {
-                            if (error.status == 404) {
-                                toastMixin.fire({
-                                    icon: 'error',
-                                    animation: true,
-                                    title: "" + 'Data not found' + ""
-                                });
+                    if (error.status == 404) {
+                        toastMixin.fire({
+                            icon: 'error',
+                            animation: true,
+                            title: "" + 'Data not found' + ""
+                        });
 
 
-                            }
-                        },
+                    }
+                },
             }); //ajax end
         }
 
@@ -671,35 +656,35 @@
                                 title: "" + response.data.message + ""
                             });
                             $('.updateManagerForm')[0].reset();
-                        }else{
+                        } else {
                             toastMixin.fire({
                                 icon: 'error',
                                 animation: true,
                                 title: "" + response.data.message + ""
                             });
                         }
-           
+
                     }, //success end
                     error: function(error) {
-                            if (error.status == 422) {
-                                $.each(error.responseJSON.errors, function(i, message) {
-                                    toastMixin.fire({
-                                        icon: 'error',
-                                        animation: true,
-                                        title: "" + message + ""
-                                    });
-                                });
-
-                            }else if (error.status == 404) {
+                        if (error.status == 422) {
+                            $.each(error.responseJSON.errors, function(i, message) {
                                 toastMixin.fire({
                                     icon: 'error',
                                     animation: true,
-                                    title: "" + 'Data not found' + ""
+                                    title: "" + message + ""
                                 });
+                            });
+
+                        } else if (error.status == 404) {
+                            toastMixin.fire({
+                                icon: 'error',
+                                animation: true,
+                                title: "" + 'Data not found' + ""
+                            });
 
 
-                            }
-                        },
+                        }
+                    },
 
                 });
             });

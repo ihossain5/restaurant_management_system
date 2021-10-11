@@ -26,6 +26,7 @@ class User extends Authenticatable {
         'token',
         'sex',
         'is_active',
+        'is_verified',
     ];
 
     /**

@@ -1,8 +1,21 @@
-       <!-- Top Bar Start -->
+@php
+use App\Http\Controllers\Manager\ManagerDashboardController;
+$status = ManagerDashboardController::restaurant_status();
+@endphp
+<!-- Top Bar Start -->
        <div class="topbar">
     
         <nav class="navbar-custom">
             <ul class="list-inline float-right mb-0">
+               @if (Auth::user()->is_manager == 1)
+               <li class="list-inline-item dropdown notification-list hidden-xs-down">
+                <a class="nav-link waves-effect" href="javascript:void(0);" data-toggle="modal"
+                    data-target="#restaurentStatusModal">
+                    <span class="btnOutlineOpen">{{$status}}</span>
+                </a>
+            </li>
+               @endif
+
               <!-- restaurant list-->
                 @yield('restaurant_list')
             
@@ -44,3 +57,32 @@
 
     </div>
     <!-- Top Bar End -->
+
+    
+    <div class="modal addModal fade" id="restaurentStatusModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="">
+                <h5 class="modal-title text-center" id="exampleModalLabel">Select a Restaurant Status</h5>
+                <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-5">
+                <div class="row text-center ">
+                    <div class="col-12 mb-4">
+                        <button class="btnOpen status_btn"data-id="1">Open</button>
+                    </div>
+                    <div class="col-12 mb-4">
+                        <button class="btnBusy status_btn"data-id="2">Busy</button>
+                    </div>
+                    <div class="col-12 mb-5">
+                        <button class="btnClose status_btn"data-id="3">Closed</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
