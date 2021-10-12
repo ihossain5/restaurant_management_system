@@ -1,12 +1,12 @@
 @extends('layouts.admin.master')
 @section('page-header')
-    Completed Orders
+    Cancelled Orders
 @endsection
 
 
 @section('pageCss')
     <style>
-  .btn-success{
+        .btn-success{
             padding: 3px 40px;
             font-weight: 600;
         }
@@ -94,6 +94,7 @@
                             <p>
                                 <strong>Special Notes :</strong> <span id="view_notes"></span>
                             </p>
+
                             {{-- <p class="pb-3">
                                 <strong>Order ID:</strong> <span id="view_order_id"></span><br>
                                 <strong>Customer Name:</strong> <span id="view_customer_name"></span><br>
@@ -281,7 +282,7 @@ function dataTable(){
     var table = $('#orderTable').DataTable({
         // processing: true,
         serverSide: true,
-        ajax: '{{route('manager.completed.order')}}',
+        ajax: '{{route('manager.cancelled.order')}}',
         columns: [
             {data: 'id'},
             {data: 'time'},

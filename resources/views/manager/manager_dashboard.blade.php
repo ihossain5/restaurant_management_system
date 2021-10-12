@@ -23,7 +23,7 @@
         <!-- Dashboard Card -->
         <div class="row pt-5">
             <div class="col-12 col-md-6 col-lg-3">
-                <a class="todaysOrderUrl" href="">
+                <a class="todaysOrderUrl" href="{{route('manager.new.order')}}">
                 <div class="card m-b-30 card-body dashboardCard orderCard activeOrderCard">
                     <div class="secondCardContent ">
                         <div>
@@ -48,7 +48,7 @@
             </a>
             </div>
             <div class="col-12 col-md-6 col-lg-3">
-                <a class="todaysOrderUrl" href="">
+                <a class="todaysOrderUrl" href="{{route('manager.order.in.preparation')}}">
                 <div class="card m-b-30 card-body dashboardCard">
                     <div class="secondCardContent">
                         <div>
@@ -64,7 +64,7 @@
             </div>
 
             <div class="col-12 col-md-6 col-lg-3">
-                <a class="todaysOrderUrl" href="">
+                <a class="todaysOrderUrl" href="{{route('manager.order.in.delivery')}}">
                 <div class="card m-b-30 card-body dashboardCard">
                     <div class="secondCardContent">
                         <div>

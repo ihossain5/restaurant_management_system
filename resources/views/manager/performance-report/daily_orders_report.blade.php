@@ -1,14 +1,33 @@
 @extends('layouts.admin.master')
 @section('page-header')
-    Completed Orders
+    Daily Report
 @endsection
 
 
 @section('pageCss')
     <style>
-  .btn-success{
-            padding: 3px 40px;
+        .txt-preparing {
+            color: rgb(38, 38, 160);
             font-weight: 600;
+        }
+
+        .txt-cancelled {
+            color: rgb(255, 0, 0);
+            font-weight: 600;
+        }
+
+        .txt-delivering {
+            color: rgb(189, 179, 45);
+            font-weight: 600;
+        }
+
+        .txt-completed {
+            color: rgb(6, 78, 4);
+            font-weight: 600;
+        }
+
+        .view-modal p {
+            line-height: 2;
         }
 
     </style>
@@ -24,9 +43,28 @@
                 <div class="col-12">
                     <div class="card m-b-30">
                         <div class="card-body">
-                            <div class="d-flex justify-content-between mb-4">
-                                <div class="ms-header-text">
-                                    <h4 class="mt-0 header-title">All New Orders</h4>
+                            <div class="row pb-5">
+                                <div class="col-lg-4">
+                                    <h4 class="mt-0 header-title">Date - <span class="starting_date"></span> </h4>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="row">
+                                        <div class="col-lg-9"></div>
+                                        <div class="col-lg-3">
+                                            <div class="custom-date">
+                                                <div class="input-daterange input-group" id="datepicker">
+                                                    <div class="customDatePicker w-100" style="max-width: none;">
+                                                        <img src="{{ asset('backend/assets/icons/dateicon.svg') }}"
+                                                            alt="">
+                                                        <input type="text" class="form-control date" name="fullDate"
+                                                            placeholder="Select Date" />
+                                                        <img src="{{ asset('backend/assets/icons/color-arrow-down.svg') }}"
+                                                            alt="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -36,34 +74,30 @@
                                     style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                     <thead>
                                         <tr>
-                                            <th>Order Id</th>
                                             <th>Time</th>
-                                            <th>Customer Name</th>
-                                            <th>Customer Contact</th>
-                                            <th>Customer Address</th>
-                                            <th>Total Revenue</th>
-                                            <th>Action</th>
+                                            <th>Order Id</th>
+                                            <th>Revenue</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="table-active">
+                                            <td class="col-3 font-weight-bold">TOTAL</td>
+                                            <td class="col-3 font-weight-bold">TOTAL <span class="total_orders"></span>
+                                                ORDERS</td>
+                                            <td class="col-3 font-weight-bold ">TOTAL <span class="total_amount"></span>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div> <!-- end col -->
             </div> <!-- end row -->
-
-
-
-
         </div><!-- container -->
-
     </div> <!-- Page content Wrapper -->
-
-
-
     <!-- view  Modal -->
     <div class="modal fade bs-example-modal-center" id="viewModal" tabindex="-1" role="dialog"
         aria-labelledby="mySmallModalLabel" aria-hidden="true">
@@ -76,25 +110,7 @@
                 <div class="modal-body">
                     <div class="col-xl-12 col-md-12">
                         <div class="ms-form-group view-modal">
-                            <p>
-                                <strong>Order ID:</strong> <span id="view_order_id"></span>
-                            </p>
-                            <p>
-                                <strong>Customer Name:</strong> <span id="view_customer_name"></span>
-                            </p>
-                            <p>
-                                <strong>Customer Email:</strong> <span id="view_customer_email"></span>
-                            </p>
-                            <p>
-                                <strong>Customer Contact:</strong> <span id="view_customer_contact"></span>
-                            </p>
-                            <p>
-                                <strong>Customer Address :</strong> <span id="view_customer_address"></span>
-                            </p>
-                            <p>
-                                <strong>Special Notes :</strong> <span id="view_notes"></span>
-                            </p>
-                            {{-- <p class="pb-3">
+                            <p class="pb-3">
                                 <strong>Order ID:</strong> <span id="view_order_id"></span><br>
                                 <strong>Customer Name:</strong> <span id="view_customer_name"></span><br>
                                 <strong>Customer Email:</strong> <span id="view_customer_email"></span><br>
@@ -104,9 +120,8 @@
                                 </button>
                                 <strong>Customer Address :</strong> <span id="view_customer_address"></span><br>
                                 <strong>Special Notes :</strong> <span id="view_notes"></span><br>
-                            </p> --}}
+                            </p>
                         </div>
-
                     </div>
                     <div class="row p-3">
                         <div class="table-responsive">
@@ -145,7 +160,7 @@
                     </div>
                 </div>
                 <div class="modal-footer view-modal-footer">
-                    <button type="submit" data-dismiss="modal" class="btn btn-success waves-effect waves-light text-dark rounded">
+                    <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
                         Done
                     </button>
                 </div>
@@ -159,13 +174,14 @@
         var config = {
             routes: {
                 view: "{!! route('order.show') !!}",
-                getOrders: "{!! route('order.restaurant') !!}",
+                getOrdersByDate: "{!! route('manager.daily.report.by.date') !!}",
             }
         };
 
-    $(function () {
-     dataTable();
-  });
+        $(function() {
+            var url = '{{ route('manager.daily.sales.report') }}';
+            dataTable(url);
+        });
 
         // view single 
         function viewOrder(id) {
@@ -215,12 +231,12 @@
 
                         });
                         $('.view_total').html('৳ ' + bdCurrencyFormat(response.data.amount));
-                        if(response.data.delivery_fee != null){
+                        if (response.data.delivery_fee != null) {
                             $('.deleveryFee').html('৳ ' + bdCurrencyFormat(response.data.delivery_fee));
-                        }else{
+                        } else {
                             $('.deleveryFee').html('৳ ' + 0);
                         }
-                       
+
 
                         $('#viewModal').modal('show');
 
@@ -241,66 +257,61 @@
             }); //ajax end
         }
 
-        // restaurant change
-        $(document).on('click', '.restaurant', function() {
-            var id = $(this).data('id');
-            $.ajax({
+        // get orders by date
+        $(".date").on("change", function() {
+            var date = $(this).val();
+            var url = {
                 type: "POST",
-                url: config.routes.getOrders,
+                url: config.routes.getOrdersByDate,
                 data: {
-                    id: id,
+                    date: date,
                     _token: "{{ csrf_token() }}"
                 },
                 dataType: 'JSON',
-                success: function(response) {
-                    if (response.success === true) {
-                        $('.restaurant_id').val(response.data.id);
-                        $('#orderTable').DataTable().clear().destroy();
-                        setSessionId(response.data.session_id); // set restaurant id into session
-                        setRestaurant(response.data.restaurant_name, response.data.id); // set restaurant into topbar
-                        dataTable();
+            };
+            $('#orderTable').DataTable().clear().destroy();
+            dataTable(url);
+        });
+        // 
 
+        function dataTable(url) {
+            var table = $('#orderTable').DataTable({
+                // processing: true,
+                serverSide: true,
+                ajax: url,
+                columns: [{
+                        data: 'time'
+                    },
+                    {
+                        data: 'id'
+                    },
+                    {
+                        data: 'amount',
+                        orderable: true,
+                        searchable: true,
+                        render: function(data, type, full, meta) {
+                            return "<span class='bdt_symbol'>৳</span>  " + data;
+                        }
+                    },
 
+                ],
+                "drawCallback": function(settings) {
+                    if (settings.json.data == '') {
+                        var date = $('.date').val();
+                        $('.starting_date').html(date);
+                        $('.total_orders').html(0);
+                        $('.total_amount').html(`<span class='bdt_symbol'>৳ </spam>` + 0);
+                    } else {
+                        $.each(settings.json.data, function(i, val) {
+                            $('.starting_date').html(val.start_date);
+                            $('.total_orders').html(val.total_order);
+                            $('.total_amount').html(`<span class='bdt_symbol'>৳ </spam>` + val
+                                .total_amount);
+                        })
                     }
-                },
-                error: function(error) {
-                    if (error.status == 404) {
-                        toastMixin.fire({
-                            icon: 'error',
-                            animation: true,
-                            title: "" + 'Data not found' + ""
-                        });
 
-
-                    }
                 },
             });
-        });
-
-function dataTable(){
-    var table = $('#orderTable').DataTable({
-        // processing: true,
-        serverSide: true,
-        ajax: '{{route('manager.completed.order')}}',
-        columns: [
-            {data: 'id'},
-            {data: 'time'},
-            {data: 'customer_name'},
-            {data: 'customer_contact'},
-            {data: 'customer_adress'},
-            {data: 'amount',
-            render: function( data, type, full, meta ) {
-                        return "<span class='bdt_symbol'>৳</span>  "+ data;
-                    }
-            },
-            {
-                data: 'action', 
-                name: 'action', 
-                orderable: true, 
-                searchable: true
-            },
-        ]
-    });
-    }   
+        }
     </script>
 @endsection

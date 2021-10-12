@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ItemStoreRequest;
 use App\Http\Requests\ItemUpdateRequest;
+use App\Models\Category;
 use App\Models\Item;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
@@ -15,10 +16,10 @@ class ItemController extends Controller {
     public function index($id) {
         // dd( Session::get('restaurant_id'));
 
-        $restaurant = Restaurant::find($id);
-        $restaurants    = Restaurant::get();
-        $items          = $restaurant->restaurant_items;
-        $categories     = $restaurant->restaurant_categories;
+        $restaurant  = Restaurant::find($id);
+        $restaurants = Restaurant::get();
+        $items       = $restaurant->restaurant_items;
+        $categories  = $restaurant->restaurant_categories;
         foreach ($items as $item) {
             foreach ($item->item_assets as $asset) {
                 $item->asset = $asset->pivot->asset;
@@ -133,22 +134,44 @@ class ItemController extends Controller {
         }
         $data               = [];
         $data['id']         = $request->id;
-        $data['name']         = $restaurant->name;
+        $data['name']       = $restaurant->name;
         $data['session_id'] = Session::get('restaurant_id');
         $data['categories'] = $categories;
         $data['items']      = $items;
         return success($data);
     }
 
+    // for manager
     public function itemsByManager() {
         $restaurant = auth()->user()->restaurant;
+        $categories = $restaurant->restaurant_categories;
         $items      = $restaurant->restaurant_items;
         foreach ($items as $item) {
             foreach ($item->item_assets as $asset) {
                 $item->image = $asset->pivot->asset;
             }
         }
-        // dd($items);
-        return view('manager.item.item', compact('items'));
+        return view('manager.item.item', compact('items', 'categories'));
+    }
+    public function getItemsByCategory(Request $request) {
+        if ($request->id == null) {
+            $restaurant = auth()->user()->restaurant;
+            $this->addImageIntoItems($restaurant->restaurant_items);
+            $data['items'] = $restaurant->restaurant_items;
+        } else {
+            $category = Category::findOrFail($request->id);
+            $this->addImageIntoItems($category->items);
+            $data['items']         = $category->items;
+            $data['category_name'] = $category->name;
+        }
+        return success($data);
+
+    }
+    public function addImageIntoItems($items) {
+        foreach ($items as $item) {
+            foreach ($item->item_assets as $asset) {
+                $item->image = $asset->pivot->asset;
+            }
+        }
     }
 }

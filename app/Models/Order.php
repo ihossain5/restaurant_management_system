@@ -30,7 +30,7 @@ class Order extends Model {
     }
     public function order_items() {
         return $this->belongsToMany(Item::class, 'order_items', 'order_id', 'item_id')
-        ->withPivot('quantity', 'price')->withTimestamps();
+            ->withPivot('quantity', 'price')->withTimestamps();
     }
 
     public function status() {
@@ -43,9 +43,9 @@ class Order extends Model {
         return $this->belongsTo(Restaurant::class, 'restaurant_id');
     }
 
-    public static function todayOrdersByRestaurantId($id) {
-        return Order::where('restaurant_id', $id)
-        ->whereDate('orders.created_at', DB::raw('CURDATE()'))->with('customer')->get();
+    public static function todayOrdersByRestaurantId($restaurant) {
+        return Order::with('items', 'items.category')->where('restaurant_id', $restaurant)
+            ->whereDate('orders.created_at', DB::raw('CURDATE()'))->with('customer')->get();
     }
     public function todaysRevenue() {
         return $this->whereDate('created_at', DB::raw('CURDATE()'))
@@ -63,10 +63,10 @@ class Order extends Model {
                 DB::raw("COUNT(order_status_id) as completed"),
             ]);
     }
-    public function todayOrdersInPreparationByRestaurantId($id) {
-        return Order::where('restaurant_id', $id)
-        ->whereDate('orders.created_at', DB::raw('CURDATE()'))
-        ->where('orders.order_status_id', 1)->get();
+    public function todayOrdersInPreparationByRestaurantId($restaurant) {
+        return Order::where('restaurant_id', $restaurant)
+            ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            ->where('orders.order_status_id', 1)->get();
 
         // return Restaurant::with(['restaurant_orders' => function ($query) {
         //     $query->whereDate('orders.created_at', DB::raw('CURDATE()'))
@@ -74,26 +74,46 @@ class Order extends Model {
         // }])->find($id);
 
     }
-    public function todayOrdersInDeliveryByRestaurantId($id) {
-        return Order::where('restaurant_id', $id)
-        ->whereDate('orders.created_at', DB::raw('CURDATE()'))
-        ->where('orders.order_status_id', 2)->get();
+    public function todayOrdersInDeliveryByRestaurantId($restaurant) {
+        return Order::where('restaurant_id', $restaurant)
+            ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            ->where('orders.order_status_id', 2)->get();
         // return Restaurant::with(['restaurant_orders' => function ($query) {
         //     $query->whereDate('orders.created_at', DB::raw('CURDATE()'))
         //         ->where('orders.order_status_id', 2)->get();
         // }])->find($id);
     }
-    public function allOrdersInPreparationByRestaurant($id) {
-        return Order::where('restaurant_id', $id)
-        ->where('orders.order_status_id', 1)->get();
+    public function ordersInPreparationByRestaurant($restaurant) {
+        return Order::where('restaurant_id', $restaurant)
+            ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            ->where('orders.order_status_id', 1)->get();
     }
-    public function allOrdersInDeliveryByRestaurant($id) {
-        return Order::where('restaurant_id', $id)
-        ->where('orders.order_status_id', 2)->get();
+    public function ordersInDeliveryByRestaurant($restaurant) {
+        return Order::where('restaurant_id', $restaurant)
+            ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            ->where('orders.order_status_id', 2)->get();
     }
-    public function allCompletedOrdersRestaurant($id) {
-        return Order::where('restaurant_id', $id)
-        ->where('orders.order_status_id', 3)->get();
+    public function CompletedOrdersByRestaurant($restaurant) {
+        return Order::where('restaurant_id', $restaurant)
+            ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            ->where('orders.order_status_id', 3)->get();
+    }
+    public function cancelledOrdersByRestaurant($restaurant) {
+        return Order::where('restaurant_id', $restaurant)
+            ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            ->where('orders.order_status_id', 4)->get();
+    }
+
+    public function ordersByDate($date, $restaurant) {
+        return Order::where('restaurant_id', $restaurant)
+            ->whereDate('created_at', $date)->get();
+    }
+    public function getOrdersByDate($start_date, $end_date, $restaurant) {
+        return Order::with('items', 'items.category')->whereDate('orders.created_at', '>=', $start_date)
+            ->whereDate('orders.created_at', '<=', $end_date)
+            ->where('restaurant_id', $restaurant)
+            ->get();
+
     }
 
 }

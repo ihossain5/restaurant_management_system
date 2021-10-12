@@ -1,6 +1,8 @@
 @php
 use App\Http\Controllers\Backend\RestaurantController;
+use App\Http\Controllers\Manager\ManagerDashboardController;
 $restaurant_id = RestaurantController::getRestaurantIdBySession();
+$orders = ManagerDashboardController::countedOrders();
 @endphp
 <!-- ========== Left Sidebar Start ========== -->
 <div class="left side-menu">
@@ -8,17 +10,11 @@ $restaurant_id = RestaurantController::getRestaurantIdBySession();
     <!-- LOGO -->
     <div class="topbar-left">
         <div class="">
-            <!--<a href=" index.html" class="logo text-center">Fonik</a>-->
             <a href="{{ route(Auth::user()->is_manager == 1 ? 'manager.dashboard' : 'dashboard') }}" class="logo">
                 <h6 class="text-center">App Logo</h6>
-                {{-- <img src="{{asset('backend/assets/images/logo.png')}}" height="20" alt="logo"> --}}
             </a>
         </div>
-      
-
-
     </div>
-
     <div class="sidebar-inner slimscrollleft">
         <div id="sidebar-menu">
             <ul>
@@ -151,16 +147,27 @@ $restaurant_id = RestaurantController::getRestaurantIdBySession();
             <a href="{{ route('manager.dashboard') }}" class="waves-effect"><i class="dripicons-device-desktop "></i><span>
                     Dashboard</span></a>
         </li>
-     
         <li class="has_sub">
             <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-device-desktop"></i><span>Orders
                     <span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
             <ul class="list-unstyled">
-                <li><a  href="{{ route('manager.new.order')}}">New Orders </a></li>
-                <li><a  href="{{ route('manager.order.in.preparation')}}">Orders In Preparation </a></li>
-                <li><a  href="{{ route('manager.order.in.delivery')}}">Orders In Delivery </a></li>
-                <li><a  href="{{ route('manager.completed.order')}}">Completed Orders </a></li>
-                <li><a  href="{{ route('manager.cancelled.order')}}">Cancelled Orders </a></li>
+                <li><a  href="{{ route('manager.new.order')}}">New Orders <span class="badge badge-custom">{{$orders['new_order']}}</span></a></li>
+                <li><a  href="{{ route('manager.order.in.preparation')}}">Orders In Preparation <span class="badge badge-custom">{{$orders['ordersInPreparation']}}</span> </a></li>
+                <li><a  href="{{ route('manager.order.in.delivery')}}">Orders In Delivery <span class="badge badge-custom">{{$orders['ordersInDelivery']}}</span></a></li>
+                <li><a  href="{{ route('manager.completed.order')}}">Completed Orders <span class="badge badge-custom">{{$orders['completedOrder']}}</span></a></li>
+                <li><a  href="{{ route('manager.cancelled.order')}}">Cancelled Orders <span class="badge badge-custom">{{$orders['cancelledOrder']}}</span></a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="{{ route('manager.restaurant.items') }}" class="waves-effect"><i class="fa fa-cutlery"></i><span>
+                    Items</span></a>
+        </li>
+        <li class="has_sub">
+            <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-device-desktop"></i><span>Performance Report
+                    <span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
+            <ul class="list-unstyled">
+                <li><a  href="{{ route('manager.daily.sales.report')}}">Daily Sales Report </a></li>
+                <li><a  href="{{ route('manager.item.performance.report')}}">Item Performance Report</a></li>
             </ul>
         </li>
         @endif

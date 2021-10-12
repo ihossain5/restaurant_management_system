@@ -177,7 +177,7 @@ crossorigin="anonymous"></script>
     $(document).on('click', '.status_btn', function() {
         var id = $(this).data('id');
         $.ajax({
-            url: config.routes.updateStatus,
+            url: '{{route('manager.restaurant.status.update')}}',
             method: "POST",
             data: {
                 id: id,

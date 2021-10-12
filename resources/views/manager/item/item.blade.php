@@ -2,11 +2,7 @@
 @section('page-header')
     Items
 @endsection
-@section('restaurant_list')
-    <select name="" class="form-control restaurant">
-        <option value="">Option</option>
-    </select>
-@endsection
+
 @section('pageCss')
     <style>
         .view-modal-footer {
@@ -94,12 +90,27 @@
                 <div class="col-12">
                     <div class="card m-b-30">
                         <div class="card-body">
-                            <div class="d-flex justify-content-between mb-4">
-                                <div class="ms-header-text">
+                            <div class="row pb-5">
+                                <div class="col-lg-4">
                                     <h4 class="mt-0 header-title">All Items</h4>
                                 </div>
-
-
+                                <div class="col-lg-8">
+                                    <div class="row">
+                                        <div class="col-lg-9">
+                                        </div>
+                                        <div class="col-lg-3 p-0">
+                                            <select class="form-control custom-select category-select">
+                                                <option value="">Item Category</option>
+                                                @if (!empty($categories))
+                                                    @foreach ($categories as $category)
+                                                        <option value="{{ $category->category_id }}">{{ $category->name }}
+                                                        </option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <span class="showError"></span>
@@ -123,13 +134,15 @@
                                                     <td>{{ $item->category->name ?? 'N/A' }}</td>
                                                     <td>
                                                         @foreach ($item->item_assets as $asset)
-                                                        <img class='img-fluid' src="{{ asset('images/' . $asset->pivot->asset) }}"
-                                                        alt="{{ $item->name }}" style='width: 60px; height: 55px;'>
+                                                            <img class='img-fluid'
+                                                                src="{{ asset('images/' . $asset->pivot->asset) }}"
+                                                                alt="{{ $item->name }}"
+                                                                style='width: 60px; height: 55px;'>
                                                         @endforeach
-                                                     
+
                                                     </td>
                                                     <td>{{ $item->name }}</td>
-                                                    <td>{{ $item->price }}</td>
+                                                    <td><span class="bdt_symbol">৳</span> {{ $item->price }}</td>
 
                                                     <td><label class="switch">
                                                             <input class="is_available status{{ $item->item_id }}"
@@ -208,6 +221,7 @@
             routes: {
                 view: "{!! route('item.show') !!}",
                 updateAvailableStatus: "{!! route('item.available.status.update') !!}",
+                getItems: "{!! route('category.items') !!}",
             }
         };
 
@@ -218,7 +232,7 @@
 
         });
 
-
+        var imagesUrl = '{!! URL::asset('/images/') !!}/';
 
         // view single 
         function viewItem(id) {
@@ -231,7 +245,7 @@
                 },
                 dataType: "json",
                 success: function(response) {
-                    var imagesUrl = '{!! URL::asset('/images/') !!}/';
+                   
                     if (response.success == true) {
                         $('#view_name').text(response.data.name);
                         $('#view_description').text(response.data.description);
@@ -314,6 +328,57 @@
                     }
                 }
             })
+        });
+
+        // category on change function
+        $(document).on('change', '.category-select', function() {
+            var id = $(this).val();
+            $.ajax({
+                url: config.routes.getItems,
+                method: "POST",
+                data: {
+                    id: id,
+                    _token: "{{ csrf_token() }}"
+                },
+                dataType: "json",
+                success: function(response) {
+                    if (response.success == true) {
+                        $('#itemTable').DataTable().clear().draw();
+                        var orderTable = $('#itemTable').DataTable();
+                        $.each(response.data.items, function(i,item){
+                            var trDOM = orderTable.row.add([
+                                    "" + item.category.name + "",
+                                    `<img class='img-fluid' src="${imagesUrl + item.image}"
+                                            alt="{{ $item->name }}" style='width: 60px; height: 55px;'>`,
+                                    "" + item.name + "",
+                                    "<span class='bdt_symbol'>৳</span>" + item.price + "",
+                                    `<label class="switch">
+                                        <input class="is_available status${item.item_id}"type="checkbox"
+                                             ${ item.is_available == 1 ? 'checked' : '' } data-id="${item.item_id}">
+                                            <span class="slider round"></span>
+                                    </label>`,
+
+                                    `<button type='button' class='btn btn-outline-dark' onclick='viewItem(${item.item_id})'>
+                                                <i class='fa fa-eye'></i>
+                                    </button>`
+                                ]).draw().node();
+                                $(trDOM).addClass('order' + item.item_id + '');
+                        });
+                    }
+                }, //success end
+                error: function(error) {
+                    if (error.status == 404) {
+                        toastMixin.fire({
+                            icon: 'error',
+                            animation: true,
+                            title: "" + 'Data not found' + ""
+                        });
+
+
+                    }
+                },
+
+            }); //ajax end
         });
     </script>
 @endsection

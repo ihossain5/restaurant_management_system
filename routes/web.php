@@ -16,6 +16,7 @@ use App\Http\Controllers\Backend\OrderPerformanceController;
 use App\Http\Controllers\Backend\RestaurantController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\Manager\ManagerDashboardController;
+use App\Http\Controllers\Manager\ManagerOrderPerformanceController;
 use App\Http\Controllers\Manager\ManagerOrdersController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -152,7 +153,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
             Route::post('/delete', [ItemController::class, 'destroy'])->name('item.delete');
             Route::post('/restaurant-items', [ItemController::class, 'getItemsByRestaurant'])->name('item.restaurant');
             Route::post('/available-status/update', [ItemController::class, 'updateAvailableStatus'])->name('item.available.status.update');
-            Route::get('/items', [ItemController::class, 'itemsByManager'])->name('restaurant.items');
+          
         }); //* Item route end */
 
         //* Category route start */
@@ -222,13 +223,22 @@ Route::post('/sign-up', [ManagerController::class, 'userSignUp'])->name('user.si
 Route::group(['prefix' => 'manager', 'middleware' => ['auth','manager']], function () {
     Route::get('dashboard', [ManagerDashboardController::class, 'index'])->name('manager.dashboard');
     Route::post('update/restaurant-status', [ManagerDashboardController::class, 'updateRestaurantStatus'])->name('manager.restaurant.status.update');
+    /* Item Routes */
+    Route::get('/items', [ItemController::class, 'itemsByManager'])->name('manager.restaurant.items');
+    Route::post('/items', [ItemController::class, 'getItemsByCategory'])->name('category.items');
 
-    /* Order Route */
+    /* Order Routes */
     Route::get('/new-orders', [ManagerOrdersController::class, 'newOrders'])->name('manager.new.order');
     Route::get('/order-in-preparation', [ManagerOrdersController::class, 'ordersInPreparation'])->name('manager.order.in.preparation');
     Route::get('/order-in-delivery', [ManagerOrdersController::class, 'ordersInDelivery'])->name('manager.order.in.delivery');
     Route::get('/completed-orders', [ManagerOrdersController::class, 'completedOrders'])->name('manager.completed.order');
     Route::get('/cancelled-orders', [ManagerOrdersController::class, 'cancelledOrders'])->name('manager.cancelled.order');
+    /* Performance report routes */
+    Route::get('/daily-sales-report', [ManagerOrderPerformanceController::class, 'dailyReports'])->name('manager.daily.sales.report');
+    Route::post('/daily-sales-report/by-date', [ManagerOrderPerformanceController::class, 'dailyReportsByDate'])->name('manager.daily.report.by.date');
+    Route::get('/item-performance-report', [ManagerOrderPerformanceController::class, 'itemPerformanceReport'])->name('manager.item.performance.report');
+    Route::post('/item-performance-report', [ManagerOrderPerformanceController::class, 'itemPerformanceReportByDate'])->name('manager.item.performance.by.date');
+    
     
 
 });

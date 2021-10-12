@@ -19,4 +19,7 @@ class Category extends Model
     public function restaurant(){
         return $this->belongsTo(Restaurant::class,'restaurant_id');
     }
+    public function items(){
+        return $this->hasMany(Item::class, 'category_id')->with('item_assets','category');
+    }
 }

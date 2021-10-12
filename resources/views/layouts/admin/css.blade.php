@@ -28,6 +28,12 @@
         crossorigin="anonymous" />
 
     <style>
+        .badge-custom{
+            background-color: #ffff81;
+        }
+        .bdt_symbol{
+            font-size: 16px;
+        }
         table i {
             margin-right: 0px;
 
