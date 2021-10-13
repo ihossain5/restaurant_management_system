@@ -6,7 +6,31 @@
 
 @section('pageCss')
     <style>
+     .accept_btn {
+            padding: 3px 20px;
+            font-weight: 600;
+            border-radius: 5px;
+        }
 
+        .edit_btn {
+            padding: 3px 30px;
+            font-weight: 600;
+            border-radius: 5px;
+        }
+
+        .deny_btn {
+            padding: 3px 30px;
+            font-weight: 600;
+            border-radius: 5px;
+        }
+
+        .deny-modal-footer {
+            display: initial !important;
+        }
+
+        .modal-footer>:not(:first-child) {
+            margin-left: 0;
+        }
 
     </style>
 @endsection
@@ -71,16 +95,24 @@
                 <div class="modal-body">
                     <div class="col-xl-12 col-md-12">
                         <div class="ms-form-group view-modal">
-                            <p class="pb-3">
-                                <strong>Order ID:</strong> <span id="view_order_id"></span><br>
-                                <strong>Customer Name:</strong> <span id="view_customer_name"></span><br>
-                                <strong>Customer Email:</strong> <span id="view_customer_email"></span><br>
-                                <strong>Customer Contact:</strong> <span id="view_customer_contact"></span><br>
-                                <button type="button" class="btn btn-outline-purple float-right waves-effect waves-light"
-                                    name="button" id="order_status">
-                                </button>
-                                <strong>Customer Address :</strong> <span id="view_customer_address"></span><br>
-                                <strong>Special Notes :</strong> <span id="view_notes"></span><br>
+                            <input type="hidden" name="" id="order_id" value="">
+                            <p>
+                                <strong>Order ID:</strong> <span id="view_order_id"></span>
+                            </p>
+                            <p>
+                                <strong>Customer Name:</strong> <span id="view_customer_name"></span>
+                            </p>
+                            <p>
+                                <strong>Customer Email:</strong> <span id="view_customer_email"></span>
+                            </p>
+                            <p>
+                                <strong>Customer Contact:</strong> <span id="view_customer_contact"></span>
+                            </p>
+                            <p>
+                                <strong>Customer Address :</strong> <span id="view_customer_address"></span>
+                            </p>
+                            <p>
+                                <strong>Special Notes :</strong> <span id="view_notes"></span>
                             </p>
                         </div>
 
@@ -122,16 +154,133 @@
                     </div>
                 </div>
                 <div class="modal-footer view-modal-footer">
-                    <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
-                        Done
+                    <button type="button" data-dismiss="modal"
+                        class="btn btn-danger deny_btn waves-effect waves-light text-dark">
+                        <i class="fa fa-ban"></i> Deny
+                    </button>
+                    <button type="button" class="btn btn-primary edit_btn waves-effect waves-light text-dark">
+                        <i class="mdi mdi-pencil"></i> Edit
+                    </button>
+                    <button type="submit"
+                        class="btn btn-success accept_btn waves-effect waves-light text-dark">
+                        <i class="fa fa-check"></i> Accept
                     </button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
     <!-- view  Modal End -->
+
+    <!-- order edit  Modal -->
+    <div class="modal fade bs-example-modal-center" id="orderEditModal" tabindex="-1" role="dialog"
+        aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content">
+                <div class="modal-header d-block">
+                    <h5 class="modal-title mt-0 text-center">Order Details</h5>
+                    <button type="button" class="close modal_close_icon" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="ms-form-group view-modal">
+                            <input type="hidden" name="" id="order_id" value="">
+                            <p>
+                                <strong>Order ID:</strong> <span id="view_order_id"></span>
+                            </p>
+                            <p>
+                                <strong>Customer Name:</strong> <span id="view_customer_name"></span>
+                            </p>
+                            <p>
+                                <strong>Customer Email:</strong> <span id="view_customer_email"></span>
+                            </p>
+                            <p>
+                                <strong>Customer Contact:</strong> <span id="view_customer_contact"></span>
+                            </p>
+                            <p>
+                                <strong>Customer Address :</strong> <span id="view_customer_address"></span>
+                            </p>
+                            <p>
+                                <strong>Special Notes :</strong> <span id="view_notes"></span>
+                                <textarea name="special_notes" id="" cols="30" rows="3" class="form-control"></textarea>
+                            </p>
+                        </div>
+
+                    </div>
+                    <div class="row p-3">
+                        <div class="table-responsive">
+                            <h5 class="text-center">Order Items</h5>
+                            <table class="table table-bordered dt-responsive nowrap"
+                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Unit Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="apeend_tbody">
+
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td class="col-3 test">Delevery Fee</td>
+                                        <td class="col-3 test"></td>
+                                        <th class="col-3"></th>
+                                        <td class="col-3 deleveryFee">asdasd </td>
+                                    </tr>
+                                    <tr class="table-active">
+                                        <td class="col-3 font-weight-bold">Total Amount</td>
+                                        <td class="col-3 test"></td>
+                                        <th class="col-3"></th>
+                                        <td class="col-3 view_total"> </td>
+                                    </tr>
+
+                                </tfoot>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer view-modal-footer">
+                    <button type="submit" data-dismiss="modal"
+                        class="btn btn-success accept_btn waves-effect waves-light text-dark">
+                        <i class="fa fa-check"></i> Save
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!-- order edit Modal End -->
+    
+    <!-- order deny  Modal -->
+    <div class="modal fade bs-example-modal-center" id="orderDenyModal" tabindex="-1" role="dialog"
+        aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content">
+                <div class="modal-header d-block">
+                    <h5 class="modal-title mt-0 text-center">Are you sue you want to cancel?</h5>
+                    <button type="button" class="close modal_close_icon" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer deny-modal-footer">
+                    <button id="editBtn" type="button" class="btn btn-block btn-danger waves-effect waves-light">
+                        Yes, I'm sure about the cancelling this order
+                    </button>
+                    <button type="button" data-dismiss="modal"
+                        class="btn btn-block btn-secondary waves-effect waves-light">
+                        No, I need to think again
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!-- order deny Modal End -->
 @endsection
 @section('pageScripts')
+<script src="{{asset('backend/assets/js/order.js')}}"></script>
     <script type='text/javascript'>
         var config = {
             routes: {
@@ -156,6 +305,7 @@
                 dataType: "json",
                 success: function(response) {
                     if (response.success == true) {
+                        $('#order_id').val(response.data.order_id);
                         $('#view_order_id').text(response.data.id);
                         $('#view_customer_name').text(response.data.is_default_name == 0 ? response.data.name :
                             response.data.customer.name);
@@ -165,6 +315,15 @@
                             .address : response.data.customer.address);
                         $('#view_customer_email').text(response.data.customer.email ?? 'N/A');
                         $('#view_notes').text(response.data.special_notes ?? 'N/A');
+
+                        if(response.data.order_status_id == 4){
+                            $('.deny_btn').prop('disabled',true);
+                            $('.edit_btn').prop('disabled',true);
+                        }else{
+                            $('.deny_btn').prop('disabled',false);
+                            $('.edit_btn').prop('disabled',false);
+                        }
+                        $('.accept_btn').attr('onclick', "acceptOrder(" + response.data.order_id + ")")
 
                         if (response.data.status.name == 'Preparing') {
                             var class_name = 'primary';
@@ -266,7 +425,17 @@ function dataTable(){
             {data: 'customer_adress'},
             {
                 data: 'action', 
-                name: 'action', 
+                render: function( data, type, full, meta ) {
+                        return `<button type='button' class='btn btn-outline-dark' onclick='viewOrder(${data})'>
+                                <i class='fa fa-eye'></i>
+                                </button>
+                                <button type='button' class='btn btn-outline-success'>
+                                    <i class='fa fa-eye'></i>
+                                </button>
+                                <button type='button' class='btn btn-outline-danger ' onclick='denyOrder(${data})'>
+                                    <i class='fa fa-ban'></i>
+                                </button>`;
+                    },
                 orderable: true, 
                 searchable: true
             },

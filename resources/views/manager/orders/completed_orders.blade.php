@@ -295,7 +295,11 @@ function dataTable(){
             },
             {
                 data: 'action', 
-                name: 'action', 
+                render: function( data, type, full, meta ) {
+                        return `<button type='button' class='btn btn-outline-dark' onclick='viewOrder(${data})'>
+                                <i class='fa fa-eye'></i>
+                            </button>`;
+                    },
                 orderable: true, 
                 searchable: true
             },

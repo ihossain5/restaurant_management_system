@@ -14,71 +14,36 @@ $orders = ManagerDashboardController::countedOrders();
                 <h6 class="text-center">App Logo</h6>
             </a>
         </div>
+        <div class=" card sidebar_user_card m-b-20">
+            <div class="card-body">
+                <div class="media justify-content-center">
+                    @if (Auth::user()->photo == null)
+                        <img src="{{ asset('images/default.png') }}" class="left_sidebar_image"
+                            alt="user-profle" style="max-width: 100px;height: auto;">
+                    @else
+                        <img class="d-flex mr-2 rounded-circle thumb-lg"
+                            src="{{ asset('images/' . Auth::user()->photo) }}" alt="Generic placeholder image"
+                            style="max-width: 100px;height: auto;">
+                    @endif
+                </div>
+                    <h6 class="text-center user_name text-uppercase">{{ Auth::user()->name }}</h6>
+                    <div class="text-center">
+                        <div class="superAdminDesign">
+                            <span> {{Auth::user()->is_manager ==1 ? 'Manager' : 'Super Admin'}}</span>
+                        </div>
+                    </div>
+            </div>
+        </div>
     </div>
     <div class="sidebar-inner slimscrollleft">
         <div id="sidebar-menu">
             <ul>
-                <div class="">
-                    <div class=" card sidebar_user_card m-b-20">
-                    <div class="card-body">
-
-                        <div class="media justify-content-center">
-                            @if (Auth::user()->photo == null)
-                                <img src="{{ asset('images/default.png') }}" class="left_sidebar_image"
-                                    alt="user-profle" style="max-width: 100px;height: auto;">
-                            @else
-                                <img class="d-flex mr-2 rounded-circle thumb-lg"
-                                    src="{{ asset('images/' . Auth::user()->photo) }}" alt="Generic placeholder image"
-                                    style="max-width: 100px;height: auto;">
-                            @endif
-                        </div>
-                            <h6 class="text-center user_name text-uppercase">{{ Auth::user()->name }}</h6>
-                            <div class="text-center">
-                                <div class="superAdminDesign">
-                                    <span> {{Auth::user()->is_manager ==1 ? 'Manager' : 'Super Admin'}}</span>
-                                </div>
-                            </div>
-                            {{-- <div class="d-flex justify-content-center pt-2" style="font-size: 16px;">
-
-                                @if (Auth::user()->is_super_admin == 1)
-                                    <span class="badge badge-primary  p-1">Super Admin</span>
-                                @elseif(Auth::user()->is_manager==1)
-                                    <span class="badge badge-primary  p-1">Manager</span>
-                                @else
-
-                                    <span class="badge badge-primary  p-1">User</span>
-                                @endif
-                            </div> --}}
-
-
-
-                    </div>
-                </div>
-
-        </div>
 
 @if (Auth::user()->is_super_admin == 1)   
-        {{-- <li class="menu-title">Main</li> --}}
-
         <li>
             <a href="{{ route('dashboard') }}" class="waves-effect"><i class="dripicons-device-desktop "></i><span>
                     Business Overview </span></a>
         </li>
-
-        {{-- <li class="has_sub">
-            <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-user"></i><span>My Restaurants
-                    <span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
-            <ul class="list-unstyled">
-                <li class="has_sub">
-                    <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-cutlery" aria-hidden="true"></i><span>Items
-                            Management<span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
-                    <ul class="list-unstyled">
-                        <li><a href="{{ route('home.hero.section') }}">Home Hero Section</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </li> --}}
-
         <li class="has_sub">
             <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-user"></i><span> Users <span
                         class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
@@ -99,7 +64,6 @@ $orders = ManagerDashboardController::countedOrders();
                 <li><a href="{{ route('restaurant.index') }}">Restaurants</a></li>
             </ul>
         </li>
-
         <li class="has_sub">
             <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-device-desktop"></i><span>My Restaurant
                     <span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
@@ -107,8 +71,6 @@ $orders = ManagerDashboardController::countedOrders();
                 <li><a class="restaurant_overview" href="{{ route('restaurant.overview',[$restaurant_id]) }}">Restaurant Overview</a></li>
             </ul>
         </li>
-
-
         <li class="has_sub">
             <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-cutlery"></i><span>Item
                 Management<span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
@@ -154,8 +116,8 @@ $orders = ManagerDashboardController::countedOrders();
                 <li><a  href="{{ route('manager.new.order')}}">New Orders <span class="badge badge-custom">{{$orders['new_order']}}</span></a></li>
                 <li><a  href="{{ route('manager.order.in.preparation')}}">Orders In Preparation <span class="badge badge-custom">{{$orders['ordersInPreparation']}}</span> </a></li>
                 <li><a  href="{{ route('manager.order.in.delivery')}}">Orders In Delivery <span class="badge badge-custom">{{$orders['ordersInDelivery']}}</span></a></li>
-                <li><a  href="{{ route('manager.completed.order')}}">Completed Orders <span class="badge badge-custom">{{$orders['completedOrder']}}</span></a></li>
-                <li><a  href="{{ route('manager.cancelled.order')}}">Cancelled Orders <span class="badge badge-custom">{{$orders['cancelledOrder']}}</span></a></li>
+                <li><a  href="{{ route('manager.completed.order')}}">Completed Orders <span class="badge badge-custom completed_order_badge">{{$orders['completedOrder']}}</span></a></li>
+                <li><a  href="{{ route('manager.cancelled.order')}}">Cancelled Orders <span class="badge badge-custom cancel_order_badge">{{$orders['cancelledOrder']}}</span></a></li>
             </ul>
         </li>
         <li>

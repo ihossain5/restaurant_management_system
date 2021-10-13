@@ -38,7 +38,7 @@
     <div class="preloader">
 
     </div>
-
+   
     <div class="page-content-wrapper">
         <div class="container-fluid">
             <div class="row">
@@ -49,8 +49,9 @@
                                 <div class="ms-header-text">
                                     <h4 class="mt-0 header-title">All Past Orders</h4>
                                 </div>
+                                <h1 id="message"></h1>
                             </div>
-
+                            <p id="new_call"></p>
                             <span class="showError"></span>
                             <div class="table-responsive">
                                 <table id="orderTable" class="table table-bordered dt-responsive nowrap data-table"
@@ -85,13 +86,9 @@
 
 @endsection
 @section('pageScripts')
-
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <script type='text/javascript'>
-
-
-
-        $(function () {
-    
+    $(function () {
     var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
@@ -110,5 +107,17 @@
     });
     
   });
+     // Enable pusher logging - don't include this in production
+     Pusher.logToConsole = true;
+    var pusher = new Pusher('1efc814744bed7686f5e', {
+      cluster: 'ap2'
+    });
+
+    var channel = pusher.subscribe('order-channel');
+    
+    channel.bind('order-event', function(data) {
+        $('#message').html(JSON.stringify(data.message));
+    });
+  
     </script>
 @endsection

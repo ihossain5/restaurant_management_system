@@ -32,7 +32,7 @@ class ManagerOrdersController extends Controller {
 
     }
     public function ordersInDelivery(Request $request) {
-        $restaurant          = Auth::user()->restaurant;
+        $restaurant       = Auth::user()->restaurant;
         $ordersInDelivery = $this->order->ordersInDeliveryByRestaurant($restaurant->restaurant_id);
         if ($request->ajax()) {
             return $this->dataTable($ordersInDelivery);
@@ -40,20 +40,40 @@ class ManagerOrdersController extends Controller {
         return view('manager.orders.orders_in_delivery');
     }
     public function completedOrders(Request $request) {
-        $restaurant          = Auth::user()->restaurant;
+        $restaurant       = Auth::user()->restaurant;
         $completed_orders = $this->order->CompletedOrdersByRestaurant($restaurant->restaurant_id);
         if ($request->ajax()) {
             return $this->orderCompletedDataTable($completed_orders);
         }
         return view('manager.orders.completed_orders');
     }
-    public function cancelledOrders (Request $request) {
-        $restaurant          = Auth::user()->restaurant;
+    public function cancelledOrders(Request $request) {
+        $restaurant      = Auth::user()->restaurant;
         $cancelledOrders = $this->order->cancelledOrdersByRestaurant($restaurant->restaurant_id);
         if ($request->ajax()) {
             return $this->orderCancelledDataTable($cancelledOrders);
         }
         return view('manager.orders.cancelled_orders');
+    }
+    public function cancelOrder(Request $request) {
+        $order = Order::findOrFail($request->id);
+        $order->update([
+            'order_status_id' => 4,
+        ]);
+        $data['message'] = 'Order has been cancelled';
+        $data['completed_order'] = count($this->order->CompletedOrdersByRestaurant($order->restaurant_id));
+        $data['cancel_order']    = count($this->order->cancelledOrdersByRestaurant($order->restaurant_id));
+        return success($data);
+    }
+    public function acceptOrder(Request $request) {
+        $order = Order::findOrFail($request->id);
+        $order->update([
+            'order_status_id' => 3,
+        ]);
+        $data['message']         = 'Order has accepted';
+        $data['completed_order'] = count($this->order->CompletedOrdersByRestaurant($order->restaurant_id));
+        $data['cancel_order']    = count($this->order->cancelledOrdersByRestaurant($order->restaurant_id));
+        return success($data);
     }
 
     public function dataTable($ordersData) {
@@ -72,9 +92,7 @@ class ManagerOrdersController extends Controller {
                 return $customer_adress;
             })
             ->addColumn('action', function ($data) {
-                $actionBtn = "<button type='button' class='btn btn-outline-dark' onclick='viewOrder($data->order_id)'>
-                                <i class='fa fa-eye'></i>
-                            </button>";
+                $actionBtn = $data->order_id;
                 return $actionBtn;
             })
             ->rawColumns(['action'])

@@ -6,7 +6,31 @@
 
 @section('pageCss')
     <style>
+        .accept_btn {
+            padding: 3px 20px;
+            font-weight: 600;
+            border-radius: 5px;
+        }
 
+        .edit_btn {
+            padding: 3px 30px;
+            font-weight: 600;
+            border-radius: 5px;
+        }
+
+        .deny_btn {
+            padding: 3px 30px;
+            font-weight: 600;
+            border-radius: 5px;
+        }
+
+        .deny-modal-footer {
+            display: initial !important;
+        }
+
+        .modal-footer>:not(:first-child) {
+            margin-left: 0;
+        }
 
     </style>
 @endsection
@@ -71,16 +95,24 @@
                 <div class="modal-body">
                     <div class="col-xl-12 col-md-12">
                         <div class="ms-form-group view-modal">
-                            <p class="pb-3">
-                                <strong>Order ID:</strong> <span id="view_order_id"></span><br>
-                                <strong>Customer Name:</strong> <span id="view_customer_name"></span><br>
-                                <strong>Customer Email:</strong> <span id="view_customer_email"></span><br>
-                                <strong>Customer Contact:</strong> <span id="view_customer_contact"></span><br>
-                                <button type="button" class="btn btn-outline-purple float-right waves-effect waves-light"
-                                    name="button" id="order_status">
-                                </button>
-                                <strong>Customer Address :</strong> <span id="view_customer_address"></span><br>
-                                <strong>Special Notes :</strong> <span id="view_notes"></span><br>
+                            <input type="hidden" name="" id="order_id" value="">
+                            <p>
+                                <strong>Order ID:</strong> <span id="view_order_id"></span>
+                            </p>
+                            <p>
+                                <strong>Customer Name:</strong> <span id="view_customer_name"></span>
+                            </p>
+                            <p>
+                                <strong>Customer Email:</strong> <span id="view_customer_email"></span>
+                            </p>
+                            <p>
+                                <strong>Customer Contact:</strong> <span id="view_customer_contact"></span>
+                            </p>
+                            <p>
+                                <strong>Customer Address :</strong> <span id="view_customer_address"></span>
+                            </p>
+                            <p>
+                                <strong>Special Notes :</strong> <span id="view_notes"></span>
                             </p>
                         </div>
 
@@ -122,16 +154,46 @@
                     </div>
                 </div>
                 <div class="modal-footer view-modal-footer">
-                    <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
-                        Done
+                    <button type="submit" class="btn btn-success accept_btn waves-effect waves-light text-dark">
+                        <i class="fa fa-check"></i> Complete
                     </button>
+                    <button type="button" data-dismiss="modal"
+                        class="btn btn-danger deny_btn waves-effect waves-light text-dark">
+                        <i class="fa fa-ban"></i> Deny
+                    </button>
+
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
     <!-- view  Modal End -->
+    <!-- order deny  Modal -->
+    <div class="modal fade bs-example-modal-center" id="orderDenyModal" tabindex="-1" role="dialog"
+        aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content">
+                <div class="modal-header d-block">
+                    <h5 class="modal-title mt-0 text-center">Are you sue you want to cancel?</h5>
+                    <button type="button" class="close modal_close_icon" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer deny-modal-footer">
+                    <button id="editBtn" type="button" class="btn btn-block btn-danger waves-effect waves-light">
+                        Yes, I'm sure about the cancelling this order
+                    </button>
+                    <button type="button" data-dismiss="modal" class="btn btn-block btn-secondary waves-effect waves-light">
+                        No, I need to think again
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!-- order deny Modal End -->
 @endsection
 @section('pageScripts')
+    <script src="{{ asset('backend/assets/js/order.js') }}"></script>
     <script type='text/javascript'>
         var config = {
             routes: {
@@ -140,9 +202,9 @@
             }
         };
 
-    $(function () {
-     dataTable();
-  });
+        $(function() {
+            dataTable();
+        });
 
         // view single 
         function viewOrder(id) {
@@ -165,6 +227,15 @@
                             .address : response.data.customer.address);
                         $('#view_customer_email').text(response.data.customer.email ?? 'N/A');
                         $('#view_notes').text(response.data.special_notes ?? 'N/A');
+
+                        if(response.data.order_status_id == 4){
+                            $('.deny_btn').prop('disabled',true);
+                            $('.edit_btn').prop('disabled',true);
+                        }else{
+                            $('.deny_btn').prop('disabled',false);
+                            $('.edit_btn').prop('disabled',false);
+                        }
+                        $('.accept_btn').attr('onclick', "acceptOrder(" + response.data.order_id + ")")
 
                         if (response.data.status.name == 'Preparing') {
                             var class_name = 'primary';
@@ -192,12 +263,12 @@
 
                         });
                         $('.view_total').html('৳ ' + bdCurrencyFormat(response.data.amount));
-                        if(response.data.delivery_fee != null){
+                        if (response.data.delivery_fee != null) {
                             $('.deleveryFee').html('৳ ' + bdCurrencyFormat(response.data.delivery_fee));
-                        }else{
+                        } else {
                             $('.deleveryFee').html('৳ ' + 0);
                         }
-                       
+
 
                         $('#viewModal').modal('show');
 
@@ -234,7 +305,8 @@
                         $('.restaurant_id').val(response.data.id);
                         $('#orderTable').DataTable().clear().destroy();
                         setSessionId(response.data.session_id); // set restaurant id into session
-                        setRestaurant(response.data.restaurant_name, response.data.id); // set restaurant into topbar
+                        setRestaurant(response.data.restaurant_name, response.data
+                        .id); // set restaurant into topbar
                         dataTable();
 
 
@@ -254,24 +326,41 @@
             });
         });
 
-function dataTable(){
-    var table = $('#orderTable').DataTable({
-        // processing: true,
-        serverSide: true,
-        ajax: '{{route('manager.order.in.delivery')}}',
-        columns: [
-            {data: 'id'},
-            {data: 'customer_name'},
-            {data: 'customer_contact'},
-            {data: 'customer_adress'},
-            {
-                data: 'action', 
-                name: 'action', 
-                orderable: true, 
-                searchable: true
-            },
-        ]
-    });
-    }   
+        function dataTable() {
+            var table = $('#orderTable').DataTable({
+                // processing: true,
+                serverSide: true,
+                ajax: '{{ route('manager.order.in.delivery') }}',
+                columns: [{
+                        data: 'id'
+                    },
+                    {
+                        data: 'customer_name'
+                    },
+                    {
+                        data: 'customer_contact'
+                    },
+                    {
+                        data: 'customer_adress'
+                    },
+                    {
+                        data: 'action',
+                        render: function(data, type, full, meta) {
+                            return `<button type='button' class='btn btn-outline-dark' onclick='viewOrder(${data})'>
+                                <i class='fa fa-eye'></i>
+                                </button>
+                                <button type='button' class='btn btn-outline-success'>
+                                    <i class='fa fa-eye'></i>
+                                </button>
+                                <button type='button' class='btn btn-outline-danger ' onclick='denyOrder(${data})'>
+                                    <i class='fa fa-ban'></i>
+                                </button>`;
+                        },
+                        orderable: true,
+                        searchable: true
+                    },
+                ]
+            });
+        }
     </script>
 @endsection

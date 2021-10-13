@@ -6,7 +6,6 @@ use App\Http\Controllers\Backend\AssetTypeController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\ContactUsController;
 use App\Http\Controllers\Backend\CustomerController;
-use App\Http\Controllers\Backend\DashboarController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\HomeHeroSectionController;
 use App\Http\Controllers\Backend\ItemController;
@@ -153,7 +152,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
             Route::post('/delete', [ItemController::class, 'destroy'])->name('item.delete');
             Route::post('/restaurant-items', [ItemController::class, 'getItemsByRestaurant'])->name('item.restaurant');
             Route::post('/available-status/update', [ItemController::class, 'updateAvailableStatus'])->name('item.available.status.update');
-          
+
         }); //* Item route end */
 
         //* Category route start */
@@ -220,7 +219,7 @@ Route::post('/make/super/admin', [UserController::class, 'makeSuperAdmin'])->nam
 Route::get('/send-email/{token}', [ManagerController::class, 'registerNewManager'])->name('send.email');
 Route::post('/sign-up', [ManagerController::class, 'userSignUp'])->name('user.sign.up');
 
-Route::group(['prefix' => 'manager', 'middleware' => ['auth','manager']], function () {
+Route::group(['prefix' => 'manager', 'middleware' => ['auth', 'manager']], function () {
     Route::get('dashboard', [ManagerDashboardController::class, 'index'])->name('manager.dashboard');
     Route::post('update/restaurant-status', [ManagerDashboardController::class, 'updateRestaurantStatus'])->name('manager.restaurant.status.update');
     /* Item Routes */
@@ -233,12 +232,22 @@ Route::group(['prefix' => 'manager', 'middleware' => ['auth','manager']], functi
     Route::get('/order-in-delivery', [ManagerOrdersController::class, 'ordersInDelivery'])->name('manager.order.in.delivery');
     Route::get('/completed-orders', [ManagerOrdersController::class, 'completedOrders'])->name('manager.completed.order');
     Route::get('/cancelled-orders', [ManagerOrdersController::class, 'cancelledOrders'])->name('manager.cancelled.order');
+    Route::post('/cancel-order', [ManagerOrdersController::class, 'cancelOrder'])->name('manager.order.cancel');
+    Route::post('/accept-order', [ManagerOrdersController::class, 'acceptOrder'])->name('manager.order.accept');
+
     /* Performance report routes */
     Route::get('/daily-sales-report', [ManagerOrderPerformanceController::class, 'dailyReports'])->name('manager.daily.sales.report');
     Route::post('/daily-sales-report/by-date', [ManagerOrderPerformanceController::class, 'dailyReportsByDate'])->name('manager.daily.report.by.date');
     Route::get('/item-performance-report', [ManagerOrderPerformanceController::class, 'itemPerformanceReport'])->name('manager.item.performance.report');
     Route::post('/item-performance-report', [ManagerOrderPerformanceController::class, 'itemPerformanceReportByDate'])->name('manager.item.performance.by.date');
-    
-    
 
+});
+
+Route::get('/listen', function () {
+    return view('pusher-test');
+});
+
+Route::get('test/new', function () {
+    // event(new App\Events\MyEvent('You Have Three New Orders!'));
+    // event(new App\Events\OrderEvent('You Have Three New Orders!'));
 });

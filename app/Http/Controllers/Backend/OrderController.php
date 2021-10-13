@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Restaurant;
 use App\Models\User;
+use App\Events\OrderEvent;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -84,19 +85,9 @@ class OrderController extends Controller {
         }])->find($restaurant_id);
     }
 
-    public function getAllOrders(Request $request){
-        if ($request->ajax()) {
-            $data = User::get();
-            // dd($data);
-            return DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('action', function($row){
-                    $actionBtn = '<a href="javascript:void(0)"  class="edit btn btn-success btn-sm">Edit</a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm">Delete</a>';
-                    return $actionBtn;
-                })
-                ->rawColumns(['action'])
-                ->make(true);
-        }
+    public function getAllOrders(){
+        // event(new OrderEvent($user = $this->create($request->all())));
+        event(new OrderEvent('asdasdasdfasfasfaf sadasd'));
     }
     public function orders(){
         return view('admin.order-management.all_orders');

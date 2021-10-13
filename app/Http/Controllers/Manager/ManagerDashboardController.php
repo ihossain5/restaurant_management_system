@@ -33,33 +33,39 @@ class ManagerDashboardController extends Controller {
         return success($restaurant->status->name);
     }
     public static function restaurant_status() {
-        return Auth::user()->restaurant->status->name;
+        if(Auth::user()->is_manager == 1){
+            return Auth::user()->restaurant->status->name;
+        }
+        
     }
     public static function countedOrders() {
-        $restaurant = Auth::user()->restaurant;
-        $new_order  = Order::where('restaurant_id', $restaurant->restaurant_id)
-            ->whereDate('orders.created_at', DB::raw('CURDATE()'))->count();
+        if(Auth::user()->is_manager == 1){
+            $restaurant = Auth::user()->restaurant;
+            $new_order  = Order::where('restaurant_id', $restaurant->restaurant_id)
+                ->whereDate('orders.created_at', DB::raw('CURDATE()'))->count();
+    
+            $ordersInPreparation = Order::where('restaurant_id', $restaurant->restaurant_id)
+                ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+                ->where('orders.order_status_id', 1)->count();
+            $ordersInDelivery = Order::where('restaurant_id', $restaurant->restaurant_id)
+                ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+                ->where('orders.order_status_id', 2)->count();
+            $completedOrder = Order::where('restaurant_id', $restaurant->restaurant_id)
+                ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+                ->where('orders.order_status_id', 3)->count();
+            $cancelledOrder = Order::where('restaurant_id', $restaurant->restaurant_id)
+                ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+                ->where('orders.order_status_id', 4)->count();
+    
+            $data = [
+                'new_order'           => $new_order,
+                'ordersInPreparation' => $ordersInPreparation,
+                'ordersInDelivery'    => $ordersInDelivery,
+                'completedOrder'      => $completedOrder,
+                'cancelledOrder'      => $cancelledOrder,
+            ];
+            return $data;
+        }
 
-        $ordersInPreparation = Order::where('restaurant_id', $restaurant->restaurant_id)
-            ->whereDate('orders.created_at', DB::raw('CURDATE()'))
-            ->where('orders.order_status_id', 1)->count();
-        $ordersInDelivery = Order::where('restaurant_id', $restaurant->restaurant_id)
-            ->whereDate('orders.created_at', DB::raw('CURDATE()'))
-            ->where('orders.order_status_id', 2)->count();
-        $completedOrder = Order::where('restaurant_id', $restaurant->restaurant_id)
-            ->whereDate('orders.created_at', DB::raw('CURDATE()'))
-            ->where('orders.order_status_id', 3)->count();
-        $cancelledOrder = Order::where('restaurant_id', $restaurant->restaurant_id)
-            ->whereDate('orders.created_at', DB::raw('CURDATE()'))
-            ->where('orders.order_status_id', 4)->count();
-
-        $data = [
-            'new_order'           => $new_order,
-            'ordersInPreparation' => $ordersInPreparation,
-            'ordersInDelivery'    => $ordersInDelivery,
-            'completedOrder'      => $completedOrder,
-            'cancelledOrder'      => $cancelledOrder,
-        ];
-        return $data;
     }
 }
