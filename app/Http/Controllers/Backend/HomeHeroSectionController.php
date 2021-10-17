@@ -23,7 +23,7 @@ class HomeHeroSectionController extends Controller {
         $image = $request->pic;
         if ($image) {
             $path      = 'hero-section/';
-            $image_url = storeImage($image, $path, 550, 485);
+            $image_url = storeImage($image, $path, 1920, 1080);
         }
         $hero_section = HomeHeroSection::create([
             'heading'     => $request->heading,
@@ -67,7 +67,7 @@ class HomeHeroSectionController extends Controller {
         $image = $request->pic;
         if ($image) {
             $path      = 'hero-section/';
-            $image_url = storeImage($image, $path, 550, 485);
+            $image_url = storeImage($image, $path, 1920, 1080);
         }else{
             $image_url  = $hero_section->pic;
         }

@@ -42,20 +42,26 @@ class ManagerDashboardController extends Controller {
         if(Auth::user()->is_manager == 1){
             $restaurant = Auth::user()->restaurant;
             $new_order  = Order::where('restaurant_id', $restaurant->restaurant_id)
-                ->whereDate('orders.created_at', DB::raw('CURDATE()'))->count();
+                ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+                ->where('orders.order_status_id', null)
+                ->count();
     
             $ordersInPreparation = Order::where('restaurant_id', $restaurant->restaurant_id)
                 ->whereDate('orders.created_at', DB::raw('CURDATE()'))
-                ->where('orders.order_status_id', 1)->count();
+                ->where('orders.order_status_id', 1)
+                ->count();
             $ordersInDelivery = Order::where('restaurant_id', $restaurant->restaurant_id)
                 ->whereDate('orders.created_at', DB::raw('CURDATE()'))
-                ->where('orders.order_status_id', 2)->count();
+                ->where('orders.order_status_id', 2)
+                ->count();
             $completedOrder = Order::where('restaurant_id', $restaurant->restaurant_id)
                 ->whereDate('orders.created_at', DB::raw('CURDATE()'))
-                ->where('orders.order_status_id', 3)->count();
+                ->where('orders.order_status_id', 3)
+                ->count();
             $cancelledOrder = Order::where('restaurant_id', $restaurant->restaurant_id)
                 ->whereDate('orders.created_at', DB::raw('CURDATE()'))
-                ->where('orders.order_status_id', 4)->count();
+                ->where('orders.order_status_id', 4)
+                ->count();
     
             $data = [
                 'new_order'           => $new_order,

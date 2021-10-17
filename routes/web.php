@@ -14,6 +14,8 @@ use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\OrderPerformanceController;
 use App\Http\Controllers\Backend\RestaurantController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\RestaurantMenuController;
 use App\Http\Controllers\Manager\ManagerDashboardController;
 use App\Http\Controllers\Manager\ManagerOrderPerformanceController;
 use App\Http\Controllers\Manager\ManagerOrdersController;
@@ -233,7 +235,8 @@ Route::group(['prefix' => 'manager', 'middleware' => ['auth', 'manager']], funct
     Route::get('/completed-orders', [ManagerOrdersController::class, 'completedOrders'])->name('manager.completed.order');
     Route::get('/cancelled-orders', [ManagerOrdersController::class, 'cancelledOrders'])->name('manager.cancelled.order');
     Route::post('/cancel-order', [ManagerOrdersController::class, 'cancelOrder'])->name('manager.order.cancel');
-    Route::post('/accept-order', [ManagerOrdersController::class, 'acceptOrder'])->name('manager.order.accept');
+    Route::post('/accept-order', [ManagerOrdersController::class, 'acceptOrder'])->name('manager.order.accept.new_order');
+    Route::post('/accept-order-in-delivery', [ManagerOrdersController::class, 'acceptOrderInDelivery'])->name('manager.order.accept.delivery');
 
     /* Performance report routes */
     Route::get('/daily-sales-report', [ManagerOrderPerformanceController::class, 'dailyReports'])->name('manager.daily.sales.report');
@@ -251,3 +254,6 @@ Route::get('test/new', function () {
     // event(new App\Events\MyEvent('You Have Three New Orders!'));
     // event(new App\Events\OrderEvent('You Have Three New Orders!'));
 });
+
+Route::get('/',[HomeController::class,'index'])->name('frontend.index');
+Route::get('/restaurant/{restaurant}/menu',[RestaurantMenuController::class,'getRestaurant'])->name('restaurant.menu');

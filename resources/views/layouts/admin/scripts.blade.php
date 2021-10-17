@@ -52,6 +52,8 @@ crossorigin="anonymous"></script>
 <script src="{{ asset('backend/assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}">
 </script>
 <script src="{{ asset('backend/assets/js/restaurant_add_row.js') }}"></script>
+
+
 <script>
         var config = {
             routes: {
@@ -68,6 +70,7 @@ crossorigin="anonymous"></script>
             </div>`
         );
     });
+
 
     $(document).ajaxComplete(function() {
         $('.preloader').removeClass('ajax_loader').empty();
@@ -204,4 +207,12 @@ crossorigin="anonymous"></script>
 
         }); //ajax end
     });
+
+
+
+
+
+
+
+
 </script>

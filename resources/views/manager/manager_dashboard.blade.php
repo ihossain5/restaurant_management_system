@@ -88,6 +88,8 @@
 
 @endsection
 @section('pageScripts')
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+<script src="{{asset('backend/assets/js/pusher_notification.js')}}"></script>
     <script>
     let orderValue = $('.orderValue').data('order');
         if (orderValue > 0) {

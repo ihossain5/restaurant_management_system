@@ -194,11 +194,14 @@
 @endsection
 @section('pageScripts')
     <script src="{{ asset('backend/assets/js/order.js') }}"></script>
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+<script src="{{asset('backend/assets/js/pusher_notification.js')}}"></script>
     <script type='text/javascript'>
         var config = {
             routes: {
                 view: "{!! route('order.show') !!}",
-                getOrders: "{!! route('order.restaurant') !!}",
+                cancelOrder: "{!! route('manager.order.cancel') !!}",
+                acceptOrder: "{!! route('manager.order.accept.delivery') !!}",
             }
         };
 
@@ -218,6 +221,7 @@
                 dataType: "json",
                 success: function(response) {
                     if (response.success == true) {
+                        $('#order_id').val(response.data.order_id);
                         $('#view_order_id').text(response.data.id);
                         $('#view_customer_name').text(response.data.is_default_name == 0 ? response.data.name :
                             response.data.customer.name);
@@ -289,42 +293,82 @@
             }); //ajax end
         }
 
-        // restaurant change
-        $(document).on('click', '.restaurant', function() {
-            var id = $(this).data('id');
+        function acceptOrder(id) {
             $.ajax({
                 type: "POST",
-                url: config.routes.getOrders,
+                url: config.routes.acceptOrder,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 data: {
                     id: id,
-                    _token: "{{ csrf_token() }}"
                 },
-                dataType: 'JSON',
+                dataType: "JSON",
                 success: function(response) {
                     if (response.success === true) {
-                        $('.restaurant_id').val(response.data.id);
-                        $('#orderTable').DataTable().clear().destroy();
-                        setSessionId(response.data.session_id); // set restaurant id into session
-                        setRestaurant(response.data.restaurant_name, response.data
-                        .id); // set restaurant into topbar
+                        var table = $('#orderTable').DataTable();
+                        $(".completed_order_badge").html(response.data.completed_order);
+                        $(".delivery_order_badge").html(response.data.order_in_delivary);
+                        $("#viewModal").modal("hide");
+                        table.row().clear().destroy();
                         dataTable();
-
-
+                        toastMixin.fire({
+                            icon: "success",
+                            animation: true,
+                            title: response.data.message,
+                        });
                     }
                 },
                 error: function(error) {
                     if (error.status == 404) {
                         toastMixin.fire({
-                            icon: 'error',
+                            icon: "error",
                             animation: true,
-                            title: "" + 'Data not found' + ""
+                            title: "" + "Data not found" + "",
                         });
-
-
                     }
                 },
             });
-        });
+        }    
+
+        function cancelOrder(id) {
+            $.ajax({
+                type: "POST",
+                url: config.routes.cancelOrder,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    id: id,
+                },
+                dataType: "JSON",
+
+                success: function(response) {
+                    if (response.success === true) {
+                        var table = $('#orderTable').DataTable();
+                        $(".cancel_order_badge").html(response.data.cancel_order);
+                        $(".delivery_order_badge").html(response.data.order_in_delivery);
+                        $("#orderDenyModal").modal("hide");
+                        table.row().clear().destroy();
+                        dataTable();
+                        toastMixin.fire({
+                            icon: "success",
+                            animation: true,
+                            title: response.data.message,
+                        });
+                    }
+                },
+                error: function(error) {
+                    if (error.status == 404) {
+                        toastMixin.fire({
+                            icon: "error",
+                            animation: true,
+                            title: "" + "Data not found" + "",
+                        });
+                    }
+                },
+            });
+        }
 
         function dataTable() {
             var table = $('#orderTable').DataTable({

@@ -60,19 +60,52 @@ class ManagerOrdersController extends Controller {
         $order->update([
             'order_status_id' => 4,
         ]);
-        $data['message'] = 'Order has been cancelled';
-        $data['completed_order'] = count($this->order->CompletedOrdersByRestaurant($order->restaurant_id));
-        $data['cancel_order']    = count($this->order->cancelledOrdersByRestaurant($order->restaurant_id));
+        $data['message']              = 'Order has been cancelled';
+        $data['order_in_delivery']    = count($this->order->ordersInDeliveryByRestaurant($order->restaurant_id));
+        $data['cancel_order']         = count($this->order->cancelledOrdersByRestaurant($order->restaurant_id));
+        $data['order_in_preparation'] = count($this->order->ordersInPreparationByRestaurant($order->restaurant_id));
+        $data['new_order']            = count($this->order->todayOrdersByRestaurantId($order->restaurant_id));
+        $data['completed_order']      = count($this->order->CompletedOrdersByRestaurant($order->restaurant_id));
         return success($data);
     }
     public function acceptOrder(Request $request) {
         $order = Order::findOrFail($request->id);
         $order->update([
+            'order_status_id' => 1,
+        ]);
+        $new_orders                   = $this->order->todayOrdersByRestaurantId($order->restaurant_id);
+        $data['id']                   = $order->order_id;
+        $data['message']              = 'Order has accepted';
+        $data['order_in_preparation'] = count($this->order->ordersInPreparationByRestaurant($order->restaurant_id));
+        $data['new_order']            = count($this->order->todayOrdersByRestaurantId($order->restaurant_id));
+        return success($data);
+        // foreach($new_orders as $new_order){
+        //     $new_order->order_in_preparation = count($this->order->ordersInPreparationByRestaurant($order->restaurant_id));
+        //     $new_order->new_order = count($this->order->todayOrdersByRestaurantId($order->restaurant_id));
+        //     $new_order->message = 'Order has accepted';
+        // }
+        // return $this->dataTable($new_orders);
+    }
+    public function acceptOrderInPreparation(Request $request) {
+        $order = Order::findOrFail($request->id);
+        $order->update([
+            'order_status_id' => 2,
+        ]);
+        $data['id']                   = $order->order_id;
+        $data['message']              = 'Order has accepted';
+        $data['order_in_preparation'] = count($this->order->ordersInPreparationByRestaurant($order->restaurant_id));
+        $data['order_in_delivary']    = count($this->order->ordersInDeliveryByRestaurant($order->restaurant_id));
+        return success($data);
+    }
+    public function acceptOrderInDelivery(Request $request) {
+        $order = Order::findOrFail($request->id);
+        $order->update([
             'order_status_id' => 3,
         ]);
-        $data['message']         = 'Order has accepted';
-        $data['completed_order'] = count($this->order->CompletedOrdersByRestaurant($order->restaurant_id));
-        $data['cancel_order']    = count($this->order->cancelledOrdersByRestaurant($order->restaurant_id));
+        $data['id']                = $order->order_id;
+        $data['message']           = 'Order has accepted';
+        $data['completed_order']   = count($this->order->CompletedOrdersByRestaurant($order->restaurant_id));
+        $data['order_in_delivary'] = count($this->order->ordersInDeliveryByRestaurant($order->restaurant_id));
         return success($data);
     }
 
@@ -119,9 +152,7 @@ class ManagerOrdersController extends Controller {
                 return $customer_adress;
             })
             ->addColumn('action', function ($data) {
-                $actionBtn = "<button type='button' class='btn btn-outline-dark' onclick='viewOrder($data->order_id)'>
-                                <i class='fa fa-eye'></i>
-                            </button>";
+                $actionBtn = $data->order_id;
                 return $actionBtn;
             })
             ->rawColumns(['action'])
@@ -147,9 +178,7 @@ class ManagerOrdersController extends Controller {
                 return $customer_adress;
             })
             ->addColumn('action', function ($data) {
-                $actionBtn = "<button type='button' class='btn btn-outline-dark' onclick='viewOrder($data->order_id)'>
-                                <i class='fa fa-eye'></i>
-                            </button>";
+                $actionBtn = $data->order_id;
                 return $actionBtn;
             })
             ->rawColumns(['action'])

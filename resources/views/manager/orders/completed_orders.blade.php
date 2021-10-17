@@ -26,7 +26,7 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between mb-4">
                                 <div class="ms-header-text">
-                                    <h4 class="mt-0 header-title">All New Orders</h4>
+                                    <h4 class="mt-0 header-title">Completed Orders</h4>
                                 </div>
                             </div>
 
@@ -155,6 +155,8 @@
     <!-- view  Modal End -->
 @endsection
 @section('pageScripts')
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+<script src="{{asset('backend/assets/js/pusher_notification.js')}}"></script>
     <script type='text/javascript'>
         var config = {
             routes: {
@@ -296,7 +298,7 @@ function dataTable(){
             {
                 data: 'action', 
                 render: function( data, type, full, meta ) {
-                        return `<button type='button' class='btn btn-outline-dark' onclick='viewOrder(${data})'>
+                        return `<button type='button' class='btn btn-outline-dark' onclick="viewOrder(${data})">
                                 <i class='fa fa-eye'></i>
                             </button>`;
                     },

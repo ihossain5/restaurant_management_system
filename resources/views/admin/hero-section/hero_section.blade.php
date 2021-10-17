@@ -115,10 +115,10 @@
 
 
                         <div class="form-group ">
-                            <label>Photo</label>
+                            <label>Photo (1920 x 1080 pixels)</label>
                             <div class="custom-file">
                                 <input type="file" name="pic" class="custom-file-input dropify"
-                                    data-errors-position="outside" data-allowed-file-extensions='["jpg", "png"]'
+                                    data-errors-position="outside" data-allowed-file-extensions='["jpg", "png", "jpeg"]'
                                     data-max-file-size="0.6M">
                             </div>
                         </div>
@@ -163,11 +163,11 @@
 
 
                         <div class="form-group ">
-                            <label>Photo</label>
+                            <label>Photo (1920 x 1080 pixels)</label>
                             <div class="custom-file edit_hero_section_photo">
                                 <input type="file" name="pic" id="edit_hero_section_photo" class="custom-file-input dropify"
-                                    data-max-file-size="0.6M" data-errors-position="outside"
-                                    data-allowed-file-extensions='["jpg", "png"]'>
+                                    data-max-file-size="2.0M" data-errors-position="outside"
+                                    data-allowed-file-extensions='["jpg", "png", "jpeg"]'>
                             </div>
                         </div>
                         <div class="form-group">
@@ -545,7 +545,16 @@
                             });
 
 
-                        }
+                        }else if (error.status == 422) {
+                        $.each(error.responseJSON.errors, function(i, message) {
+                            toastMixin.fire({
+                                icon: 'error',
+                                animation: true,
+                                title: "" + message + ""
+                            });
+                        });
+
+                    }
                     },
 
                 });

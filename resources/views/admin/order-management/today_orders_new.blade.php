@@ -192,7 +192,8 @@
                         $('#view_customer_email').text(response.data.customer.email ?? 'N/A');
                         $('#view_notes').text(response.data.special_notes ?? 'N/A');
 
-                        if (response.data.status.name == 'Preparing') {
+                        if(response.data.order_status_id !== ''){
+                            if (response.data.status.name == 'Preparing') {
                             var class_name = 'primary';
                         } else if (response.data.status.name == 'Delivering') {
                             var class_name = 'success';
@@ -201,6 +202,11 @@
                         } else {
                             var class_name = 'danger';
                         }
+                        }else{
+                            alert('asdasd');
+                            var class_name = 'none';
+                        }
+                  
 
                         $('#order_status').attr('class', 'btn float-right btn-outline-' + class_name + ' ' +
                             response.data.class);

@@ -1,0 +1,352 @@
+.allOrder {
+    max-width: 104.2rem;
+    margin   : auto;
+    padding  : 8.8rem 5rem 30rem 5rem;
+}
+
+
+.orderTitle {
+    font-size     : 5.6rem;
+    line-height   : 7.3rem;
+    text-transform: uppercase;
+    color         : #1A1A1A;
+    margin-bottom : 8.2rem;
+}
+
+
+.allOrderTable thead th {
+    font-family   : 'Roboto', sans-serif;
+    font-weight   : 500;
+    font-size     : 1.4rem;
+    line-height   : 1.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color         : #6B6B6B;
+    text-align    : left;
+    border-bottom : none;
+    padding       : 2.7rem 0;
+    min-width     : 13rem;
+}
+
+
+
+.allOrderTable thead th:last-child {
+    text-align: center;
+}
+
+
+.allOrderTable tbody td {
+    padding    : 2.7rem 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: normal;
+    font-size  : 2rem;
+    line-height: 3.4rem;
+    color      : #272727;
+    text-align : left;
+}
+
+.allOrderTable tbody td:last-child {
+    text-align: center;
+}
+
+.allOrderTable tbody td:first-child button {
+    background-color: transparent;
+    border          : none;
+    text-decoration : underline;
+}
+
+.deliveryStatus {
+    display       : inline-block;
+    font-family   : 'Roboto', sans-serif;
+    font-weight   : 500;
+    font-size     : 1.6rem;
+    line-height   : 2.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding       : .8rem 2.5rem;
+    min-width     : 14.3rem;
+}
+.pendingStatus {
+    color         : #DF911B;
+    background    : rgba(223, 145, 27, 0.1);
+}
+
+.deliverStatus {
+    color         : #1FC069;
+    background    : rgba(31, 192, 105, 0.1);
+}
+
+
+.modalCloseBtn {
+    height          : 2rem;
+    width           : 2rem;
+    background-color: transparent;
+    border          : none;
+    margin-top      : 1rem;
+    margin-right    : 1rem;
+}
+
+.modalCloseBtn img {
+    width: 100%;
+}
+
+.orderHistoryBox {
+    padding: 5.6rem;
+}
+
+
+.orderHeader h3 {
+    font-family  : 'Roboto', sans-serif;
+    font-weight  : bold;
+    font-size    : 2rem;
+    color        : #383838;
+    margin-bottom: .9rem;
+}
+
+
+.orderHeader p {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size  : 1.8rem;
+    line-height: 2.1rem;
+    color      : #383838;
+
+}
+
+
+.orderHeader img {
+    max-width: 19.1rem;
+}
+
+
+.orderHeader {
+    padding-bottom: 5.9rem;
+}
+
+
+.orderItem {
+    padding: 0;
+}
+
+.orderItem li {
+    display        : flex;
+    justify-content: space-between;
+    margin-bottom  : 3.5rem;
+    padding-right  : 2.3rem;
+}
+
+.orderItem li:last-child {
+    margin-bottom: 0;
+}
+
+.orderQty {
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    font-size  : 2.2rem;
+    line-height: 2.6rem;
+    color      : #383838;
+}
+
+.orderName {
+    font-family: 'Roboto', sans-serif;
+    font-weight: normal;
+    font-size  : 2rem;
+    line-height: 2.3rem;
+    color      : #383838;
+    margin-left: 1.2rem;
+}
+
+.orderPrice {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size  : 2rem;
+    line-height: 2.3rem;
+    color      : #383838;
+
+}
+
+
+.divider {
+    border-right: 1px solid #B3B3B3;
+
+}
+
+.divider2 {
+    border-left: 1px solid #B3B3B3;
+
+}
+
+
+.orderPricebox {
+    padding     : 0;
+    padding-left: 2.3rem;
+}
+
+.orderPricebox li {
+    display        : flex;
+    justify-content: space-between;
+    margin-bottom  : 2.4rem;
+}
+
+.orderPricebox li:last-child {
+    margin-bottom: 0;
+}
+
+
+.priceName {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size  : 2rem;
+    line-height: 2.3rem;
+    color      : #383838;
+}
+
+
+.orderAmount {
+    font-family: 'Roboto', sans-serif;
+    font-weight: normal;
+    font-size  : 2rem;
+    line-height: 2.3rem;
+    color      : #383838;
+}
+
+
+.orderPricebox li:last-child .priceName {
+    font-weight: normal;
+}
+
+.orderPricebox li:last-child .orderAmount {
+    font-weight: bold;
+}
+
+
+.specialNote h4 {
+    font-family  : 'Roboto', sans-serif;
+    font-weight  : bold;
+    font-size    : 1.8rem;
+    line-height  : 2.1rem;
+    color        : #383838;
+    margin-bottom: .8rem;
+}
+
+.specialNote p {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size  : 1.8rem;
+    line-height: 2.1rem;
+    color      : #383838;
+}
+
+
+.repateOrderBtn {
+    font-family     : 'Roboto', sans-serif;
+    font-weight     : normal;
+    font-size       : 1.8rem;
+    line-height     : 2.1rem;
+    color           : #91B110;
+    background-color: transparent;
+    padding         : 2rem 4.5rem;
+    border          : .1rem solid #91B110;
+    border-radius   : 6rem;
+}
+
+.repateOrderBtn:hover {
+    background-color: #91B110;
+    color           : white;
+}
+@media (max-width: 767.98px) {
+    .orderHeader h3, .orderName, .priceName, .orderAmount, .repateOrderBtn {
+        font-size: 16px;
+        line-height: 19px;
+    }
+    .orderQty, .orderPrice, .specialNote h4, .specialNote p {
+        font-size: 15px;
+        line-height: 18px;
+    }
+    .repateOrderBtn {
+        font-weight: bold;
+        padding: 16px 32px;
+    }
+}
+@media (max-width: 575.98px) {
+    /* html, body {
+        overflow-x: hidden;
+    } */
+    .orderTitle {
+        margin-bottom : 6.4rem;
+    }
+    .large-device-only {
+        display: none;
+    }
+    .allOrder {
+        padding: 8.8rem 5rem 12rem 5rem;
+    }
+}
+
+/* only for mobile device */
+.mobile-view-only {
+    background-color: #ebebeb;
+}
+.order-card-inner {
+    background-color: #ffffff;
+    padding: 16px;
+    border-radius: 12px;
+}
+.order-card-inner {
+    margin: 12px 0;
+}
+.order-card-inner .title, .order-card-inner .short-desc, .order-card-inner .not-visible,.order-card-inner .status, .order-card-inner .date {
+    font-family: 'Inter', sans-serif;
+} 
+.order-card-inner .title {
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: 500;
+}
+.order-card-inner .short-desc,.order-card-inner .not-visible {
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 400;
+    padding: 8px 0 16px;
+}
+.order-card-inner .status {
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: 400;
+    padding: 4px 8px;
+}
+.order-card-inner .status.pending {
+    color: #DF911B;
+    background: rgba(223, 145, 27, 0.1);
+}
+.order-card-inner .status.completed {
+    color: #1FC069;
+    background: rgba(31, 192, 105, 0.1);
+}
+.order-card-inner .status.canceld {
+    color: #f0250b;
+    background: rgba(240, 37, 11, .07);
+}
+.order-card-inner .price {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 700;
+}
+.order-card-inner .not-visible {
+    visibility: hidden;
+}
+.order-card-inner .date {
+    display: block;
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 18px;
+    color: #6B6B6B;
+}
+.order-card-inner .right {
+    text-align: center;
+}
+@media (min-width: 576px) {
+    .mobile-view-only {
+        display: none;
+    }
+}

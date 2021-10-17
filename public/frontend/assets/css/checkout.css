@@ -1,0 +1,354 @@
+.checkout {
+    padding: 9.1rem 5% 2rem 5%;
+}
+.right-border {
+    border-right: 1px solid #B3B3B3;
+}
+.info-box {
+    max-width    : 87.8rem;
+    padding      : 5.6rem;
+    background   : #FFFFFF;
+    border       : 1px solid #F2F2F2;
+    box-shadow   : 4px 12px 60px rgba(0, 0, 0, 0.03);
+    margin-bottom: 7.2rem;
+}
+
+
+.info-box h1 {
+    font-family   : "Anko-PersonalUse-Medium";
+    font-size     : 4rem;
+    line-height   : 5.2rem;
+    text-transform: uppercase;
+    color         : #355D6C;
+}
+
+.info-box .editBtn {
+    background-color: transparent;
+    border          : none;
+}
+
+.info-box .editBtn img {
+    height: 4rem;
+    width : 4rem;
+}
+
+.info-box span {
+    color      : #DE973D;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-style : italic;
+    font-size  : 1.8rem;
+}
+
+.info-box .row {
+    margin: 0;
+}
+
+
+
+
+.paymentOption h1 {
+    font-family   : "Anko-PersonalUse-Medium";
+    font-size     : 4rem;
+    line-height   : 5.2rem;
+    text-transform: uppercase;
+    color         : #355D6C;
+}
+
+
+.paymentOption p {
+    font-family  : 'Roboto', sans-serif;
+    font-weight  : 300;
+    font-size    : 2.2rem;
+    line-height  : 3.2rem;
+    color        : #383838;
+    max-width    : 46.7rem;
+    margin-bottom: 13.7rem;
+}
+
+
+.paymentOption p b {
+    font-weight: bold;
+}
+
+
+.custom-check label {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size  : 2.2rem;
+    line-height: 2.6rem;
+    color      : #383838;
+}
+
+
+.custom-check .form-check-input {
+    height      : 1.8rem;
+    width       : 1.8rem;
+    margin-right: 1.1rem;
+    padding     : initial;
+    border      : .1rem solid #53A0BC;
+}
+
+
+.custom-check .form-check-input:checked {
+    background-color: #53A0BC;
+    border-color    : #53A0BC;
+}
+
+
+.rigthCart {
+    max-width: 46.1rem;
+    margin   : auto;
+}
+
+.checkoutCart-title {
+    font-size     : 3.2rem;
+    line-height   : 4.2rem;
+    text-transform: uppercase;
+    color         : #1A1A1A;
+}
+
+.checkoutCartItem {
+    padding       : 0;
+    border-bottom : 1px solid #B3B3B3;
+    padding-bottom: 1.9rem;
+    margin-bottom : 5rem;
+
+}
+
+
+.checkoutCartItem li {
+    font-family    : 'Roboto', sans-serif;
+    margin-bottom  : 3.2rem;
+    display        : flex;
+    justify-content: space-between;
+
+}
+.checkoutCartItem li div:nth-child(1) {
+    flex: 0 0 10%;
+    max-width: 10%;
+}
+.checkoutCartItem li div:nth-child(2) {
+    flex: 0 0 68%;
+    max-width: 68%;
+}
+.checkoutCartItem li div:nth-child(3) {
+    flex: 0 0 22%;
+    max-width: 22%;
+    text-align: right;
+}
+
+.itmQuantity {
+    font-weight : bold;
+    font-size   : 2rem;
+    line-height : 2.6rem;
+    color       : #383838;
+    margin-right: 1.2rem;
+}
+
+.itemName {
+    font-weight: normal;
+    font-size  : 2rem;
+    line-height: 2.3rem;
+    color      : #383838;
+}
+
+.itemPrice {
+    font-weight: 300;
+    font-size  : 2rem;
+    line-height: 2.3rem;
+    color      : #383838;
+}
+
+
+.allItemPriceBox {
+    padding: 0;
+}
+
+.allItemPriceBox li {
+    display        : flex;
+    justify-content: space-between;
+    font-family    : 'Roboto', sans-serif;
+    margin-bottom  : 2.4rem;
+
+}
+
+.firstColumn {
+    font-weight: 300;
+    font-size  : 2rem;
+    line-height: 2.3rem;
+    color      : #383838;
+}
+
+.secondColumn {
+    font-weight: normal;
+    font-size  : 2rem;
+    line-height: 2.3rem;
+    color      : #383838;
+}
+
+
+.allItemPriceBox li:last-child .firstColumn,
+.allItemPriceBox li:last-child .secondColumn {
+    font-weight: bold;
+}
+
+
+.specInstruction {
+    font-family: 'Roboto', sans-serif;
+    font-weight: normal;
+    font-size  : 1.8rem;
+    line-height: 2.1rem;
+    color      : #858585;
+    padding    : 2rem;
+    border     : 1px solid #DDDDDD;
+}
+
+
+.specInstruction:focus {
+    border    : 1px solid #DDDDDD;
+    color     : #858585;
+    box-shadow: none;
+}
+
+
+.checkoutNote {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size  : 1.8rem;
+    line-height: 2.6rem;
+    text-align : center;
+    color      : #383838;
+    max-width  : 36.1rem;
+    margin     : auto;
+}
+
+
+.orderPlaced h1 {
+    font-family   : "Anko-PersonalUse-Medium";
+    font-size     : 4.8rem;
+    line-height   : 6.8rem;
+    text-transform: uppercase;
+    color         : #355D6C;
+}
+
+.orderPlaced h6 {
+    font-family  : 'Roboto', sans-serif;
+    font-weight  : 500;
+    font-size    : 2.2rem;
+    line-height  : 3.2rem;
+    color        : #383838;
+    margin-bottom: 2.4rem;
+}
+
+
+.orderPlaced p {
+    font-family  : 'Roboto', sans-serif;
+    font-weight  : 300;
+    font-size    : 2.2rem;
+    line-height  : 3.2rem;
+    color        : #383838;
+    max-width    : 49rem;
+    margin-bottom: 5.5rem;
+}
+
+.orderPlaced p b {
+    font-weight: bold;
+}
+
+
+.orderPlaced a {
+    font-family  : 'Roboto', sans-serif;
+    font-weight  : normal;
+    font-size    : 1.8rem;
+    line-height  : 2.1rem;
+    color        : #383838;
+    padding      : 2rem 3.2rem;
+    border       : 1px solid #383838;
+    border-radius: 60px;
+}
+
+.orderPlaced a:hover {
+    background-color: #91B110;
+    border-color    : #91B110;
+    color           : white;
+}
+
+
+.orderPlaced {
+    padding-bottom: 18.4rem;
+}
+@media (max-width: 1919.98px) {
+    .info-box {
+        max-width: 76rem;
+    }
+}
+@media (max-width: 1679.98px) {
+    .info-box {
+        max-width: 73rem;
+    }
+}
+@media (max-width: 1365.98px) {
+    .info-box {
+        max-width: 67rem;
+    }
+}
+@media (max-width: 1199.98px) {
+    .info-box {
+        max-width: 60rem;
+        padding: 5.6rem 2.8rem;
+    }
+    /* .checkoutCartItem li div:first-child {
+        flex: 0 0 70%;
+        max-width: 70%;
+    } */
+    .rigthCart {
+        max-width: 41.5rem;
+        margin: 0;
+        margin-left: auto;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .right-border {
+        border-right: 0;
+    }
+    .rigthCart {
+        max-width: initial;
+        width: 100%;
+        margin: auto;
+        margin-bottom: 48px;
+    }
+    .info-box {
+        max-width: initial;
+        padding: 5.6rem 2.8rem;
+    }
+    .firstColumn, .secondColumn, .itemName, .itemPrice, .orderPlaced a {
+        font-size: 16px;
+        line-height: 19px;
+    }
+    .paymentOption p {
+        margin-bottom: 48px;
+    }
+    .posmd {
+        padding-bottom: 12rem;
+    }
+    .specInstruction, .info-box span, .profile p, .paymentOption p {
+        font-size: 15px;
+        line-height: 18px;
+    }
+    .checkoutNote {
+        font-size: 14px;
+        line-height: 20px;
+    }
+    .orderPlaced h6 {
+        font-size: 18px;
+        line-height: 24px;
+    }
+    .orderPlaced a {
+        font-weight: 500;
+    }
+}
+@media (max-width: 575.98px) {
+    
+}

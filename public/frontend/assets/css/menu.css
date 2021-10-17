@@ -1,0 +1,375 @@
+/* Hero Carousel */
+.bg-dark-custom {
+    background: transparent;
+    position  : fixed;
+    top       : 0;
+    right     : 0;
+    left      : 0;
+}
+
+
+.hero-carousel {
+    height: 100vh;
+}
+
+.hero-carousel .carousel-item img {
+    height         : 100vh;
+    object-fit     : cover;
+    object-position: center center;
+}
+
+.hero-carousel .carousel-indicators [data-bs-target] {
+    height          : 1.2rem;
+    width           : 1.2rem;
+    border-radius   : 50%;
+    background-color: #F9F9F6;
+}
+
+.hero-carousel .carousel-caption {
+    text-align: right;
+    right     : 5%;
+    left      : 5%;
+    bottom    : 17.4rem;
+}
+
+.hero-carousel .carousel-caption h1 {
+    max-width     : 64.4rem;
+    margin-left   : auto;
+    font-weight   : bold;
+    font-size     : 7.2rem;
+    line-height   : 8.4rem;
+    text-transform: uppercase;
+    color         : #FFFFFF;
+    margin-bottom : 3.8rem;
+}
+
+.hero-carousel .carousel-caption a {
+    display      : inline-block;
+    font-family  : 'Roboto', sans-serif;
+    font-weight  : 500;
+    font-size    : 2.4rem;
+    line-height  : 2.8rem;
+    color        : #FFFFFF;
+    padding      : 2.4rem 6.2rem;
+    border       : .2rem solid #FFFFFF;
+    border-radius: 6rem;
+}
+
+.hero-carousel .carousel-caption a:hover {
+    background-color: #53A0BC;
+    border-color    : #53A0BC;
+}
+
+/* Hero Carousel End*/
+
+/* Restaurent Details CSS */
+.restaurent-Details {
+    padding: 5.8rem 5% 5.7rem 5%;
+}
+
+
+.social-link a {
+    margin-right: 2.4rem;
+    height      : 4rem;
+    width       : 4rem;
+}
+
+.social-link a:last-child {
+    margin: 0;
+}
+
+.restaLogo {
+    max-width    : 37.7rem;
+    min-width    : 25rem;
+    margin-top   : 3.4rem;
+    margin-bottom: 3.4rem;
+}
+.restaurSubTitle p {
+    font-family   : 'Roboto', sans-serif;
+    font-weight   : 300;
+    font-size     : 2.4rem;
+    line-height   : 3.8rem;
+    font-style: italic;
+    color: #91B110;
+    margin-bottom: 2rem;
+}
+
+.restaurDetails p {
+    max-width     : 81.3rem;
+    font-family   : 'Roboto', sans-serif;
+    font-weight   : 300;
+    font-size     : 2rem;
+    line-height   : 3.8rem;
+    color         : #383838;
+    margin        : auto;
+    padding-top   : .6rem;
+    padding-bottom: 2.4rem;
+}
+
+.restaurDetails a {
+    font-family  : 'Roboto', sans-serif;
+    font-weight  : normal;
+    font-size    : 1.8rem;
+    line-height  : 2.1rem;
+    color        : #53A0BC;
+    padding      : 2rem 3.2rem;
+    border       : 1px solid #53A0BC;
+    border-radius: 6rem;
+    display      : inline-block;
+}
+
+
+
+/* Menu CSS */
+.menu-section {
+    padding: 5.7rem 5% 20.2rem 5%;
+}
+
+.menuTitle {
+    font-weight   : normal;
+    font-size     : 5.6rem;
+    line-height   : 7.3rem;
+    text-align    : center;
+    text-transform: uppercase;
+    color         : #1A1A1A;
+    margin-bottom : 4rem;
+}
+
+.categories.active {
+    padding-top: 14rem !important;
+}
+.categoriesTitle {
+    font-family  : 'Roboto', sans-serif;
+    font-weight  : 300;
+    font-size    : 3.2rem;
+    line-height  : 3.8rem;
+    color        : #000000;
+    margin-bottom: 2.5rem;
+    padding: 0 1rem;
+}
+
+.sideCategories {
+    position: relative;
+}
+
+.sideCategories li:first-child::before {
+    content         : '';
+    position        : absolute;
+    top             : 3.5rem;
+    right           : -1.8rem;
+    bottom          : 0;
+    margin          : auto;
+    height          : 80%;
+    width           : .2rem;
+    background-color: #355D6C;
+}
+
+.sideCategories li:last-child::before {
+    content         : '';
+    position        : absolute;
+    top             : -3.5rem;
+    right           : -1.8rem;
+    bottom          : 0;
+    margin          : auto;
+    height          : 80%;
+    width           : .2rem;
+    background-color: #355D6C;
+}
+
+.sideCategories li::before {
+    content         : '';
+    position        : absolute;
+    top             : 0;
+    right           : -1.8rem;
+    bottom          : 0;
+    margin          : auto;
+    height          : 100%;
+    width           : .2rem;
+    background-color: #355D6C;
+}
+
+
+
+
+.sideCategories li {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size  : 2rem;
+    line-height: 2.3rem;
+    color      : #1A1A1A;
+    text-align : right;
+    position   : relative;
+    padding    : 2rem 0;
+    cursor     : pointer;
+}
+
+.sideCategories li a {
+    text-decoration: none;
+    color          : #1A1A1A;
+
+}
+
+
+
+.sideCategories li::after {
+    content         : '';
+    position        : absolute;
+    top             : 0;
+    right           : -2.4rem;
+    bottom          : 0;
+    margin          : auto;
+    height          : 1.5rem;
+    width           : 1.5rem;
+    border-radius   : 50%;
+    background-color: #355D6C;
+
+}
+
+
+.sideCatSticky {
+    position: sticky;
+    top     : 13rem;
+}
+
+
+.menu-container {
+    padding-left: 11.4rem;
+    padding-top : 1rem;
+}
+
+
+/* Item CSS */
+
+.item {
+    padding: 1.8rem;
+}
+
+.item:hover {
+    background-color: #F9F9F6;
+
+}
+
+.item-content h3 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size  : 3rem;
+    line-height: 3.5rem;
+    color      : #383838;
+}
+
+.item-content ul {
+    padding: 0;
+}
+
+
+.item-content ul li {
+    display      : inline-block;
+    font-family  : 'Roboto', sans-serif;
+    font-weight  : normal;
+    font-size    : 1.8rem;
+    line-height  : 2.1rem;
+    color        : #858585;
+    padding-right: 13px;
+    position     : relative;
+    margin-top   : .8rem;
+}
+
+.item-content ul li::after {
+    content         : '';
+    position        : absolute;
+    top             : 0;
+    right           : 4px;
+    bottom          : 0;
+    margin          : auto;
+    height          : 4px;
+    width           : 4px;
+    border-radius   : 50%;
+    background-color: #858585;
+}
+
+.item-content ul li:last-child:after {
+    background-color: transparent;
+}
+
+
+
+.item-content p {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size  : 1.8rem;
+    line-height: 2.6rem;
+    color      : #383838;
+    margin-top : 3.4rem;
+}
+
+.item-content {
+    padding-left: 3.2rem;
+}
+
+
+.price {
+    font-family  : "Anko-PersonalUse-Bold";
+    font-size    : 2.8rem;
+    line-height  : 3.6rem;
+    color        : #1A1A1A;
+    padding-right: 2.3rem;
+    margin-bottom: 1.5rem;
+}
+
+.cartBtn {
+    font-family     : 'Roboto', sans-serif;
+    font-weight     : normal;
+    font-size       : 1.8rem;
+    line-height     : 2.1rem;
+    color           : #91B110;
+    border          : 1px solid #91B110;
+    background-color: transparent;
+    padding         : 2rem 3.2rem;
+    border-radius   : 6rem;
+}
+
+.cartBtn:hover {
+    background-color: #91B110;
+    color           : white;
+}
+
+
+@media (max-width: 767.98px) {
+    
+}
+@media (max-width: 575.98px) {
+    .restaurDetails p {
+        font-size: 15px;
+        line-height: 32px;
+    }
+    .restaurDetails a {
+        font-size: 16px;
+        line-height: 19px;
+        padding: 16px 32px;
+    }
+    .item-content {
+        padding-left: 1rem;
+    }
+    .item-content h3 {
+        font-size: 22px;
+        line-height: 24px;
+    }
+    .item-content ul li {
+        font-size: 16px;
+        line-height: 19px;
+        margin-top: 8px;
+    }
+    .item-content p {
+        font-size: 15px;
+        line-height: 24px;
+        margin-top: 1rem;
+    }
+    .price {
+        margin-bottom: 8px;
+        font-size: 20px;
+        line-height: 26px;
+    }
+    .cartBtn {
+        font-weight: 500;
+    }
+}

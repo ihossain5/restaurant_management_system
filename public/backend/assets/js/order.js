@@ -20,70 +20,7 @@ function denyOrder(id){
 
 var main_url = window.location.origin;
 
-function cancelOrder(id) {
-    $.ajax({
-        type: "POST",
-        url:   main_url+"/manager/cancel-order",
-        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-        data: {
-            id: id,
-        },    
-        dataType: "JSON",
-        
-        success: function (response) {
-            if (response.success === true) {
-                $(".cancel_order_badge").html(response.data.cancel_order);
-                $(".completed_order_badge").html(response.data.completed_order);
-                $("#orderDenyModal").modal("hide");
-                toastMixin.fire({
-                    icon: "success",
-                    animation: true,
-                    title: response.data.message,
-                });
-            }
-        },
-        error: function (error) {
-            if (error.status == 404) {
-                toastMixin.fire({
-                    icon: "error",
-                    animation: true,
-                    title: "" + "Data not found" + "",
-                });
-            }
-        },
-    });
-}
+
 
 // accept order function
-function acceptOrder(id) {
-    $.ajax({
-        type: "POST",
-        url:   main_url+"/manager/accept-order",
-        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-        data: {
-            id: id,
-        },
-        dataType: "JSON",
-        success: function (response) {
-            if (response.success === true) {
-                $(".cancel_order_badge").html(response.data.cancel_order);
-                $(".completed_order_badge").html(response.data.completed_order);
-                $("#viewModal").modal("hide");
-                toastMixin.fire({
-                    icon: "success",
-                    animation: true,
-                    title: response.data.message,
-                });
-            }
-        },
-        error: function (error) {
-            if (error.status == 404) {
-                toastMixin.fire({
-                    icon: "error",
-                    animation: true,
-                    title: "" + "Data not found" + "",
-                });
-            }
-        },
-    });
-}
+

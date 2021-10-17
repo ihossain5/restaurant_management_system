@@ -6,11 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Restaurant;
 use App\Models\User;
-use App\Events\OrderEvent;
+use App\Events\MyEvent;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use DataTables;
+use Pusher\Pusher;
 
 class OrderController extends Controller {
     public function getTodayOrders($id) {
@@ -41,9 +42,12 @@ class OrderController extends Controller {
 
     public function show(Request $request) {
         $order = Order::with('items', 'status', 'customer')->findOrFail($request->id);
-        $class = (($order->status->name == 'Preparing') ? 'txt-preparing'
+        if($order->status != null){
+            $class = (($order->status->name == 'Preparing') ? 'txt-preparing'
             : (($order->status->name == 'Delivering') ? 'txt-delivering' : (($order->status->name == 'Completed') ? 'txt-completed' : 'txt-cancelled')));
         $order['class'] = $class;
+        }
+      
         return success($order);
     }
 
@@ -87,7 +91,24 @@ class OrderController extends Controller {
 
     public function getAllOrders(){
         // event(new OrderEvent($user = $this->create($request->all())));
-        event(new OrderEvent('asdasdasdfasfasfaf sadasd'));
+        event(new MyEvent('1 new order has been placed'));
+        return 'Success';
+        // $options = array(
+        //     'cluster' => 'ap2',
+        //     'encrypted' => true
+        // );
+
+        // //Remember to set your credentials below.
+        // $pusher = new Pusher(
+        //     '1efc814744bed7686f5e', 
+        //     'fe479f1e7c4829989238',
+        //     'app_id', $options
+        // );
+
+        // $message= "Hello Cloudways";
+
+        // //Send a message to notify channel with an event name of notify-event
+        // $pusher->trigger('my-channel', 'my-event', $message);
     }
     public function orders(){
         return view('admin.order-management.all_orders');

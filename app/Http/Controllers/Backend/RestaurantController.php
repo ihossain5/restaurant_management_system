@@ -30,7 +30,7 @@ class RestaurantController extends Controller {
         $logo = $request->logo;
         if ($logo) {
             $path     = 'restaurant-logo/';
-            $logo_url = storeImage($logo, $path, 80, 60);
+            $logo_url = storeImage($logo, $path, 200, 84);
         }
         $restaurant = Restaurant::create([
             'name'        => $request->name,
@@ -112,7 +112,6 @@ class RestaurantController extends Controller {
         $item_assets     = $request->new_asset;
 
         if ($item_assets_old) {
-
             foreach ($item_assets_old as $old_item_assets) {
                 // dd();
                 if (array_key_exists("asset", $old_item_assets)) {
@@ -390,7 +389,7 @@ class RestaurantController extends Controller {
         }])->find($id);
         $total_revenue = $restaurant->restaurant_orders->sum('amount');
         return view('admin.restaurant.restaurant_overview', compact(
-            'restaurant', 'restaurants', 'new_orders', 'ordersInPreparation', 'ordersInDelivery', 'completedOrders', 'cancelledOrders', 'total_revenue'
+            'id','restaurant', 'restaurants', 'new_orders', 'ordersInPreparation', 'ordersInDelivery', 'completedOrders', 'cancelledOrders', 'total_revenue'
         ));
     }
 

@@ -113,9 +113,9 @@ $orders = ManagerDashboardController::countedOrders();
             <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-device-desktop"></i><span>Orders
                     <span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
             <ul class="list-unstyled">
-                <li><a  href="{{ route('manager.new.order')}}">New Orders <span class="badge badge-custom">{{$orders['new_order']}}</span></a></li>
-                <li><a  href="{{ route('manager.order.in.preparation')}}">Orders In Preparation <span class="badge badge-custom">{{$orders['ordersInPreparation']}}</span> </a></li>
-                <li><a  href="{{ route('manager.order.in.delivery')}}">Orders In Delivery <span class="badge badge-custom">{{$orders['ordersInDelivery']}}</span></a></li>
+                <li><a  href="{{ route('manager.new.order')}}">New Orders <span class="badge badge-custom new_order_badge">{{$orders['new_order']}}</span></a></li>
+                <li><a  href="{{ route('manager.order.in.preparation')}}">Orders In Preparation <span class="badge badge-custom prepation_order_badge">{{$orders['ordersInPreparation']}}</span> </a></li>
+                <li><a  href="{{ route('manager.order.in.delivery')}}">Orders In Delivery <span class="badge badge-custom delivery_order_badge">{{$orders['ordersInDelivery']}}</span></a></li>
                 <li><a  href="{{ route('manager.completed.order')}}">Completed Orders <span class="badge badge-custom completed_order_badge">{{$orders['completedOrder']}}</span></a></li>
                 <li><a  href="{{ route('manager.cancelled.order')}}">Cancelled Orders <span class="badge badge-custom cancel_order_badge">{{$orders['cancelledOrder']}}</span></a></li>
             </ul>

@@ -17,6 +17,7 @@
 </head>
 
 <body class="fixed-left">
+    
     <!-- Loader -->
     <div id="preloader">
         <div id="status">
@@ -45,7 +46,7 @@
     </div>
     <!-- END wrapper -->
 
-
+@include('layouts.admin.notification_modal')
     @include('layouts.admin.scripts')
     @yield('pageScripts')
 </body>

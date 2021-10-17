@@ -89,22 +89,22 @@
 <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <script type='text/javascript'>
     $(function () {
-    var table = $('.data-table').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: "{{ route('order.test') }}",
-        columns: [
-            {data: 'DT_RowIndex'},
-            {data: 'name'},
-            {data: 'email'},
-            {
-                data: 'action', 
-                name: 'action', 
-                orderable: true, 
-                searchable: true
-            },
-        ]
-    });
+    // var table = $('.data-table').DataTable({
+    //     processing: true,
+    //     serverSide: true,
+    //     ajax: "{{ route('order.test') }}",
+    //     columns: [
+    //         {data: 'DT_RowIndex'},
+    //         {data: 'name'},
+    //         {data: 'email'},
+    //         {
+    //             data: 'action', 
+    //             name: 'action', 
+    //             orderable: true, 
+    //             searchable: true
+    //         },
+    //     ]
+    // });
     
   });
      // Enable pusher logging - don't include this in production
@@ -113,10 +113,16 @@
       cluster: 'ap2'
     });
 
-    var channel = pusher.subscribe('order-channel');
+    var channel = pusher.subscribe('my-channel');
     
-    channel.bind('order-event', function(data) {
-        $('#message').html(JSON.stringify(data.message));
+    channel.bind('my-event', function(data) {
+        toastMixin.fire({
+            icon: 'success',
+            animation: true,
+            title: data.message,
+         });
+
+        alert(data.message);
     });
   
     </script>

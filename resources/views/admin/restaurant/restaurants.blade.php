@@ -314,7 +314,7 @@
                                     <div class="custom-file">
                                         <input type="file" name="asset[][asset]" class="custom-file-input dropify" id="asset0"
                                             data-id="0" data-errors-position="outside"
-                                            data-allowed-file-extensions='["jpg", "png"]' data-max-file-size="0.6M"
+                                            data-allowed-file-extensions='["jpg", "png", "svg","jpeg"]' data-max-file-size="0.6M"
                                             data-height="80">
                                     </div>
                                     <span class="error_msg0 text-danger"></span>
@@ -404,7 +404,7 @@
                             <div class="custom-file edit_logo">
                                 <input type="file" name="logo" id="edit_logo" class="custom-file-input dropify"
                                     data-id="0" data-errors-position="outside"
-                                    data-allowed-file-extensions='["jpg", "png"]' data-max-file-size="0.6M" data-height="80"
+                                    data-allowed-file-extensions='["jpg", "png", "svg","jpeg"]' data-max-file-size="0.6M" data-height="80"
                                   >
                             </div>
                         </div>
@@ -853,6 +853,7 @@
                                         <div class="col-md-11"> 
                                             <div class="form-group">
                                                 <div class="custom-file url${key}">
+                                                    
                                                     <input type="file" name="asset[${key}][asset]" id="urla${key}"
                                                                 class="custom-file-input linkImage link_img${key}"
                                                                 data-height="80" data-errors-position="outside"
@@ -942,10 +943,10 @@
                                 <td>
                                     <label class="switch">
                                         <input class="is_available status${ response.data.id}"type="checkbox"
-                                            ${(response.data.is_available == 1 ) ? 'checked' : ' '} data-id="${response.data.id}">
+                                            ${(response.data.is_open == 1 ) ? 'checked' : ' '} data-id="${response.data.id}">
                                             <span class="slider round"></span>
                                     </label>
-                                </td
+                                </td>
                                 <td><button type='button' class='btn btn-outline-dark' onclick='viewRestaurant(${response.data.id})'>
                                 <i class='fa fa-eye'></i>
                             </button>

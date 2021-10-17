@@ -6,7 +6,7 @@
 
 @section('pageCss')
     <style>
-     .accept_btn {
+        .accept_btn {
             padding: 3px 20px;
             font-weight: 600;
             border-radius: 5px;
@@ -161,8 +161,7 @@
                     <button type="button" class="btn btn-primary edit_btn waves-effect waves-light text-dark">
                         <i class="mdi mdi-pencil"></i> Edit
                     </button>
-                    <button type="submit"
-                        class="btn btn-success accept_btn waves-effect waves-light text-dark">
+                    <button type="submit" class="btn btn-success accept_btn waves-effect waves-light text-dark">
                         <i class="fa fa-check"></i> Accept
                     </button>
                 </div>
@@ -252,7 +251,7 @@
         </div><!-- /.modal-dialog -->
     </div>
     <!-- order edit Modal End -->
-    
+
     <!-- order deny  Modal -->
     <div class="modal fade bs-example-modal-center" id="orderDenyModal" tabindex="-1" role="dialog"
         aria-labelledby="mySmallModalLabel" aria-hidden="true">
@@ -269,8 +268,7 @@
                     <button id="editBtn" type="button" class="btn btn-block btn-danger waves-effect waves-light">
                         Yes, I'm sure about the cancelling this order
                     </button>
-                    <button type="button" data-dismiss="modal"
-                        class="btn btn-block btn-secondary waves-effect waves-light">
+                    <button type="button" data-dismiss="modal" class="btn btn-block btn-secondary waves-effect waves-light">
                         No, I need to think again
                     </button>
                 </div>
@@ -280,18 +278,21 @@
     <!-- order deny Modal End -->
 @endsection
 @section('pageScripts')
-<script src="{{asset('backend/assets/js/order.js')}}"></script>
+    <script src="{{ asset('backend/assets/js/order.js') }}"></script>
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script src="{{ asset('backend/assets/js/pusher_notification.js') }}"></script>
     <script type='text/javascript'>
         var config = {
             routes: {
                 view: "{!! route('order.show') !!}",
-                getOrders: "{!! route('order.restaurant') !!}",
+                acceptOrder: "{!! route('manager.order.accept.preparation') !!}",
+                cancelOrder: "{!! route('manager.order.cancel') !!}",
             }
         };
 
-    $(function () {
-     dataTable();
-  });
+        $(function() {
+            dataTable();
+        });
 
         // view single 
         function viewOrder(id) {
@@ -316,28 +317,29 @@
                         $('#view_customer_email').text(response.data.customer.email ?? 'N/A');
                         $('#view_notes').text(response.data.special_notes ?? 'N/A');
 
-                        if(response.data.order_status_id == 4){
-                            $('.deny_btn').prop('disabled',true);
-                            $('.edit_btn').prop('disabled',true);
-                        }else{
-                            $('.deny_btn').prop('disabled',false);
-                            $('.edit_btn').prop('disabled',false);
+                        if (response.data.order_status_id == 4) {
+                            $('.deny_btn').prop('disabled', true);
+                            $('.edit_btn').prop('disabled', true);
+                        } else {
+                            $('.deny_btn').prop('disabled', false);
+                            $('.edit_btn').prop('disabled', false);
                         }
                         $('.accept_btn').attr('onclick', "acceptOrder(" + response.data.order_id + ")")
 
-                        if (response.data.status.name == 'Preparing') {
-                            var class_name = 'primary';
-                        } else if (response.data.status.name == 'Delivering') {
-                            var class_name = 'success';
-                        } else if (response.data.status.name == 'Completed') {
-                            var class_name = 'success';
-                        } else {
-                            var class_name = 'danger';
+                        if (response.data.order_status_id != null) {
+                            if (response.data.status.name == 'Preparing') {
+                                var class_name = 'primary';
+                            } else if (response.data.status.name == 'Delivering') {
+                                var class_name = 'success';
+                            } else if (response.data.status.name == 'Completed') {
+                                var class_name = 'success';
+                            } else {
+                                var class_name = 'danger';
+                            }
+                            $('#order_status').attr('class', 'btn float-right btn-outline-' + class_name + ' ' +
+                                response.data.class);
+                            $('#order_status').text(response.data.status.name);
                         }
-
-                        $('#order_status').attr('class', 'btn float-right btn-outline-' + class_name + ' ' +
-                            response.data.class);
-                        $('#order_status').text(response.data.status.name);
 
                         $('.apeend_tbody').empty();
                         $.each(response.data.items, function(key, val) {
@@ -351,12 +353,12 @@
 
                         });
                         $('.view_total').html('৳ ' + bdCurrencyFormat(response.data.amount));
-                        if(response.data.delivery_fee != null){
+                        if (response.data.delivery_fee != null) {
                             $('.deleveryFee').html('৳ ' + bdCurrencyFormat(response.data.delivery_fee));
-                        }else{
+                        } else {
                             $('.deleveryFee').html('৳ ' + 0);
                         }
-                       
+
 
                         $('#viewModal').modal('show');
 
@@ -377,56 +379,106 @@
             }); //ajax end
         }
 
-        // restaurant change
-        $(document).on('click', '.restaurant', function() {
-            var id = $(this).data('id');
+
+
+        function acceptOrder(id) {
             $.ajax({
                 type: "POST",
-                url: config.routes.getOrders,
+                url: config.routes.acceptOrder,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 data: {
                     id: id,
-                    _token: "{{ csrf_token() }}"
                 },
-                dataType: 'JSON',
+                dataType: "JSON",
                 success: function(response) {
                     if (response.success === true) {
-                        $('.restaurant_id').val(response.data.id);
-                        $('#orderTable').DataTable().clear().destroy();
-                        setSessionId(response.data.session_id); // set restaurant id into session
-                        setRestaurant(response.data.restaurant_name, response.data.id); // set restaurant into topbar
+                        var table = $('#orderTable').DataTable();
+                        $(".prepation_order_badge").html(response.data.order_in_preparation);
+                        $(".delivery_order_badge").html(response.data.order_in_delivary);
+                        $("#viewModal").modal("hide");
+                        table.row().clear().destroy();
                         dataTable();
-
-
+                        toastMixin.fire({
+                            icon: "success",
+                            animation: true,
+                            title: response.data.message,
+                        });
                     }
                 },
                 error: function(error) {
                     if (error.status == 404) {
                         toastMixin.fire({
-                            icon: 'error',
+                            icon: "error",
                             animation: true,
-                            title: "" + 'Data not found' + ""
+                            title: "" + "Data not found" + "",
                         });
-
-
                     }
                 },
             });
-        });
+        }
 
-function dataTable(){
-    var table = $('#orderTable').DataTable({
-        // processing: true,
-        serverSide: true,
-        ajax: '{{route('manager.order.in.preparation')}}',
-        columns: [
-            {data: 'id'},
-            {data: 'customer_name'},
-            {data: 'customer_contact'},
-            {data: 'customer_adress'},
-            {
-                data: 'action', 
-                render: function( data, type, full, meta ) {
-                        return `<button type='button' class='btn btn-outline-dark' onclick='viewOrder(${data})'>
+        function cancelOrder(id) {
+            $.ajax({
+                type: "POST",
+                url: config.routes.cancelOrder,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    id: id,
+                },
+                dataType: "JSON",
+
+                success: function(response) {
+                    if (response.success === true) {
+                        var table = $('#orderTable').DataTable();
+                        $(".cancel_order_badge").html(response.data.cancel_order);
+                        $(".prepation_order_badge").html(response.data.order_in_preparation);
+                        $("#orderDenyModal").modal("hide");
+                        table.row().clear().destroy();
+                        dataTable();
+                        toastMixin.fire({
+                            icon: "success",
+                            animation: true,
+                            title: response.data.message,
+                        });
+                    }
+                },
+                error: function(error) {
+                    if (error.status == 404) {
+                        toastMixin.fire({
+                            icon: "error",
+                            animation: true,
+                            title: "" + "Data not found" + "",
+                        });
+                    }
+                },
+            });
+        }
+
+        function dataTable() {
+            var table = $('#orderTable').DataTable({
+                // processing: true,
+                serverSide: true,
+                ajax: '{{ route('manager.order.in.preparation') }}',
+                columns: [{
+                        data: 'id'
+                    },
+                    {
+                        data: 'customer_name'
+                    },
+                    {
+                        data: 'customer_contact'
+                    },
+                    {
+                        data: 'customer_adress'
+                    },
+                    {
+                        data: 'action',
+                        render: function(data, type, full, meta) {
+                            return `<button type='button' class='btn btn-outline-dark' onclick='viewOrder(${data})'>
                                 <i class='fa fa-eye'></i>
                                 </button>
                                 <button type='button' class='btn btn-outline-success'>
@@ -435,12 +487,12 @@ function dataTable(){
                                 <button type='button' class='btn btn-outline-danger ' onclick='denyOrder(${data})'>
                                     <i class='fa fa-ban'></i>
                                 </button>`;
+                        },
+                        orderable: true,
+                        searchable: true
                     },
-                orderable: true, 
-                searchable: true
-            },
-        ]
-    });
-    }   
+                ]
+            });
+        }
     </script>
 @endsection
