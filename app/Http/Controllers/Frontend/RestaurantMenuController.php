@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class RestaurantMenuController extends Controller
 {
     public function getRestaurant(Restaurant $restaurant){
-        // dd($restaurant);
-        return view('frontend.restaurant.restaurant_menu');
+        $restaurant->load('assets','restaurant_categories','restaurant_categories.items');    
+        return view('frontend.restaurant.restaurant_menu', compact('restaurant'));
     }
 }

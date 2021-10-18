@@ -15,7 +15,6 @@ class ItemController extends Controller {
 
     public function index($id) {
         // dd( Session::get('restaurant_id'));
-
         $restaurant  = Restaurant::find($id);
         $restaurants = Restaurant::get();
         $items       = $restaurant->restaurant_items;

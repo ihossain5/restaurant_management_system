@@ -96,6 +96,10 @@ crossorigin="anonymous"></script>
         item_url = item_url.replace(':id', session_id);
         $('.item_link').attr("href", item_url);
 
+        var item_combo_url = '{{ route('item.combo.index', ':id') }}';
+        item_combo_url = item_combo_url.replace(':id', session_id);
+        $('.item_combo_link').attr("href", item_combo_url);
+
         var category_url = '{{ route('item.category', ':id') }}';
         category_url = category_url.replace(':id', session_id);
         $('.category_link').attr("href", category_url);

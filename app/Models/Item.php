@@ -32,6 +32,9 @@ class Item extends Model
         // ->whereDate('created_at', '=', DB::raw('CURDATE()'))
         // ->get();
     }
+    public function combos() {
+        return $this->belongsToMany(Combo::class, 'item_combos','item_id','combo_id');
+    }
     
     public static function findItemById($id){
         $item = self::with('category', 'item_assets')->findOrFail($id);

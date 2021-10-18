@@ -2,6 +2,9 @@
 @section('pageCss')
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/home.css') }}">
 @endsection
+@section('title')
+Home
+@endsection
 
 @section('content')
     <!-- Home Page Carousel -->
@@ -39,7 +42,7 @@
             @if (!empty($restaurants))
                 @foreach ($restaurants as $restaurant)
                     <div class="col">
-                        <a href="{{ route('restaurant.menu', [$restaurant->restaurant_id]) }}">
+                        <a href="{{ route('frontend.restaurant.menu', [$restaurant->restaurant_id]) }}">
                             <div class="card h-100 deliverCard">
                                 <div class="card-overlay-box">
                                     <img src="{{ asset('images/' . $restaurant->asset) }}" class="card-img-top" alt="...">
@@ -77,294 +80,40 @@
             </div>
         </div>
         <div class="owl-carousel deals-carousel">
-            <div>
-                <div class="card dealsCard">
-                    <div class="overlayDealsBox">
-                        <img src="{{ asset('frontend/assets/images/Home/Popular dishes/Rectangle 1.png') }}"
-                            class="card-img-top" alt="...">
-                        <div class="overlayDealsBtn">
-                            View Platter Items
-                            <div class="overlayDealsContent">
-                                <div class="cardContent">
-                                    <h5>The Red Chamber</h5>
-                                    <h3>The Red Chamber</h3>
-                                    <h5>Chicken Fries</h5>
-                                    <h5>Beef Shanks</h5>
-                                    <h5>Fried Rice</h5>
-                                    <h2>Tk. 1299</h2>
-                                    <button>Add to Cart</button>
+            @if (!empty($combos))
+                @foreach ($combos as $combo)
+                <div>
+                    <div class="card dealsCard">
+                        <div class="overlayDealsBox">
+                            <img src="{{ asset('images/'.$combo->photo) }}"
+                                class="card-img-top" alt="...">
+                            <div class="overlayDealsBtn">
+                                View Platter Items
+                                <div class="overlayDealsContent">
+                                    <div class="cardContent">
+                                        @if (!empty($combo->items))
+                                            @foreach ($combo->items as $item)
+                                            <h5>{{$item->name}}</h5>
+                                            @endforeach
+                                        @endif
+                                        <h2>Tk. {{$combo->price}}</h2>
+                                        <button>Add to Cart</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <h6>The Red Chamber</h6>
-                        <h3>The Signature Rou</h3>
-                        <h2>Tk. 1299</h2>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <div class="card dealsCard">
-                    <div class="overlayDealsBox">
-                        <img src="assets/images/Home/Popular dishes/Rectangle 1.png" class="card-img-top" alt="...">
-                        <div class="overlayDealsBtn">
-                            View Platter Items
-
-                            <div class="overlayDealsContent">
-                                <div class="cardContent">
-                                    <h5>The Red Chamber</h5>
-
-                                    <h3>The Red Chamber</h3>
-
-                                    <h5>Chicken Fries</h5>
-                                    <h5>Beef Shanks</h5>
-                                    <h5>Fried Rice</h5>
-
-                                    <h2>Tk. 1299</h2>
-
-                                    <button>Add to Cart</button>
-                                </div>
-                            </div>
+                        <div class="card-body">
+                            <h6>{{$combo->restaurant}}</h6>
+                            <h3>{{$combo->name}}</h3>
+                            <h2>Tk. {{$combo->price}}</h2>
+                            <button>Add to Cart</button>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <h6>The Red Chamber</h6>
-                        <h3>The Signature Rou</h3>
-                        <h2>Tk. 1299</h2>
-                        <button>Add to Cart</button>
-                    </div>
                 </div>
-            </div>
+                @endforeach
+            @endif
+        
 
-            <div>
-                <div class="card dealsCard">
-                    <div class="overlayDealsBox">
-                        <img src="assets/images/Home/Popular dishes/Rectangle 1.png" class="card-img-top" alt="...">
-                        <div class="overlayDealsBtn">
-                            View Platter Items
-
-                            <div class="overlayDealsContent">
-                                <div class="cardContent">
-                                    <h5>The Red Chamber</h5>
-
-                                    <h3>The Red Chamber</h3>
-
-                                    <h5>Chicken Fries</h5>
-                                    <h5>Beef Shanks</h5>
-                                    <h5>Fried Rice</h5>
-
-                                    <h2>Tk. 1299</h2>
-
-                                    <button>Add to Cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h6>The Red Chamber</h6>
-                        <h3>The Signature Rou</h3>
-                        <h2>Tk. 1299</h2>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <div class="card dealsCard">
-                    <div class="overlayDealsBox">
-                        <img src="assets/images/Home/Popular dishes/Rectangle 1.png" class="card-img-top" alt="...">
-                        <div class="overlayDealsBtn">
-                            View Platter Items
-
-                            <div class="overlayDealsContent">
-                                <div class="cardContent">
-                                    <h5>The Red Chamber</h5>
-
-                                    <h3>The Red Chamber</h3>
-
-                                    <h5>Chicken Fries</h5>
-                                    <h5>Beef Shanks</h5>
-                                    <h5>Fried Rice</h5>
-
-                                    <h2>Tk. 1299</h2>
-
-                                    <button>Add to Cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h6>The Red Chamber</h6>
-                        <h3>The Signature Rou</h3>
-                        <h2>Tk. 1299</h2>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <div class="card dealsCard">
-                    <div class="overlayDealsBox">
-                        <img src="assets/images/Home/Popular dishes/Rectangle 1.png" class="card-img-top" alt="...">
-                        <div class="overlayDealsBtn">
-                            View Platter Items
-
-                            <div class="overlayDealsContent">
-                                <div class="cardContent">
-                                    <h5>The Red Chamber</h5>
-
-                                    <h3>The Red Chamber</h3>
-
-                                    <h5>Chicken Fries</h5>
-                                    <h5>Beef Shanks</h5>
-                                    <h5>Fried Rice</h5>
-
-                                    <h2>Tk. 1299</h2>
-
-                                    <button>Add to Cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h6>The Red Chamber</h6>
-                        <h3>The Signature Rou</h3>
-                        <h2>Tk. 1299</h2>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <div class="card dealsCard">
-                    <div class="overlayDealsBox">
-                        <img src="assets/images/Home/Popular dishes/Rectangle 1.png" class="card-img-top" alt="...">
-                        <div class="overlayDealsBtn">
-                            View Platter Items
-
-                            <div class="overlayDealsContent">
-                                <div class="cardContent">
-                                    <h5>The Red Chamber</h5>
-
-                                    <h3>The Red Chamber</h3>
-
-                                    <h5>Chicken Fries</h5>
-                                    <h5>Beef Shanks</h5>
-                                    <h5>Fried Rice</h5>
-
-                                    <h2>Tk. 1299</h2>
-
-                                    <button>Add to Cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h6>The Red Chamber</h6>
-                        <h3>The Signature Rou</h3>
-                        <h2>Tk. 1299</h2>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <div class="card dealsCard">
-                    <div class="overlayDealsBox">
-                        <img src="assets/images/Home/Popular dishes/Rectangle 1.png" class="card-img-top" alt="...">
-                        <div class="overlayDealsBtn">
-                            View Platter Items
-
-                            <div class="overlayDealsContent">
-                                <div class="cardContent">
-                                    <h5>The Red Chamber</h5>
-
-                                    <h3>The Red Chamber</h3>
-
-                                    <h5>Chicken Fries</h5>
-                                    <h5>Beef Shanks</h5>
-                                    <h5>Fried Rice</h5>
-
-                                    <h2>Tk. 1299</h2>
-
-                                    <button>Add to Cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h6>The Red Chamber</h6>
-                        <h3>The Signature Rou</h3>
-                        <h2>Tk. 1299</h2>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <div class="card dealsCard">
-                    <div class="overlayDealsBox">
-                        <img src="assets/images/Home/Popular dishes/Rectangle 1.png" class="card-img-top" alt="...">
-                        <div class="overlayDealsBtn">
-                            View Platter Items
-
-                            <div class="overlayDealsContent">
-                                <div class="cardContent">
-                                    <h5>The Red Chamber</h5>
-
-                                    <h3>The Red Chamber</h3>
-
-                                    <h5>Chicken Fries</h5>
-                                    <h5>Beef Shanks</h5>
-                                    <h5>Fried Rice</h5>
-
-                                    <h2>Tk. 1299</h2>
-
-                                    <button>Add to Cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h6>The Red Chamber</h6>
-                        <h3>The Signature Rou</h3>
-                        <h2>Tk. 1299</h2>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div class="card dealsCard">
-                    <div class="overlayDealsBox">
-                        <img src="assets/images/Home/Popular dishes/Rectangle 1.png" class="card-img-top" alt="...">
-                        <div class="overlayDealsBtn">
-                            View Platter Items
-                            <div class="overlayDealsContent">
-                                <div class="cardContent">
-                                    <h5>The Red Chamber</h5>
-                                    <h3>The Red Chamber</h3>
-                                    <h5>Chicken Fries</h5>
-                                    <h5>Beef Shanks</h5>
-                                    <h5>Fried Rice</h5>
-
-                                    <h2>Tk. 1299</h2>
-
-                                    <button>Add to Cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h6>The Red Chamber</h6>
-                        <h3>The Signature Rou</h3>
-                        <h2>Tk. 1299</h2>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -384,107 +133,25 @@
             </div>
         </div>
         <div class="owl-carousel popular-carousel">
-            <div>
-                <div class="card dealsCard">
-                    <img src="{{ asset('frontend/assets/images/Home/Popular dishes/Rectangle 1.png') }}"
-                        class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h6>The Red Chamber</h6>
-                        <h3>The Signature Rou</h3>
-                        <h2>Tk. 1299</h2>
-                        <button>Add to Cart</button>
+            @if (!empty($order_items))
+                @foreach ($order_items as $item)
+                @if (count($item->orders)>0)
+                <div>
+                    <div class="card dealsCard">
+                        @foreach ($item->item_assets->take(1) as $image)
+                        <img src="{{ asset('images/'.$image->pivot->asset) }}"class="card-img-top" alt="...">
+                        @endforeach
+                        <div class="card-body">
+                            <h6>{{$item->category->restaurant->name}}</h6>
+                            <h3>{{$item->name}}</h3>
+                            <h2>Tk. {{$item->price}}</h2>
+                            <button>Add to Cart</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div>
-                <div class="card dealsCard">
-                    <img src="{{ asset('frontend/assets/images/Home/Popular dishes/Rectangle 1-1.png') }}"
-                        class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h6>The Red Chamber</h6>
-                        <h3>The Classic</h3>
-                        <h2>Tk. 1299</h2>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <div class="card dealsCard">
-                    <img src="{{ asset('frontend/assets/images/Home/Popular dishes/Rectangle 1-2.png') }}"
-                        class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h6>Gusto</h6>
-                        <h3>Fried Fiesta</h3>
-                        <h2>Tk. 1299</h2>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <div class="card dealsCard">
-                    <img src="{{ asset('frontend/assets/images/Home/Popular dishes/Rectangle 1-3.png') }}"
-                        class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h6>The Red Chamber</h6>
-                        <h3>The Signature Rou</h3>
-                        <h2>Tk. 1299</h2>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div class="card dealsCard">
-                    <img src="{{ asset('frontend/assets/images/Home/Popular dishes/Rectangle 1.png') }}"
-                        class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h6>The Red Chamber</h6>
-                        <h3>The Signature Rou</h3>
-                        <h2>Tk. 1299</h2>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <div class="card dealsCard">
-                    <img src="assets/images/Home/Popular dishes/Rectangle 1-1.png" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h6>The Red Chamber</h6>
-                        <h3>The Classic</h3>
-                        <h2>Tk. 1299</h2>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <div class="card dealsCard">
-                    <img src="assets/images/Home/Popular dishes/Rectangle 1-2.png" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h6>Gusto</h6>
-                        <h3>Fried Fiesta</h3>
-                        <h2>Tk. 1299</h2>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <div class="card dealsCard">
-                    <img src="assets/images/Home/Popular dishes/Rectangle 1-3.png" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h6>The Red Chamber</h6>
-                        <h3>The Signature Rou</h3>
-                        <h2>Tk. 1299</h2>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-
+                @endif
+                @endforeach
+            @endif
         </div>
     </section>
 @endsection

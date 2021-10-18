@@ -27,10 +27,10 @@
                 <div class="navbar-large-device d-none d-lg-block">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="about-us.html">About Us</a>
+                            <a class="nav-link active" aria-current="page" href="{{route('frontend.about.us')}}">About Us</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="signin.html">sign in</a>
+                            <a class="nav-link active" aria-current="page" href="{{route('frontend.customer.sign.in')}}">sign in</a>
                         </li>
     
                         <!-- <li class="nav-item dropdown">
@@ -54,7 +54,7 @@
                 
                 <ul class="navbar-nav navbar-small-device d-lg-none">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="about-us.html">About Us</a>
+                        <a class="nav-link active" aria-current="page" href="{{route('frontend.about.us')}}">About Us</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link " aria-current="page" href="profile.html">My Profile</a>

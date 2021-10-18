@@ -80,7 +80,7 @@ $orders = ManagerDashboardController::countedOrders();
                 {{-- <li><a class="category_link" href="{{ route('item.category',[1]) }}"><i class="fa fa-cutlery"></i>Item Categories</a></li> --}}
                 {{-- <li><a href="{{ route('item.index') }}"><i class="fa fa-cutlery"></i>Items</a></li> --}}
                 <li><a  class="item_link" href="{{ route('item.index',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Items</a></li>
-                {{-- <li><a  class="item_link" href="{{ route('item.index',[9]) }}"><i class="fa fa-cutlery"></i>Items</a></li> --}}
+                <li><a  class="item_combo_link" href="{{ route('item.combo.index',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Item Combos</a></li>
             </ul>
         </li>
 

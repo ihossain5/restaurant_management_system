@@ -22,8 +22,10 @@ $('.passToggleLogin1Btn').click(function () {
 
     if ($(".loginPassword").attr("type") === "password") {
         $(".loginPassword").attr("type", "text");
+        $('.passToggleLogin1Btn').html('Hide')
     } else {
         $(".loginPassword").attr("type", "password");
+        $('.passToggleLogin1Btn').html('Show')
     }
 
 })

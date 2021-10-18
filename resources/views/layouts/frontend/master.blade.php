@@ -1,16 +1,13 @@
 @include('layouts.frontend.partials.header')
-
 <body>
     <!-- navbar -->
     @include('layouts.frontend.partials.navbar')
     <!-- Cart -->
     @include('layouts.frontend.partials.cart')
-
     <!-- Content -->
     @yield('content')
     <!-- Footer -->
     @include('layouts.frontend.partials.footer')
-
 
     <!-- onload location modal -->
     <!-- <div class="location-modal-box">
@@ -38,9 +35,7 @@
             </div>
         </div>
     </div> -->
-
     @include('layouts.frontend.partials.scripts')
     @yield('pageScripts')
 </body>
-
 </html>

@@ -8,12 +8,15 @@ use App\Http\Controllers\Backend\ContactUsController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\HomeHeroSectionController;
+use App\Http\Controllers\Backend\ItemComboController;
 use App\Http\Controllers\Backend\ItemController;
 use App\Http\Controllers\Backend\ManagerController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\OrderPerformanceController;
 use App\Http\Controllers\Backend\RestaurantController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\Frontend\AboutUsController as FrontendAboutUsController;
+use App\Http\Controllers\Frontend\CustomerController as FrontendCustomerController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\RestaurantMenuController;
 use App\Http\Controllers\Manager\ManagerDashboardController;
@@ -142,8 +145,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
     }); //* Restaurant Manager route end */
 
     //* Item route start */
-    Route::group(['middleware' => 'web'], function () {
-        // Put routes in here
         Route::group(['prefix' => 'items'], function () {
             // Route::get('/', [ItemController::class, 'index'])->name('item.index');
             Route::get('/{id}', [ItemController::class, 'index'])->name('item.index');
@@ -154,6 +155,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
             Route::post('/delete', [ItemController::class, 'destroy'])->name('item.delete');
             Route::post('/restaurant-items', [ItemController::class, 'getItemsByRestaurant'])->name('item.restaurant');
             Route::post('/available-status/update', [ItemController::class, 'updateAvailableStatus'])->name('item.available.status.update');
+            /* Item combo route start */
+            Route::get('/{id}/combos', [ItemComboController::class, 'index'])->name('item.combo.index');
+            Route::post('/combo/store', [ItemComboController::class, 'store'])->name('item.combo.store');
+            Route::post('combo/edit', [ItemComboController::class, 'edit'])->name('item.combo.edit');
+            Route::post('combo/show', [ItemComboController::class, 'show'])->name('item.combo.show');
+            Route::post('combo/update', [ItemComboController::class, 'update'])->name('item.combo.update');
+            Route::post('combo/delete', [ItemComboController::class, 'destroy'])->name('item.combo.delete');
+            Route::post('combo/restaurant', [ItemComboController::class, 'getComboByRestaurant'])->name('item.combo.restaurant');
+            /* Item combo route start */
 
         }); //* Item route end */
 
@@ -169,7 +179,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
             Route::post('/restaurant-categories', [CategoryController::class, 'getCategoriesByRestaurant'])->name('item.category.restaurant');
 
         }); //* Category route end */
-    });
+
     //* order route start */
     Route::group(['prefix' => 'orders'], function () {
         Route::get('restaurant/{id}/today-orders', [OrderController::class, 'getTodayOrders'])->name('orders.today');
@@ -256,4 +266,6 @@ Route::get('test/new', function () {
 });
 
 Route::get('/',[HomeController::class,'index'])->name('frontend.index');
-Route::get('/restaurant/{restaurant}/menu',[RestaurantMenuController::class,'getRestaurant'])->name('restaurant.menu');
+Route::get('/restaurant/{restaurant}/menu',[RestaurantMenuController::class,'getRestaurant'])->name('frontend.restaurant.menu');
+Route::get('/about-us',[FrontendAboutUsController::class,'index'])->name('frontend.about.us');
+Route::get('/sign-in',[FrontendCustomerController::class,'customerSignIn'])->name('frontend.customer.sign.in');
