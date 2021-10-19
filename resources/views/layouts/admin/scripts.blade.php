@@ -52,7 +52,7 @@ crossorigin="anonymous"></script>
 <script src="{{ asset('backend/assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}">
 </script>
 <script src="{{ asset('backend/assets/js/restaurant_add_row.js') }}"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
         var config = {
@@ -150,8 +150,7 @@ crossorigin="anonymous"></script>
         // format: "dd-mm-yyyy",
     });
 
-
-
+  
 
     $(".yearDate").datepicker({
         // format: "yyyy",
@@ -214,9 +213,24 @@ crossorigin="anonymous"></script>
 
 
 
+// delivery location
+$('.location-select-box').select2();
+       
+// Mulilevel Menu
+$('.has_multi_sub a').click(function () {
 
+$(this).siblings('ul').toggle().removeClass('d-none');
+if ($(this).parent('li').hasClass('sub-nav-active')) {
 
+    $(this).parent('li').removeClass('sub-nav-active');
+    $(this).children('span').children('span').children('.mdi').css("transform", "rotate(-90deg)")
 
+} else {
+    $(this).parent('li').addClass('sub-nav-active');
+    $(this).children('span').children('span').children('.mdi').css("transform", "rotate(0deg)")
 
+}
+
+})
 
 </script>

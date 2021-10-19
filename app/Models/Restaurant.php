@@ -23,11 +23,19 @@ class Restaurant extends Model {
     ];
 
     public function assets() {
-        return $this->belongsToMany(AssetType::class, 'asset_restaurants', 'restaurant_id', 'asset_type_id')->withPivot('asset_restaurant_id', 'asset')->withTimestamps();
+        return $this->belongsToMany(AssetType::class, 'asset_restaurants', 'restaurant_id', 'asset_type_id')
+                       ->withPivot('asset_restaurant_id', 'asset','section')
+                       ->withTimestamps();
     }
+
+    public function delivery_locations() {
+        return $this->belongsToMany(DeliveryLocation::class, 'restaurant_delivery_locations', 'restaurant_id', 'delivery_location_id')->withTimestamps();
+    }
+
     public function restaurant_categories() {
         return $this->hasMany(Category::class, 'restaurant_id')->orderBy('created_at', 'DESC');
     }
+
     public function restaurant_items() {
         return $this->hasManyThrough(Item::class, Category::class, 'restaurant_id', 'category_id')->with('category', 'item_assets','combos')->orderBy('created_at', 'DESC');
     }

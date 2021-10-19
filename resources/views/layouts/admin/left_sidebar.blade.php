@@ -44,6 +44,54 @@ $orders = ManagerDashboardController::countedOrders();
             <a href="{{ route('dashboard') }}" class="waves-effect"><i class="dripicons-device-desktop "></i><span>
                     Business Overview </span></a>
         </li>
+        <li class="has_sub restaurant_li">
+            <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-device-desktop"></i><span>My Restaurant
+                    <span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
+            <ul class="list-unstyled">
+                <li><a class="restaurant_overview" href="{{ route('restaurant.overview',[$restaurant_id]) }}">Restaurant Overview</a></li>
+                <li><a href="{{ route('restaurant.index') }}">Restaurant Management</a></li>
+
+
+                <li class="has_multi_sub order_li">
+                    <a href="javascript:void(0);" class="waves-effect">
+                        <span>
+                            <i class="fa fa-cutlery"></i> Orders <span class="float-right"><i class="mdi mdi-chevron-right"></i></span>
+                        </span>
+                    </a>
+                    <ul class="list-unstyledMulti">         
+                        <li><a class="order_link" href="{{ route('orders.today',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Today's Orders</a></li>
+                        <li><a class="past_order_link" href="{{ route('orders.past',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Past Orders</a></li>
+                    </ul>
+                </li>
+                <li class="has_multi_sub">
+                    <a href="javascript:void(0);" class="waves-effect">
+                        <span>
+                            <i class="fa fa-cutlery"></i> Item Management <span class="float-right"><i class="mdi mdi-chevron-right"></i></span>
+                        </span>
+                    </a>
+                    <ul class="list-unstyledMulti">         
+                        <li><a class="category_link" href="{{ route('item.category',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Item Categories</a></li>   
+                        <li><a  class="item_link" href="{{ route('item.index',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Items</a></li>
+                        <li><a  class="item_combo_link" href="{{ route('item.combo.index',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Item Combos</a></li>
+                    </ul>
+                </li>
+                <li class="has_multi_sub">
+                    <a href="javascript:void(0);" class="waves-effect">
+                        <span>
+                            <i class="fa fa-cutlery"></i> Performance Report <span class="float-right"><i class="mdi mdi-chevron-right"></i></span>
+                        </span>
+                    </a>
+                    <ul class="list-unstyledMulti">         
+                        <li><a class="daily_report_route" href="{{ route('orders.daily.report',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Daily Report</a></li>
+                <li><a class="time_range_eport_route" href="{{ route('orders.time.range.report',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Time Range Report</a></li>
+                <li><a class="monthly_report_route" href="{{ route('order.report.restaurant.current.month',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Monthly Report</a></li>
+                <li><a class="item_performance_report_route" href="{{ route('order.report.item',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Item Performance Report</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </li>
+
         <li class="has_sub">
             <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-user"></i><span> Users <span
                         class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
@@ -61,43 +109,7 @@ $orders = ManagerDashboardController::countedOrders();
                 <li><a href="{{ route('about.us') }}">About Us</a></li>
                 <li><a href="{{ route('contact.us') }}">Contact Us</a></li>
                 {{-- <li><a href="{{ route('asset.type') }}">Asset Type</a></li> --}}
-                <li><a href="{{ route('restaurant.index') }}">Restaurants</a></li>
-            </ul>
-        </li>
-        <li class="has_sub">
-            <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-device-desktop"></i><span>My Restaurant
-                    <span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
-            <ul class="list-unstyled">
-                <li><a class="restaurant_overview" href="{{ route('restaurant.overview',[$restaurant_id]) }}">Restaurant Overview</a></li>
-            </ul>
-        </li>
-        <li class="has_sub">
-            <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-cutlery"></i><span>Item
-                Management<span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
-            <ul class="list-unstyled">
-                {{-- <li><a href="{{ route('item.category.index') }}"><i class="fa fa-cutlery"></i>Item Categories</a></li> --}}
-                <li><a class="category_link" href="{{ route('item.category',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Item Categories</a></li>
-                {{-- <li><a class="category_link" href="{{ route('item.category',[1]) }}"><i class="fa fa-cutlery"></i>Item Categories</a></li> --}}
-                {{-- <li><a href="{{ route('item.index') }}"><i class="fa fa-cutlery"></i>Items</a></li> --}}
-                <li><a  class="item_link" href="{{ route('item.index',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Items</a></li>
-                <li><a  class="item_combo_link" href="{{ route('item.combo.index',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Item Combos</a></li>
-            </ul>
-        </li>
-
-        <li class="has_sub">
-            <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-cutlery"></i><span>Orders<span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
-            <ul class="list-unstyled">
-                <li><a class="order_link" href="{{ route('orders.today',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Today's Orders</a></li>
-                <li><a class="past_order_link" href="{{ route('orders.past',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Past Orders</a></li>
-            </ul>
-        </li>
-        <li class="has_sub">
-            <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-cutlery"></i><span>Performance Report<span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
-            <ul class="list-unstyled">
-                <li><a class="daily_report_route" href="{{ route('orders.daily.report',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Daily Report</a></li>
-                <li><a class="time_range_eport_route" href="{{ route('orders.time.range.report',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Time Range Report</a></li>
-                <li><a class="monthly_report_route" href="{{ route('order.report.restaurant.current.month',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Monthly Report</a></li>
-                <li><a class="item_performance_report_route" href="{{ route('order.report.item',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Item Performance Report</a></li>
+               
             </ul>
         </li>
         
@@ -123,6 +135,10 @@ $orders = ManagerDashboardController::countedOrders();
         <li>
             <a href="{{ route('manager.restaurant.items') }}" class="waves-effect"><i class="fa fa-cutlery"></i><span>
                     Items</span></a>
+        </li>
+        <li>
+            <a href="{{ route('manager.restaurant.item.combos') }}" class="waves-effect"><i class="fa fa-cutlery"></i><span>
+                    Item Combos</span></a>
         </li>
         <li class="has_sub">
             <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-device-desktop"></i><span>Performance Report

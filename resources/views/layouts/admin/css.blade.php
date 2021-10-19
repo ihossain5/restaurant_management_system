@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css"
         integrity="sha512-EZSUkJWTjzDlspOoPSpUFR0o0Xy7jdzW//6qhUkoZ9c4StFkVsp9fbbd0O06p9ELS3H486m4wmrCELjza4JEog=="
         crossorigin="anonymous" />
-
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
         .badge-custom{
             background-color: #ffff81;
@@ -612,9 +612,11 @@
     fill: white;
 }
 
-
 .side-menu {
     background: linear-gradient(183.46deg, #9AD5C3 0%, #9AD5C3 101.01%) !important;
+}
+.has_multi_sub .mdi {
+    transform: rotate(-90deg);
 }
 
     </style>

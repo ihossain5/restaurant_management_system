@@ -1,3 +1,8 @@
+@php
+use App\Http\Controllers\Backend\RestaurantController;
+$locations = RestaurantController::deliveryLocations();
+
+@endphp
 <div class="modal fade bs-example-modal-center" id="RestaurantAdd" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
 aria-hidden="true">
 <div class="modal-dialog modal-dialog-centered">
@@ -45,6 +50,17 @@ aria-hidden="true">
                 <div class="form-group">
                     <label>Address</label>
                     <textarea name="address" id="" class="form-control" cols="30" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Select Delivery Locations</label>
+                    <select name="location[]" class="form-control location-select-box" id="" multiple="multiple">
+                        @if (!empty($locations))
+                            @foreach ($locations as $location)
+                                <option value="{{ $location->delivery_location_id }}">{{ $location->name }}</option>
+                            @endforeach
+                        @endif
+                    </select>
+                    <label id="location[]-error" class="error mt-2 text-danger" for="location[]"></label>
                 </div>
                 <div class="form-group">
                     <label>Logo</label>

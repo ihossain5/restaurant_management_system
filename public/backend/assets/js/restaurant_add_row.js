@@ -1,3 +1,4 @@
+
 var config = {
     routes: {
         addRestaurant: "{!! route('restaurant.store') !!}",

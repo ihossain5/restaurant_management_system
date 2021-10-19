@@ -13,14 +13,14 @@ function storeImage($image, $path, $width, $height) {
     $upload_path     = $path;
     $upload_path1    = 'images/' . $path;
     $image_url       = $upload_path . $image_full_name;
-    // $success         = $image->move($upload_path1, $image_full_name);
+    $success         = $image->move($upload_path1, $image_full_name);
     // Image::configure(array('driver' => 'imagick'));
-    $img             = Image::make($image)->resize($width, $height);
+    // $img = Image::make($image)->resize($width, $height);
     // // Image::make($image)->resize($width, $height,  function ($constraint) {
     // //     $constraint->aspectRatio();
     // // })->save($upload_path1.$image_full_name);
 
-    $img->save($upload_path1 . $image_full_name, 75);
+    // $img->save($upload_path1 . $image_full_name, 75);
 
     return $image_url;
 }
@@ -46,18 +46,29 @@ function formatDate($date) {
 }
 
 // inject orders into item
- function ordersByRestaurant($restaurant) {
+function ordersByRestaurant($restaurant) {
     foreach ($restaurant->restaurant_items as $item) {
         $restaurant->all_orders = $item->orders;
     }
     return $restaurant;
 }
 
-// set session 
- function setSession($restaurant_id)
-{
+// set session
+function setSession($restaurant_id) {
     if (Session::has('restaurant_id')) {
         Session::forget('restaurant_id');
     }
     Session::put('restaurant_id', $restaurant_id);
+}
+
+// get all combos
+function combos($items) {
+    $allCombos = [];
+    foreach ($items as $item) {
+        foreach ($item->combos as $combo) {
+            $allCombos[] = $combo;
+        }
+
+    }
+    return collect($allCombos)->unique('combo_id');
 }

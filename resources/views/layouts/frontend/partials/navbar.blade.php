@@ -1,6 +1,5 @@
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark-custom sticky-top">
-        
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark-custom sticky-top">    
         <div class="container-fluid nav-container">
             <div class="navbar-brand-wrapper">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
@@ -11,7 +10,7 @@
                         <div class="line line-three"></div>
                     </div>
                 </button>
-                <a class="navbar-brand d-block" href="/"><img src="{{asset('frontend/assets/images/Logos/logo-new.png')}}" alt="Emerald Logo"></a>
+                <a class="navbar-brand d-block" href="{{route('frontend.index')}}"><img src="{{asset('frontend/assets/images/Logos/logo-new.png')}}" alt="Emerald Logo"></a>
             </div>
             <div class="navbar-cart d-lg-none">
                 <div onclick="cartToggle()" class="" style="cursor: pointer;" aria-current="page">

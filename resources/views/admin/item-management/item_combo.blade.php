@@ -6,7 +6,7 @@
     @include('layouts.admin.restaurant_drop-down')
 @endsection
 @section('pageCss')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     <style>
 
     </style>
@@ -246,7 +246,7 @@
     @include('layouts.admin.restaurant_add_modal')
 @endsection
 @section('pageScripts')
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <script type='text/javascript'>
         var imagesUrl = '{!! URL::asset('/images/') !!}/';
         var config = {
@@ -261,7 +261,9 @@
         };
 
         $('#addButton').on('click', function() {
+            $('.item-select-box').val(null).trigger('change');
             $('.comboAddForm').trigger('reset');
+            $('.dropify-preview').hide();
         });
 
         $(document).ready(function() {
@@ -431,6 +433,7 @@
                 success: function(response) {
                     if (response.success == true) {
                         $('#view_name').text(response.data.name);
+                        $('#view_item_name').empty();
                         $.each(response.data.items, function(i, val) {
                             $('#view_item_name').append(
                                 `<span id="view_item_name">${val.name}, </span>`

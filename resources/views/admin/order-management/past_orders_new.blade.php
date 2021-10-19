@@ -193,7 +193,9 @@
 
 
     $(function () {
-     dataTable();
+        $('.restaurant_li').addClass('nav-active');
+        // $('.order_li').addClass('sub-nav-active');
+        dataTable();
   });
 
         // view single 

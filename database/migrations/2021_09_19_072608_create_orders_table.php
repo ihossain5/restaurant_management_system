@@ -14,8 +14,8 @@ class CreateOrdersTable extends Migration {
         Schema::create('orders', function (Blueprint $table) {
             $table->id('order_id');
             $table->foreignId('order_status_id')->references('order_status_id')->on('order_statuses');
-            $table->foreignId('customer_id')->references('customer_id')->on('customers');
-            $table->foreignId('restaurant_id')->references('restaurant_id')->on('restaurants');
+            $table->foreignId('customer_id')->references('customer_id')->on('customers')->cascadeOnDelete();
+            $table->foreignId('restaurant_id')->references('restaurant_id')->on('restaurants')->cascadeOnDelete();
             $table->string('id');
             $table->double('amount');
             $table->boolean('is_default_name')->default(0);

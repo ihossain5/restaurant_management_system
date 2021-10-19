@@ -234,9 +234,13 @@ Route::post('/sign-up', [ManagerController::class, 'userSignUp'])->name('user.si
 Route::group(['prefix' => 'manager', 'middleware' => ['auth', 'manager']], function () {
     Route::get('dashboard', [ManagerDashboardController::class, 'index'])->name('manager.dashboard');
     Route::post('update/restaurant-status', [ManagerDashboardController::class, 'updateRestaurantStatus'])->name('manager.restaurant.status.update');
+
     /* Item Routes */
     Route::get('/items', [ItemController::class, 'itemsByManager'])->name('manager.restaurant.items');
     Route::post('/items', [ItemController::class, 'getItemsByCategory'])->name('category.items');
+    Route::get('/item/combos', [ItemComboController::class, 'itemsCombosByManager'])->name('manager.restaurant.item.combos');
+    Route::post('/available-status/update', [ItemComboController::class, 'updateAvailableStatus'])->name('item.combo.available.status.update');
+    
 
     /* Order Routes */
     Route::get('/new-orders', [ManagerOrdersController::class, 'newOrders'])->name('manager.new.order');

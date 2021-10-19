@@ -13,5 +13,6 @@ class AssetRestaurant extends Model
         'restaurant_id',
         'asset_type_id',
         'asset',
+        'section',
     ];
 }

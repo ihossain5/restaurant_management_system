@@ -12,10 +12,14 @@ use Carbon\Carbon;
 class HomeController extends Controller {
     public function index() {
         $sliders     = HomeHeroSection::all();
-        $restaurants = Restaurant::with('assets')->latest()->get();
+        $restaurants = Restaurant::with('assets')->where('is_open', 1)->latest()->get();
         foreach ($restaurants as $restaurant) {
             foreach ($restaurant->assets as $asset) {
-                $restaurant->asset = $asset->pivot->asset;
+                if($asset->pivot->section == 'home'){
+                    $restaurant->asset = $asset->pivot->asset;
+                    break;
+                }
+            
             }
         }
         $order_items = Item::where('is_available', 1)->with(['category','orders' => function ($query) {
@@ -23,7 +27,7 @@ class HomeController extends Controller {
                   ->where('order_status_id', 3);
         }])->limit(12)->get();
 
-        $combos = Combo::with('items')->get();
+        $combos = Combo::with('items')->where('is_available', 1)->get();
         foreach($combos as $combo){
             foreach($combo->items as $item){
                 $combo->restaurant  = $item->category->restaurant->name;

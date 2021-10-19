@@ -15,7 +15,7 @@ class CreateItemsTable extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->id('item_id');
-            $table->foreignId('category_id')->references('category_id')->on('categories');
+            $table->foreignId('category_id')->references('category_id')->on('categories')->cascadeOnDelete();
             $table->string('name');
             $table->text('description');
             $table->double('price');

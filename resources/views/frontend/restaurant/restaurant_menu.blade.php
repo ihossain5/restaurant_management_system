@@ -7,26 +7,25 @@
 @endsection
 @section('content')
     <!-- Menu Page Carousel -->
+    @if (!empty($images))
     <section class="container-fluid p-0">
         <div id="menuCarousel" class="carousel slide hero-carousel menuCarousel" data-bs-ride="carousel">
             <div class="carousel-indicators">
-                <button type="button" data-bs-target="#menuCarousel" data-bs-slide-to="0" class="active"
-                    aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#menuCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#menuCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                @foreach ($images as $key => $image)
+                <button type="button" data-bs-target="#menuCarousel" data-bs-slide-to="{{$key}}" class="{{ $key == 0 ? 'active' : '' }}"
+                    aria-current="true" aria-label="Slide {{$loop->iteration}}"></button>
+                @endforeach  
             </div>
             <div class="carousel-inner">
-                @if (!empty($restaurant->assets))
-                    @foreach ($restaurant->assets as $key => $asset)
+                    @foreach ($images as $key => $image)
                         <div class="carousel-item {{ $key == 0 ? 'active' : '' }} ">
-                            <img src="{{ asset('images/' . $asset->pivot->asset) }}" class=" d-block w-100" alt="...">
-                        </div>
-                    @endforeach
-                @endif
+                            <img src="{{ asset('images/' . $image) }}" class=" d-block w-100" alt="...">
+                        </div>                      
+                    @endforeach    
             </div>
         </div>
     </section>
-
+    @endif
 
     <!-- Restaurent Details -->
     <section class="container-fluid restaurent-Details">

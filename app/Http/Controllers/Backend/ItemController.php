@@ -152,6 +152,7 @@ class ItemController extends Controller {
         }
         return view('manager.item.item', compact('items', 'categories'));
     }
+
     public function getItemsByCategory(Request $request) {
         if ($request->id == null) {
             $restaurant = auth()->user()->restaurant;
@@ -166,6 +167,7 @@ class ItemController extends Controller {
         return success($data);
 
     }
+
     public function addImageIntoItems($items) {
         foreach ($items as $item) {
             foreach ($item->item_assets as $asset) {

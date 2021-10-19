@@ -3,6 +3,7 @@
     Restaurants Section
 @endsection
 @section('pageCss')
+
     <style>
         .btn_disabled {
             pointer-events: none;
@@ -285,6 +286,17 @@
                             <textarea name="address" id="" class="form-control" cols="30" rows="3"></textarea>
                         </div>
                         <div class="form-group">
+                            <label>Select Delivery Locations</label>
+                            <select name="location[]" class="form-control location-select-box" id="" multiple="multiple">
+                                @if (!empty($locations))
+                                    @foreach ($locations as $location)
+                                        <option value="{{ $location->delivery_location_id }}">{{ $location->name }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            <label id="location[]-error" class="error mt-2 text-danger" for="location[]"></label>
+                        </div>
+                        <div class="form-group">
                             <label>Logo</label>
                             <div class="custom-file">
                                 <input type="file" name="logo" class="custom-file-input dropify"
@@ -400,6 +412,17 @@
                             <textarea name="address" class="form-control" id="edit_address" cols="30" rows="3"></textarea>
                         </div>
                         <div class="form-group">
+                            <label>Select Delivery Locations</label>
+                            <select name="location[]" class="form-control location-select-box" id="edit_location_select_box" multiple="multiple">
+                                @if (!empty($locations))
+                                    @foreach ($locations as $location)
+                                        <option value="{{ $location->delivery_location_id }}">{{ $location->name }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            <label id="location[]-error" class="error mt-2 text-danger" for="location[]"></label>
+                        </div>
+                        <div class="form-group">
                             <label>Logo</label>
                             <div class="custom-file edit_logo">
                                 <input type="file" name="logo" id="edit_logo" class="custom-file-input dropify"
@@ -440,13 +463,39 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-row restaurant_image">
-                        <div class="col-xl-6 col-md-12">
+                        {{-- <div class="col-xl-6 col-md-12"> --}}
                             <div class="form-group">
                                 <img src="" alt="image" id="view_image">
                             </div>
-                        </div>
+                        {{-- </div> --}}
                     </div>
-                    <div class="row mt-3">
+
+                    <div class="ms-form-group">
+                        <p>
+                            <strong>Name:</strong> <span id="view_name"></span>
+                        </p>
+                        <p>
+                            <strong>Type:</strong> <span id="view_type"></span>
+                        </p>
+                        <p>
+                            <strong>Email:</strong> <span id="view_email"></span>
+                        </p>
+                        <p>
+                            <strong>Contact:</strong> <span id="view_contact"></span>
+                        </p>
+                        <p>
+                            <strong>Address:</strong> <span id="view_address"></span>
+                        </p>
+                        <p>
+                            <strong>Description:</strong> <span id="view_description"></span>
+                        </p>
+                        <p>
+                            <strong>Delivery Locations:</strong> <span id="view_location"></span>
+                        </p>
+
+                    </div>
+
+                    {{-- <div class="row mt-3">
                         <div class="col-xl-6 col-md-6">
                             <div class="ms-form-group">
                                 <label for="name"><strong>Name:</strong></label>
@@ -481,7 +530,7 @@
                     <div class="ms-form-group">
                         <label for="name"><strong>Description:</strong></label>
                         <p id="view_description"></p>
-                    </div>
+                    </div> --}}
 
 
                 </div>
@@ -496,6 +545,7 @@
     <!-- view  Modal End -->
 @endsection
 @section('pageScripts')
+
     <script src="{{ asset('backend/assets/js/add_row.js') }}"></script>
     <script type='text/javascript'>
         var config = {
@@ -513,6 +563,7 @@
         $('#addButton').on('click', function() {
             $('.dropify-preview').hide();
             $('.restaurantAddForm').trigger('reset');
+            $('.location-select-box').val(null).trigger('change');
         });
 
         var imagesUrl = '{!! URL::asset('/images/') !!}/';
@@ -521,6 +572,7 @@
                 "ordering": false,
             });
             $('.dropify').dropify();
+
         });
 
 
@@ -541,6 +593,7 @@
                     'asset[][asset]': {
                             required: true
                             },
+                    "location[]": "required",
                     type: {
                         required: true,
                         maxlength: 100,
@@ -570,6 +623,7 @@
                     name: {
                         required: 'Please insert restaurant name',
                     },
+                    "location[]": "Please select a location",
                     type: {
                         required: 'Please insert restaurant type',
                     },
@@ -768,6 +822,13 @@
                         $('#view_contact').text(response.data.contact);
                         $('#view_address').text(response.data.address);
                         $('#view_description').text(response.data.description);
+                        $('#view_location').empty();
+                        $.each(response.data.delivery_locations, function(i, val) {
+                            $('#view_location').append(
+                                `<span id="view_location">${val.name}, </span>`
+                            )
+                        });
+
                         $('.restaurant_image').empty();
                         $.each(response.data.assets, function(key, val) {
                             var extension = val.pivot.asset.substr((val.pivot.asset.lastIndexOf('.') +
@@ -830,6 +891,15 @@
                         $('#edit_address').val(response.data.address)
                         $('#edit_description').val(response.data.description)
                         $('#hidden_id').val(response.data.restaurant_id)
+
+                        var locations_id=[];
+                         $.each(response.data.delivery_locations, function(key,value){
+                            locations_id.push(value.delivery_location_id)
+                          });  
+
+                        $('#edit_location_select_box').val(locations_id);
+                        $('#edit_location_select_box').trigger('change');
+
                         if (response.data.logo) {
                             var photo = imagesUrl + response.data.logo;
                             $("#edit_logo").attr("data-height", 150);

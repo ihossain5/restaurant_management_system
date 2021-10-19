@@ -3,24 +3,20 @@
         integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Bootstrap Js -->
-    <script src="{{asset('frontend/assets/bootstrap-5.1.0/bootstrap.min.js')}}"></script>
+    <script src="{{ asset('frontend/assets/bootstrap-5.1.0/bootstrap.min.js') }}"></script>
 
 
     <!-- Owl-Carousel -->
-    <script src="{{asset('frontend/assets/OwlCarousel2-2.3.4/owl.carousel.min.js')}}"></script>
+    <script src="{{ asset('frontend/assets/OwlCarousel2-2.3.4/owl.carousel.min.js') }}"></script>
 
     <!-- Custom Js -->
-    <script src="{{asset('frontend/assets/js/style.js')}}"></script>
+    <script src="{{ asset('frontend/assets/js/style.js') }}"></script>
 
 
 
     <script>
-
-
-
-
         // Deales Carousel
-        $(document).ready(function () {
+        $(document).ready(function() {
             $(".deals-carousel").owlCarousel({
                 responsiveClass: true,
                 margin: 15,
@@ -64,6 +60,13 @@
                     }
                 }
             });
-        });
+            if ($('.dealsDot button').length > 1) {
+                $('.dealsDot').removeClass('d-none');
+            }
+            if ($('.popularDot button').length > 1) {
+                $('.popularDot').removeClass('d-none');
+            }
 
+
+        });
     </script>

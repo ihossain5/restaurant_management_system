@@ -10,16 +10,20 @@ Home
     <!-- Home Page Carousel -->
     <section class="container-fluid p-0">
         <div id="homeCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="0" class="active"
-                    aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-            </div>
+            @if (count($sliders)>1)
+                <div class="carousel-indicators">
+                    @if (!empty($sliders))
+                        @foreach ($sliders as $key=>$slider)
+                        <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="{{$slider->slider_id}}" class="{{ $key == 0 ? 'active' : '' }}"
+                            aria-current="true" aria-label="{{$slider->slider_id}}"></button>
+                        @endforeach
+                    @endif
+                </div>
+            @endif   
             <div class="carousel-inner">
                 @if (!empty($sliders))
-                    @foreach ($sliders as $slider)
-                        <div class="carousel-item {{ $loop->iteration != 0 ? 'active' : '' }}">
+                    @foreach ($sliders as $key=>$slider)
+                        <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
                             <img src="{{ asset('images/' . $slider->pic) }}" class="d-block w-100" alt="...">
                             <div class="carousel-caption d-md-block">
                                 <h1>{{ $slider->description }}</h1>
@@ -73,7 +77,7 @@ Home
                     <h2 class="carouselTitle">Deals Only Found Here</h2>
                 </div>
                 <div class="col-md-6 text-start text-md-end">
-                    <div class="dots-div dots">
+                    <div class="dots-div dots d-none dealsDot">
 
                     </div>
                 </div>
@@ -126,7 +130,7 @@ Home
                     <h2 class="carouselTitle">Popular Dishes</h2>
                 </div>
                 <div class="col-md-6 text-start text-md-end">
-                    <div class="dots-div2 dots">
+                    <div class="dots-div2 dots popularDot d-none">
 
                     </div>
                 </div>

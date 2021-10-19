@@ -15,14 +15,7 @@ class ItemComboController extends Controller {
         $restaurant  = Restaurant::find($id);
         $restaurants = Restaurant::get();
         $items       = $restaurant->restaurant_items;
-        $allCombos   = [];
-        foreach ($items as $item) {
-            foreach ($item->combos as $combo) {
-                $allCombos[] = $combo;
-            }
-
-        }
-        $combos = collect($allCombos)->unique('combo_id');
+        $combos   = combos($items);
         // dd($combos);
         return view('admin.item-management.item_combo', compact('restaurant', 'restaurants', 'items', 'combos'));
     }
@@ -114,17 +107,8 @@ class ItemComboController extends Controller {
         // dd($new_combo);
         setSession($request->id);
         $items       = $restaurant->restaurant_items;
-        $allCombos   = [];
+        $combos   = combos($items);
         $combo_items = [];
-        foreach ($items as $item) {
-            foreach ($item->combos as $combo) {
-                $allCombos[]   = $combo;
-
-            }
-
-        }
-        $combos = collect($allCombos)->unique('combo_id');
-
         foreach ($combos as $item_combo) {
             $combo_items[] =  $item_combo->load('items');
         }
@@ -138,4 +122,29 @@ class ItemComboController extends Controller {
         $data['combo_items'] = $combo_items;
         return success($data);
     }
+    // for manager
+    public function itemsCombosByManager() {
+        $restaurant = auth()->user()->restaurant;
+        $items      = $restaurant->restaurant_items;
+        $allCombos   = combos($items);
+        return view('manager.item.item_combos', compact('allCombos'));
+    }
+
+    public function updateAvailableStatus(Request $request) {
+        $item = Combo::findOrFail($request->id);
+        if ($item->is_available == 0) {
+            $item->update([
+                'is_available' => 1,
+            ]);
+        } else {
+            $item->update([
+                'is_available' => 0,
+            ]);
+        }
+        $data            = array();
+        $data['message'] = 'Status updated successfully';
+        $data['id']      = $item->item_id;
+        return success($data);
+    }
+
 }

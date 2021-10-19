@@ -351,7 +351,7 @@
                             var trDOM = orderTable.row.add([
                                     "" + item.category.name + "",
                                     `<img class='img-fluid' src="${imagesUrl + item.image}"
-                                            alt="{{ $item->name }}" style='width: 60px; height: 55px;'>`,
+                                            alt="${item.name}" style='width: 60px; height: 55px;'>`,
                                     "" + item.name + "",
                                     "<span class='bdt_symbol'>৳</span>" + item.price + "",
                                     `<label class="switch">
