@@ -24,8 +24,8 @@ class Restaurant extends Model {
 
     public function assets() {
         return $this->belongsToMany(AssetType::class, 'asset_restaurants', 'restaurant_id', 'asset_type_id')
-                       ->withPivot('asset_restaurant_id', 'asset','section')
-                       ->withTimestamps();
+            ->withPivot('asset_restaurant_id', 'asset', 'section')
+            ->withTimestamps();
     }
 
     public function delivery_locations() {
@@ -37,7 +37,7 @@ class Restaurant extends Model {
     }
 
     public function restaurant_items() {
-        return $this->hasManyThrough(Item::class, Category::class, 'restaurant_id', 'category_id')->with('category', 'item_assets','combos')->orderBy('created_at', 'DESC');
+        return $this->hasManyThrough(Item::class, Category::class, 'restaurant_id', 'category_id')->with('category', 'item_assets', 'combos')->orderBy('created_at', 'DESC');
     }
 
     public function restaurant_orders() {
@@ -81,6 +81,12 @@ class Restaurant extends Model {
                 ->whereYear('orders.created_at', $year)
                 ->get();
         }])->find($id);
+    }
+
+    public function format_description() {
+        return [
+            'description'   => preg_replace('/<(\w+)[^>]*>/', '<$1>', strip_tags($this->description)),
+        ];
     }
 
 }

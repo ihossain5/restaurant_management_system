@@ -2,6 +2,18 @@
 @section('title')
     About Us
 @endsection
+@section('pageCss')
+    <style>
+        .about-section p {
+            font-weight: 300;
+            font-size: 2rem;
+            line-height: 3.8rem;
+            color: #383838;
+            font-family: 'Roboto', sans-serif;
+        }
+
+    </style>
+@endsection
 @section('content')
     <!-- About Us -->
     <section class="container-fluid about-hero">
@@ -32,7 +44,6 @@
             @endif
         </div>
     </section>
-
     @if (!empty($restaurants))
         @foreach ($restaurants as $restaurant)
             @if ($loop->odd)
@@ -41,12 +52,13 @@
                     <div class="row align-items-center">
                         <div class="col-lg-6">
                             <div class="left-box">
-                                <div id="carosel{{ $restaurant->restaurant_id }}" class="carousel slide" data-bs-ride="carousel"
-                                    data-bs-touch="true">
+                                <div id="carosel{{ $restaurant->restaurant_id }}" class="carousel slide"
+                                    data-bs-ride="carousel" data-bs-touch="true">
                                     <div class="carousel-indicators aboutCarouselIndicator">
                                         @if (!empty($restaurant->images))
                                             @foreach ($restaurant->images as $key => $asset)
-                                                <button type="button" data-bs-target="#carosel{{ $restaurant->restaurant_id }}"
+                                                <button type="button"
+                                                    data-bs-target="#carosel{{ $restaurant->restaurant_id }}"
                                                     data-bs-slide-to="{{ $key }}"
                                                     class="{{ $key == 0 ? 'active' : '' }}" aria-current="true"
                                                     aria-label="Slide {{ $loop->iteration }}"></button>
@@ -71,30 +83,7 @@
                                 <div class="indCompLogo">
                                     <img src="{{ asset('images/' . $restaurant->logo) }}" alt="">
                                 </div>
-                                <p class="compDescrip">Thai Emerald is all about their warmth, familiarity and the
-                                    ability to hold
-                                    people back into their
-                                    cosiness. From having a strong origin of Thai food culture to chefs from Thailand, the
-                                    restaurant
-                                    has managed to strike a perfect balance between the authentic ambience and a carefree
-                                    unostentatious
-                                    environment.
-
-                                    <br>
-                                    <br>
-
-                                    Starting from the menu to one’s favourite table, it locks a sense of familiarity with
-                                    every
-                                    visit.
-                                    It also allows people to experience the best of both worlds in terms of a fine dine-out
-                                    of a
-                                    three-course meal along with the relaxed drawing-room conversations.
-                                    <br>
-                                    <br>
-
-                                    In short, it’s a place where one will always come back.
-                                </p>
-
+                                <p class="compDescrip">{!! $restaurant->description !!}</p>
                                 <a class="brand-btn-sm"
                                     href="{{ route('frontend.restaurant.menu', [$restaurant->restaurant_id]) }}#menu">View
                                     Menu</a>
@@ -114,17 +103,7 @@
                                     <img style="max-width: 12.2rem;" src="{{ asset('images/' . $restaurant->logo) }}"
                                         alt="">
                                 </div>
-                                <p class="compDescrip">{{$restaurant->description}}
-                                    {{-- <br><br>
-                                    Kiyoshi is where we thrive by merging the old with the new.
-                                    <br><br>
-                                    Guided by a love for Japanese art and artistry, Kiyoshi was brought to life. Moments
-                                    spent here
-                                    have been forever etched into our memories; memories of the stillness of nature and
-                                    great, great
-                                    company. --}}
-                                </p>
-
+                                <p class="compDescrip">{!! $restaurant->description !!}</p>
                                 <a class="brand-btn-sm"
                                     href="{{ route('frontend.restaurant.menu', [$restaurant->restaurant_id]) }}#menu">View
                                     Menu</a>
@@ -132,12 +111,13 @@
                         </div>
                         <div class="col-lg-6 order-1 order-lg-2">
                             <div class="right-box">
-                                <div id="carosel{{ $restaurant->restaurant_id }}" class="carousel slide" data-bs-ride="carousel"
-                                    data-bs-touch="true">
+                                <div id="carosel{{ $restaurant->restaurant_id }}" class="carousel slide"
+                                    data-bs-ride="carousel" data-bs-touch="true">
                                     <div class="carousel-indicators aboutCarouselIndicator">
                                         @if (!empty($restaurant->images))
                                             @foreach ($restaurant->images as $key => $asset)
-                                                <button type="button" data-bs-target="#carosel{{ $restaurant->restaurant_id }}"
+                                                <button type="button"
+                                                    data-bs-target="#carosel{{ $restaurant->restaurant_id }}"
                                                     data-bs-slide-to="{{ $key }}"
                                                     class="{{ $key == 0 ? 'active' : '' }}" aria-current="true"
                                                     aria-label="Slide {{ $loop->iteration }}"></button>

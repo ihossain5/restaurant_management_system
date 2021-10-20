@@ -175,17 +175,10 @@
                                             @foreach ($restaurants as $restaurant)
                                                 <tr class="restaurant{{ $restaurant->restaurant_id }}">
                                                     <td>
-                                                        @if ($restaurant->file_type == 'mp4' || $restaurant->file_type == 'mpeg' || $restaurant->file_type == 'webm' || $restaurant->file_type == '3gp' || $restaurant->file_type == 'avi')
-                                                            <button class="play-btn"
-                                                                onclick="playVideo('{{ asset('images/' . $restaurant->asset) }}')"><i
-                                                                    class="fa fa-play play_icon"></i></button>
-
-                                                        @else
                                                             <img class='img-fluid'
                                                                 src="{{ asset('images/' . $restaurant->asset) }}"
                                                                 alt="{{ $restaurant->name }}"
                                                                 style='width: 60px; height: 55px;'>
-                                                        @endif
                                                     </td>
                                                     <td>{{ $restaurant->name }}</td>
                                                     <td>{{ $restaurant->type }}</td>

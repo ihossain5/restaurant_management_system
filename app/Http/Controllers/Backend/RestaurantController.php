@@ -5,28 +5,19 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RestaurantStoreRequest;
 use App\Models\AssetRestaurant;
-use App\Models\AssetType;
 use App\Models\DeliveryLocation;
 use App\Models\Restaurant;
+use App\Services\RestaurantService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
 
 class RestaurantController extends Controller {
-    public function index() {
-        $asset_types = AssetType::get();
-        $restaurants = Restaurant::with('assets')->latest()->get();
-        $locations   = DeliveryLocation::get()->unique('name');
-        foreach ($restaurants as $restaurant) {
-            $description                      = substr($restaurant->description, 0, 25);
-            $restaurant->formated_description = $description;
-            foreach ($restaurant->assets as $asset) {
-                $restaurant->asset = $asset->pivot->asset;
-            }
-            $file_type = File::extension($restaurant->asset);
-        }
-        return view('admin.restaurant.restaurants_new', compact('asset_types', 'restaurants', 'locations'));
+    public function index(RestaurantService $restaurantService) {
+        $restaurants = $restaurantService->all();
+        $locations   = $restaurantService->getDeliveryLocations();
+        return view('admin.restaurant.restaurants_new', compact('restaurants', 'locations'));
         // return view('admin.restaurant.restaurants', compact('asset_types', 'restaurants','locations'));
     }
     public function store(RestaurantStoreRequest $request) {
@@ -80,8 +71,9 @@ class RestaurantController extends Controller {
     public function show(Request $request) {
         $restaurant = Restaurant::with('assets', 'delivery_locations')->findOrFail($request->id);
         return response()->json([
-            'success' => true,
-            'data'    => $restaurant,
+            'success'              => true,
+            'formated_description' => $restaurant->format_description(),
+            'data'                 => $restaurant,
         ]);
     }
     public function edit(Request $request) {
@@ -119,10 +111,10 @@ class RestaurantController extends Controller {
 
         $restaurant_assets     = $request->asset;
         $restaurant_new_assets = $request->new_asset;
-        if($restaurant_new_assets){
+        if ($restaurant_new_assets) {
             $this->storeAssets($restaurant_new_assets, $restaurant);
         }
-      
+
         // dd($restaurant_assets);
         foreach ($restaurant_assets as $restaurant_asset) {
             $section         = $restaurant_asset['section'];

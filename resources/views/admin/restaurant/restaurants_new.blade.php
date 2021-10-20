@@ -175,17 +175,10 @@
                                             @foreach ($restaurants as $restaurant)
                                                 <tr class="restaurant{{ $restaurant->restaurant_id }}">
                                                     <td>
-                                                        @if ($restaurant->file_type == 'mp4' || $restaurant->file_type == 'mpeg' || $restaurant->file_type == 'webm' || $restaurant->file_type == '3gp' || $restaurant->file_type == 'avi')
-                                                            <button class="play-btn"
-                                                                onclick="playVideo('{{ asset('images/' . $restaurant->asset) }}')"><i
-                                                                    class="fa fa-play play_icon"></i></button>
-
-                                                        @else
                                                             <img class='img-fluid'
                                                                 src="{{ asset('images/' . $restaurant->asset) }}"
                                                                 alt="{{ $restaurant->name }}"
                                                                 style='width: 60px; height: 55px;'>
-                                                        @endif
                                                     </td>
                                                     <td>{{ $restaurant->name }}</td>
                                                     <td>{{ $restaurant->type }}</td>
@@ -279,11 +272,11 @@
                         </div>
                         <div class="form-group">
                             <label>Description</label>
-                            <textarea name="description" id="" class="form-control" cols="30" rows="3"></textarea>
+                            <textarea name="description" id="description" class="form-control" cols="30" rows="3"></textarea>
                         </div>
                         <div class="form-group">
                             <label>Address</label>
-                            <textarea name="address" id="" class="form-control" cols="30" rows="3"></textarea>
+                            <textarea name="address" id="address" class="form-control" cols="30" rows="3"></textarea>
                         </div>
                         <div class="form-group">
                             <label>Select Delivery Locations</label>
@@ -549,7 +542,7 @@
     <!-- view  Modal End -->
 @endsection
 @section('pageScripts')
-
+<script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
     {{-- <script src="{{ asset('backend/assets/js/add_row.js') }}"></script> --}}
     <script type='text/javascript'>
         var config = {
@@ -563,6 +556,8 @@
                 updateStatus: "{!! route('restaurant.status.update') !!}",
             }
         };
+
+        CKEDITOR.replace('description');
 
         $('#addButton').on('click', function() {
             $('.dropify-preview').hide();
@@ -762,9 +757,6 @@
                                         </button></td>
                            
                          `)
-
-
-
                         var restaurant_row = restaurantTable.row.add(row).draw().node();
                         $('#restaurantTable tbody').prepend(row);
                         $(restaurant_row).addClass('restaurant' + response.data.id + '');
@@ -778,7 +770,6 @@
                             });
 
                         }
-
 
                     } else {
                         toastMixin.fire({
@@ -825,7 +816,7 @@
                         $('#view_email').text(response.data.email);
                         $('#view_contact').text(response.data.contact);
                         $('#view_address').text(response.data.address);
-                        $('#view_description').text(response.data.description);
+                        $('#view_description').text(response.formated_description.description);
                         $('#view_location').empty();
                         $.each(response.data.delivery_locations, function(i, val) {
                             $('#view_location').append(
@@ -870,8 +861,6 @@
                             animation: true,
                             title: "" + 'Data not found' + ""
                         });
-
-
                     }
                 },
             }); //ajax end
@@ -893,7 +882,14 @@
                         $('#edit_contact').val(response.data.contact)
                         $('#edit_email').val(response.data.email)
                         $('#edit_address').val(response.data.address)
+
                         $('#edit_description').val(response.data.description)
+                        try {
+                            CKEDITOR.instances['edit_description'].destroy(true);
+                        } catch (e) {}
+                        CKEDITOR.replace('edit_description');
+
+                        
                         $('#hidden_id').val(response.data.restaurant_id)
 
                         var locations_id=[];
