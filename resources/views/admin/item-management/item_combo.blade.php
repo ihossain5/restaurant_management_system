@@ -248,6 +248,7 @@
 @section('pageScripts')
 
     <script type='text/javascript'>
+     CKEDITOR.replace('restaurant_description');
         var imagesUrl = '{!! URL::asset('/images/') !!}/';
         var config = {
             routes: {

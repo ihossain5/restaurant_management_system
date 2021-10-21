@@ -45,7 +45,7 @@ aria-hidden="true">
                 </div>
                 <div class="form-group">
                     <label>Description</label>
-                    <textarea name="description" id="" class="form-control" cols="30" rows="3"></textarea>
+                    <textarea name="description" id="restaurant_description" class="form-control" cols="30" rows="3"></textarea>
                 </div>
                 <div class="form-group">
                     <label>Address</label>
@@ -73,25 +73,41 @@ aria-hidden="true">
                 </div>
                 <label for="">Photos</label>
                 <div class="row asset_row  asset_div0">
-                    <div class="col-md-11">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <select name="asset[0][section]" class="form-control section-select-box" id="section0">
+                                <option value="">Select Section</option>
+                                <option value="home">Home</option>
+                                <option value="about_us">About Us</option>
+                                <option value="menu">Menu</option>
+                            </select>
+                            <span class="section_error_msg0 text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
                         <div class="form-group ">
                             <div class="custom-file">
-                                <input type="file" name="asset[][asset]" class="custom-file-input dropify" id="asset0"
+                                <input type="file" name="asset[0][asset]" class="custom-file-input dropify" id="asset0"
                                     data-id="0" data-errors-position="outside"
-                                    data-allowed-file-extensions='["jpg", "png"]' data-max-file-size="0.6M"
-                                    data-height="80">
+                                    data-allowed-file-extensions='["jpg", "png", "svg","jpeg"]' data-max-file-size="0.6M"
+                                    data-height="25">
                             </div>
                             <span class="error_msg0 text-danger"></span>
                         </div>
                     </div>
 
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <div class=" remove_row0" onclick="remove(0)"><i
                                 class="mdi mdi-delete close_icon_add_form"></i></div>
                     </div>
                 </div>
      
-                <button class="btn btn-primary add_row_btn float-right" onclick="addRow()" type="button"><i class="fa fa-plus"></i>   Add</button>
+                <div class="row">
+                    <div class="col-md-7"></div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary add_row_btn" onclick="addRow()" type="button"><i class="fa fa-plus"></i>Add</button>
+                    </div>
+                </div>
 
                 <div class="form-group mt-5">
                     <div>

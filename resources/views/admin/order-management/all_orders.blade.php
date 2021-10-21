@@ -83,11 +83,12 @@
 
 
 
-
+    @include('layouts.admin.restaurant_add_modal')
 @endsection
 @section('pageScripts')
 <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <script type='text/javascript'>
+     CKEDITOR.replace('restaurant_description');
     $(function () {
     // var table = $('.data-table').DataTable({
     //     processing: true,

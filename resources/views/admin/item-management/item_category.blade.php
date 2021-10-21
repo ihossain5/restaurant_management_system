@@ -203,6 +203,7 @@
 @endsection
 @section('pageScripts')
     <script type='text/javascript'>
+     CKEDITOR.replace('restaurant_description');
         var config = {
             routes: {
                 add: "{!! route('item.category.store') !!}",

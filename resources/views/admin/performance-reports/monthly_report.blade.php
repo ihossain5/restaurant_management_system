@@ -110,13 +110,12 @@
 
 
 
-
+    @include('layouts.admin.restaurant_add_modal')
 @endsection
 @section('pageScripts')
  
-
-
     <script type='text/javascript'>
+     CKEDITOR.replace('restaurant_description');
         var config = {
             routes: {
                 getOrdersByMonth: "{!! route('order.report.restaurant.month') !!}",

@@ -128,6 +128,7 @@
             </div> <!-- end row -->
         </div><!-- container -->
     </div> <!-- Page content Wrapper -->
+    @include('layouts.admin.restaurant_add_modal')
 @endsection
 @section('pageScripts')
 <script src="https://cdn.datatables.net/buttons/2.0.0/js/dataTables.buttons.min.js"></script>
@@ -137,6 +138,7 @@
 <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
     <script type='text/javascript'>
+     CKEDITOR.replace('restaurant_description');
         var config = {
             routes: {
                 getOrdersByRange: "{!! route('order.report.item.date') !!}",

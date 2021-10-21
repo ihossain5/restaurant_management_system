@@ -16,6 +16,7 @@ use App\Http\Controllers\Backend\OrderPerformanceController;
 use App\Http\Controllers\Backend\RestaurantController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\Frontend\AboutUsController as FrontendAboutUsController;
+use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CustomerController as FrontendCustomerController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\RestaurantMenuController;
@@ -251,6 +252,7 @@ Route::group(['prefix' => 'manager', 'middleware' => ['auth', 'manager']], funct
     Route::post('/cancel-order', [ManagerOrdersController::class, 'cancelOrder'])->name('manager.order.cancel');
     Route::post('/accept-order', [ManagerOrdersController::class, 'acceptOrder'])->name('manager.order.accept.new_order');
     Route::post('/accept-order-in-delivery', [ManagerOrdersController::class, 'acceptOrderInDelivery'])->name('manager.order.accept.delivery');
+    Route::post('/accept-order-in-preparation', [ManagerOrdersController::class, 'acceptOrderInPreparation'])->name('manager.order.accept.preparation');
 
     /* Performance report routes */
     Route::get('/daily-sales-report', [ManagerOrderPerformanceController::class, 'dailyReports'])->name('manager.daily.sales.report');
@@ -273,3 +275,9 @@ Route::get('/',[HomeController::class,'index'])->name('frontend.index');
 Route::get('/restaurant/{restaurant}/menu',[RestaurantMenuController::class,'getRestaurant'])->name('frontend.restaurant.menu');
 Route::get('/about-us',[FrontendAboutUsController::class,'index'])->name('frontend.about.us');
 Route::get('/sign-in',[FrontendCustomerController::class,'customerSignIn'])->name('frontend.customer.sign.in');
+
+ /* cart routes */
+ Route::post('/add-to-cart',[CartController::class,'addToCart'])->name('frontend.cart.add');
+ Route::post('/upadte-cart',[CartController::class,'updateCart'])->name('frontend.cart.update');
+ Route::post('/decrease-cart',[CartController::class,'decreaseCartQuantity'])->name('frontend.cart.decrease.quantity');
+ Route::post('/delete-cart',[CartController::class,'deleteCart'])->name('frontend.cart.delete');

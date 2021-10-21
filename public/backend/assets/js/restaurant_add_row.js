@@ -1,4 +1,5 @@
 
+
 var config = {
     routes: {
         addRestaurant: "{!! route('restaurant.store') !!}",
@@ -94,21 +95,32 @@ function addRow() {
         $(".error_msg" + new_i).hide();
         $(".asset_row:last")
             .after(` <div class="row asset_row test_row asset_div${i}">                         
-                <div class="col-md-11">
+            <div class="col-md-5">
+                    <div class="form-group">
+                        <select name="asset[${i}][section]" class="form-control section-select-box" id="section${i}">
+                            <option value="">Select Section</option>
+                            <option value="home">Home</option>
+                            <option value="about_us">About Us</option>
+                            <option value="menu">Menu</option>
+                        </select>
+                        <span class="section_error_msg${i} text-danger"></span>
+                    </div>
+              </div>
+            <div class="col-md-5">
                 <div class="form-group ">
                     <div class="custom-file">
-                        <input type="file" name="asset[][asset]" class="custom-file-input dropify${i}" data-id="${i}" id="asset${i}"
-                            data-errors-position="outside" data-allowed-file-extensions='["jpg", "png"]'
-                            data-max-file-size="0.6M" data-height="80">
+                        <input type="file" name="asset[${i}][asset]" class="custom-file-input dropify${i}" data-id="${i}" id="asset${i}"
+                            data-errors-position="outside" data-allowed-file-extensions='["jpg", "png","kpeg"]'
+                            data-max-file-size="0.6M" data-height="25">
                     </div>
                     <span class="error_msg${i} text-danger"></span>
                 </div>
             </div> 
 
-                <div class="col-md-1">
-                    <div class="remove_row${i}" onclick="remove(${i})"><i class="mdi mdi-delete close_icon_add_form"></i></div>
-                </div> 
-            </div>`);
+            <div class="col-md-2">
+                <div class="remove_row${i}" onclick="remove(${i})"><i class="mdi mdi-delete close_icon_add_form"></i></div>
+            </div> 
+        </div>`);
         $('.dropify' + i).dropify();
     }
 }

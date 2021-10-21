@@ -178,6 +178,7 @@
 @endsection
 @section('pageScripts')
     <script>
+        CKEDITOR.replace('restaurant_description');
         var config = {
             routes: {
                 getReport: "{!! route('order.report.restaurant') !!}",

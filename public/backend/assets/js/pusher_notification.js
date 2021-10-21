@@ -1,18 +1,13 @@
       Pusher.logToConsole = true;
-      var pusher = new Pusher('84269c4d437fd9489247', {
+      var pusher = new Pusher('1efc814744bed7686f5e', {
           cluster: 'ap2'
       });
 
       var channel = pusher.subscribe('my-channel');
 
       channel.bind('my-event', function(data) {
-          //  Swal.fire(data.message)
-          var number = parseInt($('.order_number').val());
-          var new_number = number + 1;
-          $('.numberOfNewOrder').html(new_number);
-          $('.order_number').val(new_number);
-          $('#notificationModal').modal('show');
-          //  alert(number);
+          $('#newOrders').html(data.message);
+          $('#allNewOrderModal').modal('show');
           playAudio();
 
       });

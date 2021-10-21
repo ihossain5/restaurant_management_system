@@ -90,8 +90,11 @@ class OrderController extends Controller {
     }
 
     public function getAllOrders(){
+        $newOrder = Order::where('order_status_id', null)
+        ->whereDate('created_at', Carbon::today())
+        ->count();
         // event(new OrderEvent($user = $this->create($request->all())));
-        event(new MyEvent('1 new order has been placed'));
+        event(new MyEvent($newOrder));
         return 'Success';
         // $options = array(
         //     'cluster' => 'ap2',

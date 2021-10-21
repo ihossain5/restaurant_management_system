@@ -111,7 +111,7 @@
                                                     </div>
                                                     <div class="col-md-6 pt-5 pt-md-0 text-start text-md-end">
                                                         <h3 class="price">Tk. {{ $item->price }}</h3>
-                                                        <button class="cartBtn">Add to Cart</button>
+                                                        <button class="cartBtn" onclick="addToCart({{ $item->item_id }},{{ $item->category->restaurant->restaurant_id }})">Add to Cart</button>
                                                     </div>
                                                 </div>
                                             </div>

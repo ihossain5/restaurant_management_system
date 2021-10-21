@@ -6,10 +6,7 @@
 
 @section('pageCss')
     <style>
-  .btn-success{
-            padding: 3px 40px;
-            font-weight: 600;
-        }
+
 
     </style>
 @endsection
@@ -65,92 +62,67 @@
 
 
     <!-- view  Modal -->
-    <div class="modal fade bs-example-modal-center" id="viewModal" tabindex="-1" role="dialog"
-        aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal addModal fade" id="viewOrderModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
-                <div class="modal-header d-block">
-                    <h5 class="modal-title mt-0 text-center">Order Details</h5>
-                    <button type="button" class="close modal_close_icon" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div class="modal-body">
-                    <div class="col-xl-12 col-md-12">
-                        <div class="ms-form-group view-modal">
-                            <p>
-                                <strong>Order ID:</strong> <span id="view_order_id"></span>
-                            </p>
-                            <p>
-                                <strong>Customer Name:</strong> <span id="view_customer_name"></span>
-                            </p>
-                            <p>
-                                <strong>Customer Email:</strong> <span id="view_customer_email"></span>
-                            </p>
-                            <p>
-                                <strong>Customer Contact:</strong> <span id="view_customer_contact"></span>
-                            </p>
-                            <p>
-                                <strong>Customer Address :</strong> <span id="view_customer_address"></span>
-                            </p>
-                            <p>
-                                <strong>Special Notes :</strong> <span id="view_notes"></span>
-                            </p>
-                            {{-- <p class="pb-3">
-                                <strong>Order ID:</strong> <span id="view_order_id"></span><br>
-                                <strong>Customer Name:</strong> <span id="view_customer_name"></span><br>
-                                <strong>Customer Email:</strong> <span id="view_customer_email"></span><br>
-                                <strong>Customer Contact:</strong> <span id="view_customer_contact"></span><br>
-                                <button type="button" class="btn btn-outline-purple float-right waves-effect waves-light"
-                                    name="button" id="order_status">
-                                </button>
-                                <strong>Customer Address :</strong> <span id="view_customer_address"></span><br>
-                                <strong>Special Notes :</strong> <span id="view_notes"></span><br>
-                            </p> --}}
-                        </div>
-
-                    </div>
-                    <div class="row p-3">
-                        <div class="table-responsive">
-                            <h5 class="text-center">Order Items</h5>
-                            <table class="table table-bordered dt-responsive nowrap"
-                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Unit Price</th>
-                                        <th>Quantity</th>
-                                        <th>Total Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="apeend_tbody">
-
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td class="col-3 test">Delevery Fee</td>
-                                        <td class="col-3 test"></td>
-                                        <th class="col-3"></th>
-                                        <td class="col-3 deleveryFee">asdasd </td>
-                                    </tr>
-                                    <tr class="table-active">
-                                        <td class="col-3 font-weight-bold">Total Amount</td>
-                                        <td class="col-3 test"></td>
-                                        <th class="col-3"></th>
-                                        <td class="col-3 view_total"> </td>
-                                    </tr>
-
-                                </tfoot>
-
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer view-modal-footer">
-                    <button type="submit" data-dismiss="modal" class="btn btn-success waves-effect waves-light text-dark rounded">
-                        Done
+                <div class="">
+                    <h5 class="modal-title text-center">Order Details</h5>
+                    <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
+                <div class="modal-body pt-3 orderDeta-body">
+                    <div class="row">
+                        <input type="hidden" name="order_id" id="order_id">
+                        <div class="col-12">
+                            <h4>Order ID: #<span id="view_order_id"></span></h4>
+                            <h4>Customer Name: <span id="view_customer_name"></span></h4>
+                            <h4>Customer Email: <span id="view_customer_email"></span></h4>
+                            <h4>Customer Contact: <span id="view_customer_contact"></span></h4>
+                            <h4>Customer Address: <span id="view_customer_address"></span></h4>
+                            <h4>Special Notes: <span id="view_notes"></span></h4>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <h4>Ordered Items</h4>
+                        </div>
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table class="table table-bordered text-center orderTable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Item Name</th>
+                                            <th scope="col">Unit Price</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Total Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="apeend_tbody">
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td>Total Amount</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="view_total"></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                          
+                        </div>
+                        <div class="col-md-8 text-md-right">
+                            <button class="btn-custom btnAccept mb-3" data-dismiss="modal"><img
+                                    src="{{asset('backend/assets/icons/icon-park-outline_correct.svg')}}" alt=""> Done</button>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- view  Modal End -->
 @endsection
@@ -224,7 +196,7 @@
                         }
                        
 
-                        $('#viewModal').modal('show');
+                        $('#viewOrderModal').modal('show');
 
                     } //success end
 

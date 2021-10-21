@@ -110,7 +110,7 @@
 
 
 
-
+    @include('layouts.admin.restaurant_add_modal')
 @endsection
 @section('pageScripts')
 {{-- <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
@@ -121,6 +121,7 @@
 <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script> --}}
 
 <script type='text/javascript'>
+ CKEDITOR.replace('restaurant_description');
         var config = {
             routes: {
                 getOrdersByMonth: "{!! route('order.report.restaurant.month') !!}",

@@ -6,31 +6,7 @@
 
 @section('pageCss')
     <style>
-        .accept_btn {
-            padding: 3px 20px;
-            font-weight: 600;
-            border-radius: 5px;
-        }
 
-        .edit_btn {
-            padding: 3px 30px;
-            font-weight: 600;
-            border-radius: 5px;
-        }
-
-        .deny_btn {
-            padding: 3px 30px;
-            font-weight: 600;
-            border-radius: 5px;
-        }
-
-        .deny-modal-footer {
-            display: initial !important;
-        }
-
-        .modal-footer>:not(:first-child) {
-            margin-left: 0;
-        }
 
     </style>
 @endsection
@@ -81,176 +57,116 @@
 
     </div> <!-- Page content Wrapper -->
 
-
-
-    <!-- view  Modal -->
-    <div class="modal fade bs-example-modal-center" id="viewModal" tabindex="-1" role="dialog"
-        aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md">
+ 
+    <div class="modal addModal fade" id="viewOrderModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
-                <div class="modal-header d-block">
-                    <h5 class="modal-title mt-0 text-center">Order Details</h5>
-                    <button type="button" class="close modal_close_icon" data-dismiss="modal" aria-hidden="true">×</button>
+                <div class="">
+                    <h5 class="modal-title text-center">Order Details</h5>
+                    <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="modal-body">
-                    <div class="col-xl-12 col-md-12">
-                        <div class="ms-form-group view-modal">
-                            <input type="hidden" name="" id="order_id" value="">
-                            <p>
-                                <strong>Order ID:</strong> <span id="view_order_id"></span>
-                            </p>
-                            <p>
-                                <strong>Customer Name:</strong> <span id="view_customer_name"></span>
-                            </p>
-                            <p>
-                                <strong>Customer Email:</strong> <span id="view_customer_email"></span>
-                            </p>
-                            <p>
-                                <strong>Customer Contact:</strong> <span id="view_customer_contact"></span>
-                            </p>
-                            <p>
-                                <strong>Customer Address :</strong> <span id="view_customer_address"></span>
-                            </p>
-                            <p>
-                                <strong>Special Notes :</strong> <span id="view_notes"></span>
-                            </p>
+                <div class="modal-body pt-3 orderDeta-body">
+                    <div class="row">
+                        <input type="hidden" name="order_id" id="order_id">
+                        <div class="col-12">
+                            <h4>Order ID: #<span id="view_order_id"></span></h4>
+                            <h4>Customer Name: <span id="view_customer_name"></span></h4>
+                            <h4>Customer Email: <span id="view_customer_email"></span></h4>
+                            <h4>Customer Contact: <span id="view_customer_contact"></span></h4>
+                            <h4>Customer Address: <span id="view_customer_address"></span></h4>
+                            <h4>Special Notes: <span id="view_notes"></span></h4>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <h4>Ordered Items</h4>
+                        </div>
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table class="table table-bordered text-center orderTable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Item Name</th>
+                                            <th scope="col">Unit Price</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Total Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="apeend_tbody">
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td>Total Amount</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="view_total"></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
 
-                    </div>
-                    <div class="row p-3">
-                        <div class="table-responsive">
-                            <h5 class="text-center">Order Items</h5>
-                            <table class="table table-bordered dt-responsive nowrap"
-                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Unit Price</th>
-                                        <th>Quantity</th>
-                                        <th>Total Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="apeend_tbody">
-
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td class="col-3 test">Delevery Fee</td>
-                                        <td class="col-3 test"></td>
-                                        <th class="col-3"></th>
-                                        <td class="col-3 deleveryFee">asdasd </td>
-                                    </tr>
-                                    <tr class="table-active">
-                                        <td class="col-3 font-weight-bold">Total Amount</td>
-                                        <td class="col-3 test"></td>
-                                        <th class="col-3"></th>
-                                        <td class="col-3 view_total"> </td>
-                                    </tr>
-
-                                </tfoot>
-
-                            </table>
+                        <div class="col-md-4">
+                            <button data-toggle="modal" data-dismiss="modal" data-target="#orderCancelModal"
+                                class="btn-custom dangerBtn mb-3 deny_btn"><img src="{{asset('backend/assets/icons/si-glyph_deny.svg')}}" alt="">
+                                Deny</button>
+                        </div>
+                        <div class="col-md-8 text-md-right">
+                            <button data-dismiss="modal" data-toggle="modal" data-target="#orderEditModal"
+                                class="btn-custom btnEdit mb-3"><img src="{{asset('backend/assets/icons/clarity_pencil-solid.svg')}}" alt="">
+                                Edit</button>
+                            <button class="btn-custom btnAccept mb-3 accept_btn"><img
+                                    src="{{asset('backend/assets/icons/icon-park-outline_correct.svg')}}" alt=""> Accept</button>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer view-modal-footer">
-                    <button type="button" data-dismiss="modal"
-                        class="btn btn-danger deny_btn waves-effect waves-light text-dark">
-                        <i class="fa fa-ban"></i> Deny
-                    </button>
-                    <button type="button" class="btn btn-primary edit_btn waves-effect waves-light text-dark">
-                        <i class="mdi mdi-pencil"></i> Edit
-                    </button>
-                    <button type="submit" class="btn btn-success accept_btn waves-effect waves-light text-dark">
-                        <i class="fa fa-check"></i> Accept
-                    </button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
+            </div>
+        </div>
     </div>
-    <!-- view  Modal End -->
 
-    <!-- order edit  Modal -->
-    <div class="modal fade bs-example-modal-center" id="orderEditModal" tabindex="-1" role="dialog"
-        aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md">
-            <div class="modal-content">
-                <div class="modal-header d-block">
-                    <h5 class="modal-title mt-0 text-center">Order Details</h5>
-                    <button type="button" class="close modal_close_icon" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div class="modal-body">
-                    <div class="col-xl-12 col-md-12">
-                        <div class="ms-form-group view-modal">
-                            <input type="hidden" name="" id="order_id" value="">
-                            <p>
-                                <strong>Order ID:</strong> <span id="view_order_id"></span>
-                            </p>
-                            <p>
-                                <strong>Customer Name:</strong> <span id="view_customer_name"></span>
-                            </p>
-                            <p>
-                                <strong>Customer Email:</strong> <span id="view_customer_email"></span>
-                            </p>
-                            <p>
-                                <strong>Customer Contact:</strong> <span id="view_customer_contact"></span>
-                            </p>
-                            <p>
-                                <strong>Customer Address :</strong> <span id="view_customer_address"></span>
-                            </p>
-                            <p>
-                                <strong>Special Notes :</strong> <span id="view_notes"></span>
-                                <textarea name="special_notes" id="" cols="30" rows="3" class="form-control"></textarea>
-                            </p>
-                        </div>
-
+<!-- order cancel  Modal -->
+<div class="modal addModal fade" id="orderCancelModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="">
+                <h5 class="modal-title text-center">Are you sure you want to cancel?</h5>
+                <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-3 orderCancel-body">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Why are you cancelling the order?</h3>
                     </div>
-                    <div class="row p-3">
-                        <div class="table-responsive">
-                            <h5 class="text-center">Order Items</h5>
-                            <table class="table table-bordered dt-responsive nowrap"
-                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Unit Price</th>
-                                        <th>Quantity</th>
-                                        <th>Total Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="apeend_tbody">
-
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td class="col-3 test">Delevery Fee</td>
-                                        <td class="col-3 test"></td>
-                                        <th class="col-3"></th>
-                                        <td class="col-3 deleveryFee">asdasd </td>
-                                    </tr>
-                                    <tr class="table-active">
-                                        <td class="col-3 font-weight-bold">Total Amount</td>
-                                        <td class="col-3 test"></td>
-                                        <th class="col-3"></th>
-                                        <td class="col-3 view_total"> </td>
-                                    </tr>
-
-                                </tfoot>
-
-                            </table>
-                        </div>
+                    <div class="col-12 mb-3">
+                        <input type="text" class="form-control"
+                            placeholder="The restaurant is busy to serve right now">
+                    </div>
+                    <div class="col-12 mb-3">
+                        <input type="text" class="form-control" placeholder="The delivery address is far away">
+                    </div>
+                    <div class="col-12 mb-3">
+                        <input type="text" class="form-control"
+                            placeholder="The special notes can not be fulfilled">
+                    </div>
+                    <div class="col-12 mb-2">
+                        <button class="conformBtn" data-dismiss="modal" id="cancelBtn">Yes, I’m sure about cancelling this
+                            order</button>
+                    </div>
+                    <div class="col-12">
+                        <button class="conformBtn cancelBtn orderCancelRedoBtn" data-dismiss="modal">No, I need to think
+                            again</button>
                     </div>
                 </div>
-                <div class="modal-footer view-modal-footer">
-                    <button type="submit" data-dismiss="modal"
-                        class="btn btn-success accept_btn waves-effect waves-light text-dark">
-                        <i class="fa fa-check"></i> Save
-                    </button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
+            </div>
+        </div>
     </div>
-    <!-- order edit Modal End -->
+</div>
+
+
+
 
     <!-- order deny  Modal -->
     <div class="modal fade bs-example-modal-center" id="orderDenyModal" tabindex="-1" role="dialog"
@@ -365,7 +281,7 @@
                         }
 
 
-                        $('#viewModal').modal('show');
+                        $('#viewOrderModal').modal('show');
 
                     } //success end
 
@@ -399,7 +315,7 @@
                         var table = $('#orderTable').DataTable();
                         $(".prepation_order_badge").html(response.data.order_in_preparation);
                         $(".new_order_badge").html(response.data.new_order);
-                        $("#viewModal").modal("hide");
+                        $("#viewOrderModal").modal("hide");
                         table.row('.table-row0').clear().destroy();
                         var url = '{{ route('manager.new.order') }}';
                         dataTable(url);
@@ -438,7 +354,7 @@
                         var table = $('#orderTable').DataTable();
                         $(".cancel_order_badge").html(response.data.cancel_order);
                         $(".new_order_badge").html(response.data.new_order);
-                        $("#orderDenyModal").modal("hide");
+                        $("#orderCancelModal").modal("hide");
                         table.row().clear().destroy();
                         dataTable();
                         toastMixin.fire({

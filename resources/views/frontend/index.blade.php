@@ -3,26 +3,27 @@
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/home.css') }}">
 @endsection
 @section('title')
-Home
+    Home
 @endsection
 
 @section('content')
     <!-- Home Page Carousel -->
     <section class="container-fluid p-0">
         <div id="homeCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel">
-            @if (count($sliders)>1)
+            @if (count($sliders) > 1)
                 <div class="carousel-indicators">
                     @if (!empty($sliders))
-                        @foreach ($sliders as $key=>$slider)
-                        <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="{{$slider->slider_id}}" class="{{ $key == 0 ? 'active' : '' }}"
-                            aria-current="true" aria-label="{{$slider->slider_id}}"></button>
+                        @foreach ($sliders as $key => $slider)
+                            <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="{{ $slider->slider_id }}"
+                                class="{{ $key == 0 ? 'active' : '' }}" aria-current="true"
+                                aria-label="{{ $slider->slider_id }}"></button>
                         @endforeach
                     @endif
                 </div>
-            @endif   
+            @endif
             <div class="carousel-inner">
                 @if (!empty($sliders))
-                    @foreach ($sliders as $key=>$slider)
+                    @foreach ($sliders as $key => $slider)
                         <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
                             <img src="{{ asset('images/' . $slider->pic) }}" class="d-block w-100" alt="...">
                             <div class="carousel-caption d-md-block">
@@ -49,7 +50,8 @@ Home
                         <a href="{{ route('frontend.restaurant.menu', [$restaurant->restaurant_id]) }}">
                             <div class="card h-100 deliverCard">
                                 <div class="card-overlay-box">
-                                    <img src="{{ asset('images/' . $restaurant->asset) }}" class="card-img-top" alt="...">
+                                    <img src="{{ asset('images/' . $restaurant->asset) }}" class="card-img-top"
+                                        alt="...">
                                     <div class="card-overlay-content">
                                         <img src="{{ 'images/' . $restaurant->logo }}" alt="">
                                         <p>**Delivery available only in Gulshan</p>
@@ -64,7 +66,6 @@ Home
                     </div>
                 @endforeach
             @endif
-
         </div>
     </section>
 
@@ -86,37 +87,36 @@ Home
         <div class="owl-carousel deals-carousel">
             @if (!empty($combos))
                 @foreach ($combos as $combo)
-                <div>
-                    <div class="card dealsCard">
-                        <div class="overlayDealsBox">
-                            <img src="{{ asset('images/'.$combo->photo) }}"
-                                class="card-img-top" alt="...">
-                            <div class="overlayDealsBtn">
-                                View Platter Items
-                                <div class="overlayDealsContent">
-                                    <div class="cardContent">
-                                        @if (!empty($combo->items))
-                                            @foreach ($combo->items as $item)
-                                            <h5>{{$item->name}}</h5>
-                                            @endforeach
-                                        @endif
-                                        <h2>Tk. {{$combo->price}}</h2>
-                                        <button>Add to Cart</button>
+                    <div>
+                        <div class="card dealsCard">
+                            <div class="overlayDealsBox">
+                                <img src="{{ asset('images/' . $combo->photo) }}" class="card-img-top" alt="...">
+                                <div class="overlayDealsBtn">
+                                    View Platter Items
+                                    <div class="overlayDealsContent">
+                                        <div class="cardContent">
+                                            @if (!empty($combo->items))
+                                                @foreach ($combo->items as $item)
+                                                    <h5>{{ $item->name }}</h5>
+                                                @endforeach
+                                            @endif
+                                            <h2>Tk. {{ $combo->price }}</h2>
+                                            <button>Add to Cart</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <h6>{{$combo->restaurant}}</h6>
-                            <h3>{{$combo->name}}</h3>
-                            <h2>Tk. {{$combo->price}}</h2>
-                            <button>Add to Cart</button>
+                            <div class="card-body">
+                                <h6>{{ $combo->restaurant }}</h6>
+                                <h3>{{ $combo->name }}</h3>
+                                <h2>Tk. {{ $combo->price }}</h2>
+                                <button>Add to Cart</button>
+                            </div>
                         </div>
                     </div>
-                </div>
                 @endforeach
             @endif
-        
+
 
         </div>
     </section>
@@ -139,21 +139,24 @@ Home
         <div class="owl-carousel popular-carousel">
             @if (!empty($order_items))
                 @foreach ($order_items as $item)
-                @if (count($item->orders)>0)
-                <div>
-                    <div class="card dealsCard">
-                        @foreach ($item->item_assets->take(1) as $image)
-                        <img src="{{ asset('images/'.$image->pivot->asset) }}"class="card-img-top" alt="...">
-                        @endforeach
-                        <div class="card-body">
-                            <h6>{{$item->category->restaurant->name}}</h6>
-                            <h3>{{$item->name}}</h3>
-                            <h2>Tk. {{$item->price}}</h2>
-                            <button>Add to Cart</button>
+                    @if (count($item->orders) > 0)
+                        <div>
+                            <div class="card dealsCard">
+                                @foreach ($item->item_assets->take(1) as $image)
+                                    <img src="{{ asset('images/' . $image->pivot->asset) }}" class="card-img-top"
+                                        alt="...">
+                                @endforeach
+                                <div class="card-body">
+                                    <h6>{{ $item->category->restaurant->name }}</h6>
+                                    <h3>{{ $item->name }}</h3>
+                                    <h2>Tk. {{ $item->price }}</h2>
+                                    <button
+                                        onclick="addToCart({{ $item->item_id }},{{ $item->category->restaurant->restaurant_id }})">Add
+                                        to Cart</button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                @endif
+                    @endif
                 @endforeach
             @endif
         </div>
@@ -161,6 +164,7 @@ Home
 @endsection
 @section('pageScripts')
     <script>
+
         $(window).scroll(function() {
             var scroll = $(window).scrollTop();
             var deliverSection = $(".deliverSection");
@@ -177,5 +181,7 @@ Home
 
             }
         });
+
+ 
     </script>
 @endsection

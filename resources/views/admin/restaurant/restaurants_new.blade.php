@@ -542,7 +542,7 @@
     <!-- view  Modal End -->
 @endsection
 @section('pageScripts')
-<script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+{{-- <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script> --}}
     {{-- <script src="{{ asset('backend/assets/js/add_row.js') }}"></script> --}}
     <script type='text/javascript'>
         var config = {
