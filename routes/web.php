@@ -281,3 +281,7 @@ Route::get('/sign-in',[FrontendCustomerController::class,'customerSignIn'])->nam
  Route::post('/upadte-cart',[CartController::class,'updateCart'])->name('frontend.cart.update');
  Route::post('/decrease-cart',[CartController::class,'decreaseCartQuantity'])->name('frontend.cart.decrease.quantity');
  Route::post('/delete-cart',[CartController::class,'deleteCart'])->name('frontend.cart.delete');
+ 
+ /* customer sign in */
+ Route::post('/customer-sign-in',[FrontendCustomerController::class,'signIn'])->name('customer.sign.in');
+ Route::post('/customer-sign-up',[FrontendCustomerController::class,'signUp'])->name('customer.sign.up');

@@ -1,6 +1,6 @@
 <aside class="cart" id="cart">
     <h1 id="cartName">my cart</h1>
-@foreach (Cart::content() as $cart)
+{{-- @foreach (Cart::content() as $cart)
 <div class="cartItem d-flex justify-content-between cartRow{{$cart->rowId}}">
     <div>
         <p>{{$cart->name}}</p>
@@ -19,7 +19,7 @@
         <h6 class="">Tk. <span class="itemTotal{{$cart->id}}">{{$cart->subtotal}}</span></h6>
     </div>
 </div>
-@endforeach
+@endforeach --}}
 
 
 
@@ -46,7 +46,7 @@
             <h6>Grand Total</h6>
         </div>
         <div>
-            <h6>Tk. <span class="grandTotal">{{Cart::subtotal()}}</span></h6>
+            {{-- <h6>Tk. <span class="grandTotal">{{Cart::subtotal()}}</span></h6> --}}
         </div>
     </div>
 
