@@ -195,8 +195,14 @@
 
 
     $(function () {
-        $('.restaurant_li').addClass('nav-active');
-        // $('.order_li').addClass('sub-nav-active');
+        $('.orders').addClass('sub-nav-active');
+            $('.orders a').siblings("ul").toggle().removeClass("d-none");
+            $('.orders a')
+                .children("span")
+                .children("span")
+                .children(".mdi")
+                .css("transform", "rotate(0deg)");
+            $('.restaurant_li').addClass('nav-active');
         dataTable();
   });
 

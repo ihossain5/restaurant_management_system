@@ -52,7 +52,7 @@ $orders = ManagerDashboardController::countedOrders();
                 <li><a href="{{ route('restaurant.index') }}">Restaurant Management</a></li>
 
 
-                <li class="has_multi_sub order_li">
+                <li class="has_multi_sub orders">
                     <a href="javascript:void(0);" class="waves-effect">
                         <span>
                             <i class="fa fa-cutlery"></i> Orders <span class="float-right"><i class="mdi mdi-chevron-right"></i></span>
@@ -63,7 +63,7 @@ $orders = ManagerDashboardController::countedOrders();
                         <li><a class="past_order_link" href="{{ route('orders.past',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Past Orders</a></li>
                     </ul>
                 </li>
-                <li class="has_multi_sub">
+                <li class="has_multi_sub items_li">
                     <a href="javascript:void(0);" class="waves-effect">
                         <span>
                             <i class="fa fa-cutlery"></i> Item Management <span class="float-right"><i class="mdi mdi-chevron-right"></i></span>
@@ -75,7 +75,7 @@ $orders = ManagerDashboardController::countedOrders();
                         <li><a  class="item_combo_link" href="{{ route('item.combo.index',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Item Combos</a></li>
                     </ul>
                 </li>
-                <li class="has_multi_sub">
+                <li class="has_multi_sub performance_li">
                     <a href="javascript:void(0);" class="waves-effect">
                         <span>
                             <i class="fa fa-cutlery"></i> Performance Report <span class="float-right"><i class="mdi mdi-chevron-right"></i></span>

@@ -1,25 +1,25 @@
 <aside class="cart" id="cart">
     <h1 id="cartName">my cart</h1>
-{{-- @foreach (Cart::content() as $cart)
+@foreach (Cart::content() as $cart)
 <div class="cartItem d-flex justify-content-between cartRow{{$cart->rowId}}">
     <div>
         <p>{{$cart->name}}</p>
         <div class="incrDecBtn">
-            <button onclick="minusBtn('{{$cart->id}}')"><img src="{{asset('frontend/assets/images/cart/minus-btn.svg')}}" alt="emerald minus icon"></button>
+            <button onclick="minusBtn('{{$cart->rowId}}')"><img src="{{asset('frontend/assets/images/cart/minus-btn.svg')}}" alt="emerald minus icon"></button>
            
-            <span class="cartQty{{$cart->id}}">{{$cart->qty}}</span>
+            <span class="cartQty{{$cart->rowId}}">{{$cart->qty}}</span>
             
-            <button onclick="plusBtn('{{$cart->id}}')" data-id="">
+            <button onclick="plusBtn('{{$cart->rowId}}')" data-id="">
                 <img src="{{asset('frontend/assets/images/cart/plus-btn.svg')}}" alt="emerald plus icon">
             </button>
         </div>
     </div>
     <div class="cartRightSide">
         <button onclick="deleteCart('{{$cart->rowId}}')"><img src="{{asset('frontend/assets/images/cart/delete.svg')}}" alt="emerald deleteIcon"></button>
-        <h6 class="">Tk. <span class="itemTotal{{$cart->id}}">{{$cart->subtotal}}</span></h6>
+        <h6 class="">Tk. <span class="itemTotal{{$cart->rowId}}">{{$cart->subtotal}}</span></h6>
     </div>
 </div>
-@endforeach --}}
+@endforeach
 
 
 
@@ -46,7 +46,7 @@
             <h6>Grand Total</h6>
         </div>
         <div>
-            {{-- <h6>Tk. <span class="grandTotal">{{Cart::subtotal()}}</span></h6> --}}
+            <h6>Tk. <span class="grandTotal">{{Cart::subtotal()}}</span></h6>
         </div>
     </div>
 

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\DeliveryLocation;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
 
 class RestaurantMenuController extends Controller
 {
     public function getRestaurant(Restaurant $restaurant){
+        $locations =  DeliveryLocation::get()->unique('name');
         $restaurant->load('assets','restaurant_categories','restaurant_categories.items');  
         $images=[];
         foreach($restaurant->assets as $asset){
@@ -16,6 +18,6 @@ class RestaurantMenuController extends Controller
                 $images[] = $asset->pivot->asset;
             }
         }  
-        return view('frontend.restaurant.restaurant_menu', compact('restaurant','images'));
+        return view('frontend.restaurant.restaurant_menu', compact('restaurant','images','locations'));
     }
 }

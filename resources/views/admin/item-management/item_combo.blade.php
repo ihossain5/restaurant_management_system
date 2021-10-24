@@ -272,6 +272,15 @@
                 "ordering": false,
             });
 
+            $('.items_li').addClass('sub-nav-active');
+            $('.items_li a').siblings("ul").toggle().removeClass("d-none");
+            $('.items_li a')
+                .children("span")
+                .children("span")
+                .children(".mdi")
+                .css("transform", "rotate(0deg)");
+            $('.restaurant_li').addClass('nav-active');
+
         });
 
         $(document).ready(function() {

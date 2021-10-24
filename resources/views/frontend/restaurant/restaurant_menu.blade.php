@@ -8,23 +8,24 @@
 @section('content')
     <!-- Menu Page Carousel -->
     @if (!empty($images))
-    <section class="container-fluid p-0">
-        <div id="menuCarousel" class="carousel slide hero-carousel menuCarousel" data-bs-ride="carousel">
-            <div class="carousel-indicators">
-                @foreach ($images as $key => $image)
-                <button type="button" data-bs-target="#menuCarousel" data-bs-slide-to="{{$key}}" class="{{ $key == 0 ? 'active' : '' }}"
-                    aria-current="true" aria-label="Slide {{$loop->iteration}}"></button>
-                @endforeach  
-            </div>
-            <div class="carousel-inner">
+        <section class="container-fluid p-0">
+            <div id="menuCarousel" class="carousel slide hero-carousel menuCarousel" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    @foreach ($images as $key => $image)
+                        <button type="button" data-bs-target="#menuCarousel" data-bs-slide-to="{{ $key }}"
+                            class="{{ $key == 0 ? 'active' : '' }}" aria-current="true"
+                            aria-label="Slide {{ $loop->iteration }}"></button>
+                    @endforeach
+                </div>
+                <div class="carousel-inner">
                     @foreach ($images as $key => $image)
                         <div class="carousel-item {{ $key == 0 ? 'active' : '' }} ">
                             <img src="{{ asset('images/' . $image) }}" class=" d-block w-100" alt="...">
-                        </div>                      
-                    @endforeach    
+                        </div>
+                    @endforeach
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
     @endif
 
     <!-- Restaurent Details -->
@@ -43,12 +44,12 @@
             <div class="col-12 restaurDetails text-center">
                 <p>{{ $restaurant->description }}</p>
 
-                <a id="menu" href="{{route('frontend.about.us')}}#{{$restaurant->restaurant_id}}">Read More</a>
+                <a id="menu" href="{{ route('frontend.about.us') }}#{{ $restaurant->restaurant_id }}">Read More</a>
             </div>
         </div>
     </section>
     <!-- Menu -->
-    <section class="container-fluid menu-section" >
+    <section class="container-fluid menu-section">
         <div class="row">
             <div class="col-12">
                 <h1 class="menuTitle">Menu</h1>
@@ -111,7 +112,15 @@
                                                     </div>
                                                     <div class="col-md-6 pt-5 pt-md-0 text-start text-md-end">
                                                         <h3 class="price">Tk. {{ $item->price }}</h3>
-                                                        <button class="cartBtn" onclick="addToCart({{ $item->item_id }},{{ $item->category->restaurant->restaurant_id }})">Add to Cart</button>
+                                                        @if (session()->has('restaurantIds'))
+                                                            @foreach (session()->get('restaurantIds') as $id)
+                                                                @if ($id == $category->restaurant->restaurant_id)
+                                                                    <button class="cartBtn addTocartBtnId{{ $item->category->restaurant->restaurant_id }}"
+                                                                        onclick="addToCart({{ $item->item_id }},{{ $item->category->restaurant->restaurant_id }})">Add
+                                                                        to Cart</button>
+                                                                @endif
+                                                            @endforeach
+                                                        @endif       
                                                     </div>
                                                 </div>
                                             </div>

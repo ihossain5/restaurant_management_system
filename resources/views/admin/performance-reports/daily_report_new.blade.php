@@ -95,6 +95,15 @@
             }
         };
     $(function () {
+        $('.performance_li').addClass('sub-nav-active');
+            $('.performance_li a').siblings("ul").toggle().removeClass("d-none");
+            $('.performance_li a')
+                .children("span")
+                .children("span")
+                .children(".mdi")
+                .css("transform", "rotate(0deg)");
+            $('.restaurant_li').addClass('nav-active');
+
     var id = $('#restaurantId').val();
     var url = '{{ route("daily.order.report.restaurant", ":id") }}';
     url = url.replace(':id', id);

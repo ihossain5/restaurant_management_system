@@ -48,8 +48,8 @@
                 @foreach ($restaurants as $restaurant)
                     <div class="col">
                         <a href="{{ route('frontend.restaurant.menu', [$restaurant->restaurant_id]) }}">
-                            <div class="card h-100 deliverCard">
-                                <div class="card-overlay-box">
+                           <div class="card h-100 deliverCard">
+                                <div class="card-overlay-box  {{$restaurant->disable == true ? 'disable-overlay' : ''}} restaurantId{{$restaurant->restaurant_id}}">
                                     <img src="{{ asset('images/' . $restaurant->asset) }}" class="card-img-top"
                                         alt="...">
                                     <div class="card-overlay-content">
@@ -60,7 +60,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $restaurant->name }}</h5>
                                     <h6>{{ $restaurant->type }}</h6>
-                                </div>
+                                </div>  
                             </div>
                         </a>
                     </div>
@@ -68,8 +68,6 @@
             @endif
         </div>
     </section>
-
-
     <!-- Carousel -->
     <section class="container-fluid deals-section">
         <div class="deals-section-header">
@@ -79,7 +77,6 @@
                 </div>
                 <div class="col-md-6 text-start text-md-end">
                     <div class="dots-div dots d-none dealsDot">
-
                     </div>
                 </div>
             </div>
@@ -109,8 +106,17 @@
                             <div class="card-body">
                                 <h6>{{ $combo->restaurant }}</h6>
                                 <h3>{{ $combo->name }}</h3>
-                                <h2>Tk. {{ $combo->price }}</h2>
-                                <button>Add to Cart</button>
+                                <h2 class="comboBtn">Tk. {{ $combo->price }}</h2>
+                                @if (session()->has('restaurantIds'))
+                                @foreach (session()->get('restaurantIds') as $id)
+                                    @if ($id == $combo->restaurant_id)
+                                    <button class="cartBtn addTocartBtnId{{$combo->restaurant_id}}">Add to Cart</button>
+                                    @else
+                                    <button class="addTocart addTocartBtnId{{$combo->restaurant_id}}">Add to Cart</button>
+                                    @endif
+                                @endforeach
+                            @endif
+                                {{-- <button class="addTocart addTocartBtnId{{$combo->restaurant_id}}">Add to Cart</button> --}}
                             </div>
                         </div>
                     </div>
@@ -149,10 +155,17 @@
                                 <div class="card-body">
                                     <h6>{{ $item->category->restaurant->name }}</h6>
                                     <h3>{{ $item->name }}</h3>
-                                    <h2>Tk. {{ $item->price }}</h2>
-                                    <button
-                                        onclick="addToCart({{ $item->item_id }},{{ $item->category->restaurant->restaurant_id }})">Add
-                                        to Cart</button>
+                                    <h2 class="itemBtn">Tk. {{ $item->price }}</h2>
+                                    @if (session()->has('restaurantIds'))
+                                    @foreach (session()->get('restaurantIds') as $id)
+                                        @if ($id == $item->category->restaurant->restaurant_id )
+                                        <button class="cartBtn addTocartBtnId{{$item->category->restaurant->restaurant_id }}"
+                                            onclick="addToCart({{ $item->item_id }},{{ $item->category->restaurant->restaurant_id }})">Add
+                                            to Cart</button>
+                                        @endif
+                                    @endforeach
+                                @endif
+
                                 </div>
                             </div>
                         </div>

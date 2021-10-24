@@ -272,13 +272,15 @@ Route::get('test/new', function () {
 });
 
 Route::get('/',[HomeController::class,'index'])->name('frontend.index');
+Route::post('/',[HomeController::class,'getRestaurantsByLocation'])->name('frontend.restaurant.by.location');
+
 Route::get('/restaurant/{restaurant}/menu',[RestaurantMenuController::class,'getRestaurant'])->name('frontend.restaurant.menu');
 Route::get('/about-us',[FrontendAboutUsController::class,'index'])->name('frontend.about.us');
 Route::get('/sign-in',[FrontendCustomerController::class,'customerSignIn'])->name('frontend.customer.sign.in');
 
  /* cart routes */
  Route::post('/add-to-cart',[CartController::class,'addToCart'])->name('frontend.cart.add');
- Route::post('/upadte-cart',[CartController::class,'updateCart'])->name('frontend.cart.update');
+ Route::post('/upadte-cart',[CartController::class,'increaseCartQuantity'])->name('frontend.cart.update');
  Route::post('/decrease-cart',[CartController::class,'decreaseCartQuantity'])->name('frontend.cart.decrease.quantity');
  Route::post('/delete-cart',[CartController::class,'deleteCart'])->name('frontend.cart.delete');
  

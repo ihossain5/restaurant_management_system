@@ -35,6 +35,7 @@
             </div>
         </div>
     </div> -->
+    @include('layouts.frontend.partials.location_modal')
     @include('layouts.frontend.partials.scripts')
     @yield('pageScripts')
 </body>

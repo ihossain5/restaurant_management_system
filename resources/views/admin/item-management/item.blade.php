@@ -386,6 +386,14 @@
                     'fileSize': 'The file size is too big ( 600KB  max).',
                 }
             });
+            $('.items_li').addClass('sub-nav-active');
+            $('.items_li a').siblings("ul").toggle().removeClass("d-none");
+            $('.items_li a')
+                .children("span")
+                .children("span")
+                .children(".mdi")
+                .css("transform", "rotate(0deg)");
+            $('.restaurant_li').addClass('nav-active');
         });
 
 

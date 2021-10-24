@@ -221,20 +221,26 @@ crossorigin="anonymous"></script>
 $('.location-select-box').select2();
        
 // Mulilevel Menu
-$('.has_multi_sub a').click(function () {
+$(".has_multi_sub").removeClass("active");
+$(".has_multi_sub a").click(function () {
+    $(this).siblings("ul").toggle().removeClass("d-none");
+    if ($(this).parent("li").hasClass("sub-nav-active")) {
+        $(this).parent("li").removeClass("active");
+        $(this).parent("li").removeClass("sub-nav-active");
+        $(this)
+            .children("span")
+            .children("span")
+            .children(".mdi")
+            .css("transform", "rotate(-90deg)");
+    } else {
+        $(this).parent("li").addClass("sub-nav-active");
+        $(this)
+            .children("span")
+            .children("span")
+            .children(".mdi")
+            .css("transform", "rotate(0deg)");
+    }
+});
 
-$(this).siblings('ul').toggle().removeClass('d-none');
-if ($(this).parent('li').hasClass('sub-nav-active')) {
-
-    $(this).parent('li').removeClass('sub-nav-active');
-    $(this).children('span').children('span').children('.mdi').css("transform", "rotate(-90deg)")
-
-} else {
-    $(this).parent('li').addClass('sub-nav-active');
-    $(this).children('span').children('span').children('.mdi').css("transform", "rotate(0deg)")
-
-}
-
-})
 
 </script>

@@ -160,7 +160,7 @@
 @endsection
 @section('pageScripts')
     <script type='text/javascript'>
-     CKEDITOR.replace('restaurant_description');
+        CKEDITOR.replace('restaurant_description');
         var config = {
             routes: {
                 view: "{!! route('order.show') !!}",
@@ -168,11 +168,17 @@
             }
         };
 
-    $(function () {
-        $('.restaurant_li').addClass('nav-active');
-        // $('.order_li').addClass('sub-nav-active');
-     dataTable();
-  });
+        $(function() {
+            $('.orders').addClass('sub-nav-active');
+            $('.orders a').siblings("ul").toggle().removeClass("d-none");
+            $('.orders a')
+                .children("span")
+                .children("span")
+                .children(".mdi")
+                .css("transform", "rotate(0deg)");
+            $('.restaurant_li').addClass('nav-active');
+            dataTable();
+        });
 
         // view single 
         function viewOrder(id) {
@@ -196,21 +202,21 @@
                         $('#view_customer_email').text(response.data.customer.email ?? 'N/A');
                         $('#view_notes').text(response.data.special_notes ?? 'N/A');
 
-                        if(response.data.order_status_id !== ''){
+                        if (response.data.order_status_id !== '') {
                             if (response.data.status.name == 'Preparing') {
-                            var class_name = 'primary';
-                        } else if (response.data.status.name == 'Delivering') {
-                            var class_name = 'success';
-                        } else if (response.data.status.name == 'Completed') {
-                            var class_name = 'success';
+                                var class_name = 'primary';
+                            } else if (response.data.status.name == 'Delivering') {
+                                var class_name = 'success';
+                            } else if (response.data.status.name == 'Completed') {
+                                var class_name = 'success';
+                            } else {
+                                var class_name = 'danger';
+                            }
                         } else {
-                            var class_name = 'danger';
-                        }
-                        }else{
                             alert('asdasd');
                             var class_name = 'none';
                         }
-                  
+
 
                         $('#order_status').attr('class', 'btn float-right btn-outline-' + class_name + ' ' +
                             response.data.class);
@@ -228,12 +234,12 @@
 
                         });
                         $('.view_total').html('৳ ' + bdCurrencyFormat(response.data.amount));
-                        if(response.data.delivery_fee != null){
+                        if (response.data.delivery_fee != null) {
                             $('.deleveryFee').html('৳ ' + bdCurrencyFormat(response.data.delivery_fee));
-                        }else{
+                        } else {
                             $('.deleveryFee').html('৳ ' + 0);
                         }
-                       
+
 
                         $('#viewModal').modal('show');
 
@@ -270,7 +276,8 @@
                         $('.restaurant_id').val(response.data.id);
                         $('#orderTable').DataTable().clear().destroy();
                         setSessionId(response.data.session_id); // set restaurant id into session
-                        setRestaurant(response.data.restaurant_name, response.data.id); // set restaurant into topbar
+                        setRestaurant(response.data.restaurant_name, response.data
+                            .id); // set restaurant into topbar
                         dataTable();
 
 
@@ -290,32 +297,41 @@
             });
         });
 
-        function dataTable(){
-    var id = $('#restaurantId').val();
-    var url = '{{ route("today.order.restaurant", ":id") }}';
-    url = url.replace(':id', id);
-    var table = $('#orderTable').DataTable({
-        // processing: true,
-        serverSide: true,
-        ajax: url,
-        columns: [
-            {data: 'id'},
-            { 
-                // class: (status.name == 'Delivering') ? 'txt-delivering' : (status.name == 'Completed') ? 'txt-completed': (status.name == 'Preparing') ? 'txt-preparing': 'txt-cancelled',
-                data: 'status.name'
-            },
-            {data: 'customer_name'},
-            {data: 'customer_contact'},
-            {data: 'customer_address'},
-            {data: 'amount'},
-            {
-                data: 'action', 
-                name: 'action', 
-                orderable: true, 
-                searchable: true
-            },
-        ]
-    });
-    }   
+        function dataTable() {
+            var id = $('#restaurantId').val();
+            var url = '{{ route('today.order.restaurant', ':id') }}';
+            url = url.replace(':id', id);
+            var table = $('#orderTable').DataTable({
+                // processing: true,
+                serverSide: true,
+                ajax: url,
+                columns: [{
+                        data: 'id'
+                    },
+                    {
+                        // class: (status.name == 'Delivering') ? 'txt-delivering' : (status.name == 'Completed') ? 'txt-completed': (status.name == 'Preparing') ? 'txt-preparing': 'txt-cancelled',
+                        data: 'status.name'
+                    },
+                    {
+                        data: 'customer_name'
+                    },
+                    {
+                        data: 'customer_contact'
+                    },
+                    {
+                        data: 'customer_address'
+                    },
+                    {
+                        data: 'amount'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: true,
+                        searchable: true
+                    },
+                ]
+            });
+        }
     </script>
 @endsection

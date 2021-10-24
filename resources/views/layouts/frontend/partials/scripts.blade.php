@@ -23,8 +23,11 @@
                 updateCart: "{!! route('frontend.cart.update') !!}",
                 decreaseCartQty: "{!! route('frontend.cart.decrease.quantity') !!}",
                 deleteCart: "{!! route('frontend.cart.delete') !!}",
+                getRestaurants: "{!! route('frontend.restaurant.by.location') !!}",
             }
         };
+    
+
         // Deales Carousel
         $(document).ready(function() {
             $(".deals-carousel").owlCarousel({
@@ -98,8 +101,8 @@
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
         }
-                // add to cart
-    function addToCart(item_id, restaurant_id) {
+        // add to cart
+        function addToCart(item_id, restaurant_id) {
             $.ajax({
                 url: config.routes.addToCart,
                 method: "POST",
@@ -114,29 +117,118 @@
                         toastr["success"](response.data.message)
                         $('.cartItem').remove();
                         $('.grandTotal').html(response.data.grandTotal)
-                       $.each(response.data.items,function(key,val){
-                           console.log(val.name);
-                           $('#cartName').after(
-                               `<div class="cartItem d-flex justify-content-between cartRow${val.rowId}">
+                        $.each(response.data.items, function(key, val) {
+                            $('#cartName').after(
+                                `<div class="cartItem d-flex justify-content-between cartRow${val.rowId}">
                                     <div>
                                         <p>${val.name}</p>
                                         <div class="incrDecBtn">
-                                            <button onclick="minusBtn('${val.id}')"><img src="{{asset('frontend/assets/images/cart/minus-btn.svg')}}" alt="emerald minus icon"></button>
+                                            <button onclick="minusBtn('${val.rowId}')"><img src="{{ asset('frontend/assets/images/cart/minus-btn.svg') }}" alt="emerald minus icon"></button>
                                         
-                                            <span class="cartQty${val.id}">${val.qty}</span>
+                                            <span class="cartQty${val.rowId}">${val.qty}</span>
                                             
-                                            <button onclick="plusBtn('${val.id}')" data-id="">
-                                                <img src="{{asset('frontend/assets/images/cart/plus-btn.svg')}}" alt="emerald plus icon">
+                                            <button onclick="plusBtn('${val.rowId}')" data-id="">
+                                                <img src="{{ asset('frontend/assets/images/cart/plus-btn.svg') }}" alt="emerald plus icon">
                                             </button>
                                         </div>
                                     </div>
                                     <div class="cartRightSide">
-                                        <button onclick="deleteCart('${val.rowId}')"><img src="{{asset('frontend/assets/images/cart/delete.svg')}}" alt="emerald deleteIcon"></button>
-                                        <h6 class="">Tk. <span class="itemTotal${val.id}">${val.subtotal}</span></h6>
+                                        <button onclick="deleteCart('${val.rowId}')"><img src="{{ asset('frontend/assets/images/cart/delete.svg') }}" alt="emerald deleteIcon"></button>
+                                        <h6 class="">Tk. <span class="itemTotal${val.rowId}">${val.subtotal}</span></h6>
                                     </div>
                                 </div>`
-                           )
-                       })
+                            )
+                        })
+                    }else{
+                        toastr["error"](response.message)
+                    } //success end
+                },
+                error: function(error) {
+                    if (error.status == 404) {
+                        toastr["error"](response.data.message)
+                    }
+                },
+            }); //ajax end
+        }
+
+        // increase cart quantity   
+        function plusBtn(rowId) {
+            var oldQty = $('.cartQty' + rowId).html();
+            $.ajax({
+                url: config.routes.updateCart,
+                method: "POST",
+                data: {
+                    rowId: rowId,
+                    _token: "{{ csrf_token() }}"
+                },
+                dataType: "json",
+                success: function(response) {
+                    if (response.success == true) {
+                        // toastr["success"](response.data.message)
+                        $('.grandTotal').html(response.data.grandTotal)
+                        $('.itemTotal' + rowId).html(response.data.price )
+                        $('.cartQty' + rowId).html(++oldQty);
+
+                    } //success end
+                },
+                error: function(error) {
+                    if (error.status == 404) {
+                        toastr["error"](response.data.message)
+                    }
+                },
+            }); //ajax end
+        }
+
+        // decrease cart quantity   
+        function minusBtn(rowId) {
+            var oldQty = $('.cartQty' + rowId).html();
+           
+            if (oldQty == 1) {
+                toastr["info"]('Quantity can not be less than 1')
+            } else {
+                $.ajax({
+                    url: config.routes.decreaseCartQty,
+                    method: "POST",
+                    data: {
+                        rowId: rowId,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.success == true) {
+                            $('.cartQty' + rowId).html(--oldQty);
+                            $('.grandTotal').html(response.data.grandTotal)
+                            $('.itemTotal' + rowId).html(response.data.price )
+                        } //success end
+                    },
+                    error: function(error) {
+                        if (error.status == 404) {
+                            toastMixin.fire({
+                                icon: 'error',
+                                animation: true,
+                                title: "" + 'Data not found' + ""
+                            });
+                        }
+                    },
+                }); //ajax end
+            }
+
+        }
+
+        function deleteCart(rowId) {
+            $.ajax({
+                url: config.routes.deleteCart,
+                method: "POST",
+                data: {
+                    rowId: rowId,
+                    _token: "{{ csrf_token() }}"
+                },
+                dataType: "json",
+                success: function(response) {
+                    if (response.success == true) {
+                        // toastr["success"](response.data.message)
+                        $('.grandTotal').html(response.data.grandTotal)
+                        $('.cartRow' + rowId).remove();
                     } //success end
                 },
                 error: function(error) {
@@ -151,93 +243,34 @@
             }); //ajax end
         }
 
-     // increase cart quantity   
-     function plusBtn(item_id){
-         var oldQty =  $('.cartQty'+item_id).html();
-         $('.cartQty'+item_id).html(++oldQty);
-         var oldprice =  parseFloat($('.itemTotal'+item_id).html());
-        // alert(oldprice);
-         $.ajax({
-                url: config.routes.updateCart,
+        // location change function
+        function getRestaurants() {
+            id = document.getElementById("select_id").value;
+            if(id== ''){
+                $('.lmbCloseBtn').hide();
+            }else{
+                $.ajax({
+                url: config.routes.getRestaurants,
                 method: "POST",
                 data: {
-                    item_id: item_id,
+                    id: id,
                     _token: "{{ csrf_token() }}"
                 },
                 dataType: "json",
                 success: function(response) {
                     if (response.success == true) {
-                        // toastr["success"](response.data.message)
-                       $('.grandTotal').html(response.data.grandTotal)
-                       $('.itemTotal'+item_id).html(response.data.price + oldprice)
-                    
-                   
-                    } //success end
-                },
-                error: function(error) {
-                    if (error.status == 404) {
-                        toastMixin.fire({
-                            icon: 'error',
-                            animation: true,
-                            title: "" + 'Data not found' + ""
+                        $('.addTocart').hide();
+                        $('.cartBtn').hide();
+                        $('.card-overlay-box').addClass('disable-overlay');
+                        $.each(response.data.restaurants, function(i,restaurant){
+                            console.log(restaurant.restaurant_id);
+                            $('.restaurantId'+restaurant.restaurant_id).removeClass('disable-overlay');
+                            $('.addTocartBtnId'+restaurant.restaurant_id).show();
                         });
-                    }
-                },
-            }); //ajax end
-     } 
-     
-      // decrease cart quantity   
-     function minusBtn(item_id){
-         var oldQty =  $('.cartQty'+item_id).html();
-         var oldprice =  parseFloat($('.itemTotal'+item_id).html());
-         if(oldQty == 1){
-            toastr["info"]('Quantity can not be less than 1')
-         }else{
-            // $('.cartQty'+item_id).html(--oldQty);
-            $.ajax({
-                url: config.routes.decreaseCartQty,
-                method: "POST",
-                data: {
-                    item_id: item_id,
-                    quantity: --oldQty,
-                    _token: "{{ csrf_token() }}"
-                },
-                dataType: "json",
-                success: function(response) {
-                    if (response.success == true) {
-                        // toastr["success"](response.data.message)
-                       $('.grandTotal').html(response.data.grandTotal)
-                    //    $('.itemTotal'+item_id).html(response.data.price + oldprice)
-                    } //success end
-                },
-                error: function(error) {
-                    if (error.status == 404) {
-                        toastMixin.fire({
-                            icon: 'error',
-                            animation: true,
-                            title: "" + 'Data not found' + ""
-                        });
-                    }
-                },
-            }); //ajax end
-         }
-         
-     }  
 
-    function deleteCart(rowId){
-        $.ajax({
-                url: config.routes.deleteCart,
-                method: "POST",
-                data: {
-                    rowId: rowId,
-                    _token: "{{ csrf_token() }}"
-                },
-                dataType: "json",
-                success: function(response) {
-                    if (response.success == true) {
-                        // toastr["success"](response.data.message)
-                       $('.grandTotal').html(response.data.grandTotal)
-                       $('.cartRow'+rowId).remove();
+                        $('.lmbCloseBtn').show();
+                        $('.headerLocation').html(response.data.location_name);
+                        $('#location-modal').modal('hide');
                     } //success end
                 },
                 error: function(error) {
@@ -250,5 +283,7 @@
                     }
                 },
             }); //ajax end
-    } 
+            }
+          
+        }
     </script>

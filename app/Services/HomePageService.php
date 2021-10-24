@@ -1,0 +1,95 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\Combo;
+use App\Models\DeliveryLocation;
+use App\Models\HomeHeroSection;
+use App\Models\Item;
+use App\Models\Restaurant;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Session;
+
+Class HomePageService {
+
+    public function popularDishes() {
+        return Item::where('is_available', 1)->with(['category', 'orders' => function ($query) {
+            $query->whereMonth('orders.created_at', '=', Carbon::now()->subMonth()->month)
+                ->where('order_status_id', 3);
+        }])->limit(12)->get();
+    }
+
+    public function combos() {
+        $combos = Combo::with('items')->where('is_available', 1)->get();
+        foreach ($combos as $combo) {
+            foreach ($combo->items as $item) {
+                $combo->restaurant    = $item->category->restaurant->name;
+                $combo->restaurant_id = $item->category->restaurant->restaurant_id;
+            }
+        }
+        return $combos;
+    }
+
+    public function getDeliveryLocations() {
+        return DeliveryLocation::get()->unique('name');
+    }
+
+    public function heroSlider() {
+        return HomeHeroSection::all();
+    }
+
+    public function restaurants() {
+        $restaurants    = Restaurant::with('assets')->where('is_open', 1)->latest()->get();
+        if(session()->has('restaurantIds')){
+            $restaurantsIds = Session::get('restaurantIds')->toArray();
+            $this->formatRestaurant($restaurants, $restaurantsIds);
+        } 
+        return $restaurants;
+    }
+
+    public function getRestaurantByLocation($id) {
+        $location    = DeliveryLocation::with('restaurants')->findOrFail($id);
+        $restaurants = $location->restaurants;
+        $this->setLocationId($location->delivery_location_id);
+        $this->setLocationName($location->name);
+        $this->setRestaurantId($restaurants->pluck('restaurant_id'));
+        return $location;
+
+    }
+
+    private function setLocationId($location_id) {
+        if (Session::has('location_id')) {
+            Session::forget('location_id');
+        }
+        Session::put('location_id', $location_id);
+    }
+    private function setLocationName($name) {
+        if (Session::has('location_name')) {
+            Session::forget('location_name');
+        }
+        Session::put('location_name', $name);
+    }
+    private function setRestaurantId($restaurantId) {
+        if (Session::has('restaurantIds')) {
+            Session::forget('restaurantIds');
+        }
+        Session::put('restaurantIds', $restaurantId);
+    }
+
+    private function formatRestaurant($restaurants, $restaurantsIds) {
+        foreach ($restaurants as $restaurant) {
+            if (in_array($restaurant->restaurant_id, $restaurantsIds)) {
+                $restaurant->disable = false;
+            } else {
+                $restaurant->disable = true;
+            }
+            foreach ($restaurant->assets as $asset) {
+                if ($asset->pivot->section == 'home') {
+                    $restaurant->asset = $asset->pivot->asset;
+                    break;
+                }
+
+            }
+        }
+    }
+}

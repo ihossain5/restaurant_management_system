@@ -11,7 +11,7 @@
 
     <style>
         .toast-message {
-            color: #000;
+            color: #ffffff;
             font-size: 16px;
         }
 

@@ -19,7 +19,7 @@
             </div>
             <div class="navbar-location-select-box d-none d-lg-block">
                 <button type="button" class="navbar-modal-show-btn" data-bs-toggle="modal" data-bs-target="#location-modal">
-                    Gulshan
+                    <span class="headerLocation">{{session()->get('location_name') ?? ''}}</span>
                 </button>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -67,7 +67,7 @@
                 </ul>
                 <div class="navbar-location-select-box d-lg-none">
                     <button type="button" class="navbar-modal-show-btn" data-bs-toggle="modal" data-bs-target="#location-modal">
-                        Gulshan
+                       <span class="headerLocation">{{session()->get('location_name') ?? ''}}</span>
                     </button>
                 </div>
             </div>

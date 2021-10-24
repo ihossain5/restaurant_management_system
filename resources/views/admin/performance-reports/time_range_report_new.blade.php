@@ -18,27 +18,29 @@
                         <div class="card-body">
                             <div class="row pb-5">
                                 <div class="col-lg-4">
-                                    <h4 class="mt-0 header-title">Time Range Report 
+                                    <h4 class="mt-0 header-title">Time Range Report
                                         <span class="start_date"></span>
-                                         <span class="end_date"></span>
+                                        <span class="end_date"></span>
                                     </h4>
                                 </div>
                                 <div class="col-lg-8">
                                     <div class="row">
                                         <div class="col-lg-4">
-                                        </div> 
+                                        </div>
                                         <div class="col-lg-2 pr-0">
                                             <div class="dropdown">
                                                 <button class="custom-select downloadDropDown" type="button"
-                                                    id="dropdownMenuButton" data-toggle="dropdown"
-                                                    aria-haspopup="true" aria-expanded="false">
-                                                    <img src="{{asset('backend/assets/icons/download-icon.svg')}}" alt="">
+                                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                    <img src="{{ asset('backend/assets/icons/download-icon.svg') }}" alt="">
                                                 </button>
                                                 <div class="dropdown-menu downloadMenu"
                                                     aria-labelledby="dropdownMenuButton">
-                                                    <button><img src="{{asset('backend/assets/icons/pdf-icon.svg')}}" alt=""> PDF
+                                                    <button><img src="{{ asset('backend/assets/icons/pdf-icon.svg') }}"
+                                                            alt=""> PDF
                                                         File</button>
-                                                    <button><img src="{{asset('backend/assets/icons/csv-icon.svg')}}" alt=""> CSV
+                                                    <button><img src="{{ asset('backend/assets/icons/csv-icon.svg') }}"
+                                                            alt=""> CSV
                                                         File</button>
                                                 </div>
                                             </div>
@@ -47,17 +49,19 @@
                                             <div class="custom-date">
                                                 <div class="input-daterange input-group" id="date-range">
                                                     <div class="customDatePicker">
-                                                        <img src="{{asset('backend/assets/icons/dateicon.svg')}}" alt="">
-                                                        <input type="text" class="form-control" name="start" id="start_date"
-                                                            placeholder="Start Date" />
-                                                            <img src="{{asset('backend/assets/icons/color-arrow-down.svg')}}" alt="">
+                                                        <img src="{{ asset('backend/assets/icons/dateicon.svg') }}" alt="">
+                                                        <input type="text" class="form-control" name="start"
+                                                            id="start_date" placeholder="Start Date" />
+                                                        <img src="{{ asset('backend/assets/icons/color-arrow-down.svg') }}"
+                                                            alt="">
                                                     </div>
 
                                                     <div class="customDatePicker">
-                                                        <img src="{{asset('backend/assets/icons/dateicon.svg')}}" alt="">
+                                                        <img src="{{ asset('backend/assets/icons/dateicon.svg') }}" alt="">
                                                         <input type="text" class="form-control" name="end" id="end_date"
                                                             placeholder="End Date" />
-                                                        <img src="{{asset('backend/assets/icons/color-arrow-down.svg')}}" alt="">
+                                                        <img src="{{ asset('backend/assets/icons/color-arrow-down.svg') }}"
+                                                            alt="">
                                                     </div>
                                                 </div>
                                             </div>
@@ -77,7 +81,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-    
+
                                     </tbody>
                                     <tfoot>
                                         @include('layouts.admin.table_footer_order_total')
@@ -94,28 +98,42 @@
 @endsection
 @section('pageScripts')
     <script type='text/javascript'>
-     CKEDITOR.replace('restaurant_description');
+        CKEDITOR.replace('restaurant_description');
         var config = {
             routes: {
                 getOrders: "{!! route('order.daily.report.restaurant') !!}",
                 getOrdersByRange: "{!! route('order.report.restaurant.date.range') !!}",
             }
         };
-        $(function () {
-    var id = $('#restaurantId').val();
-    var url = '{{ route("orders.time.range.report", ":id") }}';
-    url = url.replace(':id', id);
-    var table = $('#orderTable').DataTable({
-        // processing: true,
-        serverSide: true,
-        ajax: url,
-        columns: [
-            {data: 'date'},
-            {data: 'id'},
-            {data: 'amount'},
-        ]
-    });
-  });
+        $(function() {
+            $('.performance_li').addClass('sub-nav-active');
+            $('.performance_li a').siblings("ul").toggle().removeClass("d-none");
+            $('.performance_li a')
+                .children("span")
+                .children("span")
+                .children(".mdi")
+                .css("transform", "rotate(0deg)");
+            $('.restaurant_li').addClass('nav-active');
+
+            var id = $('#restaurantId').val();
+            var url = '{{ route('orders.time.range.report', ':id') }}';
+            url = url.replace(':id', id);
+            var table = $('#orderTable').DataTable({
+                // processing: true,
+                serverSide: true,
+                ajax: url,
+                columns: [{
+                        data: 'date'
+                    },
+                    {
+                        data: 'id'
+                    },
+                    {
+                        data: 'amount'
+                    },
+                ]
+            });
+        });
 
 
         // restaurant change
@@ -140,8 +158,9 @@
                         $('#orderTable').DataTable().clear().destroy();
                         dataTable();
                         setSessionId(response.data.session_id); // set restaurant id into session
-                        setRestaurant(response.data.restaurant_name, response.data.id); // set restaurant into topbar
-                        $('.start_date').html('- '+response.data.start_date+' -');
+                        setRestaurant(response.data.restaurant_name, response.data
+                        .id); // set restaurant into topbar
+                        $('.start_date').html('- ' + response.data.start_date + ' -');
                         $('.end_date').html(response.data.end_date);
                         // if ($.trim(response.data.orders)) {
                         //     ordersData(response.data.orders)
@@ -188,10 +207,11 @@
                             $('#orderTable').DataTable().clear().destroy();
                             dataTable();
                             setSessionId(response.data.session_id);
-                            $('.start_date').html('- '+response.data.start_date+' -');
+                            $('.start_date').html('- ' + response.data.start_date + ' -');
                             $('.end_date').html(response.data.end_date);
                             $('.total_orders').html(response.data.total_order);
-                            $('.total_amount').html('৳ ' + bdCurrencyFormat(response.data.total_amount));
+                            $('.total_amount').html('৳ ' + bdCurrencyFormat(response.data
+                            .total_amount));
                             // if ($.trim(response.data.orders)) {
                             //     ordersData(response.data.orders)
                             // }
@@ -232,18 +252,24 @@
             });
 
         }
-    function dataTable(){
-    var url = '{{ route("date.wise.order.report.restaurant") }}';
-    var table = $('#orderTable').DataTable({
-        // processing: true,
-        serverSide: true,
-        ajax: url,
-        columns: [
-            {data: 'date'},
-            {data: 'id'},
-            {data: 'amount'},
-        ]
-    });
-    } 
+
+        function dataTable() {
+            var url = '{{ route('date.wise.order.report.restaurant') }}';
+            var table = $('#orderTable').DataTable({
+                // processing: true,
+                serverSide: true,
+                ajax: url,
+                columns: [{
+                        data: 'date'
+                    },
+                    {
+                        data: 'id'
+                    },
+                    {
+                        data: 'amount'
+                    },
+                ]
+            });
+        }
     </script>
 @endsection

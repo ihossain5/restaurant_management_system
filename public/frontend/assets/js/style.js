@@ -131,12 +131,23 @@ $('#fileUpload').change(function() {
     $('#uplodedImg').attr('src', url);
 })
 
-// var locationModal = new bootstrap.Modal(document.getElementById('location-modal'), {
-//     keyboard: false
-// })
-// $(document).ready(function () {
-//     locationModal.show()
-// })
+var locationModal = new bootstrap.Modal(document.getElementById('location-modal'), {
+    keyboard: false
+})
+
+$(document).ready(function () {
+        // location modal close btn
+        $('.lmbCloseBtn').hide();
+        $('.addTocart').hide();
+    locationID = document.getElementById("select_id").value;
+    
+    if(locationID != ''){
+        $('.lmbCloseBtn').show();
+    }else{
+        locationModal.show();
+    }
+    
+})
 
 $('.navbar-toggler').on('click', function() {
     $('body').toggleClass('active');
