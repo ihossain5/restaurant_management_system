@@ -6,8 +6,18 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 
 Class CartService {
     public function addToCart($item) {
-       Cart::add($item->item_id, $item->name, 1, $item->price)
-            ->associate('App\Models\Item');
+        Cart::add($item->item_id, $item->name, 1, $item->price)
+        ->associate('App\Models\Item');
+        return true;
+    }
+    public function addComboToCart($combo) {
+        Cart::add([
+            'id'      => $combo->combo_id,
+            'name'    => $combo->name,
+            'qty'     => 1,
+            'price'   => $combo->price,
+            'options' => ['combo_id' => $combo->combo_id ?? ''],
+        ])->associate('App\Models\Combo');
         return true;
     }
 

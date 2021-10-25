@@ -142,4 +142,19 @@
             @endif
         @endforeach
     @endif
+    @include('layouts.frontend.partials.location_modal')
+@endsection
+@section('pageScripts')
+    <script>
+        var locationModal = new bootstrap.Modal(document.getElementById('location-modal'), {
+            keyboard: false
+        })
+
+        locationID = document.getElementById("select_id").value;
+        if (locationID != '') {
+            $('.lmbCloseBtn').show();
+        } else {
+            locationModal.show();
+        }
+    </script>
 @endsection

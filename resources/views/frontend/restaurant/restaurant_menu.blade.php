@@ -112,15 +112,11 @@
                                                     </div>
                                                     <div class="col-md-6 pt-5 pt-md-0 text-start text-md-end">
                                                         <h3 class="price">Tk. {{ $item->price }}</h3>
-                                                        @if (session()->has('restaurantIds'))
-                                                            @foreach (session()->get('restaurantIds') as $id)
-                                                                @if ($id == $category->restaurant->restaurant_id)
-                                                                    <button class="cartBtn addTocartBtnId{{ $item->category->restaurant->restaurant_id }}"
-                                                                        onclick="addToCart({{ $item->item_id }},{{ $item->category->restaurant->restaurant_id }})">Add
-                                                                        to Cart</button>
-                                                                @endif
-                                                            @endforeach
-                                                        @endif       
+                                                        <button
+                                                            class="{{ $restaurant->disable == true ? 'addTocart' : 'cartBtn' }}  menuCartBtn  addTocartBtnId{{ $item->category->restaurant->restaurant_id }}"
+                                                            onclick="addToCart({{ $item->item_id }},{{ $item->category->restaurant->restaurant_id }})">Add
+                                                            to Cart
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -136,6 +132,7 @@
             </div>
         </div>
     </section>
+    @include('layouts.frontend.partials.location_modal')
 @endsection
 @section('pageScripts')
     <script>
@@ -167,5 +164,16 @@
                 refElement.addClass('active');
             }
         });
+
+        var locationModal = new bootstrap.Modal(document.getElementById('location-modal'), {
+            keyboard: false
+        })
+
+        locationID = document.getElementById("select_id").value;
+        if (locationID != '') {
+            $('.lmbCloseBtn').show();
+        } else {
+            locationModal.show();
+        }
     </script>
 @endsection

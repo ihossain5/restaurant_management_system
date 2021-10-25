@@ -13,19 +13,20 @@ use Illuminate\Support\Facades\Session;
 Class HomePageService {
 
     public function popularDishes() {
-        return Item::where('is_available', 1)->with(['category', 'orders' => function ($query) {
+        $items = Item::where('is_available', 1)->with(['category', 'orders' => function ($query) {
             $query->whereMonth('orders.created_at', '=', Carbon::now()->subMonth()->month)
                 ->where('order_status_id', 3);
         }])->limit(12)->get();
+        if (session()->has('restaurantIds')) {
+            $this->formatPopularDishes($items);
+        }
+        return $items;
     }
 
     public function combos() {
         $combos = Combo::with('items')->where('is_available', 1)->get();
-        foreach ($combos as $combo) {
-            foreach ($combo->items as $item) {
-                $combo->restaurant    = $item->category->restaurant->name;
-                $combo->restaurant_id = $item->category->restaurant->restaurant_id;
-            }
+        if (session()->has('restaurantIds')) {
+            $this->formatCombos($combos);
         }
         return $combos;
     }
@@ -39,11 +40,10 @@ Class HomePageService {
     }
 
     public function restaurants() {
-        $restaurants    = Restaurant::with('assets')->where('is_open', 1)->latest()->get();
-        if(session()->has('restaurantIds')){
-            $restaurantsIds = Session::get('restaurantIds')->toArray();
-            $this->formatRestaurant($restaurants, $restaurantsIds);
-        } 
+        $restaurants = Restaurant::with('assets')->where('is_open', 1)->latest()->get();
+        if (session()->has('restaurantIds')) {
+            $this->formatRestaurant($restaurants);
+        }
         return $restaurants;
     }
 
@@ -76,9 +76,9 @@ Class HomePageService {
         Session::put('restaurantIds', $restaurantId);
     }
 
-    private function formatRestaurant($restaurants, $restaurantsIds) {
+    private function formatRestaurant($restaurants) {
         foreach ($restaurants as $restaurant) {
-            if (in_array($restaurant->restaurant_id, $restaurantsIds)) {
+            if (in_array($restaurant->restaurant_id, $this->getRestaurantFromSession())) {
                 $restaurant->disable = false;
             } else {
                 $restaurant->disable = true;
@@ -88,8 +88,38 @@ Class HomePageService {
                     $restaurant->asset = $asset->pivot->asset;
                     break;
                 }
-
             }
+        }
+    }
+
+    private function formatPopularDishes($items) {
+        foreach ($items as $item) {
+            if (in_array($item->category->restaurant->restaurant_id, $this->getRestaurantFromSession())) {
+                $item->disable = false;
+            } else {
+                $item->disable = true;
+            }
+        }
+    }
+
+    private function formatCombos($combos){
+        foreach ($combos as $combo) {
+            foreach ($combo->items as $item) {
+                $combo->restaurant    = $item->category->restaurant->name;
+                $combo->restaurant_id = $item->category->restaurant->restaurant_id;
+
+                if (in_array($item->category->restaurant->restaurant_id, $this->getRestaurantFromSession())) {
+                    $combo->disable = false;
+                } else {
+                    $combo->disable = true;
+                }
+            }
+        }
+    }
+
+    private function getRestaurantFromSession() {
+        if (session()->has('restaurantIds')) {
+            return Session::get('restaurantIds')->toArray();
         }
     }
 }

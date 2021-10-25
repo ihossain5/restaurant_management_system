@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Services\HomePageService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller {
     public $homePageService;
@@ -17,6 +18,7 @@ class HomeController extends Controller {
         $restaurants = $homePageService->restaurants();
         $order_items = $homePageService->popularDishes();
         $combos      = $homePageService->combos();
+
         return view('frontend.index', compact('sliders', 'restaurants', 'order_items', 'combos', 'locations'));
     }
 

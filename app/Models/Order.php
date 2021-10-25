@@ -25,6 +25,7 @@ class Order extends Model {
         'apology_note',
         'special_notes',
     ];
+    
     public function items() {
         return $this->belongsToMany(Item::class, 'order_items', 'order_id', 'item_id')->withPivot('quantity', 'price')->withTimestamps();
     }

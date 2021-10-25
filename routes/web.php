@@ -17,6 +17,7 @@ use App\Http\Controllers\Backend\RestaurantController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\Frontend\AboutUsController as FrontendAboutUsController;
 use App\Http\Controllers\Frontend\CartController;
+use App\Http\Controllers\Frontend\CheckOutController;
 use App\Http\Controllers\Frontend\CustomerController as FrontendCustomerController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\RestaurantMenuController;
@@ -287,3 +288,8 @@ Route::get('/sign-in',[FrontendCustomerController::class,'customerSignIn'])->nam
  /* customer sign in */
  Route::post('/customer-sign-in',[FrontendCustomerController::class,'signIn'])->name('customer.sign.in');
  Route::post('/customer-sign-up',[FrontendCustomerController::class,'signUp'])->name('customer.sign.up');
+ Route::post('/customer-sign-out',[FrontendCustomerController::class,'signOut'])->name('cusetomer.sign.out');
+
+  /* checkout */
+ Route::get('/checkout',[CheckOutController::class,'index'])->name('frontend.chekout');
+ Route::post('/place-order',[CheckOutController::class,'placeOrder'])->name('order.place');

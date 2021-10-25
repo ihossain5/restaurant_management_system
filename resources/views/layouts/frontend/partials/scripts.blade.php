@@ -102,15 +102,26 @@
             "hideMethod": "fadeOut"
         }
         // add to cart
-        function addToCart(item_id, restaurant_id) {
-            $.ajax({
-                url: config.routes.addToCart,
-                method: "POST",
-                data: {
+        function addToCart(item_id, restaurant_id,combo_id) {
+            var combo_id = combo_id || '';
+            if(combo_id == ''){
+                var data = {
                     item_id: item_id,
                     restaurant_id: restaurant_id,
                     _token: "{{ csrf_token() }}"
-                },
+                };
+            } else{
+                var data = {
+                    item_id: item_id,
+                    restaurant_id: restaurant_id,
+                    combo_id: combo_id ,
+                    _token: "{{ csrf_token() }}"
+                }
+            }
+            $.ajax({
+                url: config.routes.addToCart,
+                method: "POST",
+                data: data,
                 dataType: "json",
                 success: function(response) {
                     if (response.success == true) {
@@ -266,6 +277,7 @@
                             console.log(restaurant.restaurant_id);
                             $('.restaurantId'+restaurant.restaurant_id).removeClass('disable-overlay');
                             $('.addTocartBtnId'+restaurant.restaurant_id).show();
+                            // $('.comboBtn').after(`<button class="addTocart addTocartBtnId${restaurant.restaurant_id}">Add to Cart</button>`)
                         });
 
                         $('.lmbCloseBtn').show();

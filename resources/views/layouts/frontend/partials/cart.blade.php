@@ -16,7 +16,7 @@
     </div>
     <div class="cartRightSide">
         <button onclick="deleteCart('{{$cart->rowId}}')"><img src="{{asset('frontend/assets/images/cart/delete.svg')}}" alt="emerald deleteIcon"></button>
-        <h6 class="">Tk. <span class="itemTotal{{$cart->rowId}}">{{$cart->subtotal}}</span></h6>
+        <h6 class="">Tk. <span class="itemTotal{{$cart->rowId}}">{{ currency_format($cart->subtotal)}}</span></h6>
     </div>
 </div>
 @endforeach
@@ -30,7 +30,7 @@
             <h6>Sub Total</h6>
         </div>
         <div>
-            <h6>Tk. 1895</h6>
+            <h6>Tk. <span class="grandTotal">{{Cart::subtotal()}}</span></h6>
         </div>
     </div>
     <div class="calculation d-flex justify-content-between">
@@ -51,7 +51,7 @@
     </div>
 
 
-    <a href="checkout.html"><button class="brand-btn rounded-pill">Checkout</button></a>
+    <a href="{{route('frontend.chekout')}}"><button class="brand-btn rounded-pill">Checkout</button></a>
     <p class="info-text">One of our representatives will personally call you to confirm your order upon checkout</p>
 </aside>
 <div class="trasnparentBg" id="trasnparentBg" onclick="closeCart()"></div>

@@ -14,9 +14,9 @@
                 <div class="carousel-indicators">
                     @if (!empty($sliders))
                         @foreach ($sliders as $key => $slider)
-                            <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="{{ $slider->slider_id }}"
-                                class="{{ $key == 0 ? 'active' : '' }}" aria-current="true"
-                                aria-label="{{ $slider->slider_id }}"></button>
+                            <button type="button" data-bs-target="#homeCarousel"
+                                data-bs-slide-to="{{ $slider->slider_id }}" class="{{ $key == 0 ? 'active' : '' }}"
+                                aria-current="true" aria-label="{{ $slider->slider_id }}"></button>
                         @endforeach
                     @endif
                 </div>
@@ -48,8 +48,9 @@
                 @foreach ($restaurants as $restaurant)
                     <div class="col">
                         <a href="{{ route('frontend.restaurant.menu', [$restaurant->restaurant_id]) }}">
-                           <div class="card h-100 deliverCard">
-                                <div class="card-overlay-box  {{$restaurant->disable == true ? 'disable-overlay' : ''}} restaurantId{{$restaurant->restaurant_id}}">
+                            <div class="card h-100 deliverCard">
+                                <div
+                                    class="card-overlay-box  {{ $restaurant->disable == true ? 'disable-overlay' : '' }} restaurantId{{ $restaurant->restaurant_id }}">
                                     <img src="{{ asset('images/' . $restaurant->asset) }}" class="card-img-top"
                                         alt="...">
                                     <div class="card-overlay-content">
@@ -60,7 +61,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $restaurant->name }}</h5>
                                     <h6>{{ $restaurant->type }}</h6>
-                                </div>  
+                                </div>
                             </div>
                         </a>
                     </div>
@@ -107,27 +108,17 @@
                                 <h6>{{ $combo->restaurant }}</h6>
                                 <h3>{{ $combo->name }}</h3>
                                 <h2 class="comboBtn">Tk. {{ $combo->price }}</h2>
-                                @if (session()->has('restaurantIds'))
-                                @foreach (session()->get('restaurantIds') as $id)
-                                    @if ($id == $combo->restaurant_id)
-                                    <button class="cartBtn addTocartBtnId{{$combo->restaurant_id}}">Add to Cart</button>
-                                    @else
-                                    <button class="addTocart addTocartBtnId{{$combo->restaurant_id}}">Add to Cart</button>
-                                    @endif
-                                @endforeach
-                            @endif
-                                {{-- <button class="addTocart addTocartBtnId{{$combo->restaurant_id}}">Add to Cart</button> --}}
+                                <button
+                                    onclick="addToCart({{ $combo->combo_id }},{{ $combo->restaurant_id }},{{ $combo->combo_id }})"
+                                    class=" {{ $combo->disable == true ? 'addTocart' : 'cartBtn' }} addTocartBtnId{{ $combo->restaurant_id }}">Add
+                                    to Cart</button>
                             </div>
                         </div>
                     </div>
                 @endforeach
             @endif
-
-
         </div>
     </section>
-
-
     <!-- Popular Dishes -->
     <section class="container-fluid popular-dishes">
         <div class="popular-section-header">
@@ -156,16 +147,10 @@
                                     <h6>{{ $item->category->restaurant->name }}</h6>
                                     <h3>{{ $item->name }}</h3>
                                     <h2 class="itemBtn">Tk. {{ $item->price }}</h2>
-                                    @if (session()->has('restaurantIds'))
-                                    @foreach (session()->get('restaurantIds') as $id)
-                                        @if ($id == $item->category->restaurant->restaurant_id )
-                                        <button class="cartBtn addTocartBtnId{{$item->category->restaurant->restaurant_id }}"
-                                            onclick="addToCart({{ $item->item_id }},{{ $item->category->restaurant->restaurant_id }})">Add
-                                            to Cart</button>
-                                        @endif
-                                    @endforeach
-                                @endif
-
+                                    <button
+                                        class="{{ $item->disable == true ? 'addTocart' : 'cartBtn' }}  addTocartBtnId{{ $item->category->restaurant->restaurant_id }}"
+                                        onclick="addToCart({{ $item->item_id }},{{ $item->category->restaurant->restaurant_id }})">Add
+                                        to Cart</button>
                                 </div>
                             </div>
                         </div>
@@ -174,10 +159,10 @@
             @endif
         </div>
     </section>
+    @include('layouts.frontend.partials.location_modal')
 @endsection
 @section('pageScripts')
     <script>
-
         $(window).scroll(function() {
             var scroll = $(window).scrollTop();
             var deliverSection = $(".deliverSection");
@@ -195,6 +180,15 @@
             }
         });
 
- 
+        var locationModal = new bootstrap.Modal(document.getElementById('location-modal'), {
+            keyboard: false
+        })
+
+        locationID = document.getElementById("select_id").value;
+        if (locationID != '') {
+            $('.lmbCloseBtn').show();
+        } else {
+            locationModal.show();
+        }
     </script>
 @endsection

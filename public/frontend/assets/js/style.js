@@ -84,21 +84,24 @@ $('.editBtnDeliveryInfo').click(function () {
 })
 
 
-$('.deliveryInfoBtn').click(function () {
-    $('.deliveryInfoInput').addClass('d-none');
-    $('.deliveryInfo').removeClass('d-none');
-    $('.editBtnDeliveryInfo').removeClass('d-none');
+// $('.deliveryInfoBtn').click(function (e) {
+//     e.preventDefault();
+//     e.stopPropagation();
+//     $('.deliveryInfoInput').addClass('d-none');
+//     $('.deliveryInfo').removeClass('d-none');
+//     $('.editBtnDeliveryInfo').removeClass('d-none');
 
-    $('.info-box1').css({
-        "background": "#FFFFFF",
-        "border": "1px solid #F2F2F2",
-        "box-shadow": "4px 12px 60px rgba(0, 0, 0, 0.03)",
-        "padding": "5.6rem",
-    });
-})
+//     $('.info-box1').css({
+//         "background": "#FFFFFF",
+//         "border": "1px solid #F2F2F2",
+//         "box-shadow": "4px 12px 60px rgba(0, 0, 0, 0.03)",
+//         "padding": "5.6rem",
+//     });
+// })
 
 
-$('.editBtnAcountInfo').click(function () {
+$('.editBtnAcountInfo').click(function (e) {
+    e.stopPropagation();
     $('.acountInfoInput').removeClass('d-none');
     $('.acountInfo').addClass('d-none');
     $('.editBtnAcountInfo').addClass('d-none');
@@ -131,22 +134,13 @@ $('#fileUpload').change(function() {
     $('#uplodedImg').attr('src', url);
 })
 
-var locationModal = new bootstrap.Modal(document.getElementById('location-modal'), {
-    keyboard: false
-})
+
 
 $(document).ready(function () {
         // location modal close btn
         $('.lmbCloseBtn').hide();
         $('.addTocart').hide();
-    locationID = document.getElementById("select_id").value;
-    
-    if(locationID != ''){
-        $('.lmbCloseBtn').show();
-    }else{
-        locationModal.show();
-    }
-    
+
 })
 
 $('.navbar-toggler').on('click', function() {
