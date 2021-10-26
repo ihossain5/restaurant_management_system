@@ -2,32 +2,27 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MyEvent implements ShouldBroadcast
-{
+class MyEvent implements ShouldBroadcast {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $message;
-  
-    public function __construct($message)
-    {
-        $this->message = $message;
+    public $restaurant_id;
+
+    public function __construct($message, $restaurant_id) {
+        $this->message       = $message;
+        $this->restaurant_id = $restaurant_id;
     }
-  
-    public function broadcastOn()
-    {
+
+    public function broadcastOn() {
         return ['my-channel'];
     }
-  
-    public function broadcastAs()
-    {
+
+    public function broadcastAs() {
         return 'my-event';
     }
 }

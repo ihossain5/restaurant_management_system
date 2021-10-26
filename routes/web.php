@@ -293,3 +293,6 @@ Route::get('/sign-in',[FrontendCustomerController::class,'customerSignIn'])->nam
   /* checkout */
  Route::get('/checkout',[CheckOutController::class,'index'])->name('frontend.chekout');
  Route::post('/place-order',[CheckOutController::class,'placeOrder'])->name('order.place');
+
+ Route::get('/my-orders',[FrontendCustomerController::class,'customerOrders'])->name('frontend.customer.order');
+ Route::post('/order-details',[FrontendCustomerController::class,'customerOrderDetails'])->name('frontend.customer.order.detail');

@@ -45,6 +45,14 @@ Class CartService {
         return Cart::subtotal();
     }
 
+    public function numberOfCartItems(){
+        return count($this->allCartItems());
+    }
+
+    public function allCartItems(){
+        return Cart::content();
+    }
+
     public function updateCart($rowId, $qty) {
         return Cart::update($rowId, $qty);
     }

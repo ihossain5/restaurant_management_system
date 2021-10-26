@@ -93,7 +93,6 @@ class OrderController extends Controller {
         $newOrder = Order::where('order_status_id', null)
         ->whereDate('created_at', Carbon::today())
         ->count();
-        // event(new OrderEvent($user = $this->create($request->all())));
         event(new MyEvent($newOrder));
         return 'Success';
         // $options = array(

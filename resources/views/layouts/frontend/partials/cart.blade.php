@@ -5,32 +5,30 @@
     <div>
         <p>{{$cart->name}}</p>
         <div class="incrDecBtn">
-            <button onclick="minusBtn('{{$cart->rowId}}')"><img src="{{asset('frontend/assets/images/cart/minus-btn.svg')}}" alt="emerald minus icon"></button>
+            <button type="button" onclick="minusBtn('{{$cart->rowId}}')"><img src="{{asset('frontend/assets/images/cart/minus-btn.svg')}}" alt="emerald minus icon"></button>
            
             <span class="cartQty{{$cart->rowId}}">{{$cart->qty}}</span>
             
-            <button onclick="plusBtn('{{$cart->rowId}}')" data-id="">
+            <button type="button" onclick="plusBtn('{{$cart->rowId}}')" data-id="">
                 <img src="{{asset('frontend/assets/images/cart/plus-btn.svg')}}" alt="emerald plus icon">
             </button>
         </div>
     </div>
     <div class="cartRightSide">
-        <button onclick="deleteCart('{{$cart->rowId}}')"><img src="{{asset('frontend/assets/images/cart/delete.svg')}}" alt="emerald deleteIcon"></button>
+        <button type="button" onclick="deleteCart('{{$cart->rowId}}')"><img src="{{asset('frontend/assets/images/cart/delete.svg')}}" alt="emerald deleteIcon"></button>
         <h6 class="">Tk. <span class="itemTotal{{$cart->rowId}}">{{ currency_format($cart->subtotal)}}</span></h6>
     </div>
 </div>
 @endforeach
 
-
-
-
-
+@if (count(Cart::content())>0)
+<div class="parent-div">
     <div class="calculation d-flex justify-content-between">
         <div>
             <h6>Sub Total</h6>
         </div>
         <div>
-            <h6>Tk. <span class="grandTotal">{{Cart::subtotal()}}</span></h6>
+            <h6>Tk. <span class="subTotal">{{Cart::subtotal()}}</span></h6>
         </div>
     </div>
     <div class="calculation d-flex justify-content-between">
@@ -51,7 +49,9 @@
     </div>
 
 
-    <a href="{{route('frontend.chekout')}}"><button class="brand-btn rounded-pill">Checkout</button></a>
+    <a href="{{route('frontend.chekout')}}"><button type="button" class="brand-btn rounded-pill">Checkout</button></a>
     <p class="info-text">One of our representatives will personally call you to confirm your order upon checkout</p>
+</div>
+    @endif
 </aside>
 <div class="trasnparentBg" id="trasnparentBg" onclick="closeCart()"></div>

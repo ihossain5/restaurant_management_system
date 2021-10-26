@@ -13,7 +13,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-6">
-                <h1 class="section-title">Orders</h1>
+                <h1 class="section-title">Orders </h1>
+                <input type="hidden" name="" id="managerRestaurantId" value="{{Auth::user()->restaurant->restaurant_id}}">
             </div>
             <div class="col-6 text-right">
                 <h1 class="section-title"></h1>
@@ -40,7 +41,7 @@
 
                         </div>
                         <div>
-                            <h1 class="orderValue new_orders" data-order="{{$total_new_orders}}">{{$total_new_orders}}</h1>
+                            <h1 class="orderValue new_orders new_order_badge" data-order="{{$total_new_orders}}">{{$total_new_orders}}</h1>
                             <h5>New Orders</h5>
                         </div>
                     </div>

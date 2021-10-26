@@ -16,7 +16,7 @@ class Customer  extends Authenticatable
     protected $fillable = ['name','photo','sex','email','password','contact','is_banned','address'];
 
     public function orders(){
-        return $this->hasMany(Order::class,'customer_id');
+        return $this->hasMany(Order::class,'customer_id')->orderBy('order_id','DESC');
     }
 
     public function setPasswordAttribute($pass) {

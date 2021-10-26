@@ -41,9 +41,7 @@ Class HomePageService {
 
     public function restaurants() {
         $restaurants = Restaurant::with('assets')->where('is_open', 1)->latest()->get();
-        if (session()->has('restaurantIds')) {
-            $this->formatRestaurant($restaurants);
-        }
+        $this->formatRestaurant($restaurants);
         return $restaurants;
     }
 
@@ -78,11 +76,14 @@ Class HomePageService {
 
     private function formatRestaurant($restaurants) {
         foreach ($restaurants as $restaurant) {
-            if (in_array($restaurant->restaurant_id, $this->getRestaurantFromSession())) {
-                $restaurant->disable = false;
-            } else {
-                $restaurant->disable = true;
+            if (session()->has('restaurantIds')) {
+                if (in_array($restaurant->restaurant_id, $this->getRestaurantFromSession())) {
+                    $restaurant->disable = false;
+                } else {
+                    $restaurant->disable = true;
+                }
             }
+           
             foreach ($restaurant->assets as $asset) {
                 if ($asset->pivot->section == 'home') {
                     $restaurant->asset = $asset->pivot->asset;

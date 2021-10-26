@@ -31,10 +31,13 @@
                                 <div class="col-12 pb-3">
                                     <h5>Address</h5>
                                     <p class="address">{{ $customer->address ?? 'N/A' }}</p>
+                                    <input type="hidden" class="contactAddress">
                                 </div>
                                 <div class="col-12 pb-3">
                                     <h5>Mobile Number</h5>
                                     <p class="contact">{{ $customer->contact ?? 'N/A' }}</p>
+                                    <input type="hidden" class="contactNumber">
+                                    {{-- <label id="-error" class="error mt-2 text-danger h3" for=""></label> --}}
                                 </div>
 
                             </div>
@@ -54,7 +57,7 @@
 
                                     <div class="col-12 mt-5">
                                         <div class="form-check custom-check">
-                                            <input class="form-check-input" name="setDefaultAddress" type="checkbox" checked id="newAddres1">
+                                            <input class="form-check-input" name="setDefaultAddress" type="checkbox"  id="newAddres1">
                                             <label class="form-check-label" for="newAddress1">
                                                 Save this as my delivery address for future
                                                 reference
@@ -105,7 +108,7 @@
                                 </div>
                                 <div class="col-12 mt-5">
                                     <div class="form-check custom-check">
-                                        <input class="form-check-input" type="checkbox" id="newAddress">
+                                        <input class="form-check-input" name="setDefaultInfo"  type="checkbox" id="newAddress">
                                         <label class="form-check-label" for="newAddress">
                                             Save this as my delivery address for future
                                             reference
@@ -201,7 +204,7 @@
                                             Grand Total
                                         </div>
                                         <div class="secondColumn">
-                                            Tk. {{ Cart::subtotal() }}
+                                            Tk.  {{ totalAmount(Cart::subtotal(), 60) }}
                                         </div>
                                     </li>
                                 </ul>
@@ -234,26 +237,7 @@
                 placeOrder: "{!! route('order.place') !!}",
             }
         };
-        $(document).on('submit', '#placeOrder', function(e) {
-            e.preventDefault();
-            $.ajax({
-                url: config.routes.placeOrder,
-                method: "POST",
-                data: new FormData(this),
-                contentType: false,
-                cache: false,
-                processData: false,
-                dataType: "json",
-                success: function(response) {
-                    if (response.success == true) {
-
-                    } else {
-
-                    }
-                }, //success end
-
-            });
-        });
+      $('.contactNumber').hide();
 
         function save() {
             var checkbox = document.getElementById("newAddres1");
@@ -291,33 +275,62 @@
             // }
         }
 
+    // jQuery.validator.addClassRules('contactNumber', {
+    //     required: true /*,
+    //     other rules */
+    // });
 
-        // $("#placeOrder").validate({
-        //         rules: {
-        //             name: {
-        //                 required: true,
-        //                 maxlength: 50,
-        //             },
-        //             email: {
-        //                 required: true,
-        //                 email: true,
-        //             },
-        //             contact: {
-        //                 required: true,
-        //             },
-        //         },
-        //         messages: {
-        //             name: {
-        //                 required: 'Please insert employee name',
-        //             },
-        //             email: {
-        //                 required: 'Please insert employee email',
-        //             },
-        //         },
-        //         errorPlacement: function(label, element) {
-        //             label.addClass('mt-2 text-danger');
-        //             label.insertAfter(element);
-        //         },
-        //     }); 
+    // jQuery.validator.addClassRules('contactAddress', {
+    //     required: true /*,
+    //     other rules */
+    // });
+
+//     $.validator.addClassRules({
+//     contactAddress: {
+//         required: true,
+//         number: true
+//     },
+//     contactNumber: {
+//         required: true,
+//         email: true
+//     }
+// });
+
+        $("#placeOrder").validate({
+            ignore: [],
+                errorPlacement: function(label, element) {
+                    label.addClass('mt-2 text-danger');
+                    label.insertAfter(element);
+                },
+            }); 
+
+     $(document).on('submit', '#placeOrder', function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: config.routes.placeOrder,
+                method: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json",
+                success: function(response) {
+                    if (response.success == true) {
+                        window.location.replace("{{ route("frontend.customer.order") }}");
+                    } else {
+                        toastr["error"](response.message)
+                    }
+                }, //success end
+                error: function(error) {
+                    if (error.status == 422) {
+                        $.each(error.responseJSON.errors, function(i, message) {
+                            toastr["error"](message)
+                        });
+
+                    }
+                },
+
+            });
+        });
     </script>
 @endsection

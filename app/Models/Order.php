@@ -29,8 +29,14 @@ class Order extends Model {
     public function items() {
         return $this->belongsToMany(Item::class, 'order_items', 'order_id', 'item_id')->withPivot('quantity', 'price')->withTimestamps();
     }
+
     public function order_items() {
         return $this->belongsToMany(Item::class, 'order_items', 'order_id', 'item_id')
+            ->withPivot('quantity', 'price')->withTimestamps();
+    }
+
+    public function order_combos() {
+        return $this->belongsToMany(Combo::class, 'order_combos', 'order_id', 'combo_id')
             ->withPivot('quantity', 'price')->withTimestamps();
     }
 
@@ -118,6 +124,11 @@ class Order extends Model {
             ->where('restaurant_id', $restaurant)
             ->get();
 
+    }
+
+    public function getOrderId($name){
+        $data =  getFirstLetter($name);
+        return $data.$this->id;
     }
 
 }

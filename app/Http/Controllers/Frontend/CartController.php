@@ -43,14 +43,13 @@ class CartController extends Controller {
             }
         }
 
-        $data               = [];
-        $data['message']    = 'Item has been added into cart';
-        $data['items']      = Cart::content();
-        $data['grandTotal'] = $this->cartService->grandTotal();
-        return response()->json([
-            'success' => true,
-            'data'    => $data,
-        ]);
+        $data                      = [];
+        $data['message']           = 'Item has been added into cart';
+        $data['items']             = $this->cartService->allCartItems();
+        $data['subTotal']          = $this->cartService->grandTotal();
+        $data['numberOfCartItems'] = $this->cartService->numberOfCartItems();
+        $data['grandTotal']        = totalAmount($this->cartService->grandTotal(), 60);
+        return success($data);
     }
 
     public function increaseCartQuantity(Request $request) {
@@ -65,14 +64,16 @@ class CartController extends Controller {
 
     public function deleteCart(Request $request) {
         Cart::remove($request->rowId);
-        $data['grandTotal'] = $this->cartService->grandTotal();
+        $data['grandTotal']        = $this->cartService->grandTotal();
+        $data['numberOfCartItems'] = $this->cartService->numberOfCartItems();
         return success($data);
     }
 
     public function cartTotal($rowId) {
-        $data               = [];
-        $data['grandTotal'] = $this->cartService->grandTotal();
-        $data['price']      = $this->cartService->subtotal($rowId);
+        $data                      = [];
+        $data['grandTotal']        = $this->cartService->grandTotal();
+        $data['numberOfCartItems'] = $this->cartService->numberOfCartItems();
+        $data['price']             = $this->cartService->subtotal($rowId);
         return $data;
     }
 
@@ -84,4 +85,5 @@ class CartController extends Controller {
         $item = Item::findOrFail($id);
         return $this->cartService->addToCart($item);
     }
+
 }

@@ -14,11 +14,14 @@ class RestaurantMenuController extends Controller
         $locations =  DeliveryLocation::get()->unique('name');
         $restaurant->load('assets','restaurant_categories','restaurant_categories.items');  
         $images=[];
-        if (in_array($restaurant->restaurant_id, Session::get('restaurantIds')->toArray())) {
-            $restaurant->disable = false;
-        } else {
-            $restaurant->disable = true;
-        } 
+        if (Session::has('sessionRestaurantId')){
+            if (in_array($restaurant->restaurant_id, Session::get('restaurantIds')->toArray())) {
+                $restaurant->disable = false;
+            } else {
+                $restaurant->disable = true;
+            } 
+        }
+  
         foreach($restaurant->assets as $asset){
             
             if($asset->pivot->section == 'menu'){

@@ -13,8 +13,11 @@
                 <a class="navbar-brand d-block" href="{{route('frontend.index')}}"><img src="{{asset('frontend/assets/images/Logos/logo-new.png')}}" alt="Emerald Logo"></a>
             </div>
             <div class="navbar-cart d-lg-none">
-                <div onclick="cartToggle()" class="" style="cursor: pointer;" aria-current="page">
+                <div onclick="cartToggle()" class="position-relative" style="cursor: pointer;" aria-current="page">
                     <img src="{{asset('frontend/assets/images/Home/cart.svg')}}" alt="emerald cart">
+                    <div class="cart-counter">
+                        <span class="cartCounter">{{count(Cart::content())}}</span>
+                    </div>
                 </div>
             </div>
             <div class="navbar-location-select-box d-none d-lg-block">
@@ -36,9 +39,8 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="profile.html">My Profile</a></li>
-                                <li><a class="dropdown-item" href="allOrder.html">My Orders</a></li>
+                                <li><a class="dropdown-item" href="{{route('frontend.customer.order')}}">My Orders</a></li>
                                 <li>
-                                    {{-- <a class="dropdown-item" href="{{route('cusetomer.sign.out')}}">sign out</a> --}}
                                     <a class="dropdown-item" href="{{ route('cusetomer.sign.out') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">sign out</a>
                                     <form id="logout-form" action="{{ route('cusetomer.sign.out') }}" method="POST" class="d-none">
                                         @csrf
@@ -53,8 +55,13 @@
                         </li>
                         @endif
                         <li class="nav-item">
-                            <div onclick="cartToggle()" class="nav-link active" style="cursor: pointer;"
-                                aria-current="page"><img src="{{asset('frontend/assets/images/Home/cart.svg')}}" alt="emerald cart"></div>
+                            <div onclick="cartToggle()" class="nav-link  position-relative" style="cursor: pointer;"
+                                aria-current="page">
+                                <img src="{{asset('frontend/assets/images/Home/cart.svg')}}" alt="emerald cart">
+                                <div class="cart-counter">
+                                    <span class="cartCounter">{{count(Cart::content())}}</span>
+                                </div>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -68,7 +75,7 @@
                         <a class="nav-link " aria-current="page" href="profile.html">My Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="allOrder.html">My Orders</a>
+                        <a class="nav-link" aria-current="page" href="{{route('frontend.customer.order')}}">My Orders</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="/">sign out</a>

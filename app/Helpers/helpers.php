@@ -72,3 +72,29 @@ function combos($items) {
     }
     return collect($allCombos)->unique('combo_id');
 }
+
+function formatAmount($amount) {
+    return floatval(preg_replace('/[^\d.]/', '', $amount));
+}
+
+// order total amount
+function totalAmount($amount, $deleiveryFee) {
+    $amount       = floatval(preg_replace('/[^\d.]/', '', $amount));
+    $deleiveryFee = floatval(preg_replace('/[^\d.]/', '', $deleiveryFee));
+    return currency_format($amount + $deleiveryFee);
+}
+
+//get first character of a stirng
+function getFirstLetter($str) {
+    $ret = '';
+    foreach (explode(' ', $str) as $word) {
+        $ret .= strtoupper($word[0]);
+    }
+
+    return $ret;
+}
+
+//for frontend
+function formatOrderDate($date) {
+    return Carbon::parse($date)->format('d F, Y');
+}

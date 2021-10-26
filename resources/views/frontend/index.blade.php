@@ -54,8 +54,10 @@
                                     <img src="{{ asset('images/' . $restaurant->asset) }}" class="card-img-top"
                                         alt="...">
                                     <div class="card-overlay-content">
-                                        <img src="{{ 'images/' . $restaurant->logo }}" alt="">
-                                        <p>**Delivery available only in Gulshan</p>
+                                        <div class="card-ovelay-inner">
+                                            <img src="{{ 'images/' . $restaurant->logo }}" alt="">
+                                            <p>**Delivery available only in Gulshan</p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="card-body">

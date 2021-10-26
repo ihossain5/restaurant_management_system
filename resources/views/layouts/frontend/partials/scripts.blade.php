@@ -26,7 +26,7 @@
                 getRestaurants: "{!! route('frontend.restaurant.by.location') !!}",
             }
         };
-    
+
 
         // Deales Carousel
         $(document).ready(function() {
@@ -102,19 +102,19 @@
             "hideMethod": "fadeOut"
         }
         // add to cart
-        function addToCart(item_id, restaurant_id,combo_id) {
+        function addToCart(item_id, restaurant_id, combo_id) {
             var combo_id = combo_id || '';
-            if(combo_id == ''){
+            if (combo_id == '') {
                 var data = {
                     item_id: item_id,
                     restaurant_id: restaurant_id,
                     _token: "{{ csrf_token() }}"
                 };
-            } else{
+            } else {
                 var data = {
                     item_id: item_id,
                     restaurant_id: restaurant_id,
-                    combo_id: combo_id ,
+                    combo_id: combo_id,
                     _token: "{{ csrf_token() }}"
                 }
             }
@@ -149,8 +149,39 @@
                                     </div>
                                 </div>`
                             )
-                        })
-                    }else{
+                        });
+                        $('.parent-div').empty();
+                        $('.cartItem:last').after(
+                            `<div class="parent-div"> 
+                                <div class="calculation d-flex justify-content-between">
+                                    <div>
+                                        <h6>Sub Total</h6>
+                                    </div>
+                                    <div>
+                                        <h6>Tk. <span class="subTotal">${response.data.subTotal}</span></h6>
+                                    </div>
+                                </div>
+                                <div class="calculation d-flex justify-content-between">
+                                    <div>
+                                        <h6>VAT</h6>
+                                    </div>
+                                    <div>
+                                        <h6>Tk. 85</h6>
+                                    </div>
+                                </div>
+                                <div class="calculation grand-total d-flex justify-content-between py-4">
+                                    <div>
+                                        <h6>Grand Total</h6>
+                                    </div>
+                                    <div>
+                                        <h6>Tk. <span class="grandTotal">${response.data.subTotal}</span></h6>
+                                    </div>
+                                </div>
+                                <a href="{{ route("frontend.chekout") }}"><button type="button" class="brand-btn rounded-pill">Checkout</button></a>
+                                <p class="info-text">One of our representatives will personally call you to confirm your order upon checkout</p>
+                           </div>`);
+                           cartCounter(response.data.numberOfCartItems); // set cart counter
+                    } else {
                         toastr["error"](response.message)
                     } //success end
                 },
@@ -164,6 +195,7 @@
 
         // increase cart quantity   
         function plusBtn(rowId) {
+            // alert('sdsd');
             var oldQty = $('.cartQty' + rowId).html();
             $.ajax({
                 url: config.routes.updateCart,
@@ -177,9 +209,10 @@
                     if (response.success == true) {
                         // toastr["success"](response.data.message)
                         $('.grandTotal').html(response.data.grandTotal)
-                        $('.itemTotal' + rowId).html(response.data.price )
+                        $('.subTotal').html(response.data.grandTotal)
+                        $('.itemTotal' + rowId).html(response.data.price)
                         $('.cartQty' + rowId).html(++oldQty);
-
+                        cartCounter(response.data.numberOfCartItems); // set cart counter
                     } //success end
                 },
                 error: function(error) {
@@ -193,7 +226,7 @@
         // decrease cart quantity   
         function minusBtn(rowId) {
             var oldQty = $('.cartQty' + rowId).html();
-           
+
             if (oldQty == 1) {
                 toastr["info"]('Quantity can not be less than 1')
             } else {
@@ -208,8 +241,10 @@
                     success: function(response) {
                         if (response.success == true) {
                             $('.cartQty' + rowId).html(--oldQty);
+                            $('.subTotal').html(response.data.grandTotal)
                             $('.grandTotal').html(response.data.grandTotal)
-                            $('.itemTotal' + rowId).html(response.data.price )
+                            $('.itemTotal' + rowId).html(response.data.price)
+                            cartCounter(response.data.numberOfCartItems); // set cart counter
                         } //success end
                     },
                     error: function(error) {
@@ -239,7 +274,9 @@
                     if (response.success == true) {
                         // toastr["success"](response.data.message)
                         $('.grandTotal').html(response.data.grandTotal)
+                        $('.subTotal').html(response.data.grandTotal)
                         $('.cartRow' + rowId).remove();
+                        cartCounter(response.data.numberOfCartItems); // set cart counter
                     } //success end
                 },
                 error: function(error) {
@@ -257,45 +294,51 @@
         // location change function
         function getRestaurants() {
             id = document.getElementById("select_id").value;
-            if(id== ''){
+            if (id == '') {
                 $('.lmbCloseBtn').hide();
-            }else{
+            } else {
                 $.ajax({
-                url: config.routes.getRestaurants,
-                method: "POST",
-                data: {
-                    id: id,
-                    _token: "{{ csrf_token() }}"
-                },
-                dataType: "json",
-                success: function(response) {
-                    if (response.success == true) {
-                        $('.addTocart').hide();
-                        $('.cartBtn').hide();
-                        $('.card-overlay-box').addClass('disable-overlay');
-                        $.each(response.data.restaurants, function(i,restaurant){
-                            console.log(restaurant.restaurant_id);
-                            $('.restaurantId'+restaurant.restaurant_id).removeClass('disable-overlay');
-                            $('.addTocartBtnId'+restaurant.restaurant_id).show();
-                            // $('.comboBtn').after(`<button class="addTocart addTocartBtnId${restaurant.restaurant_id}">Add to Cart</button>`)
-                        });
+                    url: config.routes.getRestaurants,
+                    method: "POST",
+                    data: {
+                        id: id,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.success == true) {
+                            $('.addTocart').hide();
+                            $('.cartBtn').hide();
+                            $('.card-overlay-box').addClass('disable-overlay');
+                            $.each(response.data.restaurants, function(i, restaurant) {
+                                console.log(restaurant.restaurant_id);
+                                $('.restaurantId' + restaurant.restaurant_id).removeClass(
+                                    'disable-overlay');
+                                $('.addTocartBtnId' + restaurant.restaurant_id).show();
+                                // $('.comboBtn').after(`<button class="addTocart addTocartBtnId${restaurant.restaurant_id}">Add to Cart</button>`)
+                            });
 
-                        $('.lmbCloseBtn').show();
-                        $('.headerLocation').html(response.data.location_name);
-                        $('#location-modal').modal('hide');
-                    } //success end
-                },
-                error: function(error) {
-                    if (error.status == 404) {
-                        toastMixin.fire({
-                            icon: 'error',
-                            animation: true,
-                            title: "" + 'Data not found' + ""
-                        });
-                    }
-                },
-            }); //ajax end
+                            $('.lmbCloseBtn').show();
+                            $('.headerLocation').html(response.data.location_name);
+                            $('#location-modal').modal('hide');
+                        } //success end
+                    },
+                    error: function(error) {
+                        if (error.status == 404) {
+                            toastMixin.fire({
+                                icon: 'error',
+                                animation: true,
+                                title: "" + 'Data not found' + ""
+                            });
+                        }
+                    },
+                }); //ajax end
             }
-          
+
         }
+
+      function cartCounter(number){
+          $('.cartCounter').html(number);
+
+      }  
     </script>
