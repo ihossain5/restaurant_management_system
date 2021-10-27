@@ -38,7 +38,7 @@
                                 My Profile
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="profile.html">My Profile</a></li>
+                                <li><a class="dropdown-item" href="{{route('customer.profile')}}">My Profile</a></li>
                                 <li><a class="dropdown-item" href="{{route('frontend.customer.order')}}">My Orders</a></li>
                                 <li>
                                     <a class="dropdown-item" href="{{ route('cusetomer.sign.out') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">sign out</a>
@@ -72,13 +72,16 @@
                     </li>
                     @if (Auth::guard('customer')->check())
                     <li class="nav-item">
-                        <a class="nav-link " aria-current="page" href="profile.html">My Profile</a>
+                        <a class="nav-link " aria-current="page" href="{{route('customer.profile')}}">My Profile</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{{route('frontend.customer.order')}}">My Orders</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/">sign out</a>
+                        <a class="nav-link" aria-current="page" href="{{ route('cusetomer.sign.out') }}" onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();">sign out</a>
+                        <form id="logout-form-mobile" action="{{ route('cusetomer.sign.out') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
                     </li>
                     @endif
                 </ul>

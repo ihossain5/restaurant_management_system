@@ -35,37 +35,40 @@ $('.passToggleLogin1Btn').click(function () {
 function personalInfoEdit() {
     $('.personalInfo').addClass('d-none');
     $('.personalInfoForm').removeClass('d-none');
-
     $('.perosnalEditBtn').addClass('d-none')
+
+    var name =  $('.customerName').html();
+    var email =  $('.customerEmail').html();
+    $('.customerNameEdit').val(name);
+    $('.customerEmailEdit').val(email);
 }
 
 
 
-function personalInfoSave() {
-    $('.personalInfo').removeClass('d-none');
-    $('.personalInfoForm').addClass('d-none');
+// function personalInfoSave() {
+//     $('.personalInfo').removeClass('d-none');
+//     $('.personalInfoForm').addClass('d-none');
 
-    $('.perosnalEditBtn').removeClass('d-none')
+//     $('.perosnalEditBtn').removeClass('d-none')
 
-}
+// }
 
 
 
 function deliveryInfoEdit() {
     $('.deliveryInfo').addClass('d-none');
     $('.deliveryInfoForm').removeClass('d-none');
-
     $('.deliveryEditBtn').addClass('d-none');
+
+   var address =  $('.customerAddress').html();
+   var contact =  $('.customerContact').html();
+   $('.customerAddressEdit').val(address);
+   $('.customerContactEdit').val(contact);
 }
 
 
 
-function deliveryInfoSave() {
-    $('.deliveryInfo').removeClass('d-none');
-    $('.deliveryInfoForm').addClass('d-none');
 
-    $('.deliveryEditBtn').removeClass('d-none');
-}
 
 
 $('.editBtnDeliveryInfo').click(function () {
@@ -128,11 +131,6 @@ $('.acountInfoBtn').click(function () {
     });
 })
 
-// edit profile image 
-$('#fileUpload').change(function() {
-    const url = window.URL.createObjectURL(this.files[0]);
-    $('#uplodedImg').attr('src', url);
-})
 
 
 

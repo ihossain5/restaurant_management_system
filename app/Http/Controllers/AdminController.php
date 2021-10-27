@@ -78,10 +78,10 @@ class AdminController extends Controller {
             $image_url = $user->image;
         }
         $user->update([
-            'name'  => $request->name,
-            'image' => $image_url,
-            'phone' => $request->phone,
-            'email' => $request->email,
+            'name'    => $request->name,
+            'image'   => $image_url,
+            'contact' => $request->contact,
+            'email'   => $request->email,
 
         ]);
         return redirect()->back()->with('success', 'Profile has been updated');
@@ -113,10 +113,10 @@ class AdminController extends Controller {
     public function store(AdminStoreRequest $request) {
         $token = Str::random(30);
         $user  = User::create($request->validated() + [
-            'password'   => $token,
-            'token'      => $token,
+            'password'       => $token,
+            'token'          => $token,
             'is_super_admin' => 1,
-            'is_active' => 1,
+            'is_active'      => 1,
         ]);
         $maildata = [
             'title'   => 'Geetings from Emerald',
@@ -124,15 +124,15 @@ class AdminController extends Controller {
             'url'     => route('send.email', [$token]),
         ];
         Mail::to($request->email)->send(new SendMail($maildata));
-        $data                = array();
-        $data['message']         = 'Admin added successfully';
-        $data['name']            = $user->name;
-        $data['email']           = $user->email;
-        $data['contact']         = $user->contact ?? 'N/A';
-        $data['photo']           = $user->photo;
-        $data['sex']             = $user->sex ??'N/A';
-        $data['id']              = $user->id;
-        $data['is_active']              = $user->is_active;
+        $data              = array();
+        $data['message']   = 'Admin added successfully';
+        $data['name']      = $user->name;
+        $data['email']     = $user->email;
+        $data['contact']   = $user->contact ?? 'N/A';
+        $data['photo']     = $user->photo;
+        $data['sex']       = $user->sex ?? 'N/A';
+        $data['id']        = $user->id;
+        $data['is_active'] = $user->is_active;
         return success($data);
 
     }
@@ -332,19 +332,19 @@ class AdminController extends Controller {
         return redirect('/')->with('success', 'Your password has been changed!');
     }
 
-    public function updateActiveStatus(Request $request){
+    public function updateActiveStatus(Request $request) {
         $admin = User::findOrFail($request->id);
-        if($admin->is_active == 0){
+        if ($admin->is_active == 0) {
             $admin->update([
-                'is_active'=> 1
+                'is_active' => 1,
             ]);
-        }else{
+        } else {
             $admin->update([
-                'is_active'=> 0
+                'is_active' => 0,
             ]);
         }
-        $data = [];
+        $data            = [];
         $data['message'] = 'Status has been updated';
-        return success($data); 
+        return success($data);
     }
 }

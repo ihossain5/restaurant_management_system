@@ -129,10 +129,10 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td class="col-3 test">Delevery Fee</td>
-                                        <td class="col-3 test"></td>
-                                        <th class="col-3"></th>
-                                        <td class="col-3 deleveryFee">asdasd </td>
+                                        {{-- <td class="col-3 test">Delevery Fee</td> 
+                                        <td class="col-6 test"></td>
+                                        <th class="col-6"></th>
+                                        <td class="col-3 deleveryFee">asdasd </td> --}}
                                     </tr>
                                     <tr class="table-active">
                                         <td class="col-3 font-weight-bold">Total Amount</td>
@@ -166,6 +166,8 @@
             }
         };
 
+        $('.user_li').addClass('nav-active');
+        $('.customer_li').addClass('active');
 
     $(function () {
     var id = $('#customer_id').val();
@@ -176,7 +178,7 @@
         serverSide: true,
         ajax: url,
         columns: [
-            {data: 'id'},
+            {data: 'orderID'},
             {data: 'date'},
             {data: 'customer_name'},
             {data: 'customer_contact'},
@@ -214,22 +216,26 @@
                         $('#view_customer_email').text(response.data.customer.email ?? 'N/A');
                         $('#view_notes').text(response.data.special_notes ?? 'N/A');
 
-                        if (response.data.status.name == 'Preparing') {
+                        if(response.data.order_status_id != null){
+                            if (response.data.status.name == 'Preparing') {
                             var class_name = 'primary';
-                        } else if (response.data.status.name == 'Delivering') {
-                            var class_name = 'success';
-                        } else if (response.data.status.name == 'Completed') {
-                            var class_name = 'success';
-                        } else {
-                            var class_name = 'danger';
+                            } else if (response.data.status.name == 'Delivering') {
+                                var class_name = 'success';
+                            } else if (response.data.status.name == 'Completed') {
+                                var class_name = 'success';
+                            } else {
+                                var class_name = 'danger';
+                            }
+                            $('#order_status').text(response.data.status.name);
                         }
+                
 
                         $('#order_status').attr('class', 'btn float-right btn-outline-' + class_name + ' ' +
                             response.data.class);
-                        $('#order_status').text(response.data.status.name);
+                     
 
                         $('.apeend_tbody').empty();
-                        $.each(response.data.items, function(key, val) {
+                        $.each(response.data.orderItems, function(key, val) {
                             var total_price = two_decimal(val.pivot.quantity * val.pivot.price);
                             $('.apeend_tbody').append(
                                 `<tr><td class="item_name">${val.name}</td>
@@ -240,11 +246,11 @@
 
                         });
                         $('.view_total').html('৳ ' + bdCurrencyFormat(response.data.amount));
-                        if(response.data.delivery_fee != null){
-                            $('.deleveryFee').html('৳ ' + bdCurrencyFormat(response.data.delivery_fee));
-                        }else{
-                            $('.deleveryFee').html('৳ ' + 0);
-                        }
+                        // if(response.data.delivery_fee != null){
+                        //     $('.deleveryFee').html('৳ ' + bdCurrencyFormat(response.data.delivery_fee));
+                        // }else{
+                        //     $('.deleveryFee').html('৳ ' + 0);
+                        // }
 
 
                         $('#viewModal').modal('show');
@@ -309,7 +315,7 @@
         serverSide: true,
         ajax: url,
         columns: [
-            {data: 'id'},
+            {data: 'orderID'},
             {data: 'date'},
             {data: 'customer_name'},
             {data: 'customer_contact'},

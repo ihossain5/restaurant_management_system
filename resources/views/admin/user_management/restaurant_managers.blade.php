@@ -178,7 +178,7 @@
                     <form class="managerAddForm" method="POST"> @csrf
                         <div class="form-group">
                             <label>Select Restaurant</label>
-                            <select name="restaurant" id="" class="form-control">
+                            <select name="restaurant" id="" class="form-control restaurant_select_box">
                                 <option value="">Select Restaurant</option>
                                 @foreach ($restaurants as $restaurant)
                                     <option value="{{ $restaurant->restaurant_id }}">{{ $restaurant->name }}</option>
@@ -223,8 +223,8 @@
                         <input type="hidden" name="hidden_id" id="hidden_id">
                         <div class="form-group">
                             <label>Select Restaurant</label>
-                            <select name="restaurant" id="restaurant_id" class="form-control">
-                                <option value="">Select Restaurant</option>
+                            <select name="restaurant" id="restaurant_id" class="form-control restaurant_select_box">
+                                <option value="" selected class="restaurantName"></option>
                                 @foreach ($restaurants as $restaurant)
                                     <option value="{{ $restaurant->restaurant_id }}">{{ $restaurant->name }}</option>
                                 @endforeach
@@ -273,7 +273,7 @@
                                 <strong>Email:</strong> <span id="view_email"></span><br>
                                 <strong>Phone:</strong> <span id="view_phone"></span><br>
                                 <label for="name"><strong>Photo:</strong></label> <br>
-                                <img src="" id="view_image">
+                                <img src="" id="view_image" style="width: 100%;">
                             </p>
                         </div>
                         <div class="form-group">
@@ -312,6 +312,7 @@
         $('#addButton').on('click', function() {
             $('.dropify-preview').hide();
             $('.managerAddForm').trigger('reset');
+            $('.restaurantName').html('select Restaurant');
         });
 
         var imagesUrl = '{!! URL::asset('/images/') !!}';
@@ -419,7 +420,7 @@
                             .append(`<td>` + response.data.name + `</td>`)
                             .append(`<td>` + response.data.sex + `</td>`)
                             .append(`<td>` + response.data.email + `</td>`)
-                            .append(`<td>` + response.data.phone + `</td>`)
+                            .append(`<td>` + response.data.contact + `</td>`)
 
 
                             .append(`<td><button type='button' class='btn btn-outline-dark' onclick='viewManager(${response.data.id})'>
@@ -448,6 +449,15 @@
                             });
 
                         }
+                        $('.restaurant_select_box').empty();
+                        $('.restaurant_select_box').append(
+                                `<option value="" class="restaurantName"></option>`
+                            );
+                        $.each(response.data.restaurants, function(i, restaurant) {
+                            $('.restaurant_select_box').append(
+                                `<option value="${restaurant.restaurant_id}">${restaurant.name}</option>`
+                            );
+                        });
 
 
                     } else {
@@ -591,11 +601,14 @@
                 dataType: "json",
                 success: function(response) {
                     if (response.success == true) {
+                        // $('.restaurantName').html();
                         $('#edit_name').val(response.data.name)
                         $('#edit_email').val(response.data.email)
                         $('#hidden_id').val(response.data.id)
-                        $('#restaurant_id').val(response.data.restaurant ? response.data.restaurant
-                            .restaurant_id : '')
+                        $('.restaurantName').html(response.data.restaurant ? response.data.restaurant
+                            .name : '')
+                        // $('#restaurant_id').val(response.data.restaurant ? response.data.restaurant
+                        //     .name : '')
                         $('#edit_modal').modal('show');
 
                     } //success end
@@ -656,6 +669,16 @@
                                 title: "" + response.data.message + ""
                             });
                             $('.updateManagerForm')[0].reset();
+
+                            $('.restaurant_select_box').empty();
+                            $('.restaurant_select_box').append(
+                                `<option value="" class="restaurantName"></option>`
+                            );
+                            $.each(response.data.restaurants, function(i, restaurant) {
+                                $('.restaurant_select_box').append(
+                                    `<option value="${restaurant.restaurant_id}">${restaurant.name}</option>`
+                                );
+                            });
                         } else {
                             toastMixin.fire({
                                 icon: 'error',

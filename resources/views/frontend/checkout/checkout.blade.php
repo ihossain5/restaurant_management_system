@@ -46,18 +46,19 @@
                             <form id="addressForm">
                                 <div class="row formInput profile-input pt-5">
                                     <div class="col-12">
-                                        <input class="form-control" name="address" type="text" id="address" placeholder="Address"
-                                            value="{{ $customer->address }}">
+                                        <input class="form-control" name="address" type="text" id="address"
+                                            placeholder="Address" value="{{ $customer->address }}">
 
                                     </div>
                                     <div class="col-12">
-                                        <input class="form-control" type="text" name="contact" id="contact" placeholder="Mobile Number"
-                                            value="{{ $customer->contact }}">
+                                        <input class="form-control" type="text" name="contact" id="contact"
+                                            placeholder="Mobile Number" value="{{ $customer->contact }}">
                                     </div>
 
                                     <div class="col-12 mt-5">
                                         <div class="form-check custom-check">
-                                            <input class="form-check-input" name="setDefaultAddress" type="checkbox"  id="newAddres1">
+                                            <input class="form-check-input" name="setDefaultAddress" type="checkbox"
+                                                id="newAddres1">
                                             <label class="form-check-label" for="newAddress1">
                                                 Save this as my delivery address for future
                                                 reference
@@ -103,12 +104,13 @@
 
                                 </div>
                                 <div class="col-12">
-                                    <input class="form-control" name="email" id="email" type="text" placeholder="Your Email"
-                                        value="{{ $customer->email }}">
+                                    <input class="form-control" name="email" id="email" type="text"
+                                        placeholder="Your Email" value="{{ $customer->email }}">
                                 </div>
                                 <div class="col-12 mt-5">
                                     <div class="form-check custom-check">
-                                        <input class="form-check-input" name="setDefaultInfo"  type="checkbox" id="newAddress">
+                                        <input class="form-check-input" name="setDefaultInfo" type="checkbox"
+                                            id="newAddress">
                                         <label class="form-check-label" for="newAddress">
                                             Save this as my delivery address for future
                                             reference
@@ -146,7 +148,7 @@
                             <div class="col-6 col-md-6">
                                 <h1 class="checkoutCart-title">My Cart</h1>
                             </div>
-                            <input type="hidden" name="restaurant_id" value="{{$restaurant->restaurant_id}}">
+                            <input type="hidden" name="restaurant_id" value="{{ $restaurant->restaurant_id }}">
                             <div class="col-6 col-md-6 text-end">
                                 <img style="max-width: 16.5rem;" src="{{ asset('images/' . $restaurant->logo) }}" alt="">
                             </div>
@@ -156,7 +158,7 @@
                                 <ul class="checkoutCartItem">
                                     <!-- Cart Item -->
                                     @foreach (Cart::content() as $cart)
-                                    {{-- <input type="hidden" name="cartId" value="{{$cart->rowId}}"> --}}
+                                        {{-- <input type="hidden" name="cartId" value="{{$cart->rowId}}"> --}}
                                         <li>
                                             <div>
                                                 <span class="itmQuantity">{{ $cart->qty }}X</span>
@@ -204,7 +206,7 @@
                                             Grand Total
                                         </div>
                                         <div class="secondColumn">
-                                            Tk.  {{ totalAmount(Cart::subtotal(), 60) }}
+                                            Tk. {{ totalAmount(Cart::subtotal(), 60) }}
                                         </div>
                                     </li>
                                 </ul>
@@ -237,7 +239,7 @@
                 placeOrder: "{!! route('order.place') !!}",
             }
         };
-      $('.contactNumber').hide();
+        $('.contactNumber').hide();
 
         function save() {
             var checkbox = document.getElementById("newAddres1");
@@ -275,36 +277,36 @@
             // }
         }
 
-    // jQuery.validator.addClassRules('contactNumber', {
-    //     required: true /*,
-    //     other rules */
-    // });
+        // jQuery.validator.addClassRules('contactNumber', {
+        //     required: true /*,
+        //     other rules */
+        // });
 
-    // jQuery.validator.addClassRules('contactAddress', {
-    //     required: true /*,
-    //     other rules */
-    // });
+        // jQuery.validator.addClassRules('contactAddress', {
+        //     required: true /*,
+        //     other rules */
+        // });
 
-//     $.validator.addClassRules({
-//     contactAddress: {
-//         required: true,
-//         number: true
-//     },
-//     contactNumber: {
-//         required: true,
-//         email: true
-//     }
-// });
+        //     $.validator.addClassRules({
+        //     contactAddress: {
+        //         required: true,
+        //         number: true
+        //     },
+        //     contactNumber: {
+        //         required: true,
+        //         email: true
+        //     }
+        // });
 
         $("#placeOrder").validate({
             ignore: [],
-                errorPlacement: function(label, element) {
-                    label.addClass('mt-2 text-danger');
-                    label.insertAfter(element);
-                },
-            }); 
+            errorPlacement: function(label, element) {
+                label.addClass('mt-2 text-danger');
+                label.insertAfter(element);
+            },
+        });
 
-     $(document).on('submit', '#placeOrder', function(e) {
+        $(document).on('submit', '#placeOrder', function(e) {
             e.preventDefault();
             $.ajax({
                 url: config.routes.placeOrder,
@@ -316,7 +318,9 @@
                 dataType: "json",
                 success: function(response) {
                     if (response.success == true) {
-                        window.location.replace("{{ route("frontend.customer.order") }}");
+                        var url = '{{ route('order.placed', ':id') }}';
+                        url = url.replace(':id', response.data.order_id);
+                        window.location.replace(url);
                     } else {
                         toastr["error"](response.message)
                     }

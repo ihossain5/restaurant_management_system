@@ -97,7 +97,7 @@
                                                 <div class="form-group">
                                                     <label for="phone">Phone</label>
                                                     <input type="name" name="phone" class="form-control" id="phone"
-                                                        value="{{ $user->phone ?? '' }}">
+                                                        value="{{ $user->contact ?? '' }}">
                                                 </div>
                                                 
                                             </div>

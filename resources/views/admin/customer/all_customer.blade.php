@@ -202,7 +202,7 @@
                     }
                     },
                     {data: 'name'},
-                    {data: 'sex'},
+                    {data: 'gender',},
                     {data: 'email'},
                     {data: 'contact'},
                     {data: 'address'},
@@ -242,9 +242,9 @@
                     if (response.success == true) {              
                         $('#view_name').text(response.data.name);
                         $('#view_email').text(response.data.email);
-                        $('#view_gender').text(response.data.sex ?? 'N/A');
-                        $('#view_phone').text(response.data.contact ?? 'N/A');
-                        $('#view_address').text(response.data.address ?? 'N/A');
+                        $('#view_gender').text(response.data.sex == ''? 'N/A' : response.data.sex);
+                        $('#view_phone').text(response.data.contact == ''? 'N/A' : response.data.contact);
+                        $('#view_address').text(response.data.address == ''? 'N/A' : response.data.address);
 
                         if (response.data.photo === null) {
                             $('#view_image').attr('src','/images/default.png');
@@ -331,5 +331,12 @@
 
         }
         //end
+
+       function getOrder(id){
+        var url = '{{ route('customer.orders', ':id') }}';
+        url = url.replace(':id', id);
+        window.location.replace(url);
+           
+       } 
     </script>
 @endsection

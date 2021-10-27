@@ -208,7 +208,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
         Route::get('/', [CustomerController::class, 'index'])->name('customer.index');
         Route::post('/show', [CustomerController::class, 'show'])->name('customer.show');
         Route::post('/banned', [CustomerController::class, 'banCustomer'])->name('customer.banned');
-        Route::get('{id}/orders/', [CustomerController::class, 'customerOrders'])->name('customer.orders');
+        Route::get('{id}/all-order/', [CustomerController::class, 'customerOrders'])->name('customer.orders');
         Route::post('/orders', [CustomerController::class, 'customerOrderByRestaurant'])->name('customer.order.restaurant');
         Route::get('/order', [CustomerController::class, 'getOrders'])->name('customer.order');
         Route::post('/delete', [ManagerController::class, 'destroy'])->name('restaurant.manager.delete');
@@ -290,9 +290,20 @@ Route::get('/sign-in',[FrontendCustomerController::class,'customerSignIn'])->nam
  Route::post('/customer-sign-up',[FrontendCustomerController::class,'signUp'])->name('customer.sign.up');
  Route::post('/customer-sign-out',[FrontendCustomerController::class,'signOut'])->name('cusetomer.sign.out');
 
+  /* customer profile */
+ Route::get('/profile',[FrontendCustomerController::class,'customerProfile'])->name('customer.profile');
+ Route::post('/profile/photo/update',[FrontendCustomerController::class,'customerProfilePhotoUpdate'])->name('customer.profile.photo.update');
+ Route::post('/delivery/info/update',[FrontendCustomerController::class,'customerDeliveryInfoUpdate'])->name('customer.delivery.info.update');
+ Route::post('/account/info/update',[FrontendCustomerController::class,'customerAccountInfoUpdate'])->name('customer.account.info.update');
+
   /* checkout */
  Route::get('/checkout',[CheckOutController::class,'index'])->name('frontend.chekout');
  Route::post('/place-order',[CheckOutController::class,'placeOrder'])->name('order.place');
+ Route::get('/order-placed/{order}',[CheckOutController::class,'orderPlaced'])->name('order.placed');
 
  Route::get('/my-orders',[FrontendCustomerController::class,'customerOrders'])->name('frontend.customer.order');
  Route::post('/order-details',[FrontendCustomerController::class,'customerOrderDetails'])->name('frontend.customer.order.detail');
+
+
+ Route::get('auth/facebook', [FrontendCustomerController::class, 'redirectToGoogle']);
+Route::get('auth/facebook/callback', [FrontendCustomerController::class, 'handleGoogleCallback']);

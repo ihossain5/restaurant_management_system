@@ -13,7 +13,7 @@ class Customer  extends Authenticatable
     use HasFactory;
     
     protected $primaryKey = 'customer_id';
-    protected $fillable = ['name','photo','sex','email','password','contact','is_banned','address'];
+    protected $fillable = ['name','photo','sex','email','password','contact','is_banned','address','google_id'];
 
     public function orders(){
         return $this->hasMany(Order::class,'customer_id')->orderBy('order_id','DESC');

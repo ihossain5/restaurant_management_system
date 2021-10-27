@@ -18,7 +18,7 @@ use Illuminate\Support\Str;
 class ManagerController extends Controller {
     public function index() {
         $managers    = User::where('is_manager', 1)->latest()->get();
-        $restaurants = Restaurant::get();
+        $restaurants = Restaurant::where('user_id',null)->get();
         return view('admin.user_management.restaurant_managers', compact('managers', 'restaurants'));
     }
 
@@ -49,6 +49,8 @@ class ManagerController extends Controller {
         $data['sex']             = $user->sex ??'N/A';
         $data['id']              = $user->id;
         $data['restaurant_name'] = $user->restaurant->name;
+        $data['restaurants'] = Restaurant::where('user_id',null)->get();
+
         return response()->json([
             'success' => true,
             'data'    => $data,
@@ -98,6 +100,7 @@ class ManagerController extends Controller {
             $data['sex']           = $user->sex ?? 'N/A';
             $data['id']              = $user->id;
             $data['restaurant_name'] = $user->restaurant->name;
+            $data['restaurants'] = Restaurant::where('user_id',null)->get();
             return response()->json([
                 'success' => true,
                 'data'    => $data,
@@ -120,11 +123,17 @@ class ManagerController extends Controller {
     public function registerNewManager($token) {
         // dd($token);
         $user = User::where('token', $token)->first();
-        if ($user->is_verified == 0) {
-            return view('admin.user_management.register', compact('user'));
-        } else {
-            abort();
+        if($user){
+            if ($user->is_verified == 0) {
+                return view('admin.user_management.register', compact('user'));
+            } else {
+                abort('404');
+            }
         }
+        else {
+            abort('404');
+        }
+
     }
 
     public function userSignUp(UserStoreRequest $request) {

@@ -866,11 +866,11 @@
                         setRestaurant(response.data.name, response.data.id);  // set restaurant into topbar
                          
                         $.each(response.data.categories, function(i, category) {
-                            console.log(category);
                             $('.category_select_box').append(
                                 `<option value="${category.category_id}">${category.name}</option>`
                             );
                         });
+                        
                         if ($.trim(response.data)) {
                             var itemTable = $('#itemTable').DataTable();
                             $.each(response.data.items, function(key, val) {

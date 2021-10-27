@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Restaurant;
 use App\Models\User;
 use App\Events\MyEvent;
+use App\Services\OrderService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -40,14 +41,14 @@ class OrderController extends Controller {
         // return view('admin.order-management.past_orders', compact('restaurants', 'restaurant'));
     }
 
-    public function show(Request $request) {
-        $order = Order::with('items', 'status', 'customer')->findOrFail($request->id);
+    public function show(Request $request, OrderService $orderService) {
+        $order = Order::with('items', 'status', 'customer','order_combos')->findOrFail($request->id);
         if($order->status != null){
             $class = (($order->status->name == 'Preparing') ? 'txt-preparing'
             : (($order->status->name == 'Delivering') ? 'txt-delivering' : (($order->status->name == 'Completed') ? 'txt-completed' : 'txt-cancelled')));
         $order['class'] = $class;
         }
-      
+        $order->orderItems = $orderService->orderItems($order);
         return success($order);
     }
 

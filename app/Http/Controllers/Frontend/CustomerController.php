@@ -7,11 +7,15 @@ use App\Http\Requests\CustomerSignInRequest;
 use App\Http\Requests\CustomerSignUpRequest;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\User;
+use App\Services\OrderService;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Laravel\Socialite\Facades\Socialite;
 
 class CustomerController extends Controller {
     public function customerSignIn() {
@@ -21,7 +25,7 @@ class CustomerController extends Controller {
         // dd($request->all());
         $credentials = $request->only('email', 'password');
         if (Auth::guard('customer')->attempt($credentials)) {
-            Session::flash('message','Successfully logged in');
+            Session::flash('message', 'Successfully logged in');
             return success('ssdsd');
         } else {
             return response()->json([
@@ -46,32 +50,139 @@ class CustomerController extends Controller {
         return success($customer);
     }
 
-    public function signOut(){
+    public function signOut() {
         Auth::guard('customer')->logout();
         return redirect()->back();
     }
 
-    public function customerOrders(){
+    public function customerOrders() {
         $orders = Auth::guard('customer')->user()->orders;
-        $orders->load('items','order_combos','customer','restaurant','status');
-        return view('frontend.orders.my_orders',compact('orders'));
+        $orders->load('items', 'order_combos', 'customer', 'restaurant', 'status');
+        return view('frontend.orders.my_orders', compact('orders'));
     }
 
-    public function customerOrderDetails(Request $request){
-        $order = Order::with('restaurant','items','order_combos')->findOrFail($request->id);
-        $orderItems = [];
-        foreach($order->order_combos as $combo){
-            $orderItems[] = $combo;
-        
-        }
-        foreach($order->items as $item){
-            $orderItems[] = $item;
-        
-        }
-        $order->date = Carbon::parse($order->created_at)->format('g:i A') . ' '. formatOrderDate($order->created_at);
+    public function customerOrderDetails(Request $request, OrderService $orderService) {
+        $order             = Order::with('restaurant', 'items', 'order_combos')->findOrFail($request->id);
+        $order->date       = Carbon::parse($order->created_at)->format('g:i A') . ' ' . formatOrderDate($order->created_at);
         $order->grandTotal = formatAmount($order->amount) + formatAmount($order->delivery_fee);
-        $order->orderItems = $orderItems;
-        $order->orderID = $order->getOrderId($order->restaurant->name);
+        $order->orderItems = $orderService->orderItems($order);
+        $order->orderID    = $order->getOrderId($order->restaurant->name);
         return success($order);
+    }
+
+    public function customerProfile() {
+        $customer = Auth::guard('customer')->user();
+        return view('frontend.customer.profile', compact('customer'));
+    }
+
+    public function customerProfilePhotoUpdate(Request $request) {
+        $customer = Auth::guard('customer')->user();
+        if ($request->photo) {
+            deleteImage($customer->photo);
+            $photo     = $request->photo;
+            $path      = 'customer/profile/';
+            $photo_url = storeImage($photo, $path, 100, 100);
+            $customer->update([
+                'photo' => $photo_url,
+            ]);
+            $data['message'] = 'Profile photo has been updated';
+            // $data['photo'] = $customer->address;
+            return success($data);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Please upload a photo',
+            ]);
+        }
+    }
+
+    public function customerDeliveryInfoUpdate(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'address' => 'required|max:1000',
+            'contact' => 'required|max:11|numeric',
+        ]);
+        if ($validator->fails()) {
+            $data          = array();
+            $data['error'] = $validator->errors()->all();
+            return response()->json([
+                'success' => false,
+                'data'    => $data,
+            ]);
+        } else {
+            $customer = Auth::guard('customer')->user();
+            $customer->update([
+                'address' => $request->address,
+                'contact' => $request->contact,
+            ]);
+            $data['message'] = 'Delivery information has been saved';
+            $data['address'] = $customer->address;
+            $data['contact'] = $customer->contact;
+            return success($data);
+        }
+
+    }
+
+    public function customerAccountInfoUpdate(Request $request) {
+        $customer  = Auth::guard('customer')->user();
+        $validator = Validator::make($request->all(), [
+            'name'  => 'required|max:100',
+            'email' => 'required|max:100|email|unique:customers,email,' . $customer->customer_id . ',customer_id',
+
+        ]);
+        if ($validator->fails()) {
+            $data          = array();
+            $data['error'] = $validator->errors()->all();
+            return response()->json([
+                'success' => false,
+                'data'    => $data,
+            ]);
+        } else {
+            $customer->update([
+                'name'  => $request->name,
+                'email' => $request->email,
+            ]);
+            $data['message'] = 'Account information has been saved';
+            $data['name']    = $customer->name;
+            $data['email']   = $customer->email;
+            return success($data);
+        }
+
+    }
+
+    public function redirectToGoogle() {
+        return Socialite::driver('facebook')->redirect();
+    }
+
+    public function handleGoogleCallback() {
+        try {
+
+            $user = Socialite::driver('facebook')->user();
+            // dd($user);
+
+            $finduser = User::where('fb_id', $user->id)->first();
+
+            if ($finduser) {
+
+                Auth::login($finduser);
+                // dd('uuuuuuu';)
+
+                return redirect()->intended('dashboard');
+
+            } else {
+                $newUser = User::create([
+                    'name'     => $user->name,
+                    'email'    => $user->email,
+                    'fb_id'    => $user->id,
+                    'password' => encrypt('12345678'),
+                ]);
+
+                Auth::login($newUser);
+
+                // dd('sdssd');
+            }
+
+        } catch (Exception $e) {
+            dd($e->getMessage());
+        }
     }
 }

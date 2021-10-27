@@ -171,6 +171,7 @@ return [
         Yajra\DataTables\DataTablesServiceProvider::class,
         // Darryldecode\Cart\CartServiceProvider::class,
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -238,6 +239,7 @@ return [
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         // 'Cart' => Darryldecode\Cart\Facades\CartFacade::class, 
         'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
     ],
 

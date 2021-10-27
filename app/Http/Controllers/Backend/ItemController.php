@@ -31,7 +31,7 @@ class ItemController extends Controller {
         $photo = $request->photo;
         if ($photo) {
             $path      = 'item-assets/';
-            $photo_url = storeImage($photo, $path, 480, 380);
+            $photo_url = storeImage($photo, $path, 401, 296);
         }
         $item = Item::create($request->validated());
         $item->item_assets()->attach([9 => [
@@ -65,7 +65,7 @@ class ItemController extends Controller {
                 deleteImage($asset->pivot->asset);
             }
             $path      = 'item-assets/';
-            $photo_url = storeImage($photo, $path, 480, 380);
+            $photo_url = storeImage($photo, $path, 401, 296);
         } else {
             foreach ($item->item_assets as $asset) {
                 $photo_url = $asset->pivot->asset;

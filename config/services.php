@@ -12,11 +12,11 @@ return [
     | location for this type of information, allowing packages to have
     | a conventional file to locate the various service credentials.
     |
-    */
+     */
 
-    'mailgun' => [
-        'domain' => env('MAILGUN_DOMAIN'),
-        'secret' => env('MAILGUN_SECRET'),
+    'mailgun'  => [
+        'domain'   => env('MAILGUN_DOMAIN'),
+        'secret'   => env('MAILGUN_SECRET'),
         'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
     ],
 
@@ -24,10 +24,20 @@ return [
         'token' => env('POSTMARK_TOKEN'),
     ],
 
-    'ses' => [
-        'key' => env('AWS_ACCESS_KEY_ID'),
+    'ses'      => [
+        'key'    => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+    ],
+    'google'   => [
+        'client_id'     => '475867216933-bj4oj9c4qoc6u8btob7rg7409eumv0tr.apps.googleusercontent.com',
+        'client_secret' => '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',
+        'redirect'      => 'http://localhost:8000/auth/google/callback',
+    ],
+    'facebook' => [
+        'client_id'     => '1184181885409366',
+        'client_secret' => 'c7da528059bab23f5e3b6ff5d33b6b24',
+        'redirect'      => 'http://127.0.0.1:8000/auth/facebook/callback',
     ],
 
 ];
