@@ -25,7 +25,7 @@ class Order extends Model {
         'apology_note',
         'special_notes',
     ];
-    
+
     public function items() {
         return $this->belongsToMany(Item::class, 'order_items', 'order_id', 'item_id')->withPivot('quantity', 'price')->withTimestamps();
     }
@@ -126,9 +126,10 @@ class Order extends Model {
 
     }
 
-    public function getOrderId($name){
-        $data =  getFirstLetter($name);
-        return $data.$this->id;
+
+    public function getIdAttribute($value) {
+        $data = getFirstLetter($this->restaurant->name);
+        return $data . $value;
     }
 
 }

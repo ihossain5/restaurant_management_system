@@ -49,7 +49,7 @@
                                     @foreach ($orders as $order)
                                     <tr>
                                         <td>
-                                            <button onclick="viewOrder({{$order->order_id}})">#{{$order->getOrderId($order->restaurant->name)}}</button>
+                                            <button onclick="viewOrder({{$order->order_id}})">#{{$order->id}}</button>
                                         </td>
                                         <td>{{$order->restaurant->name}}</td>
                                         <td>Tk. {{currency_format($order->amount)}}</td>

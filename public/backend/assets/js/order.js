@@ -15,6 +15,6 @@ function denyOrder(id){
     $('#orderCancelModal').modal('show');
 }
 
+// update order function
 
-// accept order function
 

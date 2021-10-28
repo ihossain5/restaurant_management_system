@@ -19,6 +19,7 @@ use App\Http\Controllers\Frontend\AboutUsController as FrontendAboutUsController
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckOutController;
 use App\Http\Controllers\Frontend\CustomerController as FrontendCustomerController;
+use App\Http\Controllers\Frontend\CustomerLoginController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\RestaurantMenuController;
 use App\Http\Controllers\Manager\ManagerDashboardController;
@@ -254,6 +255,7 @@ Route::group(['prefix' => 'manager', 'middleware' => ['auth', 'manager']], funct
     Route::post('/accept-order', [ManagerOrdersController::class, 'acceptOrder'])->name('manager.order.accept.new_order');
     Route::post('/accept-order-in-delivery', [ManagerOrdersController::class, 'acceptOrderInDelivery'])->name('manager.order.accept.delivery');
     Route::post('/accept-order-in-preparation', [ManagerOrdersController::class, 'acceptOrderInPreparation'])->name('manager.order.accept.preparation');
+    Route::post('/update-order', [ManagerOrdersController::class, 'updateOrder'])->name('manager.order.update');
 
     /* Performance report routes */
     Route::get('/daily-sales-report', [ManagerOrderPerformanceController::class, 'dailyReports'])->name('manager.daily.sales.report');
@@ -307,3 +309,11 @@ Route::get('/sign-in',[FrontendCustomerController::class,'customerSignIn'])->nam
 
  Route::get('auth/facebook', [FrontendCustomerController::class, 'redirectToGoogle']);
 Route::get('auth/facebook/callback', [FrontendCustomerController::class, 'handleGoogleCallback']);
+
+// Google login
+Route::get('login/google', [CustomerLoginController::class, 'redirectToGoogle'])->name('login.google');
+Route::get('login/google/callback', [CustomerLoginController::class, 'handleGoogleCallback']);
+
+Route::get('404',function(){
+    return view('frontend.404');
+});

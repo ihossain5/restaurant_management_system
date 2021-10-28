@@ -22,6 +22,7 @@
 @endforeach
 
 @if (count(Cart::content())>0)
+
 <div class="parent-div">
     <div class="calculation d-flex justify-content-between">
         <div>

@@ -52,11 +52,13 @@ crossorigin="anonymous"></script>
 <script src="{{ asset('backend/assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}">
 </script>
 <script src="{{ asset('backend/assets/js/restaurant_add_row.js') }}"></script>
+<script src="{{ asset('backend/assets/js/style.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
 
 <script>
+
         var config = {
             routes: {
                 updateStatus: "{!! route('manager.restaurant.status.update') !!}",
@@ -241,6 +243,37 @@ $(".has_multi_sub a").click(function () {
             .css("transform", "rotate(0deg)");
     }
 });
+
+
+
+// $(document).load(function(){
+//     $("#testId").trigger("click");
+// });
+
+window.onload = (event) => {
+    $("body").trigger("click");
+    // var context = new AudioContext();
+};
+
+
+var audio = new Audio("http://127.0.0.1:8000/backend/assets/notification.mp3");
+
+// alert(audio);
+// function playAudio() {
+//     var x = new Audio("http://127.0.0.1:8000/backend/assets/notification.mp3");
+//     // Show loading animation.
+//     var playPromise = x.play();
+
+//     if (playPromise !== undefined) {
+//         playPromise
+//             .then((_) => {
+//                 x.play();
+//             })
+//             .catch((error) => {
+//                 console.log(error);
+//             });
+//     }
+// }
 
 
 </script>

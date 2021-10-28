@@ -1,0 +1,29 @@
+.not-found-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.not-found-inner {
+    padding: 9.2rem 11.2rem;
+    display: inline-block;
+    text-align: center;
+}
+.not-found-inner h4 {
+    font-weight: 500;
+    font-size: 3.2rem;
+    line-height: 4.2rem;
+    text-align: center;
+    text-transform: uppercase;
+    color: #53A0BC;
+    margin-top: 3.8rem;
+}
+@media (min-width: 2160px) {
+    .not-found-content {
+        min-height: calc(100vh - 200px);
+    }
+}
+@media (max-width: 575.98px) {
+    .not-found-content {
+        min-height: calc(100vh - 200px);
+    }
+}

@@ -13,10 +13,14 @@ use Illuminate\Support\Facades\Session;
 Class HomePageService {
 
     public function popularDishes() {
-        $items = Item::where('is_available', 1)->with(['category', 'orders' => function ($query) {
-            $query->whereMonth('orders.created_at', '=', Carbon::now()->subMonth()->month)
-                ->where('order_status_id', 3);
-        }])->limit(12)->get();
+        $items = Item::where('is_available', 1)->withCount([
+            'category',
+            'orders',
+            'orders as counted_order' => function ($query) {
+                $query->whereMonth('orders.created_at', '=', Carbon::now()->subMonth()->month)
+                    ->where('order_status_id', 3);
+            }])->orderBy('counted_order', 'DESC')->get();
+
         if (session()->has('restaurantIds')) {
             $this->formatPopularDishes($items);
         }
@@ -83,7 +87,7 @@ Class HomePageService {
                     $restaurant->disable = true;
                 }
             }
-           
+
             foreach ($restaurant->assets as $asset) {
                 if ($asset->pivot->section == 'home') {
                     $restaurant->asset = $asset->pivot->asset;
@@ -103,7 +107,7 @@ Class HomePageService {
         }
     }
 
-    private function formatCombos($combos){
+    private function formatCombos($combos) {
         foreach ($combos as $combo) {
             foreach ($combo->items as $item) {
                 $combo->restaurant    = $item->category->restaurant->name;

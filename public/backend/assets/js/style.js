@@ -25,8 +25,9 @@ let orderItem;
 // }
 
 function openEditModalAction(orderId) {
+    let main_url = window.location.origin;
     axios
-        .get("https://emerald.antapp.space/api/items")
+        .get(`${main_url}/api/items`)
         .then((res) => {
             if (res.status === 200 && res.data.status === true) {
                 console.log(res.data.data);
@@ -37,7 +38,7 @@ function openEditModalAction(orderId) {
             console.log(err);
         });
     axios
-        .get(`https://emerald.antapp.space/api/order/${orderId}/details`)
+        .get(`${main_url}/api/order/${orderId}/details`)
         .then((res) => {
             if (res.status === 200 && res.data.status === true) {
                 orderItem = res.data.data;
@@ -57,6 +58,7 @@ function openEditModalAction(orderId) {
 
 function addExistingItem() {
     // console.log(orderItem);
+    let main_url = window.location.origin;
 
     $(".orderId").html(`#${orderItem.order_id}`);
     $(".orderIdInput").val(`${orderItem.order_id}`);
@@ -64,7 +66,7 @@ function addExistingItem() {
     $(".customerEmail").html(`${orderItem.email}`);
     $(".customerContact").html(`${orderItem.customer_contact}`);
     $(".customerAddress").html(`${orderItem.customer_address}`);
-    $(".specialNotes").val(`${orderItem.special_notes}`);
+    $(".specialNotes").val(`${orderItem.special_notes ?? ''}`);
 
     $(".editOrderTable tbody").empty();
     orderItem.items.map((item) => {
@@ -100,13 +102,13 @@ function addExistingItem() {
     </td>
     <td>
         <button onclick="decrementAction('${$row_track_id}')" id="quantityDec${$row_track_id}" type="button" class="incBtn"><img
-                src="assets/clarity_minus-line.svg" alt=""></button>
+                src="${main_url}/backend/assets/icons/clarity_minus-line.svg" alt=""></button>
         <span id="quantityShow${$row_track_id}">${item.pivot.quantity}</span>
         <input type="hidden" id="quantity${$row_track_id}" name="item[${$row_track_id}][quantity]" value="${
             item.pivot.quantity
         }">
         <button onclick="incrementAction('${$row_track_id}')" id="quantityInc${$row_track_id}" type="button" class="incBtn"><img
-                src="assets/carbon_add.svg" alt=""></button>
+                src="${main_url}/backend/assets/icons/carbon_add.svg" alt=""></button>
     </td>
     <td>Tk <span id="indTotalPriceHtml${$row_track_id}">${
             item.pivot.price
@@ -116,7 +118,7 @@ function addExistingItem() {
         }">
     </td>
     <td>
-        <button onclick="delete_row('row_edit${$row_track_id}')" id="delBtn${$row_track_id}" class="delBtn"><img src="assets/ic_baseline-delete.svg"
+        <button onclick="delete_row('row_edit${$row_track_id}')" id="delBtn${$row_track_id}" class="delBtn"><img src="${main_url}/backend/assets/icons/ic_baseline-delete.svg"
                 alt=""></button>
     </td>
 </tr>
@@ -155,6 +157,7 @@ function addListToItem($rowno) {
 // let totalRow = 0;
 
 function add_row_edit() {
+    let main_url = window.location.origin;
     $row_track_id = $(".editOrderTable tbody>tr:last").data("row_track");
     if ($row_track_id == null) {
         $row_track_id = 1;
@@ -176,17 +179,17 @@ function add_row_edit() {
     </td>
     <td>
         <button onclick="decrementAction('${$row_track_id}')" id="quantityDec${$row_track_id}" type="button" class="incBtn"><img
-                src="assets/clarity_minus-line.svg" alt=""></button>
+                src="${main_url}/backend/assets/icons/clarity_minus-line.svg" alt=""></button>
         <span id="quantityShow${$row_track_id}">1</span>
         <input type="hidden" id="quantity${$row_track_id}" name="item[${$row_track_id}][quantity]" value="1">
         <button onclick="incrementAction('${$row_track_id}')" id="quantityInc${$row_track_id}" type="button" class="incBtn"><img
-                src="assets/carbon_add.svg" alt=""></button>
+                src="${main_url}/backend/assets/icons/carbon_add.svg" alt=""></button>
     </td>
     <td>Tk <span id="indTotalPriceHtml${$row_track_id}">1,000</span>
         <input id="indTotalPrice${$row_track_id}" class="totalCost" name="item[${$row_track_id}][individualTotal]" type="hidden">
     </td>
     <td>
-        <button onclick="delete_row('row_edit${$row_track_id}')" id="delBtn${$row_track_id}" class="delBtn"><img src="assets/ic_baseline-delete.svg"
+        <button onclick="delete_row('row_edit${$row_track_id}')" id="delBtn${$row_track_id}" class="delBtn"><img src="${main_url}/backend/assets/icons/ic_baseline-delete.svg"
                 alt=""></button>
     </td>
 </tr>

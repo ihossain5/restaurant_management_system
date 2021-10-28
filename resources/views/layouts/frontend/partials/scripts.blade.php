@@ -27,6 +27,15 @@
             }
         };
 
+        $(document).ajaxStart(function() {
+            $('.main_loader').removeClass('d-none');
+        });
+
+
+        $(document).ajaxComplete(function() {
+            $('.main_loader').addClass('d-none');
+        });
+
 
         // Deales Carousel
         $(document).ready(function() {
@@ -177,10 +186,10 @@
                                         <h6>Tk. <span class="grandTotal">${response.data.subTotal}</span></h6>
                                     </div>
                                 </div>
-                                <a href="{{ route("frontend.chekout") }}"><button type="button" class="brand-btn rounded-pill">Checkout</button></a>
+                                <a href="{{ route('frontend.chekout') }}"><button type="button" class="brand-btn rounded-pill">Checkout</button></a>
                                 <p class="info-text">One of our representatives will personally call you to confirm your order upon checkout</p>
                            </div>`);
-                           cartCounter(response.data.numberOfCartItems); // set cart counter
+                        cartCounter(response.data.numberOfCartItems); // set cart counter
                     } else {
                         toastr["error"](response.message)
                     } //success end
@@ -337,8 +346,8 @@
 
         }
 
-      function cartCounter(number){
-          $('.cartCounter').html(number);
+        function cartCounter(number) {
+            $('.cartCounter').html(number);
 
-      }  
+        }
     </script>

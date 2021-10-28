@@ -52,13 +52,16 @@ class CustomerController extends Controller {
 
     public function signOut() {
         Auth::guard('customer')->logout();
-        return redirect()->back();
+        return redirect()->route('frontend.index');
     }
 
     public function customerOrders() {
-        $orders = Auth::guard('customer')->user()->orders;
-        $orders->load('items', 'order_combos', 'customer', 'restaurant', 'status');
-        return view('frontend.orders.my_orders', compact('orders'));
+        if (Auth::guard('customer')->check()) {
+            $orders = Auth::guard('customer')->user()->orders;
+            $orders->load('items', 'order_combos', 'customer', 'restaurant', 'status');
+            return view('frontend.orders.my_orders', compact('orders'));
+        }
+
     }
 
     public function customerOrderDetails(Request $request, OrderService $orderService) {
@@ -66,7 +69,8 @@ class CustomerController extends Controller {
         $order->date       = Carbon::parse($order->created_at)->format('g:i A') . ' ' . formatOrderDate($order->created_at);
         $order->grandTotal = formatAmount($order->amount) + formatAmount($order->delivery_fee);
         $order->orderItems = $orderService->orderItems($order);
-        $order->orderID    = $order->getOrderId($order->restaurant->name);
+        // $order->orderID    = $order->getOrderId($order->restaurant->name);
+        $order->orderID = $order->id;
         return success($order);
     }
 
@@ -76,30 +80,32 @@ class CustomerController extends Controller {
     }
 
     public function customerProfilePhotoUpdate(Request $request) {
-        $customer = Auth::guard('customer')->user();
-        if ($request->photo) {
-            deleteImage($customer->photo);
-            $photo     = $request->photo;
-            $path      = 'customer/profile/';
-            $photo_url = storeImage($photo, $path, 100, 100);
-            $customer->update([
-                'photo' => $photo_url,
-            ]);
-            $data['message'] = 'Profile photo has been updated';
-            // $data['photo'] = $customer->address;
-            return success($data);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Please upload a photo',
-            ]);
+        if (Auth::guard('customer')->check()) {
+            $customer = Auth::guard('customer')->user();
+            if ($request->photo) {
+                deleteImage($customer->photo);
+                $photo     = $request->photo;
+                $path      = 'customer/profile/';
+                $photo_url = storeImage($photo, $path, 100, 100);
+                $customer->update([
+                    'photo' => $photo_url,
+                ]);
+                $data['message'] = 'Profile photo has been updated';
+                // $data['photo'] = $customer->address;
+                return success($data);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please upload a photo',
+                ]);
+            }
         }
     }
 
     public function customerDeliveryInfoUpdate(Request $request) {
         $validator = Validator::make($request->all(), [
             'address' => 'required|max:1000',
-            'contact' => 'required|max:11|numeric',
+            'contact' => 'required|numeric',
         ]);
         if ($validator->fails()) {
             $data          = array();

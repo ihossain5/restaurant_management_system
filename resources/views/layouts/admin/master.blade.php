@@ -17,7 +17,7 @@
 </head>
 
 <body class="fixed-left">
-    
+   
     <!-- Loader -->
     <div id="preloader">
         <div id="status">
@@ -36,13 +36,9 @@
                 @yield('content')
 
             </div> <!-- content -->
-
             @include('layouts.admin.footer')
-       
-
         </div>
         <!-- End Right content here -->
-
     </div>
     <!-- END wrapper -->
 

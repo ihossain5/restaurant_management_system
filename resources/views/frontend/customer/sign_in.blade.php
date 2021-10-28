@@ -70,7 +70,7 @@
                                         <p class="signInInfo">Sign in instantly with your social account</p>
 
                                         <div class="socialLogin">
-                                            <a href="{{ url('auth/facebook') }}">
+                                            <a href="{{ route('login.google') }}">
                                                 <button><img src="{{ asset('frontend/assets/images/sign up/Google.svg') }}"
                                                     alt=""></button>
                                             </a>
@@ -102,8 +102,10 @@
                                     <div class="col-12">
                                         <p class="signInInfo">Sign Up instantly with your social account</p>
                                         <div class="socialLogin">
-                                            <button><img src="{{ asset('frontend/assets/images/sign up/Google.svg') }}"
+                                            <a href="{{ route('login.google') }}">
+                                                <button><img src="{{ asset('frontend/assets/images/sign up/Google.svg') }}"
                                                     alt=""></button>
+                                            </a>
                                             <button><img src="{{ asset('frontend/assets/images/sign up/facebook.svg') }}"
                                                     alt=""></button>
                                         </div>

@@ -113,12 +113,119 @@
                                 Deny</button>
                         </div>
                         <div class="col-md-8 text-md-right">
-                            <button data-dismiss="modal" data-toggle="modal" data-target="#orderEditModal"
-                                class="btn-custom btnEdit mb-3"><img src="{{asset('backend/assets/icons/clarity_pencil-solid.svg')}}" alt="">
+                            <button data-dismiss="modal" 
+                                class="btn-custom btnEdit orderEditBtn mb-3"><img src="{{asset('backend/assets/icons/clarity_pencil-solid.svg')}}" alt="">
                                 Edit</button>
                             <button class="btn-custom btnAccept mb-3 accept_btn"><img
                                     src="{{asset('backend/assets/icons/icon-park-outline_correct.svg')}}" alt=""> Accept</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal addModal fade" id="orderEditModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="">
+                    <h5 class="modal-title text-center">Order Details Edit</h5>
+                    <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pt-3 orderDeta-body">
+                    <div class="row">
+                        <form id="orderEditForm">@csrf
+                        <div class="col-12">
+                            <h4>Order ID: <span class="orderId">#</span>
+                                <input type="hidden" name="order_id" class="orderIdInput">
+                            </h4>
+                            <h4>Customer Name: <span class="customerName"></span></h4>
+                            <h4>Customer Email: <span class="customerEmail"></span></h4>
+                            <h4>Customer Contact: <span class="customerContact"></span></h4>
+                            <h4>Customer Address: <span class="customerAddress"></span></h4>
+                            <h4 class="mt-3">Special Notes</h4>
+                        </div>
+                        <div class="col-12">
+                            <input type="text" class="form-control specialInput specialNotes" name="specialNotes">
+                        </div>
+                        <div class="col-12 mt-3">
+                            <h4>Ordered Items</h4>
+                        </div>
+                        <div class="col-12">
+                            <div class="table-responsive">
+
+                                <table class="table table-bordered text-center orderTable editOrderTable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Item Name</th>
+                                            <th scope="col">Unit Price</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Total Price</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                   
+                                    <tbody>
+                                        <!-- <tr>
+                                            <td>
+                                                <select class="itemSelect" name="itemName">
+                                                    <option value="">Item Name</option>
+                                                    <option value="1">Burger</option>
+                                                    <option value="2">Pizza</option>
+                                                </select>
+                                            </td>
+                                            <td>Tk <span>500</span>
+                                                <input type="hidden">
+                                            </td>
+                                            <td>
+                                                <button type="button" class="incBtn"><img
+                                                        src="assets/clarity_minus-line.svg" alt=""></button>
+                                                <span>1</span>
+                                                <input type="hidden">
+                                                <button type="button" class="incBtn"><img
+                                                        src="assets/carbon_add.svg" alt=""></button>
+                                            </td>
+                                            <td>Tk <span>1,000</span>
+                                                <input type="hidden">
+                                            </td>
+                                            <td>
+                                                <button class="delBtn"><img src="assets/ic_baseline-delete.svg"
+                                                        alt=""></button>
+                                            </td>
+                                        </tr> -->
+
+
+                                    </tbody>
+                            
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5" class="text-right"
+                                                style="background-color: transparent; border: none;">
+                                                <button onclick="add_row_edit()" type="button"
+                                                    class="btn-custom btnEdit"><img src="{{asset('backend/assets/icons/carbon_add.svg')}}"
+                                                        alt="">
+                                                    Add Item</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">Total Amount</td>
+                                            <td colspan="2">Tk <span class="totalAmount">1,500</span>
+                                                <input type="hidden" name="totalAmount" class="totalAmountInput">
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+
+                        <div class="col-12 text-right">
+                            <button  class="btn-custom btnAccept" type="submit"><img
+                                    src="{{asset('backend/assets/icons/icon-park-outline_correct.svg')}}" alt=""> Save</button>
+                        </div>
+                    </form>
                     </div>
                 </div>
             </div>
@@ -198,6 +305,10 @@
     <script src="{{ asset('backend/assets/js/order.js') }}"></script>
     <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <script src="{{ asset('backend/assets/js/pusher_notification.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.23.0/axios.min.js"
+    integrity="sha512-Idr7xVNnMWCsgBQscTSCivBNWWH30oo/tzYORviOCrLKmBaRxRflm2miNhTFJNVmXvCtzgms5nlJF4az2hiGnA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script type='text/javascript'>
         var config = {
             routes: {
@@ -205,6 +316,7 @@
                 getOrders: "{!! route('order.restaurant') !!}",
                 cancelOrder: "{!! route('manager.order.cancel') !!}",
                 acceptOrder: "{!! route('manager.order.accept.new_order') !!}",
+                updateOrder: "{!! route('manager.order.update') !!}",
             }
         };
 
@@ -227,11 +339,11 @@
                     if (response.success == true) {
                         $('#order_id').val(response.data.order_id);
                         $('#view_order_id').text(response.data.id);
-                        $('#view_customer_name').text(response.data.is_default_name == 0 ? response.data.name :
+                        $('#view_customer_name').text(response.data.is_default_name == 1 ? response.data.name :
                             response.data.customer.name);
-                        $('#view_customer_contact').text(response.data.is_default_contact == 0 ? response.data
+                        $('#view_customer_contact').text(response.data.is_default_contact == 1 ? response.data
                             .contact : response.data.customer.contact);
-                        $('#view_customer_address').text(response.data.is_default_address == 0 ? response.data
+                        $('#view_customer_address').text(response.data.is_default_address == 1 ? response.data
                             .address : response.data.customer.address);
                         $('#view_customer_email').text(response.data.customer.email ?? 'N/A');
                         $('#view_notes').text(response.data.special_notes ?? 'N/A');
@@ -243,6 +355,7 @@
                             $('.edit_btn').prop('disabled', false);
                         }
                         $('.accept_btn').attr('onclick', "acceptOrder(" + response.data.order_id + ")")
+                        $('.orderEditBtn').attr('onclick', "openEditModalAction(" + response.data.order_id + ")")
 
                         if (response.data.order_status_id != null) {
                             if (response.data.status.name == 'Preparing') {
@@ -263,13 +376,13 @@
 
 
                         $('.apeend_tbody').empty();
-                        $.each(response.data.items, function(key, val) {
+                        $.each(response.data.orderItems, function(key, val) {
                             var total_price = two_decimal(val.pivot.quantity * val.pivot.price);
                             $('.apeend_tbody').append(
                                 `<tr><td class="item_name">${val.name}</td>
-                                <td class="item_price">${'৳ ' + bdCurrencyFormat( val.pivot.price)}</td>
+                                <td class="item_price">${'৳ ' + bdCurrencyFormat( val.price)}</td>
                                 <td class="item_quantity">${val.pivot.quantity}</td>
-                                <td class="item_total_price">${'৳ ' + bdCurrencyFormat(total_price) }</td></tr>`
+                                <td class="item_total_price">${'৳ ' + bdCurrencyFormat(val.pivot.price) }</td></tr>`
                             );
 
                         });
@@ -466,5 +579,46 @@
                 ]
             });
         }
+
+      $(document).on('submit','#orderEditForm',function(e){
+          e.preventDefault();
+          $.ajax({
+                url: config.routes.updateOrder,
+                method: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json",
+                success: function(response) {
+                    if (response.success == true) {
+                        $("#orderEditModal").modal("hide");
+                        toastMixin.fire({
+                                icon: 'success',
+                                animation: true,
+                                title: "" + response.data.message + ""
+                            });
+                    } else {
+                        toastMixin.fire({
+                            icon: 'error',
+                            animation: true,
+                            title: "" + response.data.message + ""
+                        });
+                    }
+                }, //success end
+                error: function(error) {
+                    if (error.status == 422) {
+                        $.each(error.responseJSON.errors, function(i, message) {
+                            toastMixin.fire({
+                                icon: 'error',
+                                animation: true,
+                                title: "" + message + ""
+                            });
+                        });
+
+                    }
+                },
+            });
+      });  
     </script>
 @endsection

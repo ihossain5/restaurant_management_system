@@ -110,8 +110,8 @@ class CheckOutController extends Controller {
                 }
 
                 //destroy cart
-                Cart::destroy();
-                Session::forget('sessionRestaurantId');
+                // Cart::destroy();
+                // Session::forget('sessionRestaurantId');
                 Session::flash('success', 'Thanks for your order');
 
                 $newOrder = Order::where('order_status_id', null)

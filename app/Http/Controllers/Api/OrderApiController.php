@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\Order;
+use App\Services\OrderService;
 
 class OrderApiController extends Controller {
     public function all() {
@@ -14,7 +15,7 @@ class OrderApiController extends Controller {
             'data'   => $orders,
         ]);
     }
-    public function getOrderById(Order $order) {
+    public function getOrderById(Order $order, OrderService $orderService) {
         $order->load('items', 'status', 'customer');
         $data                     = [];
         $data['order_id']         = $order->order_id;
@@ -24,7 +25,7 @@ class OrderApiController extends Controller {
         $data['customer_address'] = $order->is_default_address == 0 ? $order->address : $order->customer->address;
         $data['email']            = $order->customer->email;
         $data['special_notes']    = $order->special_notes;
-        $data['items']            = $order->items;
+        $data['items']            = $orderService->orderItems($order);
 
         return response()->json([
             'status' => true,

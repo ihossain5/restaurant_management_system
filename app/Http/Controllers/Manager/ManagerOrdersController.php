@@ -7,6 +7,7 @@ use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
 class ManagerOrdersController extends Controller {
@@ -109,19 +110,46 @@ class ManagerOrdersController extends Controller {
         return success($data);
     }
 
+    public function updateOrder(Request $request) {
+        // dd($request->all());
+        $this->validate($request, [
+            'item'  => 'required|array',
+            'item*' => 'required',
+        ]);
+        $order = Order::findOrFail($request->order_id);
+        $items = $request->item;
+
+        DB::transaction(function () use($request, $items, $order) {
+            $order->update([
+                'special_notes' => $request->specialNotes ?? null,
+                'amount'        => $request->totalAmount,
+            ]);
+            foreach ($items as $item) {
+                $updated_item[$item['item_id']] = [
+                    'quantity' => $item['quantity'],
+                    'price'    => formatAmount($item['individualTotal']),
+                ];
+    
+            }
+            $order->items()->sync($updated_item, true);
+        });
+        $data['message']= 'Order has been updated';
+        return success($data);
+    }
+
     public function dataTable($ordersData) {
         return DataTables::of($ordersData)
             ->addIndexColumn()
             ->addColumn('customer_name', function ($data) {
-                $customer_name = $data->is_default_name == 0 ? $data->name : $data->customer->name;
+                $customer_name = $data->is_default_name == 1 ? $data->name : $data->customer->name;
                 return $customer_name;
             })
             ->addColumn('customer_contact', function ($data) {
-                $customer_contact = $data->is_default_contact == 0 ? $data->contact : $data->customer->contact;
+                $customer_contact = $data->is_default_contact == 1 ? $data->contact : $data->customer->contact;
                 return $customer_contact;
             })
             ->addColumn('customer_adress', function ($data) {
-                $customer_adress = $data->is_default_address == 0 ? $data->address : $data->customer->address;
+                $customer_adress = $data->is_default_address == 1 ? $data->address : $data->customer->address;
                 return $customer_adress;
             })
             ->addColumn('action', function ($data) {

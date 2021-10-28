@@ -123,7 +123,8 @@ class CustomerController extends Controller {
 
             ->addIndexColumn()
             ->addColumn('orderID', function ($data) {
-                return $data->getOrderId($data->restaurant->name);
+                // return $data->getOrderId($data->restaurant->name);
+                return $data->id;
             })
             ->addColumn('action', function ($data) {
                 $actionBtn = "<button type='button' class='btn btn-outline-dark' onclick='viewOrder($data->order_id)'>
