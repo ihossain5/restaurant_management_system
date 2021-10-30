@@ -338,6 +338,7 @@
             } else {
                 $.ajax({
                     url: config.routes.placeOrder,
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                     method: "POST",
                     data: new FormData(this),
                     contentType: false,
