@@ -1,4 +1,7 @@
 @extends('layouts.admin.master')
+@section('title')
+    Cancelled Orders
+@endsection
 @section('page-header')
     Cancelled Orders
 @endsection
@@ -22,7 +25,7 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between mb-4">
                                 <div class="ms-header-text">
-                                    <h4 class="mt-0 header-title">All New Orders</h4>
+                                    <h4 class="mt-0 header-title">All Cancelled Orders</h4>
                                 </div>
                             </div>
 
@@ -127,11 +130,12 @@
 @endsection
 @section('pageScripts')
 <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+<script src="{{ asset('backend/assets/js/order.js') }}"></script>
 <script src="{{asset('backend/assets/js/pusher_notification.js')}}"></script>
     <script type='text/javascript'>
         var config = {
             routes: {
-                view: "{!! route('order.show') !!}",
+                view: "{!! route('manager.order.show') !!}",
                 getOrders: "{!! route('order.restaurant') !!}",
             }
         };
@@ -140,79 +144,7 @@
      dataTable();
   });
 
-        // view single 
-        function viewOrder(id) {
-            $.ajax({
-                url: config.routes.view,
-                method: "POST",
-                data: {
-                    id: id,
-                    _token: "{{ csrf_token() }}"
-                },
-                dataType: "json",
-                success: function(response) {
-                    if (response.success == true) {
-                        $('#view_order_id').text(response.data.id);
-                        $('#view_customer_name').text(response.data.is_default_name == 0 ? response.data.name :
-                            response.data.customer.name);
-                        $('#view_customer_contact').text(response.data.is_default_contact == 0 ? response.data
-                            .contact : response.data.customer.contact);
-                        $('#view_customer_address').text(response.data.is_default_address == 0 ? response.data
-                            .address : response.data.customer.address);
-                        $('#view_customer_email').text(response.data.customer.email ?? 'N/A');
-                        $('#view_notes').text(response.data.special_notes ?? 'N/A');
 
-                        if (response.data.status.name == 'Preparing') {
-                            var class_name = 'primary';
-                        } else if (response.data.status.name == 'Delivering') {
-                            var class_name = 'success';
-                        } else if (response.data.status.name == 'Completed') {
-                            var class_name = 'success';
-                        } else {
-                            var class_name = 'danger';
-                        }
-
-                        $('#order_status').attr('class', 'btn float-right btn-outline-' + class_name + ' ' +
-                            response.data.class);
-                        $('#order_status').text(response.data.status.name);
-
-                        $('.apeend_tbody').empty();
-                        $.each(response.data.items, function(key, val) {
-                            var total_price = two_decimal(val.pivot.quantity * val.pivot.price);
-                            $('.apeend_tbody').append(
-                                `<tr><td class="item_name">${val.name}</td>
-                                <td class="item_price">${'৳ ' + bdCurrencyFormat( val.pivot.price)}</td>
-                                <td class="item_quantity">${val.pivot.quantity}</td>
-                                <td class="item_total_price">${'৳ ' + bdCurrencyFormat(total_price) }</td></tr>`
-                            );
-
-                        });
-                        $('.view_total').html('৳ ' + bdCurrencyFormat(response.data.amount));
-                        if(response.data.delivery_fee != null){
-                            $('.deleveryFee').html('৳ ' + bdCurrencyFormat(response.data.delivery_fee));
-                        }else{
-                            $('.deleveryFee').html('৳ ' + 0);
-                        }
-                       
-
-                        $('#viewOrderModal').modal('show');
-
-                    } //success end
-
-                },
-                error: function(error) {
-                    if (error.status == 404) {
-                        toastMixin.fire({
-                            icon: 'error',
-                            animation: true,
-                            title: "" + 'Data not found' + ""
-                        });
-
-
-                    }
-                },
-            }); //ajax end
-        }
 
 
 function dataTable(){

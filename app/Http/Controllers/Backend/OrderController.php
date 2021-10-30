@@ -42,13 +42,7 @@ class OrderController extends Controller {
     }
 
     public function show(Request $request, OrderService $orderService) {
-        $order = Order::with('items', 'status', 'customer','order_combos')->findOrFail($request->id);
-        if($order->status != null){
-            $class = (($order->status->name == 'Preparing') ? 'txt-preparing'
-            : (($order->status->name == 'Delivering') ? 'txt-delivering' : (($order->status->name == 'Completed') ? 'txt-completed' : 'txt-cancelled')));
-        $order['class'] = $class;
-        }
-        $order->orderItems = $orderService->orderItems($order);
+        $order = $orderService->findOrderById($request->id);
         return success($order);
     }
 

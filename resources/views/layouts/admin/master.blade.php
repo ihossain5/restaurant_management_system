@@ -6,10 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <title>Admin Dashboard</title>
+    <title> {{auth()->user()->is_super_admin == 1 ? Admin : 'Manager'}} @yield('title')</title>
     <meta content="Admin Dashboard" name="description" />
     <meta content="Themesbrand" name="author" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="csrf_token" content="{{ csrf_token() }}" />
 
     @include('layouts.admin.css')
     @yield('pageCss')
@@ -17,7 +18,7 @@
 </head>
 
 <body class="fixed-left">
-   
+
     <!-- Loader -->
     <div id="preloader">
         <div id="status">
@@ -42,7 +43,7 @@
     </div>
     <!-- END wrapper -->
 
-@include('layouts.admin.notification_modal')
+    @include('layouts.admin.notification_modal')
     @include('layouts.admin.scripts')
     @yield('pageScripts')
 </body>

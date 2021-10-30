@@ -44,10 +44,15 @@ class CheckOutController extends Controller {
         $customer_id     = Auth::guard('customer')->user()->customer_id;
         $customer        = Customer::findOrFail($customer_id);
         $items           = Cart::content();
-        $this->cartItems = Cart::content();
         $subtotal        = Cart::subtotal();
 
-        $restaurant = Restaurant::findOrFail($request->restaurant_id);
+        $restaurant = Restaurant::with('status')->findOrFail($request->restaurant_id);
+        if($restaurant->status->name == 'CLOSED'){
+            return response()->json([
+                'success' => false,
+                'message' => 'This restaurant is closed now. Please select another restaurant',
+            ]);
+        }
 
         $max = Order::where('restaurant_id', $request->restaurant_id)->max('id');
         if ($max == null) {
@@ -64,12 +69,13 @@ class CheckOutController extends Controller {
                         'contact' => $request->contact,
                         'address' => $request->address,
                     ]);
-                    $order->is_default_contact = 1;
-                    $order->is_default_address = 1;
+                 
                     // dd('sss');
                 } else {
                     $order->address = $request->address;
                     $order->contact = $request->contact;
+                    $order->is_default_contact = 1;
+                    $order->is_default_address = 1;
                 }
 
                 if ($request->has('setDefaultInfo')) {
@@ -77,9 +83,10 @@ class CheckOutController extends Controller {
                         'name'  => $request->name,
                         'email' => $request->email,
                     ]);
-                    $order->is_default_name = 1;
+                    
                     // $order->is_default_address = 1;
                 } else {
+                    $order->is_default_name = 1;
                     $order->name = $request->name;
                     // $order->email = $request->email;
                 }
@@ -133,7 +140,7 @@ class CheckOutController extends Controller {
     }
 
     public function orderPlaced(Order $order, OrderService $orderService) {
-        $order->load('restaurant','items');
+        $order->load('restaurant','items','order_combos');
         $orderItems = $orderService->orderItems($order);
         return view('frontend.orders.order_placed',compact('order','orderItems'));
     }

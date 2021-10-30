@@ -45,7 +45,7 @@ use Illuminate\Support\Facades\Route;
 
 require __DIR__ . '/auth.php';
 
-Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth','admin']], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/password-update', [AdminController::class, 'passwordChange'])->name('password.change');
     Route::post('/password-update', [AdminController::class, 'updatePassword'])->name('password.update');
@@ -148,40 +148,40 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
     }); //* Restaurant Manager route end */
 
     //* Item route start */
-        Route::group(['prefix' => 'items'], function () {
-            // Route::get('/', [ItemController::class, 'index'])->name('item.index');
-            Route::get('/{id}', [ItemController::class, 'index'])->name('item.index');
-            Route::post('/store', [ItemController::class, 'store'])->name('item.store');
-            Route::post('/edit', [ItemController::class, 'edit'])->name('item.edit');
-            Route::post('/show', [ItemController::class, 'show'])->name('item.show');
-            Route::post('/update', [ItemController::class, 'update'])->name('item.update');
-            Route::post('/delete', [ItemController::class, 'destroy'])->name('item.delete');
-            Route::post('/restaurant-items', [ItemController::class, 'getItemsByRestaurant'])->name('item.restaurant');
-            Route::post('/available-status/update', [ItemController::class, 'updateAvailableStatus'])->name('item.available.status.update');
-            /* Item combo route start */
-            Route::get('/{id}/combos', [ItemComboController::class, 'index'])->name('item.combo.index');
-            Route::post('/combo/store', [ItemComboController::class, 'store'])->name('item.combo.store');
-            Route::post('combo/edit', [ItemComboController::class, 'edit'])->name('item.combo.edit');
-            Route::post('combo/show', [ItemComboController::class, 'show'])->name('item.combo.show');
-            Route::post('combo/update', [ItemComboController::class, 'update'])->name('item.combo.update');
-            Route::post('combo/delete', [ItemComboController::class, 'destroy'])->name('item.combo.delete');
-            Route::post('combo/restaurant', [ItemComboController::class, 'getComboByRestaurant'])->name('item.combo.restaurant');
-            /* Item combo route start */
+    Route::group(['prefix' => 'items'], function () {
+        // Route::get('/', [ItemController::class, 'index'])->name('item.index');
+        Route::get('/{id}', [ItemController::class, 'index'])->name('item.index');
+        Route::post('/store', [ItemController::class, 'store'])->name('item.store');
+        Route::post('/edit', [ItemController::class, 'edit'])->name('item.edit');
+        Route::post('/show', [ItemController::class, 'show'])->name('item.show');
+        Route::post('/update', [ItemController::class, 'update'])->name('item.update');
+        Route::post('/delete', [ItemController::class, 'destroy'])->name('item.delete');
+        Route::post('/restaurant-items', [ItemController::class, 'getItemsByRestaurant'])->name('item.restaurant');
+        Route::post('/available-status/update', [ItemController::class, 'updateAvailableStatus'])->name('item.available.status.update');
+        /* Item combo route start */
+        Route::get('/{id}/combos', [ItemComboController::class, 'index'])->name('item.combo.index');
+        Route::post('/combo/store', [ItemComboController::class, 'store'])->name('item.combo.store');
+        Route::post('combo/edit', [ItemComboController::class, 'edit'])->name('item.combo.edit');
+        Route::post('combo/show', [ItemComboController::class, 'show'])->name('item.combo.show');
+        Route::post('combo/update', [ItemComboController::class, 'update'])->name('item.combo.update');
+        Route::post('combo/delete', [ItemComboController::class, 'destroy'])->name('item.combo.delete');
+        Route::post('combo/restaurant', [ItemComboController::class, 'getComboByRestaurant'])->name('item.combo.restaurant');
+        /* Item combo route start */
 
-        }); //* Item route end */
+    }); //* Item route end */
 
-        //* Category route start */
-        Route::group(['prefix' => 'categories'], function () {
-            Route::get('/', [CategoryController::class, 'index'])->name('item.category.index');
-            Route::get('/{id}', [CategoryController::class, 'index'])->name('item.category');
-            Route::post('/store', [CategoryController::class, 'store'])->name('item.category.store');
-            Route::post('/edit', [CategoryController::class, 'edit'])->name('item.category.edit');
-            Route::post('/show', [CategoryController::class, 'show'])->name('item.category.show');
-            Route::post('/update', [CategoryController::class, 'update'])->name('item.category.update');
-            Route::post('/delete', [CategoryController::class, 'destroy'])->name('item.category.delete');
-            Route::post('/restaurant-categories', [CategoryController::class, 'getCategoriesByRestaurant'])->name('item.category.restaurant');
+    //* Category route start */
+    Route::group(['prefix' => 'categories'], function () {
+        Route::get('/', [CategoryController::class, 'index'])->name('item.category.index');
+        Route::get('/{id}', [CategoryController::class, 'index'])->name('item.category');
+        Route::post('/store', [CategoryController::class, 'store'])->name('item.category.store');
+        Route::post('/edit', [CategoryController::class, 'edit'])->name('item.category.edit');
+        Route::post('/show', [CategoryController::class, 'show'])->name('item.category.show');
+        Route::post('/update', [CategoryController::class, 'update'])->name('item.category.update');
+        Route::post('/delete', [CategoryController::class, 'destroy'])->name('item.category.delete');
+        Route::post('/restaurant-categories', [CategoryController::class, 'getCategoriesByRestaurant'])->name('item.category.restaurant');
 
-        }); //* Category route end */
+    }); //* Category route end */
 
     //* order route start */
     Route::group(['prefix' => 'orders'], function () {
@@ -200,9 +200,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
     }); //* order route end */
 
     //* performance route start */
-    Route::group(['prefix' => 'orders'], function () {
-        Route::post('/restaurant-past-orders', [OrderController::class, 'getPastOrdersByRestaurant'])->name('order.past.restaurant');
-    }); //* performance route end */
+    // Route::group(['prefix' => 'orders'], function () {
+    //     Route::post('/restaurant-past-orders', [OrderController::class, 'getPastOrdersByRestaurant'])->name('order.past.restaurant');
+    // }); //* performance route end */
 
     //* customer route start */
     Route::group(['prefix' => 'customers'], function () {
@@ -234,6 +234,7 @@ Route::post('/make/super/admin', [UserController::class, 'makeSuperAdmin'])->nam
 Route::get('/send-email/{token}', [ManagerController::class, 'registerNewManager'])->name('send.email');
 Route::post('/sign-up', [ManagerController::class, 'userSignUp'])->name('user.sign.up');
 
+//* manager routes start */
 Route::group(['prefix' => 'manager', 'middleware' => ['auth', 'manager']], function () {
     Route::get('dashboard', [ManagerDashboardController::class, 'index'])->name('manager.dashboard');
     Route::post('update/restaurant-status', [ManagerDashboardController::class, 'updateRestaurantStatus'])->name('manager.restaurant.status.update');
@@ -242,8 +243,10 @@ Route::group(['prefix' => 'manager', 'middleware' => ['auth', 'manager']], funct
     Route::get('/items', [ItemController::class, 'itemsByManager'])->name('manager.restaurant.items');
     Route::post('/items', [ItemController::class, 'getItemsByCategory'])->name('category.items');
     Route::get('/item/combos', [ItemComboController::class, 'itemsCombosByManager'])->name('manager.restaurant.item.combos');
-    Route::post('/available-status/update', [ItemComboController::class, 'updateAvailableStatus'])->name('item.combo.available.status.update');
-    
+    Route::post('combo/edit', [ItemComboController::class, 'edit'])->name('manager.item.combo.edit');
+    Route::post('/combo/available-status/update', [ItemComboController::class, 'updateAvailableStatus'])->name('item.combo.available.status.update');
+    Route::post('/item-show', [ItemController::class, 'show'])->name('mamager.item.show');
+    Route::post('/item/available-status/update', [ItemController::class, 'updateAvailableStatus'])->name('item.available.status.update');
 
     /* Order Routes */
     Route::get('/new-orders', [ManagerOrdersController::class, 'newOrders'])->name('manager.new.order');
@@ -256,6 +259,7 @@ Route::group(['prefix' => 'manager', 'middleware' => ['auth', 'manager']], funct
     Route::post('/accept-order-in-delivery', [ManagerOrdersController::class, 'acceptOrderInDelivery'])->name('manager.order.accept.delivery');
     Route::post('/accept-order-in-preparation', [ManagerOrdersController::class, 'acceptOrderInPreparation'])->name('manager.order.accept.preparation');
     Route::post('/update-order', [ManagerOrdersController::class, 'updateOrder'])->name('manager.order.update');
+    Route::post('/order-details', [OrderController::class, 'show'])->name('manager.order.show');
 
     /* Performance report routes */
     Route::get('/daily-sales-report', [ManagerOrderPerformanceController::class, 'dailyReports'])->name('manager.daily.sales.report');
@@ -265,55 +269,46 @@ Route::group(['prefix' => 'manager', 'middleware' => ['auth', 'manager']], funct
 
 });
 
-Route::get('/listen', function () {
-    return view('pusher-test');
-});
+//* frontend routes start */
+Route::get('/', [HomeController::class, 'index'])->name('frontend.index');
+Route::post('/', [HomeController::class, 'getRestaurantsByLocation'])->name('frontend.restaurant.by.location');
 
-Route::get('test/new', function () {
-    // event(new App\Events\MyEvent('You Have Three New Orders!'));
-    // event(new App\Events\OrderEvent('You Have Three New Orders!'));
-});
+Route::get('/restaurant/{restaurant}/menu', [RestaurantMenuController::class, 'getRestaurant'])->name('frontend.restaurant.menu');
+Route::get('/about-us', [FrontendAboutUsController::class, 'index'])->name('frontend.about.us');
+Route::get('/sign-in', [FrontendCustomerController::class, 'customerSignIn'])->name('frontend.customer.sign.in');
 
-Route::get('/',[HomeController::class,'index'])->name('frontend.index');
-Route::post('/',[HomeController::class,'getRestaurantsByLocation'])->name('frontend.restaurant.by.location');
+/* cart routes */
+Route::post('/add-to-cart', [CartController::class, 'addToCart'])->name('frontend.cart.add');
+Route::post('/upadte-cart', [CartController::class, 'increaseCartQuantity'])->name('frontend.cart.update');
+Route::post('/decrease-cart', [CartController::class, 'decreaseCartQuantity'])->name('frontend.cart.decrease.quantity');
+Route::post('/delete-cart', [CartController::class, 'deleteCart'])->name('frontend.cart.delete');
 
-Route::get('/restaurant/{restaurant}/menu',[RestaurantMenuController::class,'getRestaurant'])->name('frontend.restaurant.menu');
-Route::get('/about-us',[FrontendAboutUsController::class,'index'])->name('frontend.about.us');
-Route::get('/sign-in',[FrontendCustomerController::class,'customerSignIn'])->name('frontend.customer.sign.in');
+/* customer sign in */
+Route::post('/customer-sign-in', [FrontendCustomerController::class, 'signIn'])->name('customer.sign.in');
+Route::post('/customer-sign-up', [FrontendCustomerController::class, 'signUp'])->name('customer.sign.up');
+Route::post('/customer-sign-out', [FrontendCustomerController::class, 'signOut'])->name('cusetomer.sign.out');
 
- /* cart routes */
- Route::post('/add-to-cart',[CartController::class,'addToCart'])->name('frontend.cart.add');
- Route::post('/upadte-cart',[CartController::class,'increaseCartQuantity'])->name('frontend.cart.update');
- Route::post('/decrease-cart',[CartController::class,'decreaseCartQuantity'])->name('frontend.cart.decrease.quantity');
- Route::post('/delete-cart',[CartController::class,'deleteCart'])->name('frontend.cart.delete');
- 
- /* customer sign in */
- Route::post('/customer-sign-in',[FrontendCustomerController::class,'signIn'])->name('customer.sign.in');
- Route::post('/customer-sign-up',[FrontendCustomerController::class,'signUp'])->name('customer.sign.up');
- Route::post('/customer-sign-out',[FrontendCustomerController::class,'signOut'])->name('cusetomer.sign.out');
+/* customer profile */
+Route::get('/profile', [FrontendCustomerController::class, 'customerProfile'])->name('customer.profile');
+Route::post('/profile/photo/update', [FrontendCustomerController::class, 'customerProfilePhotoUpdate'])->name('customer.profile.photo.update');
+Route::post('/delivery/info/update', [FrontendCustomerController::class, 'customerDeliveryInfoUpdate'])->name('customer.delivery.info.update');
+Route::post('/account/info/update', [FrontendCustomerController::class, 'customerAccountInfoUpdate'])->name('customer.account.info.update');
 
-  /* customer profile */
- Route::get('/profile',[FrontendCustomerController::class,'customerProfile'])->name('customer.profile');
- Route::post('/profile/photo/update',[FrontendCustomerController::class,'customerProfilePhotoUpdate'])->name('customer.profile.photo.update');
- Route::post('/delivery/info/update',[FrontendCustomerController::class,'customerDeliveryInfoUpdate'])->name('customer.delivery.info.update');
- Route::post('/account/info/update',[FrontendCustomerController::class,'customerAccountInfoUpdate'])->name('customer.account.info.update');
+/* checkout */
+Route::get('/checkout', [CheckOutController::class, 'index'])->name('frontend.chekout');
+Route::post('/place-order', [CheckOutController::class, 'placeOrder'])->name('order.place');
+Route::get('/order-placed/{order}', [CheckOutController::class, 'orderPlaced'])->name('order.placed');
 
-  /* checkout */
- Route::get('/checkout',[CheckOutController::class,'index'])->name('frontend.chekout');
- Route::post('/place-order',[CheckOutController::class,'placeOrder'])->name('order.place');
- Route::get('/order-placed/{order}',[CheckOutController::class,'orderPlaced'])->name('order.placed');
+Route::get('/my-orders', [FrontendCustomerController::class, 'customerOrders'])->name('frontend.customer.order');
+Route::post('/order-details', [FrontendCustomerController::class, 'customerOrderDetails'])->name('frontend.customer.order.detail');
 
- Route::get('/my-orders',[FrontendCustomerController::class,'customerOrders'])->name('frontend.customer.order');
- Route::post('/order-details',[FrontendCustomerController::class,'customerOrderDetails'])->name('frontend.customer.order.detail');
-
-
- Route::get('auth/facebook', [FrontendCustomerController::class, 'redirectToGoogle']);
+Route::get('auth/facebook', [FrontendCustomerController::class, 'redirectToGoogle']);
 Route::get('auth/facebook/callback', [FrontendCustomerController::class, 'handleGoogleCallback']);
 
 // Google login
 Route::get('login/google', [CustomerLoginController::class, 'redirectToGoogle'])->name('login.google');
 Route::get('login/google/callback', [CustomerLoginController::class, 'handleGoogleCallback']);
 
-Route::get('404',function(){
+Route::get('404', function () {
     return view('frontend.404');
 });

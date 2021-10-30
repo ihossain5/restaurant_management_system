@@ -1,4 +1,7 @@
 @extends('layouts.admin.master')
+@section('title')
+    Items
+@endsection
 @section('page-header')
     Items
 @endsection
@@ -221,7 +224,7 @@
     <script type='text/javascript'>
         var config = {
             routes: {
-                view: "{!! route('item.show') !!}",
+                view: "{!! route('mamager.item.show') !!}",
                 updateAvailableStatus: "{!! route('item.available.status.update') !!}",
                 getItems: "{!! route('category.items') !!}",
             }

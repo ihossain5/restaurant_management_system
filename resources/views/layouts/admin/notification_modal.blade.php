@@ -1,7 +1,7 @@
-@php
+{{-- @php
 use App\Http\Controllers\Manager\ManagerDashboardController;
 $orders = ManagerDashboardController::countedOrders();
-@endphp
+@endphp --}}
  <div class="modal fade" id="allNewOrderModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered orderNotifModal">
             <div class="modal-content modal-body">

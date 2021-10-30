@@ -1,4 +1,7 @@
 @extends('layouts.admin.master')
+@section('title')
+    Item Combos
+@endsection
 @section('page-header')
     Item Combos
 @endsection
@@ -182,7 +185,7 @@
     <script type='text/javascript'>
         var config = {
             routes: {
-                view: "{!! route('item.combo.edit') !!}",
+                view: "{!! route('manager.item.combo.edit') !!}",
                 updateAvailableStatus: "{!! route('item.combo.available.status.update') !!}",
             }
         };

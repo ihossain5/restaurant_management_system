@@ -18,7 +18,7 @@ class ManagerOrderPerformanceController extends Controller {
     public function dailyReports(Request $request) {
         $restaurant = Auth::user()->restaurant;
         $orders     = $this->order->todayOrdersByRestaurantId($restaurant->restaurant_id);
-        foreach($orders as $order){
+        foreach ($orders as $order) {
             $order['start_date']   = formatDate(Carbon::now());
             $order['total_order']  = count($orders);
             $order['total_amount'] = $orders->sum('amount');
@@ -26,14 +26,14 @@ class ManagerOrderPerformanceController extends Controller {
         if ($request->ajax()) {
             return $this->dailySalesDataTable($orders);
         }
-        return view('manager.performance-report.daily_orders_report',);
+        return view('manager.performance-report.daily_orders_report', );
     }
     public function dailyReportsByDate(Request $request) {
         $date       = Carbon::parse($request->date)->format('Y-m-d');
         $restaurant = Auth::user()->restaurant;
         $orders     = $this->order->ordersByDate($date, $restaurant->restaurant_id);
-       
-        foreach($orders as $order){
+
+        foreach ($orders as $order) {
             $order['start_date']   = formatDate($request->date);
             $order['total_order']  = count($orders);
             $order['total_amount'] = $orders->sum('amount');
@@ -46,7 +46,7 @@ class ManagerOrderPerformanceController extends Controller {
         $orders     = $this->order->todayOrdersByRestaurantId($restaurant->restaurant_id);
         $date       = formatDate(Carbon::today());
         // dd($date);
-        $items      = $this->getOrderItems($orders, $date, $date);
+        $items = $this->getOrderItems($orders, $date, $date);
         if ($request->ajax()) {
             return $this->itemPerformanceDataTable(collect($items));
         }
@@ -64,6 +64,7 @@ class ManagerOrderPerformanceController extends Controller {
         $category = Category::findOrFail($request->id);
         $orders   = $this->order->getOrdersByDate($start_date, $end_date, $category->restaurant_id);
         $items    = [];
+        $total = 0;
         foreach ($orders as $order) {
             foreach ($order->items as $item) {
                 if ($item->category_id == $request->id) {
@@ -71,10 +72,12 @@ class ManagerOrderPerformanceController extends Controller {
                     $item['start_date']   = formatDate($request->start_date);
                     $item['end_date']     = formatDate($request->end_date);
                     $item['total_order']  = count($orders);
-                    $item['total_amount'] = $orders->sum('amount');
+                    $total += $item->pivot->price;
                 }
+                $item['total_amount'] = $total;
             }
         }
+        // dd($total);
         return $this->itemPerformanceDataTable(collect($items));
     }
 
@@ -93,7 +96,6 @@ class ManagerOrderPerformanceController extends Controller {
                 $item['end_date']     = $end_date;
                 $item['total_order']  = count($orders);
                 $item['total_amount'] = $orders->sum('amount');
-
             }
         }
         return $items;
@@ -106,13 +108,13 @@ class ManagerOrderPerformanceController extends Controller {
                 $time = Carbon::parse($data->created_at)->format('g:i A');
                 return $time;
             })
-            ->make(true);
+        ->make(true);
     }
     public function itemPerformanceDataTable($ordersData) {
         return DataTables::of($ordersData)
             ->addIndexColumn()
             ->addColumn('revenue', function ($data) {
-                $revenue = $data->pivot->quantity * $data->pivot->price;;
+                $revenue = $data->pivot->price;;
                 return $revenue;
             })
             ->make(true);

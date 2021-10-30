@@ -87,11 +87,11 @@
                             <div class="row profile p-0">
                                 <div class="col-12 pb-3">
                                     <h5>Name</h5>
-                                    <p>{{ $customer->name ?? 'N/A' }}</p>
+                                    <p class="name">{{ $customer->name ?? 'N/A' }}</p>
                                 </div>
                                 <div class="col-12 pb-3">
                                     <h5>Email</h5>
-                                    <p>{{ $customer->email ?? 'N/A' }}</p>
+                                    <p class="email">{{ $customer->email ?? 'N/A' }}</p>
                                 </div>
                             </div>
                         </div>
@@ -230,10 +230,13 @@
             </div>
         </form>
     </section>
-    {{-- @include('layouts.frontend.partials.location_modal') --}}
+    @include('layouts.frontend.partials.location_modal')
 @endsection
 @section('pageScripts')
     <script>
+           var locationModal = new bootstrap.Modal(document.getElementById('location-modal'), {
+            keyboard: false
+        })
         var config = {
             routes: {
                 placeOrder: "{!! route('order.place') !!}",
@@ -298,43 +301,70 @@
         //     }
         // });
 
-        $("#placeOrder").validate({
-            ignore: [],
-            errorPlacement: function(label, element) {
-                label.addClass('mt-2 text-danger');
-                label.insertAfter(element);
-            },
-        });
+        // $("#placeOrder").validate({
+        //     ignore: [],
+        //     errorPlacement: function(label, element) {
+        //         label.addClass('mt-2 text-danger');
+        //         label.insertAfter(element);
+        //     },
+        // });
 
         $(document).on('submit', '#placeOrder', function(e) {
             e.preventDefault();
-            $.ajax({
-                url: config.routes.placeOrder,
-                method: "POST",
-                data: new FormData(this),
-                contentType: false,
-                cache: false,
-                processData: false,
-                dataType: "json",
-                success: function(response) {
-                    if (response.success == true) {
-                        var url = '{{ route('order.placed', ':id') }}';
-                        url = url.replace(':id', response.data.order_id);
-                        window.location.replace(url);
-                    } else {
-                        toastr["error"](response.message)
-                    }
-                }, //success end
-                error: function(error) {
-                    if (error.status == 422) {
-                        $.each(error.responseJSON.errors, function(i, message) {
-                            toastr["error"](message)
-                        });
+            var address = $('.address').html();
+            var contact = $('.contact').html();
+            var name = $('.name').html();
+            var email = $('.email').html();
+            if (address == 'N/A' || address == '') {
+                $('#address-error').remove();
+                $('#contact-error').remove();
+                $('#name-error').remove();
+                $('#email-error').remove();
+                $('.address').after(
+                    `<label id="address-error" class="error mt-2 text-danger h3" for="">Please insert your address</label>`
+                );
+            } else if (contact == 'N/A' || contact == '') {
+                $('.contact').after(
+                    `<label id="contact-error" class="error mt-2 text-danger h3" for="">Please insert your mobile number</label>`
+                );
+            } else if (name == 'N/A' || name == '') {
+                $('.name').after(
+                    `<label id="name-error" class="error mt-2 text-danger h3" for="">Please insert your name</label>`
+                );
+            } else if (email == 'N/A' || email == '') {
+                $('.email').after(
+                    `<label id="email-error" class="error mt-2 text-danger h3" for="">Please insert your email</label>`
+                );
+            } else {
+                $.ajax({
+                    url: config.routes.placeOrder,
+                    method: "POST",
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.success == true) {
+                            var url = '{{ route('order.placed', ':id') }}';
+                            url = url.replace(':id', response.data.order_id);
+                            window.location.replace(url);
+                        } else {
+                            toastr["error"](response.message)
+                        }
+                    }, //success end
+                    error: function(error) {
+                        if (error.status == 422) {
+                            $.each(error.responseJSON.errors, function(i, message) {
+                                toastr["error"](message)
+                            });
 
-                    }
-                },
+                        }
+                    },
 
-            });
+                });
+            }
+
         });
     </script>
 @endsection

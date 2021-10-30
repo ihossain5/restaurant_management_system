@@ -168,15 +168,15 @@ class ManagerOrdersController extends Controller {
                 return $time;
             })
             ->addColumn('customer_name', function ($data) {
-                $customer_name = $data->is_default_name == 0 ? $data->name : $data->customer->name;
+                $customer_name = $data->is_default_name == 1 ? $data->name : $data->customer->name;
                 return $customer_name;
             })
             ->addColumn('customer_contact', function ($data) {
-                $customer_contact = $data->is_default_contact == 0 ? $data->contact : $data->customer->contact;
+                $customer_contact = $data->is_default_contact == 1 ? $data->contact : $data->customer->contact;
                 return $customer_contact;
             })
             ->addColumn('customer_adress', function ($data) {
-                $customer_adress = $data->is_default_address == 0 ? $data->address : $data->customer->address;
+                $customer_adress = $data->is_default_address == 1 ? $data->address : $data->customer->address;
                 return $customer_adress;
             })
             ->addColumn('action', function ($data) {
@@ -194,15 +194,15 @@ class ManagerOrdersController extends Controller {
                 return $time;
             })
             ->addColumn('customer_name', function ($data) {
-                $customer_name = $data->is_default_name == 0 ? $data->name : $data->customer->name;
+                $customer_name = $data->is_default_name == 1 ? $data->name : $data->customer->name;
                 return $customer_name;
             })
             ->addColumn('customer_contact', function ($data) {
-                $customer_contact = $data->is_default_contact == 0 ? $data->contact : $data->customer->contact;
+                $customer_contact = $data->is_default_contact == 1 ? $data->contact : $data->customer->contact;
                 return $customer_contact;
             })
             ->addColumn('customer_adress', function ($data) {
-                $customer_adress = $data->is_default_address == 0 ? $data->address : $data->customer->address;
+                $customer_adress = $data->is_default_address == 1 ? $data->address : $data->customer->address;
                 return $customer_adress;
             })
             ->addColumn('action', function ($data) {

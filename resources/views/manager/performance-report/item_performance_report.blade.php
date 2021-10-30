@@ -277,6 +277,10 @@
 
                 ],
                 "drawCallback": function(settings) {
+                    if(settings.json.data.length <=0){
+                        $('.total_orders').html(0);
+                        $('.total_amount').html(`<span class='bdt_symbol'>৳ </spam>`+ 0);
+                    }
                     $.each(settings.json.data, function(i,val){
                       $('.starting_date').html(val.start_date);
                       $('.ending_date').html(val.end_date);

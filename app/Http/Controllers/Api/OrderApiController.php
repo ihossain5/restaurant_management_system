@@ -16,13 +16,13 @@ class OrderApiController extends Controller {
         ]);
     }
     public function getOrderById(Order $order, OrderService $orderService) {
-        $order->load('items', 'status', 'customer');
+        $order->load('items', 'status', 'customer','order_combos');
         $data                     = [];
         $data['order_id']         = $order->order_id;
-        $data['customer_name']    = $order->is_default_name == 0 ? $order->name : $order->customer->name;
-        $data['customer_contact'] = $order->is_default_contact == 0 ? $order->contact : $order->customer->contact;
-        $data['customer_address'] = $order->is_default_address == 0 ? $order->address : $order->customer->address;
-        $data['customer_address'] = $order->is_default_address == 0 ? $order->address : $order->customer->address;
+        $data['id']               = $order->id;
+        $data['customer_name']    = $order->is_default_name == 1 ? $order->name : $order->customer->name;
+        $data['customer_contact'] = $order->is_default_contact == 1 ? $order->contact : $order->customer->contact;
+        $data['customer_address'] = $order->is_default_address == 1 ? $order->address : $order->customer->address;
         $data['email']            = $order->customer->email;
         $data['special_notes']    = $order->special_notes;
         $data['items']            = $orderService->orderItems($order);
@@ -39,7 +39,7 @@ class OrderApiController extends Controller {
         ]);
     }
 
-    public function items(){
+    public function items() {
         return response()->json([
             'status' => true,
             'data'   => Item::all(),

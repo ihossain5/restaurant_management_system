@@ -59,8 +59,7 @@ function openEditModalAction(orderId) {
 function addExistingItem() {
     // console.log(orderItem);
     let main_url = window.location.origin;
-
-    $(".orderId").html(`#${orderItem.order_id}`);
+    $(".orderId").html(`#${orderItem.id}`);
     $(".orderIdInput").val(`${orderItem.order_id}`);
     $(".customerName").html(`${orderItem.customer_name}`);
     $(".customerEmail").html(`${orderItem.email}`);
@@ -130,11 +129,11 @@ function addExistingItem() {
             $("<option></option>").attr("value", item.item_id).text(item.name)
         );
 
-        $.each(othersItem, function (key, value) {
+        $.each(othersItem, function(key, value) {
             $(`#itemsDesc${$row_track_id}`).append(
                 $("<option></option>")
-                    .attr("value", value.item_id)
-                    .text(value.name)
+                .attr("value", value.item_id)
+                .text(value.name)
             );
         });
 
@@ -145,7 +144,7 @@ function addExistingItem() {
 function addListToItem($rowno) {
     console.log(allItem);
 
-    $.each(allItem, function (key, value) {
+    $.each(allItem, function(key, value) {
         $(`#itemsDesc${$rowno}`).append(
             $("<option></option>").attr("value", value.item_id).text(value.name)
         );
@@ -231,7 +230,7 @@ function rowWiseCalculation(rowNumber) {
 
 function totalCalculator() {
     let totalCost = 0;
-    $(".totalCost").each(function () {
+    $(".totalCost").each(function() {
         let cleanNumber2 = $(this).val();
         let number = Number(cleanNumber2.replace(/[^0-9\.-]+/g, ""));
         totalCost += parseFloat(number || 0);

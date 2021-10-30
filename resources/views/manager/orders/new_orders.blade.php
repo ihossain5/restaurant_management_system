@@ -1,4 +1,7 @@
 @extends('layouts.admin.master')
+@section('title')
+     New Orders 
+@endsection
 @section('page-header')
     New Orders
 @endsection
@@ -302,7 +305,7 @@
     <!-- order deny Modal End -->
 @endsection
 @section('pageScripts')
-    <script src="{{ asset('backend/assets/js/order.js') }}"></script>
+<script src="{{ asset('backend/assets/js/order.js') }}"></script>
     <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <script src="{{ asset('backend/assets/js/pusher_notification.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.23.0/axios.min.js"
@@ -312,7 +315,7 @@
     <script type='text/javascript'>
         var config = {
             routes: {
-                view: "{!! route('order.show') !!}",
+                view: "{!! route('manager.order.show') !!}",
                 getOrders: "{!! route('order.restaurant') !!}",
                 cancelOrder: "{!! route('manager.order.cancel') !!}",
                 acceptOrder: "{!! route('manager.order.accept.new_order') !!}",
@@ -325,93 +328,94 @@
             dataTable(url);
         });
 
-        // view single 
-        function viewOrder(id) {
-            $.ajax({
-                url: config.routes.view,
-                method: "POST",
-                data: {
-                    id: id,
-                    _token: "{{ csrf_token() }}"
-                },
-                dataType: "json",
-                success: function(response) {
-                    if (response.success == true) {
-                        $('#order_id').val(response.data.order_id);
-                        $('#view_order_id').text(response.data.id);
-                        $('#view_customer_name').text(response.data.is_default_name == 1 ? response.data.name :
-                            response.data.customer.name);
-                        $('#view_customer_contact').text(response.data.is_default_contact == 1 ? response.data
-                            .contact : response.data.customer.contact);
-                        $('#view_customer_address').text(response.data.is_default_address == 1 ? response.data
-                            .address : response.data.customer.address);
-                        $('#view_customer_email').text(response.data.customer.email ?? 'N/A');
-                        $('#view_notes').text(response.data.special_notes ?? 'N/A');
-                        if (response.data.order_status_id == 4) {
-                            $('.deny_btn').prop('disabled', true);
-                            $('.edit_btn').prop('disabled', true);
-                        } else {
-                            $('.deny_btn').prop('disabled', false);
-                            $('.edit_btn').prop('disabled', false);
-                        }
-                        $('.accept_btn').attr('onclick', "acceptOrder(" + response.data.order_id + ")")
-                        $('.orderEditBtn').attr('onclick', "openEditModalAction(" + response.data.order_id + ")")
+        // // view single 
+        // function viewOrder(id) {
+        //     $.ajax({
+        //         url: config.routes.view,
+        //         method: "POST",
+        //         data: {
+        //             id: id,
+        //             _token: "{{ csrf_token() }}"
+        //         },
+        //         dataType: "json",
+        //         success: function(response) {
+        //             if (response.success == true) {
+        //                 $('#order_id').val(response.data.order_id);
+        //                 $('#view_order_id').text(response.data.id);
+        //                 $('#view_customer_name').text(response.data.is_default_name == 1 ? response.data.name :
+        //                     response.data.customer.name);
+        //                 $('#view_customer_contact').text(response.data.is_default_contact == 1 ? response.data
+        //                     .contact : response.data.customer.contact);
+        //                 $('#view_customer_address').text(response.data.is_default_address == 1 ? response.data
+        //                     .address : response.data.customer.address);
+        //                 $('#view_customer_email').text(response.data.customer.email ?? 'N/A');
+        //                 $('#view_notes').text(response.data.special_notes ?? 'N/A');
+        //                 if (response.data.order_status_id == 4) {
+        //                     $('.deny_btn').prop('disabled', true);
+        //                     $('.edit_btn').prop('disabled', true);
+        //                 } else {
+        //                     $('.deny_btn').prop('disabled', false);
+        //                     $('.edit_btn').prop('disabled', false);
+        //                 }
+        //                 $('.accept_btn').attr('onclick', "acceptOrder(" + response.data.order_id + ")")
+        //                 $('.orderEditBtn').attr('onclick', "openEditModalAction(" + response.data.order_id + ")")
 
-                        if (response.data.order_status_id != null) {
-                            if (response.data.status.name == 'Preparing') {
-                                var class_name = 'primary';
-                            } else if (response.data.status.name == 'Delivering') {
-                                var class_name = 'success';
-                            } else if (response.data.status.name == 'Completed') {
-                                var class_name = 'success';
-                            } else {
-                                var class_name = 'danger';
-                            }
-                            $('#order_status').attr('class', 'btn float-right btn-outline-' + class_name + ' ' +
-                                response.data.class);
-                            $('#order_status').text(response.data.status.name);
-                        }
-
-
+        //                 if (response.data.order_status_id != null) {
+        //                     if (response.data.status.name == 'Preparing') {
+        //                         var class_name = 'primary';
+        //                     } else if (response.data.status.name == 'Delivering') {
+        //                         var class_name = 'success';
+        //                     } else if (response.data.status.name == 'Completed') {
+        //                         var class_name = 'success';
+        //                     } else {
+        //                         var class_name = 'danger';
+        //                     }
+        //                     $('#order_status').attr('class', 'btn float-right btn-outline-' + class_name + ' ' +
+        //                         response.data.class);
+        //                     $('#order_status').text(response.data.status.name);
+        //                 }
 
 
-                        $('.apeend_tbody').empty();
-                        $.each(response.data.orderItems, function(key, val) {
-                            var total_price = two_decimal(val.pivot.quantity * val.pivot.price);
-                            $('.apeend_tbody').append(
-                                `<tr><td class="item_name">${val.name}</td>
-                                <td class="item_price">${'৳ ' + bdCurrencyFormat( val.price)}</td>
-                                <td class="item_quantity">${val.pivot.quantity}</td>
-                                <td class="item_total_price">${'৳ ' + bdCurrencyFormat(val.pivot.price) }</td></tr>`
-                            );
-
-                        });
-                        $('.view_total').html('৳ ' + bdCurrencyFormat(response.data.amount));
-                        if (response.data.delivery_fee != null) {
-                            $('.deleveryFee').html('৳ ' + bdCurrencyFormat(response.data.delivery_fee));
-                        } else {
-                            $('.deleveryFee').html('৳ ' + 0);
-                        }
 
 
-                        $('#viewOrderModal').modal('show');
+        //                 $('.apeend_tbody').empty();
+        //                 $.each(response.data.orderItems, function(key, val) {
+        //                     var total_price = two_decimal(val.pivot.quantity * val.pivot.price);
+        //                     $('.apeend_tbody').append(
+        //                         `<tr><td class="item_name">${val.name}</td>
+        //                         <td class="item_price">${'৳ ' + bdCurrencyFormat( val.price)}</td>
+        //                         <td class="item_quantity">${val.pivot.quantity}</td>
+        //                         <td class="item_total_price">${'৳ ' + bdCurrencyFormat(val.pivot.price) }</td></tr>`
+        //                     );
 
-                    } //success end
-
-                },
-                error: function(error) {
-                    if (error.status == 404) {
-                        toastMixin.fire({
-                            icon: 'error',
-                            animation: true,
-                            title: "" + 'Data not found' + ""
-                        });
+        //                 });
+        //                 $('.view_total').html('৳ ' + bdCurrencyFormat(response.data.amount));
+        //                 if (response.data.delivery_fee != null) {
+        //                     $('.deleveryFee').html('৳ ' + bdCurrencyFormat(response.data.delivery_fee));
+        //                 } else {
+        //                     $('.deleveryFee').html('৳ ' + 0);
+        //                 }
 
 
-                    }
-                },
-            }); //ajax end
-        }
+        //                 $('#viewOrderModal').modal('show');
+
+        //             } //success end
+
+        //         },
+        //         error: function(error) {
+        //             if (error.status == 404) {
+        //                 toastMixin.fire({
+        //                     icon: 'error',
+        //                     animation: true,
+        //                     title: "" + 'Data not found' + ""
+        //                 });
+
+
+        //             }
+        //         },
+        //     }); //ajax end
+        // }
+
         function acceptOrder(id) {
             $.ajax({
                 type: "POST",
@@ -428,7 +432,6 @@
                         var table = $('#orderTable').DataTable();
                         $(".prepation_order_badge").html(response.data.order_in_preparation);
                         $(".new_order_badge").html(response.data.new_order);
-                        $("#viewOrderModal").modal("hide");
                         table.row('.table-row0').clear().destroy();
                         var url = '{{ route('manager.new.order') }}';
                         dataTable(url);
@@ -437,6 +440,7 @@
                             animation: true,
                             title: response.data.message,
                         });
+                        $("#viewOrderModal").modal("hide");
                     }
                 },
                 error: function(error) {
@@ -467,7 +471,7 @@
                         var table = $('#orderTable').DataTable();
                         $(".cancel_order_badge").html(response.data.cancel_order);
                         $(".new_order_badge").html(response.data.new_order);
-                        $("#orderCancelModal").modal("hide");
+                        
                         table.row().clear().destroy();
                         dataTable();
                         toastMixin.fire({
@@ -475,6 +479,7 @@
                             animation: true,
                             title: response.data.message,
                         });
+                        $("#orderCancelModal").modal("hide");
                     }
                 },
                 error: function(error) {

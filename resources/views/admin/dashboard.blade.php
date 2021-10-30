@@ -1,4 +1,7 @@
 @extends('layouts.admin.master')
+@section('title')
+ Dashboard
+@endsection
 @section('page-header')
  {{Auth::user()->is_super_admin == 1 ?  'Business Overview' : 'Dashboard'}}
 @endsection
