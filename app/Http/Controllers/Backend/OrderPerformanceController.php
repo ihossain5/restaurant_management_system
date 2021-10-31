@@ -134,24 +134,26 @@ class OrderPerformanceController extends Controller {
     }
     // monthly report end
     public function itemReportsByRestaurant(Request $request, $id) {
-        $restaurant   = Restaurant::with('restaurant_categories', 'restaurant_orders', 'restaurant_orders.items', 'restaurant_orders.items.category')->findOrFail($id);
-        $restaurants  = Restaurant::get();
-        $total_order  = $restaurant->restaurant_orders ? $restaurant->restaurant_orders->count() : 0;
-        $total_amount = $restaurant->restaurant_orders ? $restaurant->restaurant_orders->sum('amount') : 0;
+        $restaurant  = Restaurant::with('restaurant_categories', 'restaurant_orders', 'restaurant_orders.items', 'restaurant_orders.items.category')->findOrFail($id);
+        $restaurants = Restaurant::get();
+
+        $orders       = $restaurant->lastMontCompletedOrders($id);
+        $total_order  = $orders ? $orders->count() : 0;
+        $total_amount = $orders ? $orders->sum('amount') : 0;
         if ($request->ajax()) {
             $items = [];
-            foreach($restaurant->restaurant_orders as $order){
+            foreach ($orders as $order) {
                 $items = $order->items;
                 // dd($items);
-                foreach($order->items as $item){
+                foreach ($order->items as $item) {
                     $item->revenue = $item->pivot->quantity * $item->price;
                 }
             }
             // dd($items);
             return DataTables::of($items)
-            ->addIndexColumn()
-            ->make(true);
-          
+                ->addIndexColumn()
+                ->make(true);
+
         }
         // return view('admin.performance-reports.item_performance_report', compact('restaurant', 'restaurants', 'total_order', 'total_amount'));
         return view('admin.performance-reports.item_performance_report_new', compact('restaurant', 'restaurants', 'total_order', 'total_amount'));

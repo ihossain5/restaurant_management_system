@@ -14,8 +14,15 @@ class Combo extends Model
         'price',
         'photo',
         'is_available',
+        'restaurant_id',
     ];
     public function items() {
         return $this->belongsToMany(Item::class, 'item_combos','combo_id','item_id')->withTimestamps();
     }
+
+    public function restaurant(){
+        return $this->belongsTo(Restaurant::class, 'restaurant_id');
+    }
+
+
 }

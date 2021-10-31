@@ -107,7 +107,7 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <h6>{{ $combo->restaurant }}</h6>
+                                <h6>{{ $combo->restaurant->name }}</h6>
                                 <h3>{{ $combo->name }}</h3>
                                 <h2 class="comboBtn">Tk. {{ $combo->price }}</h2>
                                 <button

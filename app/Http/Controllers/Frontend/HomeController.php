@@ -21,6 +21,7 @@ class HomeController extends Controller {
         $restaurants = $homePageService->restaurants();
         $order_items = $homePageService->popularDishes();
         $combos      = $homePageService->combos();
+        // dd($combos);
 
         return view('frontend.index', compact('sliders', 'restaurants', 'order_items', 'combos', 'locations'));
     }

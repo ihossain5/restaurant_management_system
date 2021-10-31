@@ -15,7 +15,7 @@ class ItemComboController extends Controller {
         $restaurant  = Restaurant::find($id);
         $restaurants = Restaurant::get();
         $items       = $restaurant->restaurant_items;
-        $combos   = combos($items);
+        $combos      = combos($items);
         // dd($combos);
         return view('admin.item-management.item_combo', compact('restaurant', 'restaurants', 'items', 'combos'));
     }
@@ -27,7 +27,8 @@ class ItemComboController extends Controller {
             $photo_url = storeImage($photo, $path, 401, 296);
         }
         $combo->update([
-            'photo' => $photo_url,
+            'photo'         => $photo_url,
+            'restaurant_id' => $request->restaurant_id,
         ]);
         foreach ($request->item as $item) {
             $combo->items()->attach([$item]);
@@ -58,12 +59,15 @@ class ItemComboController extends Controller {
         // dd($request->all());
         $combo = Combo::findOrFail($request->hidden_id);
         $photo = $request->photo;
-        $combo->update($request->validated());
+        $combo->update($request->validated()+[
+            'restaurant_id' => $request->restaurant_id,
+        ]);
         if ($photo) {
             $path      = 'item-combos/';
             $photo_url = storeImage($photo, $path, 401, 296);
             $combo->update([
-                'photo' => $photo_url,
+                'photo'         => $photo_url,
+               
             ]);
         }
         $combo->items()->sync($request->item);
@@ -107,10 +111,10 @@ class ItemComboController extends Controller {
         // dd($new_combo);
         setSession($request->id);
         $items       = $restaurant->restaurant_items;
-        $combos   = combos($items);
+        $combos      = combos($items);
         $combo_items = [];
         foreach ($combos as $item_combo) {
-            $combo_items[] =  $item_combo->load('items');
+            $combo_items[] = $item_combo->load('items');
         }
 
         $data                = [];
@@ -126,7 +130,7 @@ class ItemComboController extends Controller {
     public function itemsCombosByManager() {
         $restaurant = auth()->user()->restaurant;
         $items      = $restaurant->restaurant_items;
-        $allCombos   = combos($items);
+        $allCombos  = combos($items);
         return view('manager.item.item_combos', compact('allCombos'));
     }
 

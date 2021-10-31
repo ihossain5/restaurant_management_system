@@ -109,15 +109,10 @@ Class HomePageService {
 
     private function formatCombos($combos) {
         foreach ($combos as $combo) {
-            foreach ($combo->items as $item) {
-                $combo->restaurant    = $item->category->restaurant->name;
-                $combo->restaurant_id = $item->category->restaurant->restaurant_id;
-
-                if (in_array($item->category->restaurant->restaurant_id, $this->getRestaurantFromSession())) {
-                    $combo->disable = false;
-                } else {
-                    $combo->disable = true;
-                }
+            if (in_array($combo->restaurant_id, $this->getRestaurantFromSession())) {
+                $combo->disable = false;
+            } else {
+                $combo->disable = true;
             }
         }
     }
