@@ -15,6 +15,5 @@
         <a href="javascript:void(0);" class="dropdown-item notify-item text-right addRestaurent" data-toggle="modal" data-target="#RestaurantAdd">
             +add a new restaurant
         </a>
-
     </div>
 </li>

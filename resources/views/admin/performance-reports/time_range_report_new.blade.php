@@ -32,15 +32,18 @@
                                                 <button class="custom-select downloadDropDown" type="button"
                                                     id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                                     aria-expanded="false">
-                                                    <img src="{{ asset('backend/assets/icons/download-icon.svg') }}" alt="">
+                                                    <img src="{{ asset('backend/assets/icons/download-icon.svg') }}"
+                                                        alt="">
                                                 </button>
                                                 <div class="dropdown-menu downloadMenu"
                                                     aria-labelledby="dropdownMenuButton">
-                                                    <button><img src="{{ asset('backend/assets/icons/pdf-icon.svg') }}"
-                                                            alt=""> PDF
+                                                    <button onclick="downloadPdf()"><img
+                                                            src="{{ asset('backend/assets/icons/pdf-icon.svg') }}" alt="">
+                                                        PDF
                                                         File</button>
-                                                    <button><img src="{{ asset('backend/assets/icons/csv-icon.svg') }}"
-                                                            alt=""> CSV
+                                                    <button onclick="downloadCsv()"><img
+                                                            src="{{ asset('backend/assets/icons/csv-icon.svg') }}" alt="">
+                                                        CSV
                                                         File</button>
                                                 </div>
                                             </div>
@@ -49,7 +52,8 @@
                                             <div class="custom-date">
                                                 <div class="input-daterange input-group" id="date-range">
                                                     <div class="customDatePicker">
-                                                        <img src="{{ asset('backend/assets/icons/dateicon.svg') }}" alt="">
+                                                        <img src="{{ asset('backend/assets/icons/dateicon.svg') }}"
+                                                            alt="">
                                                         <input type="text" class="form-control" name="start"
                                                             id="start_date" placeholder="Start Date" />
                                                         <img src="{{ asset('backend/assets/icons/color-arrow-down.svg') }}"
@@ -57,7 +61,8 @@
                                                     </div>
 
                                                     <div class="customDatePicker">
-                                                        <img src="{{ asset('backend/assets/icons/dateicon.svg') }}" alt="">
+                                                        <img src="{{ asset('backend/assets/icons/dateicon.svg') }}"
+                                                            alt="">
                                                         <input type="text" class="form-control" name="end" id="end_date"
                                                             placeholder="End Date" />
                                                         <img src="{{ asset('backend/assets/icons/color-arrow-down.svg') }}"
@@ -119,7 +124,16 @@
             var url = '{{ route('orders.time.range.report', ':id') }}';
             url = url.replace(':id', id);
             var table = $('#orderTable').DataTable({
-                // processing: true,
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'csvHtml5',
+                        className: 'd-none',
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        className: 'd-none',
+                    },
+                ],
                 serverSide: true,
                 ajax: url,
                 columns: [{
@@ -159,7 +173,7 @@
                         dataTable();
                         setSessionId(response.data.session_id); // set restaurant id into session
                         setRestaurant(response.data.restaurant_name, response.data
-                        .id); // set restaurant into topbar
+                            .id); // set restaurant into topbar
                         $('.start_date').html('- ' + response.data.start_date + ' -');
                         $('.end_date').html(response.data.end_date);
                         // if ($.trim(response.data.orders)) {
@@ -211,7 +225,7 @@
                             $('.end_date').html(response.data.end_date);
                             $('.total_orders').html(response.data.total_order);
                             $('.total_amount').html('৳ ' + bdCurrencyFormat(response.data
-                            .total_amount));
+                                .total_amount));
                             // if ($.trim(response.data.orders)) {
                             //     ordersData(response.data.orders)
                             // }
@@ -256,7 +270,16 @@
         function dataTable() {
             var url = '{{ route('date.wise.order.report.restaurant') }}';
             var table = $('#orderTable').DataTable({
-                // processing: true,
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'csvHtml5',
+                        className: 'd-none',
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        className: 'd-none',
+                    },
+                ],
                 serverSide: true,
                 ajax: url,
                 columns: [{

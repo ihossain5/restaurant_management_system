@@ -22,4 +22,8 @@ class Category extends Model
     public function items(){
         return $this->hasMany(Item::class, 'category_id')->with('item_assets','category');
     }
+
+    public function available_items(){
+        return $this->hasMany(Item::class, 'category_id')->with('item_assets','category')->where('is_available',1);
+    }
 }

@@ -1,5 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-*, *::before, *::after {
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     outline: none;
@@ -19,7 +21,7 @@ html {
 body {
     position: relative;
     overflow-x: hidden;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     margin: 0;
 }
 
@@ -27,7 +29,18 @@ ul {
     list-style: none;
 }
 
-.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     margin: 0;
     padding: 0;
 }
@@ -41,19 +54,36 @@ a {
     text-decoration: none;
 }
 
-a:hover, a:focus, a:active, a:focus-visible {
+a:hover,
+a:focus,
+a:active,
+a:focus-visible {
     outline: none;
 }
 
 /* --input and button type focus & outline style-- */
 
-input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="password"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="number"]:focus, textarea:focus, input[type="button"]:focus, input[type="reset"]:focus, input[type="submit"]:focus, select:focus {
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+input[type="button"]:focus,
+input[type="reset"]:focus,
+input[type="submit"]:focus,
+select:focus {
     outline: none;
     box-shadow: none;
     -webkit-box-shadow: none;
 }
 
-.btn.focus, .btn:focus, button:focus, button:focus-visible {
+.btn.focus,
+.btn:focus,
+button:focus,
+button:focus-visible {
     outline: 0;
     box-shadow: none;
 }
@@ -62,41 +92,41 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus, in
 
 @font-face {
     font-family: "AnkoPersonalUse";
-    src: url('../anko/AnkoPersonalUse.otf');
+    src: url("../anko/AnkoPersonalUse.otf");
 }
 
 @font-face {
     font-family: "Anko-PersonalUse-Bold";
-    src: url('../anko/Anko-PersonalUse-Bold.otf');
+    src: url("../anko/Anko-PersonalUse-Bold.otf");
 }
 
 @font-face {
     font-family: "Anko-PersonalUse-BoldItalic";
-    src: url('../anko/Anko-PersonalUse-BoldItalic.otf');
+    src: url("../anko/Anko-PersonalUse-BoldItalic.otf");
 }
 
 @font-face {
     font-family: "Anko-PersonalUse-Medium";
-    src: url('../anko/Anko-PersonalUse-Medium.otf');
+    src: url("../anko/Anko-PersonalUse-Medium.otf");
 }
 
 @font-face {
     font-family: "Anko-PersonalUse-MediumItalic";
-    src: url('../anko/Anko-PersonalUse-MediumItalic.otf');
+    src: url("../anko/Anko-PersonalUse-MediumItalic.otf");
 }
 
 @font-face {
     font-family: "AnkoPersonalUse-RegularItalic";
-    src: url('../anko/AnkoPersonalUse-RegularItalic.otf');
+    src: url("../anko/AnkoPersonalUse-RegularItalic.otf");
 }
 
 @font-face {
     font-family: "Anko-PersonalUse-SemiBoldItalic";
-    src: url('../anko/Anko-PersonalUse-SemiBoldItalic.otf');
+    src: url("../anko/Anko-PersonalUse-SemiBoldItalic.otf");
 }
 
 body {
-    font-family: 'AnkoPersonalUse';
+    font-family: "AnkoPersonalUse";
 }
 
 /* onload location modal start */
@@ -135,7 +165,7 @@ body {
     font-size: 4rem;
     line-height: 5.2rem;
     text-align: center;
-    color: #355D6C;
+    color: #355d6c;
     text-transform: uppercase;
     margin-bottom: 4.2rem;
 }
@@ -143,26 +173,26 @@ body {
 .location-modal-box .select-box select {
     background-color: transparent;
     border: 0;
-    border-bottom: 1px solid #B3B3B3;
+    border-bottom: 1px solid #b3b3b3;
     width: 50.6rem;
     font-size: 2.2rem;
     line-height: 2.6rem;
     padding: 4px 0;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
 /* onload location modal end */
-
 
 /* alert modal start */
 .alert-modal .modal-content {
     padding: 4.5rem 6.7rem;
 }
-.alert-modal .modal-body, .alert-modal .modal-footer {
+.alert-modal .modal-body,
+.alert-modal .modal-footer {
     padding: 0;
 }
 .alert-modal .modal-body h3 {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     font-style: normal;
     font-weight: 300;
     font-size: 2rem;
@@ -179,21 +209,21 @@ body {
     font-weight: normal;
     font-size: 1.8rem;
     line-height: 2.1rem;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     text-transform: capitalize;
     padding: 2rem 3.2rem;
-    border: 1px solid #91B110;
+    border: 1px solid #91b110;
     border-radius: 60px;
     background-color: transparent;
     min-width: 16rem;
     display: block;
 }
 .alert-modal .alert-modal-btn.fill {
-    background: #91B110;
+    background: #91b110;
     color: #ffffff;
 }
 .alert-modal .alert-modal-btn:not(.fill) {
-    color: #91B110;
+    color: #91b110;
 }
 
 .alert-modal .modal-body h3 {
@@ -209,14 +239,14 @@ body {
 /* alert modal end */
 
 body .nav-overlay {
-    transition: all .3s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
 body.active .nav-overlay {
-    content: '';
+    content: "";
     position: fixed;
-    top       : 0;
-    right     : 0;
-    left      : 0;
+    top: 0;
+    right: 0;
+    left: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1;
@@ -247,7 +277,7 @@ body.active .nav-overlay {
 
 .bg-dark-custom {
     background: #383838;
-    transition: .3s;
+    transition: 0.3s;
 }
 
 .navbar .navbar-collapse {
@@ -261,12 +291,12 @@ body.active .nav-overlay {
     min-width: 274px;
     position: relative;
     border: 0;
-    border-bottom: 1px solid #DDDDDD;
+    border-bottom: 1px solid #dddddd;
     background-color: transparent;
     font-weight: 300;
     font-size: 20px;
     line-height: 23px;
-    color: #F9F9F6;
+    color: #f9f9f6;
     padding: 4px 22px;
     appearance: none;
 }
@@ -278,7 +308,7 @@ body.active .nav-overlay {
     right: 0;
     left: 0;
     bottom: 0;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 16px;
     color: red;
 }
@@ -291,7 +321,7 @@ body.active .nav-overlay {
 .navbar-location-select-box .location-select option:hover {
     background-color: #ffff;
     color: red;
-    box-shadow: 0 0 10px 100px #1882A8 inset;
+    box-shadow: 0 0 10px 100px #1882a8 inset;
 }
 
 /* navbar location seclet box end */
@@ -303,15 +333,15 @@ body.active .nav-overlay {
     min-width: 300px;
     position: relative;
     border: 0;
-    border-bottom: 1px solid #DDDDDD;
+    border-bottom: 1px solid #dddddd;
     background-color: transparent;
     font-weight: 300;
     font-size: 2rem;
     line-height: 2.3rem;
-    color: #F9F9F6;
+    color: #f9f9f6;
     padding: 0.4rem 2.2rem;
     text-align: left;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
 .navbar-location-select-box .navbar-modal-show-btn::after {
@@ -320,7 +350,7 @@ body.active .nav-overlay {
     top: 50%;
     transform: translateY(-50%);
     right: 2px;
-    color: #D9E021;
+    color: #d9e021;
     font-size: 1.8rem;
     font-weight: 700;
 }
@@ -359,8 +389,8 @@ body.active .nav-overlay {
 }
 
 .dropdown-item {
-    padding-top: .8rem;
-    padding-bottom: .8rem;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
     text-transform: uppercase;
 }
 
@@ -376,10 +406,10 @@ body.active .nav-overlay {
     width: 2.4rem;
     height: 2.4rem;
     border-radius: 50%;
-    background: #D9E021;
+    background: #d9e021;
     text-align: center;
     position: absolute;
-    top: -.9rem;
+    top: -0.9rem;
     right: -1.2rem;
 }
 .cart-counter span {
@@ -387,8 +417,8 @@ body.active .nav-overlay {
     font-size: 1.6rem;
     line-height: 2.6rem;
     font-weight: 700;
-    color: #1A1A1A;
-    font-family: 'Roboto', sans-serif;
+    color: #1a1a1a;
+    font-family: "Roboto", sans-serif;
 }
 
 /* Cart CSS */
@@ -399,7 +429,7 @@ body.active .nav-overlay {
     width: 100%;
     height: 100vh;
     overflow-y: auto;
-    background: #FFFFFF;
+    background: #ffffff;
     position: fixed;
     top: 0;
     right: -802px;
@@ -418,7 +448,7 @@ body.active .nav-overlay {
     font-size: 4rem;
     line-height: 5.2rem;
     text-transform: uppercase;
-    color: #1A1A1A;
+    color: #1a1a1a;
     padding-bottom: 4.3rem;
 }
 
@@ -430,7 +460,7 @@ body.active .nav-overlay {
     font-weight: 300;
     font-size: 2.2rem;
     color: #383838;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
 .incrDecBtn button {
@@ -468,7 +498,7 @@ body.active .nav-overlay {
     font-size: 2.2rem;
     line-height: 2.6rem;
     color: #383838;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
 .cartRightSide button {
@@ -493,7 +523,7 @@ body.active .nav-overlay {
     text-align: right;
     color: #383838;
     padding-top: 2.3rem;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
 .calculation {
@@ -504,15 +534,18 @@ body.active .nav-overlay {
     font-weight: 300;
     font-size: 2rem;
     color: #383838;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
 .calculation.grand-total h6 {
     font-weight: bold;
 }
 
-.calculation:nth-child(even) {
-    border-bottom: 1px solid #B3B3B3;
+/* .calculation:nth-child(even) {
+    border-bottom: 1px solid #b3b3b3;
+} */
+.grand-total{
+    border-top: 1px solid #b3b3b3;
 }
 
 .brand-btn {
@@ -520,15 +553,15 @@ body.active .nav-overlay {
     font-weight: bold;
     color: #383838;
     padding: 2.4rem;
-    background-color: #D9E021;
+    background-color: #d9e021;
     border: none;
     margin-top: 2.4rem;
     margin-bottom: 2.4rem;
     width: 100%;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 .brand-btn:hover {
-    background: #91B110;
+    background: #91b110;
 }
 
 .info-text {
@@ -539,7 +572,7 @@ body.active .nav-overlay {
     margin: auto;
     color: #383838;
     font-weight: 300;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
 .trasnparentBg {
@@ -560,16 +593,17 @@ body.active .nav-overlay {
 
 .about-hero {
     padding-top: 5rem;
-    background-color: #F9F9F6;
+    background-color: #f9f9f6;
 }
 
-.about-hero, .aboutHeroLogo {
+.about-hero,
+.aboutHeroLogo {
     padding-left: 39.7rem;
     padding-right: 23.6rem;
 }
 
 .aboutHeroLogo {
-    background-color: #F9F9F6;
+    background-color: #f9f9f6;
     padding-bottom: 6.5rem;
 }
 
@@ -585,7 +619,7 @@ body.active .nav-overlay {
     color: #383838;
     padding-top: 4rem;
     max-width: 542px;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
 .company-logo {
@@ -627,7 +661,7 @@ body.active .nav-overlay {
     font-size: 2rem;
     line-height: 3.8rem;
     color: #383838;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
 .brand-btn-sm {
@@ -636,17 +670,17 @@ body.active .nav-overlay {
     line-height: 2.1rem;
     color: white;
     padding: 2rem 3.2rem;
-    background: #91B110;
+    background: #91b110;
     border-radius: 6rem;
     text-decoration: none;
     display: inline-block;
     margin-top: 6.4rem;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
 .brand-btn-sm:hover {
     color: white;
-    background-color: #D9E021;
+    background-color: #d9e021;
 }
 
 .about-section.right-content .right-box {
@@ -663,7 +697,7 @@ body.active .nav-overlay {
 }
 
 .section-bg {
-    background: #F9F9F6;
+    background: #f9f9f6;
 }
 
 .aboutCarouselIndicator [data-bs-target] {
@@ -674,7 +708,7 @@ body.active .nav-overlay {
 }
 
 .aboutCarouselIndicator .active {
-    background-color: #F9F9F6;
+    background-color: #f9f9f6;
 }
 
 /* Sign In/Up CSS */
@@ -711,14 +745,15 @@ body.active .nav-overlay {
     justify-content: center;
 }
 
-.signIn-nav .nav-link.active, .signIn-nav.show>.nav-link {
+.signIn-nav .nav-link.active,
+.signIn-nav.show > .nav-link {
     background-color: transparent;
-    color: #355D6C;
+    color: #355d6c;
     font-weight: 500;
     font-size: 2.8rem;
     line-height: 3.6rem;
     text-transform: uppercase;
-    border-bottom: 3px solid #355D6C;
+    border-bottom: 3px solid #355d6c;
 }
 
 .signIn-nav .nav-link {
@@ -727,7 +762,7 @@ body.active .nav-overlay {
     line-height: 3.6rem;
     text-transform: uppercase;
     color: #858585;
-    border-bottom: 3px solid #F2F2F2;
+    border-bottom: 3px solid #f2f2f2;
     border-radius: 0;
     padding-left: 2rem;
     padding-right: 2rem;
@@ -743,7 +778,7 @@ body.active .nav-overlay {
     text-align: center;
     color: #383838;
     padding-top: 3.4rem;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
 .socialLogin {
@@ -777,12 +812,12 @@ body.active .nav-overlay {
     line-height: 3.2rem;
     text-align: center;
     color: #383838;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     margin-bottom: 4.3rem;
 }
 
 .formInput input {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     font-weight: 300;
     font-size: 2rem;
     line-height: 2.3rem;
@@ -790,12 +825,12 @@ body.active .nav-overlay {
     padding: 1.6rem 1.6rem 1.6rem 0;
     margin-bottom: 2.4rem;
     border: none;
-    border-bottom: 1px solid #B3B3B3;
+    border-bottom: 1px solid #b3b3b3;
     border-radius: 0;
 }
 
 .formInput input:focus {
-    border-bottom: 1px solid #B3B3B3;
+    border-bottom: 1px solid #b3b3b3;
 }
 
 .toggleBtn {
@@ -813,7 +848,7 @@ body.active .nav-overlay {
 }
 
 .toggleBtn span {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     font-weight: 500;
     font-size: 1.8rem;
     line-height: 2.1rem;
@@ -822,7 +857,7 @@ body.active .nav-overlay {
 }
 
 .outlineBtn {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     padding: 2.4rem 9.7rem;
     font-weight: 500;
     font-size: 2.4rem;
@@ -850,7 +885,7 @@ body.active .nav-overlay {
     font-weight: normal;
     font-size: 4.8rem;
     text-transform: uppercase;
-    color: #1A1A1A;
+    color: #1a1a1a;
     padding-bottom: 6.5rem;
 }
 
@@ -859,7 +894,7 @@ body.active .nav-overlay {
     font-size: 3.2rem;
     line-height: 4.2rem;
     text-transform: uppercase;
-    color: #355D6C;
+    color: #355d6c;
 }
 
 .profile-image-box input[type="file"] {
@@ -873,7 +908,7 @@ body.active .nav-overlay {
     height: 3.2rem;
     line-height: 3.2rem;
     border-radius: 50%;
-    background: #53A0BC;
+    background: #53a0bc;
     text-align: center;
     cursor: pointer;
     position: absolute;
@@ -903,7 +938,7 @@ body.active .nav-overlay {
 }
 
 .profile h5 {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     font-weight: 500;
     font-size: 2rem;
     line-height: 2.3rem;
@@ -912,12 +947,12 @@ body.active .nav-overlay {
 }
 
 .profile p {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     font-weight: 300;
     font-size: 2.2rem;
     line-height: 2.6rem;
     color: #383838;
-    padding-top: .8rem;
+    padding-top: 0.8rem;
 }
 
 .profile .delAddress {
@@ -930,13 +965,13 @@ body.active .nav-overlay {
 }
 
 .profile-input button {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     padding: 2rem 4.9rem;
-    background-color: #53A0BC;
+    background-color: #53a0bc;
     border: none;
     font-size: 1.8rem;
     line-height: 2.1rem;
-    color: #FFFFFF;
+    color: #ffffff;
     font-weight: 500;
     margin-top: 4.1rem;
 }
@@ -963,7 +998,7 @@ body.active .nav-overlay {
 }
 
 .footer {
-    background: #355D6C;
+    background: #355d6c;
 }
 
 .footer-logo {
@@ -982,21 +1017,22 @@ body.active .nav-overlay {
 .foot-contact p {
     font-weight: 300;
     font-size: 2rem;
-    color: #FFFFFF;
-    font-family: 'Roboto', sans-serif;
+    color: #ffffff;
+    font-family: "Roboto", sans-serif;
 }
 
 .infoLink li {
     text-align: right;
-    padding-top: .8rem;
-    padding-bottom: .8rem;
+}
+.infoLink li:not(:last-child) {
+    margin-bottom: 1.6rem;
 }
 
 .infoLink li a {
     font-weight: 300;
     font-size: 2rem;
-    color: #FFFFFF;
-    font-family: 'Roboto', sans-serif;
+    color: #ffffff;
+    font-family: "Roboto", sans-serif;
 }
 
 .footer-text {
@@ -1015,11 +1051,11 @@ body.active .nav-overlay {
 }
 
 .footer-text li::after {
-    content: '';
+    content: "";
     position: absolute;
-    right: -.75rem;
+    right: -0.75rem;
     top: 0;
-    bottom: .5rem;
+    bottom: 0.5rem;
     margin: auto;
     height: 50%;
     width: 2px;
@@ -1030,13 +1066,20 @@ body.active .nav-overlay {
     width: 0;
 }
 
+#toast-container>div {
+    padding: 15px 15px 15px 42px !important;
+    width: 340px !important;
+    box-shadow: none !important;
+}
+
 /* `xxl` applies to x-large devices (large desktops, less than 1400px) */
 
 @media (max-width: 1399.98px) {
     html {
         font-size: 56.5%;
     }
-    .about-hero, .aboutHeroLogo {
+    .about-hero,
+    .aboutHeroLogo {
         padding-left: 19.7rem;
         padding-right: 19.6rem;
     }
@@ -1080,7 +1123,7 @@ body.active .nav-overlay {
     .bar-wrapper .line {
         width: 24px;
         height: 2px;
-        background: #D9E021;
+        background: #d9e021;
     }
     .bar-wrapper .line.line-two {
         margin: 6px 0;
@@ -1124,7 +1167,8 @@ body.active .nav-overlay {
         height: 18px;
     }
     /* small device navbar end */
-    .about-hero, .aboutHeroLogo {
+    .about-hero,
+    .aboutHeroLogo {
         padding-left: 10.7rem;
         padding-right: 10.6rem;
     }
@@ -1148,7 +1192,7 @@ body.active .nav-overlay {
     }
     .divider {
         border-right: 0;
-        border-bottom: 1px solid #B3B3B3;
+        border-bottom: 1px solid #b3b3b3;
         padding-bottom: 3rem;
     }
     .divider li {
@@ -1187,13 +1231,14 @@ body.active .nav-overlay {
         padding-bottom: 3.5rem;
     }
     .foot-cont {
-        padding: 5rem
+        padding: 5rem;
     }
     .cart {
         padding: 4.5rem 4.4rem;
         max-width: 350px;
     }
-    .about-hero, .aboutHeroLogo {
+    .about-hero,
+    .aboutHeroLogo {
         padding-left: 5rem;
         padding-right: 5rem;
     }
@@ -1252,7 +1297,8 @@ body.active .nav-overlay {
         font-size: 28px;
         line-height: 36px;
     }
-    .cartItem p, .cartRightSide h6 {
+    .cartItem p,
+    .cartRightSide h6 {
         font-size: 17px;
         line-height: 20px;
     }
@@ -1287,6 +1333,10 @@ body.active .nav-overlay {
         line-height: 16px;
     }
     /* about us page */
+    .brand-btn-sm {
+        font-size: 14px;
+        line-height: 18px;
+    }
     .company-logo .logo-wrapper img {
         width: 100%;
         padding: 0 1.5rem;
@@ -1297,11 +1347,13 @@ body.active .nav-overlay {
     .about-section.left-content .left-box {
         padding-right: 0;
     }
-    .about-hero p {
+    .about-hero p,
+    .compDescrip {
         font-size: 14px;
     }
     /* checkout page */
-    .profile h5, .profile p {
+    .profile h5,
+    .profile p {
         font-size: 15px;
         line-height: 18px;
     }
@@ -1309,4 +1361,9 @@ body.active .nav-overlay {
     .profile {
         padding: 10.2rem 5rem;
     }
+    #toast-container>div {
+        padding: 8px !important;
+        width: 336px !important;
+    }
 }
+

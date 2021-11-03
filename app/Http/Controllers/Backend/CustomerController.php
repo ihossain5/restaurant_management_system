@@ -90,6 +90,7 @@ class CustomerController extends Controller {
 
         $restaurants = Restaurant::get();
         $orders      = Order::where('customer_id', $id)->where('restaurant_id', $restaurant->restaurant_id)->with('customer')->latest()->get();
+        // dd($orders);
         if ($request->ajax()) {
             return $this->ordersData($orders);
         }

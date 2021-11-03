@@ -1,6 +1,7 @@
 @extends('layouts.frontend.master')
 @section('pageCss')
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/allOrder.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
 @endsection
 @section('title')
     Home
@@ -12,7 +13,7 @@
     <!-- All Order Table -->
     <section class="large-device-only">
         <div class="row">
-            <div class="col-lg-7">
+            <div class="col-lg-12">
                 <div class="allOrder">
                     <h1 class="orderTitle">My orders</h1>
                     @if (session()->has('success'))
@@ -66,9 +67,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-5">
+            {{-- <div class="col-lg-5">
                 <img class="w-100 left-img" src="{{asset('frontend/assets/images/My Orders/image 19.png')}}" alt="">
-            </div>
+            </div> --}}
         </div>
     </section>
 
@@ -77,54 +78,26 @@
         <div class="allOrder">
             <h1 class="orderTitle">My orders</h1>
             <div class="order-card-wrapper">
+                @if (!empty($orders))
+                @foreach ($orders as $order)
                 <div class="order-card-inner">
-                    <a data-bs-toggle="modal" href="#orderViewModal" class="d-block text-reset">
+                    <a onclick="viewOrder({{$order->order_id}})">
                         <div class="row">
                             <div class="col-8 left">
-                                <h2 class="title">Kiyoshi</h2>
-                                <p class="short-desc">Ebi Meets Sake</p>
-                                <span class="status pending">Pending</span>
+                                <h2 class="title">{{$order->restaurant->name}}</h2>
+                                <p class="short-desc">{{$order->restaurant->name}}</p>
+                                <span class="status {{ ( ($order->order_status_id == null) ? 'pending' : (($order->status->name == 'Completed') ?  'completed' : 'canceld' ))}}">{{$order->status->name ?? 'Pending' }}</span>
                             </div>
                             <div class="col-4 right text-end">
-                                <h1 class="price">Tk 1,000</h1>
+                                <h1 class="price">Tk {{currency_format($order->amount)}}</h1>
                                 <p class="not-visible">empty space</p>
-                                <span class="date">18/02/21</span>
+                                <span class="date">{{formatOrderDate($order->created_at)}}</span>
                             </div>
                         </div>
                     </a>
                 </div>
-                <div class="order-card-inner">
-                    <a data-bs-toggle="modal" href="#orderViewModal" class="d-block text-reset">
-                        <div class="row">
-                            <div class="col-8 left">
-                                <h2 class="title">Kiyoshi</h2>
-                                <p class="short-desc">Ebi Meets Sake</p>
-                                <span class="status completed">Completed</span>
-                            </div>
-                            <div class="col-4 right text-end">
-                                <h1 class="price">Tk 1,000</h1>
-                                <p class="not-visible">empty space</p>
-                                <span class="date">18/02/21</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="order-card-inner">
-                    <a data-bs-toggle="modal" href="#orderViewModal" class="d-block text-reset">
-                        <div class="row">
-                            <div class="col-8 left">
-                                <h2 class="title">Kiyoshi</h2>
-                                <p class="short-desc">Ebi Meets Sake</p>
-                                <span class="status canceld">Canceled</span>
-                            </div>
-                            <div class="col-4 right text-end">
-                                <h1 class="price">Tk 1,000</h1>
-                                <p class="not-visible">empty space</p>
-                                <span class="date">18/02/21</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                @endforeach
+                @endif
             </div>
         </div>
     </section>
@@ -165,15 +138,15 @@
                             <ul class="orderPricebox">
                                 <li>
                                     <div class="priceName">Sub Total</div>
-                                    <div class="orderAmount subtotal">Tk. 1895</div>
+                                    <div class="orderAmount subtotal">Tk. </div>
                                 </li>
                                 <li>
                                     <div class="priceName">VAT</div>
-                                    <div class="orderAmount">Tk. 85</div>
+                                    <div class="orderAmount vatAmount">Tk. </div>
                                 </li>
                                 <li>
                                     <div class="priceName">Delivery Fee</div>
-                                    <div class="orderAmount">Tk. 60</div>
+                                    <div class="orderAmount deliveryFee">Tk. </div>
                                 </li>
                                 <li>
                                     <div class="priceName">Grand Total</div>
@@ -233,7 +206,9 @@
                         });
                         $('.orderId').html(response.data.orderID);
                         $('.date').html(response.data.date);
-                        $('.subtotal').html(response.data.amount);
+                        $('.subtotal').html(response.data.subtotal);
+                        $('.vatAmount').html(response.data.vatAmount);
+                        $('.deliveryFee').html(response.data.deliveryFee);
                         $('.grandTotal').html(response.data.grandTotal);
                         $('.specialNotes').html(response.data.special_notes ?? 'N/A');
                         $('#restaurantImg').attr('src', path+'/images/' + response.data.restaurant.logo);

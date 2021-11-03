@@ -121,10 +121,72 @@
 
 
 /* Menu CSS */
-.menu-section {
-    padding: 5.7rem 5% 20.2rem 5%;
+.menu-title-wrapper {
+    padding-top: 5.8rem;
+}
+.menu-navbar-wrapper.sticky-top {
+    background: #ffffff;
+    border-bottom: 1px solid #DDDDDD;
+    z-index: 10;
+}
+.scroll-x-navbar::-webkit-scrollbar {
+    display: none;
+}
+.scroll-x-navbar {
+    display: flex;
+    flex-wrap: initial;
+    overflow-x: auto;
+    margin-bottom: 0;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.scroll-x-navbar .nav-item:not(:last-child) {
+    margin-right: 4rem;
+}
+.scroll-x-navbar .nav-link {
+    font-family  : 'Roboto', sans-serif;
+    font-size: 1.8rem;
+    line-height: 2.1rem;
+    font-weight: 400;
+    color: #858585;
+    text-transform: capitalize;
+    padding: 1.6rem 0;
+    white-space: nowrap;
+    position: relative;
+}
+.scroll-x-navbar .nav-link.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    width: 100%;
+    background: #53A0BC;
+    z-index: 2;
+}
+.scroll-x-navbar.nav-pills .nav-link.active, .scroll-x-navbar.nav-pills .show>.nav-link {
+    color: #000000;
+    background-color: transparent;
 }
 
+.scrollspy-menu-content {
+    position: relative;
+    margin-top: 4rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    padding-bottom: 12rem;
+}
+.scrollspy-menu-content .container .categories:not(:first-child) {
+    padding-top: 5.8rem;
+}
+.categories {
+    transition: padding .4s ease-in-out;
+}
+.categories.active {
+    padding-top: 18rem !important;
+}
 .menuTitle {
     font-weight   : normal;
     font-size     : 5.6rem;
@@ -135,15 +197,14 @@
     margin-bottom : 4rem;
 }
 
-.categories.active {
-    padding-top: 14rem !important;
-}
+
 .categoriesTitle {
     font-family  : 'Roboto', sans-serif;
     font-weight  : 300;
     font-size    : 3.2rem;
     line-height  : 3.8rem;
     color        : #000000;
+    text-transform: capitalize;
     margin-bottom: 2.5rem;
     padding: 0 1rem;
 }
@@ -151,92 +212,6 @@
 .sideCategories {
     position: relative;
 }
-
-.sideCategories li:first-child::before {
-    content         : '';
-    position        : absolute;
-    top             : 3.5rem;
-    right           : -1.8rem;
-    bottom          : 0;
-    margin          : auto;
-    height          : 80%;
-    width           : .2rem;
-    background-color: #355D6C;
-}
-
-.sideCategories li:last-child::before {
-    content         : '';
-    position        : absolute;
-    top             : -3.5rem;
-    right           : -1.8rem;
-    bottom          : 0;
-    margin          : auto;
-    height          : 80%;
-    width           : .2rem;
-    background-color: #355D6C;
-}
-
-.sideCategories li::before {
-    content         : '';
-    position        : absolute;
-    top             : 0;
-    right           : -1.8rem;
-    bottom          : 0;
-    margin          : auto;
-    height          : 100%;
-    width           : .2rem;
-    background-color: #355D6C;
-}
-
-
-
-
-.sideCategories li {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 300;
-    font-size  : 2rem;
-    line-height: 2.3rem;
-    color      : #1A1A1A;
-    text-align : right;
-    position   : relative;
-    padding    : 2rem 0;
-    cursor     : pointer;
-}
-
-.sideCategories li a {
-    text-decoration: none;
-    color          : #1A1A1A;
-
-}
-
-
-
-.sideCategories li::after {
-    content         : '';
-    position        : absolute;
-    top             : 0;
-    right           : -2.4rem;
-    bottom          : 0;
-    margin          : auto;
-    height          : 1.5rem;
-    width           : 1.5rem;
-    border-radius   : 50%;
-    background-color: #355D6C;
-
-}
-
-
-.sideCatSticky {
-    position: sticky;
-    top     : 13rem;
-}
-
-
-.menu-container {
-    padding-left: 11.4rem;
-    padding-top : 1rem;
-}
-
 
 /* Item CSS */
 
@@ -316,7 +291,7 @@
     margin-bottom: 1.5rem;
 }
 
-.menuCartBtn {
+.cartBtn {
     font-family     : 'Roboto', sans-serif;
     font-weight     : normal;
     font-size       : 1.8rem;

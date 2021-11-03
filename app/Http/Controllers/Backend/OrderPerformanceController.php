@@ -134,19 +134,20 @@ class OrderPerformanceController extends Controller {
     }
     // monthly report end
     public function itemReportsByRestaurant(Request $request, $id) {
-        $restaurant  = Restaurant::with('restaurant_categories', 'restaurant_orders', 'restaurant_orders.items', 'restaurant_orders.items.category')->findOrFail($id);
-        $restaurants = Restaurant::get();
-
+        // dd($request->all());
+        $restaurant   = Restaurant::with('restaurant_categories', 'restaurant_orders', 'restaurant_orders.items', 'restaurant_orders.items.category')->findOrFail($id);
+        $restaurants  = Restaurant::get();
         $orders       = $restaurant->lastMontCompletedOrders($id);
         $total_order  = $orders ? $orders->count() : 0;
         $total_amount = $orders ? $orders->sum('amount') : 0;
+
         if ($request->ajax()) {
             $items = [];
             foreach ($orders as $order) {
-                $items = $order->items;
-                // dd($items);
                 foreach ($order->items as $item) {
-                    $item->revenue = $item->pivot->quantity * $item->price;
+                    $items[]                = $item;
+                    $item['total_quantity'] = $item->pivot->quantity;
+                    $item['total_amount']   = $item->pivot->price;
                 }
             }
             // dd($items);
@@ -172,6 +173,18 @@ class OrderPerformanceController extends Controller {
         $data['start_date']      = formatDate($request->start_date);
         $data['end_date']        = formatDate($request->end_date);
         return success($data);
+    }
+
+    public function itemReportsByCategory(Request $request){
+        // dd($request->all());
+        if($request->start_date != null && $request->end_date != null){
+            $start_date = Carbon::parse($request->start_date)->format('y-m-d');
+            $end_date   = Carbon::parse($request->end_date)->format('y-m-d');
+        }
+        if ($request->id == null) {
+            $restaurant = Restaurant::findOrFail($request->id);
+            return $this->performanceReportByDate($start_date, $end_date, $restaurant->restaurant_id);
+        }
     }
 
     public function dataTable($restaurant_orders) {

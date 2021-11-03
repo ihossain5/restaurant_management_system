@@ -18,6 +18,7 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\Frontend\AboutUsController as FrontendAboutUsController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckOutController;
+use App\Http\Controllers\Frontend\ContactUsController as FrontendContactUsController;
 use App\Http\Controllers\Frontend\CustomerController as FrontendCustomerController;
 use App\Http\Controllers\Frontend\CustomerLoginController;
 use App\Http\Controllers\Frontend\HomeController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\Manager\ManagerDashboardController;
 use App\Http\Controllers\Manager\ManagerOrderPerformanceController;
 use App\Http\Controllers\Manager\ManagerOrdersController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -134,6 +136,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admin']], function (
         Route::post('monthly-reports', [OrderPerformanceController::class, 'monthlyOrdersReportByRestaurant'])->name('order.report.restaurant.month');
         Route::get('/{id}/item/performance-reports', [OrderPerformanceController::class, 'itemReportsByRestaurant'])->name('order.report.item');
         Route::post('item/performance-reports', [OrderPerformanceController::class, 'itemReportsByDate'])->name('order.report.item.date');
+        Route::post('category-item/performance-reports', [OrderPerformanceController::class, 'itemReportsByCategory'])->name('order.item.report.by.category');
 
     }); //* Restaurant route end */
 
@@ -157,7 +160,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admin']], function (
         Route::post('/update', [ItemController::class, 'update'])->name('item.update');
         Route::post('/delete', [ItemController::class, 'destroy'])->name('item.delete');
         Route::post('/restaurant-items', [ItemController::class, 'getItemsByRestaurant'])->name('item.restaurant');
-        Route::post('/available-status/update', [ItemController::class, 'updateAvailableStatus'])->name('item.available.status.update');
+        Route::post('/available-status/update', [ItemController::class, 'updateAvailableStatus'])->name('item.status.available.update');
         /* Item combo route start */
         Route::get('/{id}/combos', [ItemComboController::class, 'index'])->name('item.combo.index');
         Route::post('/combo/store', [ItemComboController::class, 'store'])->name('item.combo.store');
@@ -199,10 +202,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admin']], function (
         Route::post('/restaurant-past-orders', [OrderController::class, 'getPastOrdersByRestaurant'])->name('order.past.restaurant');
     }); //* order route end */
 
-    //* performance route start */
-    // Route::group(['prefix' => 'orders'], function () {
-    //     Route::post('/restaurant-past-orders', [OrderController::class, 'getPastOrdersByRestaurant'])->name('order.past.restaurant');
-    // }); //* performance route end */
 
     //* customer route start */
     Route::group(['prefix' => 'customers'], function () {
@@ -276,12 +275,15 @@ Route::post('/', [HomeController::class, 'getRestaurantsByLocation'])->name('fro
 Route::get('/restaurant/{restaurant}/menu', [RestaurantMenuController::class, 'getRestaurant'])->name('frontend.restaurant.menu');
 Route::get('/about-us', [FrontendAboutUsController::class, 'index'])->name('frontend.about.us');
 Route::get('/sign-in', [FrontendCustomerController::class, 'customerSignIn'])->name('frontend.customer.sign.in');
+Route::get('/cotact-us', [FrontendContactUsController::class, 'index'])->name('frontend.contact.us');
 
 /* cart routes */
 Route::post('/add-to-cart', [CartController::class, 'addToCart'])->name('frontend.cart.add');
 Route::post('/upadte-cart', [CartController::class, 'increaseCartQuantity'])->name('frontend.cart.update');
 Route::post('/decrease-cart', [CartController::class, 'decreaseCartQuantity'])->name('frontend.cart.decrease.quantity');
 Route::post('/delete-cart', [CartController::class, 'deleteCart'])->name('frontend.cart.delete');
+Route::post('/add-cart', [CartController::class, 'changeRestautantToCart'])->name('frontend.cart.change.restaurant');
+Route::post('/add-cart-restaurant', [CartController::class, 'addToCartBusyRestaurant'])->name('frontend.cart.add.busy.restaurant');
 
 /* customer sign in */
 Route::post('/customer-sign-in', [FrontendCustomerController::class, 'signIn'])->name('customer.sign.in');
@@ -302,13 +304,18 @@ Route::get('/order-placed/{order}', [CheckOutController::class, 'orderPlaced'])-
 Route::get('/my-orders', [FrontendCustomerController::class, 'customerOrders'])->name('frontend.customer.order');
 Route::post('/order-details', [FrontendCustomerController::class, 'customerOrderDetails'])->name('frontend.customer.order.detail');
 
-Route::get('auth/facebook', [FrontendCustomerController::class, 'redirectToGoogle']);
-Route::get('auth/facebook/callback', [FrontendCustomerController::class, 'handleGoogleCallback']);
+Route::get('auth/facebook', [CustomerLoginController::class, 'redirectToFacebook'])->name('login.facebook');
+Route::get('auth/facebook/callback', [CustomerLoginController::class, 'handleFacebookCallback']);
 
 // Google login
 Route::get('login/google', [CustomerLoginController::class, 'redirectToGoogle'])->name('login.google');
 Route::get('login/google/callback', [CustomerLoginController::class, 'handleGoogleCallback']);
 
-Route::get('404', function () {
-    return view('frontend.404');
+
+Route::get('/clear-cache', function () {
+
+    $configCache = Artisan::call('config:cache');
+    $clearCache  = Artisan::call('cache:clear');
+    // return what you want
+    return "Finished";
 });

@@ -5,17 +5,19 @@
 
 @section('pageCss')
     <style>
-        #view_image{
+        #view_image {
             width: 100%;
         }
-        .ban-btn i{
+
+        .ban-btn i {
             font-size: 20px;
         }
 
-        .btn-outline-info svg{
-           /* width: 25px; */
-           height: 20px;
+        .btn-outline-info svg {
+            /* width: 25px; */
+            height: 20px;
         }
+
         .switch {
             position: relative;
             display: inline-block;
@@ -145,12 +147,12 @@
                                 <strong>Phone:</strong> <span id="view_phone"></span><br>
                                 <strong>Default Address:</strong> <span id="view_address"></span><br>
                                 <label for="name"><strong>Photo:</strong></label> <br>
-                            <img src="" id="view_image">
+                                <img src="" id="view_image">
                             </p>
                         </div>
                         <div class="form-group">
                             <div>
-                               
+
 
                             </div>
                         </div>
@@ -161,7 +163,7 @@
                     <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
                         Done
                     </button>
-                  </div>
+                </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
@@ -177,8 +179,6 @@
             }
         };
 
-
-
         var imagesUrl = '{!! URL::asset('/images/') !!}';
         $(document).ready(function() {
             var url = '{{ route('customer.index') }}';
@@ -193,30 +193,42 @@
                     },
                     'pdfHtml5'
                 ],
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                 serverSide: true,
                 ajax: url,
-                columns: [
-                    {data: 'image',
-                    render: function( data, type, full, meta ) {
-                        return "<img src=\"/images/"+data+"\" height=\"50\"/>";
-                    }
-                    },
-                    {data: 'name'},
-                    {data: 'gender',},
-                    {data: 'email'},
-                    {data: 'contact'},
-                    {data: 'address'},
-                    {data: 'status',
-                    name: 'status', 
-                orderable: true, 
-                searchable: true
+                columns: [{
+                        data: 'image',
+                        render: function(data, type, full, meta) {
+                            return "<img src=\"/images/" + data + "\" height=\"50\"/>";
+                        }
                     },
                     {
-                data: 'action', 
-                name: 'action', 
-                orderable: true, 
-                searchable: true
-            },
+                        data: 'name'
+                    },
+                    {
+                        data: 'gender',
+                    },
+                    {
+                        data: 'email'
+                    },
+                    {
+                        data: 'contact'
+                    },
+                    {
+                        data: 'address'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: true,
+                        searchable: true
+                    },
                 ]
             });
 
@@ -239,38 +251,33 @@
                 },
                 dataType: "json",
                 success: function(response) {
-                    if (response.success == true) {              
+                    if (response.success == true) {
                         $('#view_name').text(response.data.name);
                         $('#view_email').text(response.data.email);
-                        $('#view_gender').text(response.data.sex == ''? 'N/A' : response.data.sex);
-                        $('#view_phone').text(response.data.contact == ''? 'N/A' : response.data.contact);
-                        $('#view_address').text(response.data.address == ''? 'N/A' : response.data.address);
-
+                        $('#view_gender').text(response.data.sex == '' ? 'N/A' : response.data.sex);
+                        $('#view_phone').text(response.data.contact == '' ? 'N/A' : response.data.contact);
+                        $('#view_address').text(response.data.address == '' ? 'N/A' : response.data.address);
                         if (response.data.photo === null) {
-                            $('#view_image').attr('src','/images/default.png');
+                            $('#view_image').attr('src', '/images/default.png');
                         } else {
                             $('#view_image').attr('src', '/images/' + response.data.photo);
                         }
 
-
-
                         $('#viewModal').modal('show');
 
                     }
-      
-
                 },
                 error: function(error) {
-                            if (error.status == 404) {
-                                toastMixin.fire({
-                                    icon: 'error',
-                                    animation: true,
-                                    title: "" + 'Data not found' + ""
-                                });
+                    if (error.status == 404) {
+                        toastMixin.fire({
+                            icon: 'error',
+                            animation: true,
+                            title: "" + 'Data not found' + ""
+                        });
 
 
-                            }
-                        },
+                    }
+                },
             }); //ajax end
         }
 
@@ -319,7 +326,7 @@
                         },
                     });
 
-                }else {
+                } else {
                     if ($('.status' + id + "").prop("checked") == true) {
                         $('.status' + id + "").prop('checked', false);
                     } else {
@@ -332,11 +339,11 @@
         }
         //end
 
-       function getOrder(id){
-        var url = '{{ route('customer.orders', ':id') }}';
-        url = url.replace(':id', id);
-        window.location.replace(url);
-           
-       } 
+        function getOrder(id) {
+            var url = '{{ route('customer.orders', ':id') }}';
+            url = url.replace(':id', id);
+            window.location.replace(url);
+
+        }
     </script>
 @endsection

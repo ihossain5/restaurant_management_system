@@ -54,17 +54,6 @@ class Restaurant extends Model {
             ->where('order_status_id', '=', 3)
             ->orderBy('created_at', 'DESC');
     }
-
-    public function lastMontCompletedOrders($id) {
-        return Order::with('items','items.category')->where('restaurant_id', '=', $id)
-        ->whereMonth(
-            'created_at', '=', Carbon::now()->subMonth()->month
-        )
-        ->where('order_status_id', '=', 3)
-        ->orderBy('created_at', 'DESC')->get();
-        
-    }
-
     public function restaurant_cancelled_orders() {
         return $this->hasMany(Order::class, 'restaurant_id')
             ->whereDate('created_at', DB::raw('CURDATE()'))
@@ -95,9 +84,19 @@ class Restaurant extends Model {
         }])->find($id);
     }
 
+    public function lastMontCompletedOrders($id) {
+        return Order::with('items','items.category')->where('restaurant_id', '=', $id)
+        ->whereMonth(
+            'created_at', '=', Carbon::now()->subMonth()->month
+        )
+        ->where('order_status_id', '=', 3)
+        ->orderBy('created_at', 'DESC')->get();
+
+    }
+
     public function format_description() {
         return [
-            'description' => preg_replace('/<(\w+)[^>]*>/', '<$1>', strip_tags($this->description)),
+            'description'   => preg_replace('/<(\w+)[^>]*>/', '<$1>', strip_tags($this->description)),
         ];
     }
 

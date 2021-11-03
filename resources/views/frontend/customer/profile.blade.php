@@ -3,7 +3,7 @@
     Profile
 @endsection
 @section('pageCss')
-
+<link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
 @endsection
 @section('content')
     <!-- Profile -->

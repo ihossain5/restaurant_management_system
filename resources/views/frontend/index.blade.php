@@ -1,6 +1,8 @@
 @extends('layouts.frontend.master')
 @section('pageCss')
+    <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/home.css') }}">
+
 @endsection
 @section('title')
     Home
@@ -34,7 +36,6 @@
                     @endforeach
                 @endif
             </div>
-        </div>
     </section>
     <!-- Choose we Deliver -->
     <section class="deliverSection">
@@ -101,7 +102,10 @@
                                                 @endforeach
                                             @endif
                                             <h2>Tk. {{ $combo->price }}</h2>
-                                            <button>Add to Cart</button>
+                                            <button
+                                            onclick="addToCart({{ $combo->combo_id }},{{ $combo->restaurant_id }},{{ $combo->combo_id }})"
+                                            class=" {{ $combo->disable == true ? 'addTocart' : 'cartBtn' }}  {{ $combo->closed == true ? 'd-none' : ' ' }}  addTocartBtnId{{ $combo->restaurant_id }}">Add
+                                            to Cart</button>
                                         </div>
                                     </div>
                                 </div>
@@ -112,7 +116,7 @@
                                 <h2 class="comboBtn">Tk. {{ $combo->price }}</h2>
                                 <button
                                     onclick="addToCart({{ $combo->combo_id }},{{ $combo->restaurant_id }},{{ $combo->combo_id }})"
-                                    class=" {{ $combo->disable == true ? 'addTocart' : 'cartBtn' }} addTocartBtnId{{ $combo->restaurant_id }}">Add
+                                    class=" {{ $combo->disable == true ? 'addTocart' : 'cartBtn' }}  {{ $combo->closed == true ? 'd-none' : ' ' }}  addTocartBtnId{{ $combo->restaurant_id }}">Add
                                     to Cart</button>
                             </div>
                         </div>
@@ -149,10 +153,15 @@
                                     <h6>{{ $item->category->restaurant->name }}</h6>
                                     <h3>{{ $item->name }}</h3>
                                     <h2 class="itemBtn">Tk. {{ $item->price }}</h2>
-                                    <button
-                                        class="{{ $item->disable == true ? 'addTocart' : 'cartBtn' }}  addTocartBtnId{{ $item->category->restaurant->restaurant_id }}"
+                                    @if ($item->closed == true)
+                                        <p>Restaurant is closed now</p>  
+                                        @else
+                                        <button
+                                        class="{{ $item->disable == true ? 'addTocart' : 'cartBtn' }} addTocartBtnId{{ $item->category->restaurant->restaurant_id }}"
                                         onclick="addToCart({{ $item->item_id }},{{ $item->category->restaurant->restaurant_id }})">Add
                                         to Cart</button>
+                                    @endif
+                                  
                                 </div>
                             </div>
                         </div>
@@ -192,5 +201,6 @@
         } else {
             locationModal.show();
         }
+
     </script>
 @endsection

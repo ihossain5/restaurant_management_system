@@ -25,7 +25,7 @@ class RestaurantController extends Controller {
         $logo = $request->logo;
         if ($logo) {
             $path     = 'restaurant-logo/';
-            $logo_url = storeImage($logo, $path, 200, 84);
+            $logo_url = storeImage($logo, $path, 128, 128);
         }
         $restaurant = Restaurant::create([
             'name'        => $request->name,
@@ -94,7 +94,7 @@ class RestaurantController extends Controller {
         if ($logo) {
             deleteImage($restaurant->logo);
             $path     = 'restaurant-logo/';
-            $logo_url = storeImage($logo, $path, 80, 60);
+            $logo_url = storeImage($logo, $path, 128, 128);
         } else {
             $logo_url = $restaurant->logo;
         }
@@ -146,10 +146,11 @@ class RestaurantController extends Controller {
         }
 
         $description         = substr($restaurant->description, 0, 25);
+        $address         = substr($restaurant->address, 0, 25);
         $data                = array();
         $data['message']     = 'Restaurant updated successfully';
         $data['name']        = $restaurant->name;
-        $data['address']     = $restaurant->address;
+        $data['address']     = $address;
         $data['type']        = $restaurant->type;
         $data['is_open']     = $restaurant->is_open;
         $data['description'] = $description;

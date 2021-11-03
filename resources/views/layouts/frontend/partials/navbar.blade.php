@@ -22,7 +22,7 @@
             </div>
             <div class="navbar-location-select-box d-none d-lg-block">
                 <button type="button" class="navbar-modal-show-btn" data-bs-toggle="modal" data-bs-target="#location-modal">
-                    <span class="headerLocation">{{session()->get('location_name') ?? ''}}</span>
+                    <span class="headerLocation">{{session()->get('location_name') ?? 'Select '}}</span>
                 </button>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -82,6 +82,10 @@
                         <form id="logout-form-mobile" action="{{ route('cusetomer.sign.out') }}" method="POST" class="d-none">
                             @csrf
                         </form>
+                    </li>
+                    @else
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{route('frontend.customer.sign.in')}}">sign in</a>
                     </li>
                     @endif
                 </ul>

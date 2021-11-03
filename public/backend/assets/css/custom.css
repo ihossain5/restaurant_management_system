@@ -236,7 +236,7 @@ td img {
     border: 2px solid #892d91;
     border-radius: 5px;
     height: 100%;
-    background-image: url("color-arrow-down.svg");
+    background-image: url("../icons/color-arrow-down.svg");
     background-size: 14px 14px;
     font-weight: 500;
     color: #892d91;

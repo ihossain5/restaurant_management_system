@@ -1,14 +1,15 @@
 Pusher.logToConsole = true;
-var pusher = new Pusher("9461678ffaefc2c7ac75", {
+var pusher = new Pusher("1efc814744bed7686f5e", {
     cluster: "ap2",
 });
-
 
 var channel = pusher.subscribe("my-channel");
 var id = $("#managerRestaurantId").val();
 
-channel.bind("my-event", function(data) {
-    $("body").trigger("click");
+var audio = new Audio("http://127.0.0.1:8000/backend/assets/notification.mp3");
+
+channel.bind("my-event", function (data) {
+    // $("#sht1").text("click from pusher bind");
 
     if (id == data.restaurant_id) {
         $("#newOrders").html(data.message);
@@ -18,23 +19,22 @@ channel.bind("my-event", function(data) {
         // audio.muted = true
 
         audio.play();
+        audio.muted = false;
         // audio.muted = false
-
     }
-
 });
 
-function playAudio() {
-    // Show loading animation.
-    var playPromise = x.play();
+// function playAudio() {
+//     // Show loading animation.
+//     var playPromise = x.play();
 
-    if (playPromise !== undefined) {
-        playPromise
-            .then((_) => {
-                x.play();
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-}
+//     if (playPromise !== undefined) {
+//         playPromise
+//             .then((_) => {
+//                 x.play();
+//             })
+//             .catch((error) => {
+//                 console.log(error);
+//             });
+//     }
+// }

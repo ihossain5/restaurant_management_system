@@ -2,7 +2,9 @@
 @section('title')
     About Us
 @endsection
+
 @section('pageCss')
+<link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
     <style>
         .about-section p {
             font-weight: 300;

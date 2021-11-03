@@ -6,16 +6,11 @@
     @include('layouts.admin.restaurant_drop-down')
 @endsection
 @section('pageCss')
-
-    <style>
-
-    </style>
+    <style></style>
 @endsection
 @section('content')
     <div class="preloader">
-
     </div>
-
     <div class="page-content-wrapper">
         <div class="container-fluid">
             <div class="row">
@@ -26,17 +21,11 @@
                                 <div class="ms-header-text">
                                     <h4 class="mt-0 header-title">All Item Combos</h4>
                                 </div>
-
                                 <button type="button" class="btn btn-outline-purple float-right waves-effect waves-light"
                                     name="button" id="addButton" data-toggle="modal" data-target="#add"> Add
                                     New
                                 </button>
-
-
-
                             </div>
-
-                            <span class="showError"></span>
                             <div class="table-responsive">
                                 <table id="comboTable" class="table table-bordered dt-responsive nowrap"
                                     style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -73,9 +62,9 @@
                                                             onclick='editCombo({{ $combo->combo_id }})'><i
                                                                 class='mdi mdi-pencil'></i></button>
 
-                                                        <button type='button' name='delete' class="btn btn-outline-danger "
+                                                        {{-- <button type='button' name='delete' class="btn btn-outline-danger "
                                                             onclick="deleteCombo({{ $combo->combo_id }})"><i
-                                                                class="mdi mdi-delete "></i></button>
+                                                                class="mdi mdi-delete "></i></button> --}}
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -233,10 +222,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer view-modal-footer">
-                    <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
-                        Done
-                    </button>
+                <div class="col-md-12 mt-3">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button data-toggle="modal" class="btn-custom dangerBtn  mb-3 delete_btn"><i class="mdi mdi-delete "></i>
+                            Delete
+                        </button>
+                        </div>
+                        <div class="col-md-6 text-right">
+                        <button data-dismiss="modal" class="btn btn-custom btnAccept mb-3 "> Done</button>
+                        </div>
+                    </div>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -380,10 +376,6 @@
                                         <button type='button' class='btn btn-outline-info'onclick='editCombo(${response.data.combo_id})'>
                                             <i class='mdi mdi-pencil'></i>
                                         </button>
-                         
-                                        <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteCombo(${response.data.combo_id})">
-                                            <i class="mdi mdi-delete "></i>
-                                        </button>
                                    </td>`)
 
 
@@ -443,6 +435,7 @@
                 success: function(response) {
                     if (response.success == true) {
                         $('#view_name').text(response.data.name);
+                        $('.delete_btn').attr('onclick', "deleteCombo(" + id + ")");
                         $('#view_item_name').empty();
                         $.each(response.data.items, function(i, val) {
                             $('#view_item_name').append(
@@ -557,13 +550,12 @@
                                         </button>
                                         <button type='button' class='btn btn-outline-info'onclick='editCombo(${response.data.combo_id})'>
                                             <i class='mdi mdi-pencil'></i>
-                                        </button>
+                                        </button></td>`
                          
-                                        <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteCombo(${response.data.combo_id})">
-                                            <i class="mdi mdi-delete "></i>
-                                        </button>
-                                   </td>
-                                `
+                                        // <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteCombo(${response.data.combo_id})">
+                                        //     <i class="mdi mdi-delete "></i>
+                                        // </button>
+                                   
                             );
                             if (response.data.message) {
                                 $('#edit_modal').modal('hide');
@@ -646,6 +638,7 @@
                                         .combo_id)
                                     .remove()
                                     .draw();
+                                    $('#viewModal').modal('hide'); 
                             } else {
                                 Swal.fire("Error!", "" + response.message + "", "error");
                             }
@@ -719,9 +712,7 @@
                                             <i class='mdi mdi-pencil'></i>
                                         </button>
                          
-                                        <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteCombo(${val.combo_id})">
-                                            <i class="mdi mdi-delete "></i>
-                                        </button>`
+                                     `
                                 ]).draw().node();
                                 $(trDOM).addClass('combo' + val.combo_id + '');
                                 console.log(val.item_name);

@@ -24,6 +24,7 @@ class Order extends Model {
         'delivery_fee',
         'apology_note',
         'special_notes',
+        'vat_amount',
     ];
 
     public function items() {

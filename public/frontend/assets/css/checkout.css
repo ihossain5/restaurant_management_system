@@ -133,8 +133,8 @@
     max-width: 68%;
 }
 .checkoutCartItem li div:nth-child(3) {
-    flex: 0 0 22%;
-    max-width: 22%;
+    flex: 0 0 25%;
+    max-width: 25%;
     text-align: right;
 }
 

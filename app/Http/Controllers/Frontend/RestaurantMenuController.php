@@ -12,15 +12,16 @@ class RestaurantMenuController extends Controller
 {
     public function getRestaurant(Restaurant $restaurant){
         $locations =  DeliveryLocation::get()->unique('name');
-        $restaurant->load('assets','restaurant_categories','restaurant_categories.items');  
+        $restaurant->load('assets','restaurant_categories','restaurant_categories.available_items','status');  
         $images=[];
-        if (Session::has('sessionRestaurantId')){
+        if (Session::has('restaurantIds')){
             if (in_array($restaurant->restaurant_id, Session::get('restaurantIds')->toArray())) {
                 $restaurant->disable = false;
             } else {
                 $restaurant->disable = true;
             } 
         }
+        // dd($restaurant);
   
         foreach($restaurant->assets as $asset){
             

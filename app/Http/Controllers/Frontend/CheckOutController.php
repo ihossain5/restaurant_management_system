@@ -20,10 +20,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class CheckOutController extends Controller {
-    public function index(CartService $cart) {
+    public $cart;
+    public function __construct(CartService $cart) {
+        $this->cart = $cart;
+    }
+
+    public function index() {
         // dd(Auth::user()->name);
         if (Auth::guard('customer')->check()) {
-            if ($cart->numberOfCartItems() > 0) {
+            if ($this->cart->numberOfCartItems() > 0) {
                 $restaurant_id = Session::get('sessionRestaurantId');
                 $restaurant    = Restaurant::findOrFail($restaurant_id);
                 $customer      = Auth::guard('customer')->user();
@@ -41,13 +46,13 @@ class CheckOutController extends Controller {
 
     public function placeOrder(OrderStoreRequest $request) {
         // dd($request->all());
-        $customer_id     = Auth::guard('customer')->user()->customer_id;
-        $customer        = Customer::findOrFail($customer_id);
-        $items           = Cart::content();
-        $subtotal        = Cart::subtotal();
+        $customer_id = Auth::guard('customer')->user()->customer_id;
+        $customer    = Customer::findOrFail($customer_id);
+        $items       = $this->cart->allCartItems();
+        $subtotal    = $this->cart->getTotalAmount();
 
         $restaurant = Restaurant::with('status')->findOrFail($request->restaurant_id);
-        if($restaurant->status->name == 'CLOSED'){
+        if ($restaurant->status->name == 'CLOSED') {
             return response()->json([
                 'success' => false,
                 'message' => 'This restaurant is closed now. Please select another restaurant',
@@ -69,11 +74,11 @@ class CheckOutController extends Controller {
                         'contact' => $request->contact,
                         'address' => $request->address,
                     ]);
-                 
+
                     // dd('sss');
                 } else {
-                    $order->address = $request->address;
-                    $order->contact = $request->contact;
+                    $order->address            = $request->address;
+                    $order->contact            = $request->contact;
                     $order->is_default_contact = 1;
                     $order->is_default_address = 1;
                 }
@@ -83,20 +88,21 @@ class CheckOutController extends Controller {
                         'name'  => $request->name,
                         'email' => $request->email,
                     ]);
-                    
+
                     // $order->is_default_address = 1;
                 } else {
                     $order->is_default_name = 1;
-                    $order->name = $request->name;
+                    $order->name            = $request->name;
                     // $order->email = $request->email;
                 }
 
                 $order->restaurant_id = $request->restaurant_id;
                 $order->customer_id   = $customer->customer_id;
-                $order->delivery_fee  = 60;
+                $order->delivery_fee  = $this->cart->deliveryCharge;
+                $order->vat_amount    = $this->cart->getVatAmount();
                 $order->id            = $id;
                 $order->special_notes = $request->instruction;
-                $order->amount        = formatAmount($subtotal);
+                $order->amount        = $subtotal;
                 $order->save();
 
                 // insert into pivot table
@@ -140,8 +146,9 @@ class CheckOutController extends Controller {
     }
 
     public function orderPlaced(Order $order, OrderService $orderService) {
-        $order->load('restaurant','items','order_combos');
+        $order->load('restaurant', 'items', 'order_combos', 'customer');
         $orderItems = $orderService->orderItems($order);
-        return view('frontend.orders.order_placed',compact('order','orderItems'));
+        $contact    = $order->is_default_contact == 1 ? $order->contact : $order->customer->contact;
+        return view('frontend.orders.order_placed', compact('order', 'orderItems', 'contact'));
     }
 }

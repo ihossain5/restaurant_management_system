@@ -4,6 +4,7 @@
 @endsection
 @section('pageCss')
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/checkout.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
 @endsection
 @section('content')
     <!-- Header Images -->
@@ -79,7 +80,7 @@
                                 <h1>account information</h1>
                             </div>
                             <div class="col-2 text-end">
-                                <button type="submit" class="editBtnAcountInfo editBtn"><img
+                                <button type="button" class="editBtnAcountInfo editBtn"><img
                                         src="{{ asset('frontend/assets/images/Checkout/edit.svg') }}" alt=""></button>
                             </div>
                         </div>
@@ -95,7 +96,7 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- <form action=""></form> --}}
+
                         <div class="acountInfoInput d-none">
                             <div class="row formInput profile-input pt-5">
                                 <div class="col-12">
@@ -118,7 +119,8 @@
                                     </div>
                                 </div>
                                 <div class="col-12 text-end">
-                                    <button class="rounded-pill acountInfoBtn">Save Changes</button>
+                                    <button type="button" onclick="saveCustomerInfo()"
+                                        class="rounded-pill acountInfoBtn">Save Changes</button>
                                 </div>
                             </div>
                         </div>
@@ -190,7 +192,7 @@
                                             VAT
                                         </div>
                                         <div class="secondColumn">
-                                            Tk. 85
+                                            Tk. {{ $vatAMount }}
                                         </div>
                                     </li>
                                     <li>
@@ -198,7 +200,7 @@
                                             Delivery Fee
                                         </div>
                                         <div class="secondColumn">
-                                            Tk. 60
+                                            Tk. {{ $deliveryCharge }}
                                         </div>
                                     </li>
                                     <li>
@@ -206,13 +208,13 @@
                                             Grand Total
                                         </div>
                                         <div class="secondColumn">
-                                            Tk. {{ totalAmount(Cart::subtotal(), 60) }}
+                                            Tk. {{ $totalAmount }}
                                         </div>
                                     </li>
                                 </ul>
                             </div>
                             <div class="col-12">
-                                <textarea class="form-control specInstruction" name="instruction" cols="30" rows="6"
+                                <textarea class="form-control specInstruction" name="instruction" cols="30" rows="3"
                                     placeholder="Special Instructions"></textarea>
                             </div>
 
@@ -234,7 +236,7 @@
 @endsection
 @section('pageScripts')
     <script>
-           var locationModal = new bootstrap.Modal(document.getElementById('location-modal'), {
+        var locationModal = new bootstrap.Modal(document.getElementById('location-modal'), {
             keyboard: false
         })
         var config = {
@@ -245,7 +247,6 @@
         $('.contactNumber').hide();
 
         function save() {
-            var checkbox = document.getElementById("newAddres1");
             var address = document.getElementById('address').value;
             var contact = document.getElementById('contact').value;
             if (address == '') {
@@ -280,6 +281,31 @@
             // }
         }
 
+        function saveCustomerInfo() {
+            var checkbox = document.getElementById("newAddres1");
+            var name = document.getElementById('name').value;
+            var email = document.getElementById('email').value;
+            if (name == '') {
+                $('.error_msg').remove();
+                $('#name').after(`<label class="h3 text-danger error_msg" for="">Please insert your name</label>`)
+            } else if (email == '') {
+                $('.error_msg').remove();
+                $('#email').after(`<label class="h3 text-danger error_msg" for="">Please insert your email</label>`)
+            } else {
+
+            $('.acountInfoInput').addClass('d-none');
+            $('.acountInfo').removeClass('d-none');
+            $('.editBtnAcountInfo').removeClass('d-none');
+
+            $('.info-box2').css({
+                "background": "#FFFFFF",
+                "border": "1px solid #F2F2F2",
+                "box-shadow": "4px 12px 60px rgba(0, 0, 0, 0.03)",
+                "padding": "5.6rem",
+            });
+          }
+        }
+
         // jQuery.validator.addClassRules('contactNumber', {
         //     required: true /*,
         //     other rules */
@@ -308,6 +334,18 @@
         //         label.insertAfter(element);
         //     },
         // });
+
+        $("#placeOrder").validate({
+                rules: {
+                    instruction: {
+                        maxlength: 100,
+                    },
+                },
+                errorPlacement: function(label, element) {
+                    label.addClass('mt-2 text-danger h3');
+                    label.insertAfter(element);
+                },
+            });
 
         $(document).on('submit', '#placeOrder', function(e) {
             e.preventDefault();
@@ -338,7 +376,9 @@
             } else {
                 $.ajax({
                     url: config.routes.placeOrder,
-                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
                     method: "POST",
                     data: new FormData(this),
                     contentType: false,

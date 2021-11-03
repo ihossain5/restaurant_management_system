@@ -56,7 +56,6 @@ class ManagerOrderPerformanceController extends Controller {
     public function itemPerformanceReportByDate(Request $request) {
         $start_date = Carbon::parse($request->start_date)->format('y-m-d');
         $end_date   = Carbon::parse($request->end_date)->format('y-m-d');
-
         if ($request->id == null) {
             $restaurant = Auth::user()->restaurant;
             return $this->performanceReportByDate($start_date, $end_date, $restaurant->restaurant_id);

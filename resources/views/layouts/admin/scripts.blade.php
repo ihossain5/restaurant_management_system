@@ -40,6 +40,9 @@
 <script src="{{ asset('backend/assets/js/bd_currency_format.js') }}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"></script>
+<script src="{{ asset('backend/assets/js/restaurant_add_row.js') }}"></script>
+
+<script src="{{ asset('backend/assets/js/style.js') }}"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.15.5/sweetalert2.min.js"
 integrity="sha512-+uGHdpCaEymD6EqvUR4H/PBuwqm3JTZmRh3gT0Lq52VGDAlywdXPBEiLiZUg6D1ViLonuNSUFdbL2tH9djAP8g=="
@@ -51,20 +54,19 @@ crossorigin="anonymous"></script>
 
 <script src="{{ asset('backend/assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}">
 </script>
-<script src="{{ asset('backend/assets/js/restaurant_add_row.js') }}"></script>
 
-<script src="{{ asset('backend/assets/js/style.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
 
 <script>
+    // $(document).ready(function() {
+    var config = {
+        routes: {
+            updateStatus: "{!! route('manager.restaurant.status.update') !!}",
+        }
+    };
 
-        var config = {
-            routes: {
-                updateStatus: "{!! route('manager.restaurant.status.update') !!}",
-            }
-        };
     $(document).ajaxStart(function() {
         $('.preloader').empty();
         $('.preloader').addClass('ajax_loader').append(
@@ -81,7 +83,7 @@ crossorigin="anonymous"></script>
         $('.preloader').removeClass('ajax_loader').empty();
     });
 
-    
+
     // for alert message
     var toastMixin = Swal.mixin({
         toast: true,
@@ -157,7 +159,7 @@ crossorigin="anonymous"></script>
         // format: "dd-mm-yyyy",
     });
 
-  
+
 
     $(".yearDate").datepicker({
         // format: "yyyy",
@@ -190,7 +192,7 @@ crossorigin="anonymous"></script>
     $(document).on('click', '.status_btn', function() {
         var id = $(this).data('id');
         $.ajax({
-            url: '{{route('manager.restaurant.status.update')}}',
+            url: '{{ route('manager.restaurant.status.update') }}',
             method: "POST",
             data: {
                 id: id,
@@ -199,8 +201,8 @@ crossorigin="anonymous"></script>
             dataType: "json",
             success: function(response) {
                 if (response.success == true) {
-                   $('.btnOutlineOpen').html(response.data);
-                   $('#restaurentStatusModal').modal('hide');
+                    $('.btnOutlineOpen').html(response.data);
+                    $('#restaurentStatusModal').modal('hide');
                 }
             }, //success end
             error: function(error) {
@@ -220,53 +222,46 @@ crossorigin="anonymous"></script>
 
 
 
-// delivery location
-$('.location-select-box').select2();
-       
-// Mulilevel Menu
-$(".has_multi_sub").removeClass("active");
-$(".has_multi_sub a").click(function () {
-    $(this).siblings("ul").toggle().removeClass("d-none");
-    if ($(this).parent("li").hasClass("sub-nav-active")) {
-        $(this).parent("li").removeClass("active");
-        $(this).parent("li").removeClass("sub-nav-active");
-        $(this)
-            .children("span")
-            .children("span")
-            .children(".mdi")
-            .css("transform", "rotate(-90deg)");
-    } else {
-        $(this).parent("li").addClass("sub-nav-active");
-        $(this)
-            .children("span")
-            .children("span")
-            .children(".mdi")
-            .css("transform", "rotate(0deg)");
+    // delivery location
+    $('.location-select-box').select2();
+
+    // Mulilevel Menu
+    $(".has_multi_sub").removeClass("active");
+    $(".has_multi_sub a").click(function() {
+        $(this).siblings("ul").toggle().removeClass("d-none");
+        if ($(this).parent("li").hasClass("sub-nav-active")) {
+            $(this).parent("li").removeClass("active");
+            $(this).parent("li").removeClass("sub-nav-active");
+            $(this)
+                .children("span")
+                .children("span")
+                .children(".mdi")
+                .css("transform", "rotate(-90deg)");
+        } else {
+            $(this).parent("li").addClass("sub-nav-active");
+            $(this)
+                .children("span")
+                .children("span")
+                .children(".mdi")
+                .css("transform", "rotate(0deg)");
+        }
+    });
+
+
+
+
+
+
+
+    // alert(audio);
+
+
+    function downloadPdf() {
+        $('.buttons-pdf').click();
     }
-});
 
-
-
-
-
-var audio = new Audio("http://127.0.0.1:8000/backend/assets/notification.mp3");
-
-// alert(audio);
-// function playAudio() {
-//     var x = new Audio("http://127.0.0.1:8000/backend/assets/notification.mp3");
-//     // Show loading animation.
-//     var playPromise = x.play();
-
-//     if (playPromise !== undefined) {
-//         playPromise
-//             .then((_) => {
-//                 x.play();
-//             })
-//             .catch((error) => {
-//                 console.log(error);
-//             });
-//     }
-// }
-
-
+    function downloadCsv() {
+        $('.buttons-csv').click();
+    }
+// });
 </script>

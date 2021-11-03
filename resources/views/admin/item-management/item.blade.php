@@ -96,17 +96,11 @@
                                 <div class="ms-header-text">
                                     <h4 class="mt-0 header-title">All Items</h4>
                                 </div>
-
-                                <button type="button" class="btn btn-outline-purple float-right waves-effect waves-light"
+                             <button type="button" class="btn btn-outline-purple float-right waves-effect waves-light"
                                     name="button" id="addButton" data-toggle="modal" data-target="#add"> Add
                                     New
                                 </button>
-
-
-
                             </div>
-
-                            <span class="showError"></span>
                             <div class="table-responsive">
                                 <table id="itemTable" class="table table-bordered dt-responsive nowrap"
                                     style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -148,14 +142,11 @@
                                                         <button type='button' class='btn btn-outline-info '
                                                             onclick='editItem({{ $item->item_id }})'><i
                                                                 class='mdi mdi-pencil'></i></button>
-
-                                                        <button type='button' name='delete' class="btn btn-outline-danger "
+                                                        {{-- <button type='button' name='delete' class="btn btn-outline-danger "
                                                             onclick="deleteItem({{ $item->item_id }})"><i
-                                                                class="mdi mdi-delete "></i></button>
-
+                                                                class="mdi mdi-delete "></i></button> --}}
 
                                                     </td>
-
                                                 </tr>
                                             @endforeach
                                         @endif
@@ -344,11 +335,19 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer view-modal-footer">
-                    <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
-                        Done
-                    </button>
+                <div class="col-md-12 mt-5">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button data-toggle="modal" class="btn-custom dangerBtn  mb-3 delete_btn"><i class="mdi mdi-delete "></i>
+                            Delete
+                        </button>
+                        </div>
+                        <div class="col-md-6 text-right">
+                        <button data-dismiss="modal" class="btn btn-custom btnAccept mb-3 "> Done</button>
+                        </div>
+                    </div>
                 </div>
+
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
@@ -367,7 +366,7 @@
                 update: "{!! route('item.update') !!}",
                 delete: "{!! route('item.delete') !!}",
                 getItems: "{!! route('item.restaurant') !!}",
-                updateAvailableStatus: "{!! route('item.available.status.update') !!}",
+                updateAvailableStatus: "{!! route('item.status.available.update') !!}",
             }
         };
 
@@ -554,10 +553,10 @@
                             </button>
                             <button type='button' class='btn btn-outline-info' onclick='editItem(${response.data.id})'>
                                 <i class='mdi mdi-pencil'></i>
-                            </button>
-                            <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteItem(${response.data.id})">
-                                <i class="mdi mdi-delete "></i>
                             </button></td>`)
+                            // <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteItem(${response.data.id})">
+                            //     <i class="mdi mdi-delete "></i>
+                            // </button>
 
 
                         var category_row = itemTable.row.add(row).draw().node();
@@ -622,6 +621,7 @@
                         $('#view_volume').text(response.data.volume);
                         $('#view_taste').text(response.data.taste);
                         $('#view_photo').text(response.data.photo);
+                        $('.delete_btn').attr('onclick', "deleteItem(" + id + ")");
                         if (response.data.image != null) {
                             $('#view_image').attr('src', imagesUrl + response.data.image);
                         }
@@ -730,12 +730,12 @@
                             </button>
                             <button type='button' class='btn btn-outline-info' onclick='editItem(${response.data.id})'>
                                 <i class='mdi mdi-pencil'></i>
-                            </button>
+                            </button></td>`
                            
-                            <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteItem(${response.data.id})">
-                                <i class="mdi mdi-delete "></i>
-                            </button></td>
-                                `
+                            // <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteItem(${response.data.id})">
+                            //     <i class="mdi mdi-delete "></i>
+                            // </button>
+                                
                             );
                             if (response.data.message) {
                                 $('#edit_modal').modal('hide');
@@ -818,6 +818,7 @@
                                         .id)
                                     .remove()
                                     .draw();
+                                    $('#viewModal').modal('hide');
                             } else {
                                 Swal.fire("Error!", "" + response.message + "", "error");
                             }
@@ -890,10 +891,10 @@
                                         </button>
                                         <button type='button' class='btn btn-outline-info' onclick='editItem(${val.item_id})'>
                                             <i class='mdi mdi-pencil'></i>
-                                        </button>
-                                        <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteItem(${val.item_id})">
-                                            <i class="mdi mdi-delete "></i>
                                         </button>`
+                                        // <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteItem(${val.item_id})">
+                                        //     <i class="mdi mdi-delete "></i>
+                                        // </button>`
                                 ]).draw().node();
                                 $(trDOM).addClass('item' + val.item_id + '');
                             });

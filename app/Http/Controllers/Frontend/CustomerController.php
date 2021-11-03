@@ -10,12 +10,10 @@ use App\Models\Order;
 use App\Models\User;
 use App\Services\OrderService;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-use Laravel\Socialite\Facades\Socialite;
 
 class CustomerController extends Controller {
     public function customerSignIn() {
@@ -44,6 +42,7 @@ class CustomerController extends Controller {
         // }
     }
     public function signUp(CustomerSignUpRequest $request) {
+        // dd($request->all());
         $customer = Customer::create($request->validated());
         $data     = Auth::guard('customer')->login($customer);
         Session::flash('message', 'Successfully logged in');
@@ -65,10 +64,13 @@ class CustomerController extends Controller {
     }
 
     public function customerOrderDetails(Request $request, OrderService $orderService) {
-        $order             = Order::with('restaurant', 'items', 'order_combos')->findOrFail($request->id);
-        $order->date       = Carbon::parse($order->created_at)->format('g:i A') . ' ' . formatOrderDate($order->created_at);
-        $order->grandTotal = formatAmount($order->amount) + formatAmount($order->delivery_fee);
-        $order->orderItems = $orderService->orderItems($order);
+        $order              = Order::with('restaurant', 'items', 'order_combos')->findOrFail($request->id);
+        $order->date        = Carbon::parse($order->created_at)->format('g:i A') . ' ' . formatOrderDate($order->created_at);
+        $order->grandTotal  = currency_format($order->amount);
+        $order->deliveryFee = currency_format($order->delivery_fee);
+        $order->vatAmount   = currency_format($order->vat_amount);
+        $order->orderItems  = $orderService->orderItems($order);
+        $order->subtotal    = $orderService->getOrderSubTotal($request->id);
         // $order->orderID    = $order->getOrderId($order->restaurant->name);
         $order->orderID = $order->id;
         return success($order);
@@ -155,40 +157,4 @@ class CustomerController extends Controller {
 
     }
 
-    public function redirectToGoogle() {
-        return Socialite::driver('facebook')->redirect();
-    }
-
-    public function handleGoogleCallback() {
-        try {
-
-            $user = Socialite::driver('facebook')->user();
-            // dd($user);
-
-            $finduser = User::where('fb_id', $user->id)->first();
-
-            if ($finduser) {
-
-                Auth::login($finduser);
-                // dd('uuuuuuu';)
-
-                return redirect()->intended('dashboard');
-
-            } else {
-                $newUser = User::create([
-                    'name'     => $user->name,
-                    'email'    => $user->email,
-                    'fb_id'    => $user->id,
-                    'password' => encrypt('12345678'),
-                ]);
-
-                Auth::login($newUser);
-
-                // dd('sdssd');
-            }
-
-        } catch (Exception $e) {
-            dd($e->getMessage());
-        }
-    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -32,6 +33,18 @@ class Item extends Model
         // ->whereDate('created_at', '=', DB::raw('CURDATE()'))
         // ->get();
     }
+    
+    public function completed_orders(){
+        return $this->belongsToMany(Order::class,'order_items','item_id', 'order_id' )->withPivot('quantity','price')
+        ->with('status','customer')
+        ->whereMonth(
+            'orders.created_at', '=', Carbon::now()->subMonth()->month
+        )
+        ->where('orders.order_status_id', 3);
+        // ->whereDate('created_at', '=', DB::raw('CURDATE()'))
+        // ->get();
+    }
+
     public function combos() {
         return $this->belongsToMany(Combo::class, 'item_combos','item_id','combo_id');
     }

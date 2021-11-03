@@ -15,6 +15,11 @@ class RestaurantService {
             $result      = preg_replace('/<(\w+)[^>]*>/', '<$1>', $strip_text);
             $restaurant->formated_description = $result;
 
+            $address                      = substr($restaurant->address, 0, 25);
+            $strip_text  = strip_tags($address);
+            $address_result      = preg_replace('/<(\w+)[^>]*>/', '<$1>', $strip_text);
+            $restaurant->formated_address= $address_result;
+
             foreach ($restaurant->assets as $asset) {
                 $restaurant->asset = $asset->pivot->asset;
             }

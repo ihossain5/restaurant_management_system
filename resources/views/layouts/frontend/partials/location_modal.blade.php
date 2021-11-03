@@ -3,12 +3,15 @@
         <div class="modal show" tabindex="-1" id="location-modal" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    {{-- @if (session()->has('location_id'))
+                    @if (session()->has('location_id'))
                      <button data-bs-dismiss="modal" class="lmbCloseBtn"><img
-                        src="{{asset('frontend/assets/images/My Orders/modal-close.svg')}}" alt=""></button>                     
-                    @endif --}}
-                    <button data-bs-dismiss="modal" class="lmbCloseBtn"><img
-                        src="{{asset('frontend/assets/images/My Orders/modal-close.svg')}}" alt=""></button>
+                        src="{{asset('frontend/assets/images/My Orders/modal-close.svg')}}" alt=""></button>     
+                        @else
+                        <button data-bs-dismiss="modal" class="lmbCloseBtn"><img
+                            src="{{asset('frontend/assets/images/My Orders/modal-close.svg')}}" alt="">
+                        </button>
+                    @endif
+                  
                     <div class="modal-body">
                         <div class="image-wrapper">
                             <img src="{{asset('frontend/assets/images/Logos/Emerald Group.svg')}}" alt="logo">

@@ -255,9 +255,13 @@
     color           : white;
 }
 @media (max-width: 767.98px) {
-    .orderHeader h3, .orderName, .priceName, .orderAmount, .repateOrderBtn {
+    .orderHeader h3, .orderName, .priceName, .orderAmount {
         font-size: 16px;
         line-height: 19px;
+    }
+    .repateOrderBtn {
+        font-size: 14px;
+        line-height: 18px;
     }
     .orderQty, .orderPrice, .specialNote h4, .specialNote p {
         font-size: 15px;

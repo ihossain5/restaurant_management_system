@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 @section('page-header')
-    Restaurants Section
+    Restaurants Section 
 @endsection
 @section('pageCss')
 
@@ -130,6 +130,7 @@
         .slider.round:before {
             border-radius: 50%;
         }
+
     </style>
 @endsection
 @section('content')
@@ -159,7 +160,7 @@
                                     style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                     <thead>
                                         <tr>
-                                            <th>Asset</th>
+                                            {{-- <th>Asset</th> --}}
                                             <th>Name</th>
                                             <th>Type</th>
                                             <th>Description</th>
@@ -174,18 +175,18 @@
                                         @if (!empty($restaurants))
                                             @foreach ($restaurants as $restaurant)
                                                 <tr class="restaurant{{ $restaurant->restaurant_id }}">
-                                                    <td>
+                                                    {{-- <td>
                                                             <img class='img-fluid'
                                                                 src="{{ asset('images/' . $restaurant->asset) }}"
                                                                 alt="{{ $restaurant->name }}"
                                                                 style='width: 60px; height: 55px;'>
-                                                    </td>
+                                                    </td> --}}
                                                     <td>{{ $restaurant->name }}</td>
                                                     <td>{{ $restaurant->type }}</td>
                                                     <td>{{ $restaurant->formated_description }}...</td>
                                                     <td>{{ $restaurant->contact }}</td>
                                                     <td>{{ $restaurant->email }}</td>
-                                                    <td>{{ $restaurant->address }}</td>
+                                                    <td>{{ $restaurant->formated_address }}</td>
                                                     <td>
                                                         <label class="switch">
                                                             <input class="is_active status{{ $restaurant->restaurant_id }}"
@@ -194,22 +195,18 @@
                                                             <span class="slider round"></span>
                                                         </label>
                                                     </td>
-
                                                     <td>
-
                                                         <button type='button' class='btn btn-outline-dark'
                                                             onclick='viewRestaurant({{ $restaurant->restaurant_id }})'><i
                                                                 class='fa fa-eye'></i></button>
                                                         <button type='button' class='btn btn-outline-info '
                                                             onclick='editRestaurant({{ $restaurant->restaurant_id }})'><i
                                                                 class='mdi mdi-pencil'></i></button>
-                                                        <button type='button' name='delete' class="btn btn-outline-danger "
+                                                        {{-- <button type='button' name='delete' class="btn btn-outline-danger "
                                                             onclick="deleteRestaurant({{ $restaurant->restaurant_id }})"><i
-                                                                class="mdi mdi-delete "></i></button>
-
+                                                                class="mdi mdi-delete "></i></button> --}}
 
                                                     </td>
-
                                                 </tr>
                                             @endforeach
                                         @endif
@@ -449,24 +446,17 @@
         </div><!-- /.modal-dialog -->
     </div>
     <!-- Edit  Modal End -->
+
     <!-- view  Modal -->
     <div class="modal fade bs-example-modal-center" id="viewModal" tabindex="-1" role="dialog"
         aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header d-block">
                     <h5 class="modal-title mt-0 text-center">Restaurant Details</h5>
                     <button type="button" class="close modal_close_icon" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-row restaurant_image">
-                        {{-- <div class="col-xl-6 col-md-12"> --}}
-                            <div class="form-group">
-                                <img src="" alt="image" id="view_image">
-                            </div>
-                        {{-- </div> --}}
-                    </div>
-
                     <div class="ms-form-group">
                         <p>
                             <strong>Name:</strong> <span id="view_name"></span>
@@ -491,7 +481,17 @@
                         </p>
 
                     </div>
-
+                    <div class="form-row restaurant_image">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="row home-section"></div>
+                        </div>
+                        <div class="col-xl-12 col-md-12 mt-3">
+                            <div class="row menu-section"></div>
+                        </div>
+                        <div class="col-xl-12 col-md-12 mt-3">
+                            <div class="row about-section"></div>
+                        </div>
+                    </div>
                     {{-- <div class="row mt-3">
                         <div class="col-xl-6 col-md-6">
                             <div class="ms-form-group">
@@ -531,11 +531,23 @@
 
 
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
+                <div class="col-md-12 mt-5">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button data-toggle="modal" class="btn-custom dangerBtn  mb-3 delete_btn"><i class="mdi mdi-delete "></i>
+                            Delete
+                        </button>
+                        </div>
+                        <div class="col-md-6 text-right">
+                        <button data-dismiss="modal" class="btn btn-custom btnAccept mb-3 accept_btn"> Done</button>
+                        </div>
+                    </div>
+                </div>
+                {{-- <div class="modal-footer">
+                    <button type="submit" data-dismiss="modal" class="btn btn-success waves-effect waves-light">
                         Done
                     </button>
-                  </div>
+                  </div> --}}
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
@@ -735,7 +747,6 @@
                         }
                         var restaurantTable = $('#restaurantTable').DataTable();
                         var row = $('<tr>')
-                            .append(`<td>` + img + `</td>`)
                             .append(`<td>` + response.data.name + `</td>`)
                             .append(`<td>` + response.data.type + `</td>`)
                             .append(`<td>` + response.data.description + `...</td>`)
@@ -817,6 +828,7 @@
                         $('#view_contact').text(response.data.contact);
                         $('#view_address').text(response.data.address);
                         $('#view_description').text(response.formated_description.description);
+                        $('.delete_btn').attr('onclick', "deleteRestaurant(" + response.data.restaurant_id + ")");
                         $('#view_location').empty();
                         $.each(response.data.delivery_locations, function(i, val) {
                             $('#view_location').append(
@@ -824,7 +836,9 @@
                             )
                         });
 
-                        $('.restaurant_image').empty();
+                        $('.home-section').empty();
+                        $('.about-section').empty();
+                        $('.menu-section').empty();
                         $.each(response.data.assets, function(key, val) {
                             var extension = val.pivot.asset.substr((val.pivot.asset.lastIndexOf('.') +
                                 1));
@@ -838,16 +852,41 @@
                                 var img =
                                     `<img src="${imagesUrl+'/'+val.pivot.asset}" alt="image" id="view_image">`;
                             }
-
-
-                            $(".restaurant_image").append(
-                                `<div class="col-xl-6 col-md-12">
-                                        <div class="ms-form-group">
+                            if(val.pivot.section == 'home'){
+                                $('.home-section').append(
+                                    `<div class="col-xl-12 col-md-12">
+                                        <div class="ms-form-group ${val.pivot.section}">
                                             ${img}
                                         </div>
                                     </div>`
+                                )
+                            }else if(val.pivot.section == 'about_us'){
+                                $('.about-section').append(
+                                    `<div class="col-xl-4 col-md-4">
+                                        <div class="ms-form-group ${val.pivot.section}">
+                                            ${img}
+                                        </div>
+                                    </div>`
+                                )
+                            }else if(val.pivot.section == 'menu'){
+                                $('.menu-section').append(
+                                    `<div class="col-xl-4 col-md-4">
+                                        <div class="ms-form-group ${val.pivot.section}">
+                                            ${img}
+                                        </div>
+                                    </div>`
+                                )
+                            }
 
-                            );
+
+                            // $(".restaurant_image").append(
+                            //     `<div class="col-xl-6 col-md-12">
+                            //             <div class="ms-form-group ${val.pivot.section}">
+                            //                 ${img}
+                            //             </div>
+                            //         </div>`
+
+                            // );
                         });
                         $('#viewModal').modal('show');
 
@@ -1013,7 +1052,6 @@
                             }
                             $('.restaurant' + response.data.id).html(
                                 `
-                                <td>${img}</td>
                                 <td>${response.data.name}</td>
                                 <td>${response.data.type}</td>
                                 <td>${response.data.description}...</td>

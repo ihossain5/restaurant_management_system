@@ -11,6 +11,7 @@
 
     <!-- Custom Js -->
     <script src="{{ asset('frontend/assets/js/style.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/bd_currency_format.js') }}"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
@@ -24,6 +25,8 @@
                 decreaseCartQty: "{!! route('frontend.cart.decrease.quantity') !!}",
                 deleteCart: "{!! route('frontend.cart.delete') !!}",
                 getRestaurants: "{!! route('frontend.restaurant.by.location') !!}",
+                changeRestaurant: "{!! route('frontend.cart.change.restaurant') !!}",
+                addToCartRestaurant: "{!! route('frontend.cart.add.busy.restaurant') !!}",
             }
         };
 
@@ -105,10 +108,11 @@
             "hideDuration": "1000",
             "timeOut": "5000",
             "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
+            "autohide": false,
+            // "showEasing": "swing",
+            // "hideEasing": "linear",
+            // "showMethod": "fadeIn",
+            // "hideMethod": "fadeOut"
         }
         // add to cart
         function addToCart(item_id, restaurant_id, combo_id) {
@@ -138,60 +142,24 @@
                         $('.cartItem').remove();
                         $('.grandTotal').html(response.data.grandTotal)
                         $.each(response.data.items, function(key, val) {
-                            $('#cartName').after(
-                                `<div class="cartItem d-flex justify-content-between cartRow${val.rowId}">
-                                    <div>
-                                        <p>${val.name}</p>
-                                        <div class="incrDecBtn">
-                                            <button onclick="minusBtn('${val.rowId}')"><img src="{{ asset('frontend/assets/images/cart/minus-btn.svg') }}" alt="emerald minus icon"></button>
-                                        
-                                            <span class="cartQty${val.rowId}">${val.qty}</span>
-                                            
-                                            <button onclick="plusBtn('${val.rowId}')" data-id="">
-                                                <img src="{{ asset('frontend/assets/images/cart/plus-btn.svg') }}" alt="emerald plus icon">
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="cartRightSide">
-                                        <button onclick="deleteCart('${val.rowId}')"><img src="{{ asset('frontend/assets/images/cart/delete.svg') }}" alt="emerald deleteIcon"></button>
-                                        <h6 class="">Tk. <span class="itemTotal${val.rowId}">${val.subtotal}</span></h6>
-                                    </div>
-                                </div>`
-                            )
+                            appendCartItem(val);
                         });
-                        $('.parent-div').empty();
-                        $('.cartItem:last').after(
-                            `<div class="parent-div"> 
-                                <div class="calculation d-flex justify-content-between">
-                                    <div>
-                                        <h6>Sub Total</h6>
-                                    </div>
-                                    <div>
-                                        <h6>Tk. <span class="subTotal">${response.data.subTotal}</span></h6>
-                                    </div>
-                                </div>
-                                <div class="calculation d-flex justify-content-between">
-                                    <div>
-                                        <h6>VAT</h6>
-                                    </div>
-                                    <div>
-                                        <h6>Tk. 85</h6>
-                                    </div>
-                                </div>
-                                <div class="calculation grand-total d-flex justify-content-between py-4">
-                                    <div>
-                                        <h6>Grand Total</h6>
-                                    </div>
-                                    <div>
-                                        <h6>Tk. <span class="grandTotal">${response.data.subTotal}</span></h6>
-                                    </div>
-                                </div>
-                                <a href="{{ route('frontend.chekout') }}"><button type="button" class="brand-btn rounded-pill">Checkout</button></a>
-                                <p class="info-text">One of our representatives will personally call you to confirm your order upon checkout</p>
-                           </div>`);
+                        appendCartTotal(response.data.subTotal, response.data.vatAmount, response.data
+                            .grandTotal, response.data.deliveryCharge)
                         cartCounter(response.data.numberOfCartItems); // set cart counter
                     } else {
-                        toastr["error"](response.message)
+                        $('#modal_restaurant_id').val(response.data.restaurant_id);
+                        $('#modal_combo_id').val(response.data.combo_id);
+                        $('#modal_item_id').val(response.data.item_id);
+                        $('.alertMessage').html(response.data.message);
+                        if (response.data.status == 'BUSY') {
+                            $('#alertModalForm').removeClass('cartChangeForm');
+                            $('#alertModalForm').addClass('addToCart');
+                        } else {
+                            $('#alertModalForm').removeClass('addToCart');
+                            $('#alertModalForm').addClass('cartChangeForm');
+                        }
+                        $('#alertModal').modal('show');
                     } //success end
                 },
                 error: function(error) {
@@ -203,7 +171,7 @@
         }
 
         // increase cart quantity   
-        function plusBtn(rowId) {
+        function increaseQuantity(rowId) {
             // alert('sdsd');
             var oldQty = $('.cartQty' + rowId).html();
             $.ajax({
@@ -220,6 +188,9 @@
                         $('.grandTotal').html(response.data.grandTotal)
                         $('.subTotal').html(response.data.grandTotal)
                         $('.itemTotal' + rowId).html(response.data.price)
+                        $('.grandTotal').html(response.data.totalAmount)
+                        $('.vat-amount').html(response.data.vatAmount)
+                        $('.delivary-charge').html(response.data.deliveryCharge)
                         $('.cartQty' + rowId).html(++oldQty);
                         cartCounter(response.data.numberOfCartItems); // set cart counter
                     } //success end
@@ -233,7 +204,7 @@
         }
 
         // decrease cart quantity   
-        function minusBtn(rowId) {
+        function decreaseQuantity(rowId) {
             var oldQty = $('.cartQty' + rowId).html();
 
             if (oldQty == 1) {
@@ -251,18 +222,16 @@
                         if (response.success == true) {
                             $('.cartQty' + rowId).html(--oldQty);
                             $('.subTotal').html(response.data.grandTotal)
-                            $('.grandTotal').html(response.data.grandTotal)
+                            $('.grandTotal').html(response.data.totalAmount)
+                            $('.vat-amount').html(response.data.vatAmount)
+                            $('.delivary-charge').html(response.data.deliveryCharge)
                             $('.itemTotal' + rowId).html(response.data.price)
                             cartCounter(response.data.numberOfCartItems); // set cart counter
                         } //success end
                     },
                     error: function(error) {
                         if (error.status == 404) {
-                            toastMixin.fire({
-                                icon: 'error',
-                                animation: true,
-                                title: "" + 'Data not found' + ""
-                            });
+                            toastr["error"]('Data not found');
                         }
                     },
                 }); //ajax end
@@ -282,19 +251,17 @@
                 success: function(response) {
                     if (response.success == true) {
                         // toastr["success"](response.data.message)
-                        $('.grandTotal').html(response.data.grandTotal)
                         $('.subTotal').html(response.data.grandTotal)
+                        $('.grandTotal').html(response.data.totalAmount)
+                        $('.vat-amount').html(response.data.vatAmount)
+                        $('.delivery-charge').html(response.data.deliveryCharge)
                         $('.cartRow' + rowId).remove();
                         cartCounter(response.data.numberOfCartItems); // set cart counter
                     } //success end
                 },
                 error: function(error) {
                     if (error.status == 404) {
-                        toastMixin.fire({
-                            icon: 'error',
-                            animation: true,
-                            title: "" + 'Data not found' + ""
-                        });
+                        toastr["error"]('Data not found');
                     }
                 },
             }); //ajax end
@@ -324,6 +291,7 @@
                                 $('.restaurantId' + restaurant.restaurant_id).removeClass(
                                     'disable-overlay');
                                 $('.addTocartBtnId' + restaurant.restaurant_id).show();
+                                // $('.addTocartBtnId' + restaurant.restaurant_id).re();
                                 // $('.comboBtn').after(`<button class="addTocart addTocartBtnId${restaurant.restaurant_id}">Add to Cart</button>`)
                             });
 
@@ -334,11 +302,7 @@
                     },
                     error: function(error) {
                         if (error.status == 404) {
-                            toastMixin.fire({
-                                icon: 'error',
-                                animation: true,
-                                title: "" + 'Data not found' + ""
-                            });
+                            toastr["error"]('Data not found');
                         }
                     },
                 }); //ajax end
@@ -346,8 +310,166 @@
 
         }
 
+        $(document).on('submit', '.cartChangeForm', function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: config.routes.changeRestaurant,
+                method: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json",
+                success: function(response) {
+                    if (response.success == true) {
+                        toastr["success"](response.data.message)
+                        $('.cartItem').remove();
+                        $('.grandTotal').html(response.data.grandTotal)
+                        $.each(response.data.items, function(key, val) {
+                            appendCartItem(val);
+                        });
+                        appendCartTotal(response.data.subTotal)
+                        cartCounter(response.data.numberOfCartItems); // set cart counter
+                        $('#alertModal').modal('hide');
+                    } else {
+                        toastr["error"]('Data not found');
+
+                    }
+                }, //success end
+                error: function(error) {
+                    if (error.status == 422) {
+                        $.each(error.responseJSON.errors, function(i, message) {
+                            toastr["error"](message)
+                        });
+
+                    }
+                },
+
+            });
+        });
+
+        // add to cart alert model form
+        $(document).on('submit', '.addToCart', function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: config.routes.addToCartRestaurant,
+                method: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json",
+                success: function(response) {
+                    if (response.success == true) {
+                        toastr["success"](response.data.message)
+                        $('.cartItem').remove();
+                        $('.grandTotal').html(response.data.grandTotal)
+                        $.each(response.data.items, function(key, val) {
+                            appendCartItem(val);
+                        });
+                        appendCartTotal(response.data.subTotal, response.data.vatAmount, response.data
+                            .grandTotal)
+                        cartCounter(response.data.numberOfCartItems); // set cart counter
+                        $('#alertModal').modal('hide');
+                    } else {
+                        $('#modal_restaurant_id').val(response.data.restaurant_id);
+                        $('#modal_combo_id').val(response.data.combo_id);
+                        $('#modal_item_id').val(response.data.item_id);
+                        $('.alertMessage').html(response.data.message);
+                        if (response.data.status == 'BUSY') {
+                            $('#alertModalForm').removeClass('cartChangeForm');
+                            $('#alertModalForm').addClass('addToCart');
+                        } else {
+                            $('#alertModalForm').removeClass('addToCart');
+                            $('#alertModalForm').addClass('cartChangeForm');
+                        }
+                        $('#alertModal').modal('show');
+
+                    }
+                }, //success end
+                error: function(error) {
+                    if (error.status == 422) {
+                        $.each(error.responseJSON.errors, function(i, message) {
+                            toastr["error"](message)
+                        });
+
+                    }
+                },
+
+            });
+        });
+
         function cartCounter(number) {
             $('.cartCounter').html(number);
-
         }
+
+        function appendCartItem(val) {
+            $('#cartName').after(
+                `<div class="cartItem d-flex justify-content-between cartRow${val.rowId}">
+                    <div>
+                        <p>${val.name}</p>
+                        <div class="incrDecBtn">
+                            <button onclick="decreaseQuantity('${val.rowId}')"><img src="{{ asset('frontend/assets/images/cart/minus-btn.svg') }}" alt="emerald minus icon"></button>
+                            <span class="cartQty${val.rowId}">${val.qty}</span>
+                            <button onclick="increaseQuantity('${val.rowId}')" data-id="">
+                                <img src="{{ asset('frontend/assets/images/cart/plus-btn.svg') }}" alt="emerald plus icon">
+                            </button>
+                          </div>
+                        </div>
+                        <div class="cartRightSide">
+                            <button onclick="deleteCart('${val.rowId}')"><img src="{{ asset('frontend/assets/images/cart/delete.svg') }}" alt="emerald deleteIcon"></button>
+                                <h6 class="">Tk. <span class="itemTotal${val.rowId}">${bdCurrencyFormat(val.subtotal)}</span></h6>
+                        </div>
+                </div>`
+            )
+        }
+
+        // cart subtotal
+        function appendCartTotal(subTotal, vatAmount, grandTotal, deliveryCharge) {
+            $('.parent-div').empty();
+            $('.cartItem:last').after(
+                `<div class="parent-div">
+                    <div class="calculation d-flex justify-content-between">
+                        <div>
+                            <h6>Sub Total</h6>
+                        </div>
+                        <div>
+                            <h6>Tk. <span class="subTotal">${subTotal}</span></h6>
+                        </div>
+                    </div>
+                    <div class="calculation d-flex justify-content-between">
+                        <div>
+                            <h6>VAT</h6>
+                        </div>
+                        <div>
+                            <h6>Tk. <span class="vat-amount">${vatAmount}</span></h6>
+                        </div>
+                    </div>
+                    <div class="calculation d-flex justify-content-between">
+                        <div>
+                            <h6>Delivery Charge</h6>
+                        </div>
+                        <div>
+                            <h6>Tk. <span class="delivery-charge">${deliveryCharge}</span></h6>
+                        </div>
+                    </div>
+                    <div class="calculation grand-total d-flex justify-content-between py-4">
+                        <div>
+                            <h6>Grand Total</h6>
+                        </div>
+                        <div>
+                            <h6>Tk. <span class="grandTotal">${grandTotal}</span></h6>
+                        </div>
+                    </div>
+                    <a href="{{ route('frontend.chekout') }}"><button type="button" class="brand-btn rounded-pill">Checkout</button></a>
+                    <p class="info-text">One of our representatives will personally call you to confirm your order upon checkout</p>
+                </div>
+                `);
+        }
+
+        <?php if (session()->has('location_id')): ?>
+        $('.lmbCloseBtn').show();
+        <?php else : ?>
+        $('.lmbCloseBtn').hide();
+        <?php endif; ?>
     </script>

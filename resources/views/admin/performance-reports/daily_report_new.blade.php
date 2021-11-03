@@ -19,24 +19,29 @@
                             <div class="row pb-5">
                                 <div class="col-lg-4">
                                     <h4 class="mt-0 header-title">Daily Report -<span
-                                        class="current_date">{{ $current_date }}</span></h4>
+                                            class="current_date">{{ $current_date }}</span></h4>
                                 </div>
                                 <div class="col-lg-8">
                                     <div class="row">
                                         <div class="col-lg-6">
-                                        </div> 
+                                        </div>
                                         <div class="col-lg-2 pr-0">
                                             <div class="dropdown">
                                                 <button class="custom-select downloadDropDown" type="button"
-                                                    id="dropdownMenuButton" data-toggle="dropdown"
-                                                    aria-haspopup="true" aria-expanded="false">
-                                                    <img src="{{asset('backend/assets/icons/download-icon.svg')}}" alt="">
+                                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                    <img src="{{ asset('backend/assets/icons/download-icon.svg') }}"
+                                                        alt="">
                                                 </button>
                                                 <div class="dropdown-menu downloadMenu"
                                                     aria-labelledby="dropdownMenuButton">
-                                                    <button><img src="{{asset('backend/assets/icons/pdf-icon.svg')}}" alt=""> PDF
+                                                    <button onclick="downloadPdf()"><img
+                                                            src="{{ asset('backend/assets/icons/pdf-icon.svg') }}" alt="">
+                                                        PDF
                                                         File</button>
-                                                    <button><img src="{{asset('backend/assets/icons/csv-icon.svg')}}" alt=""> CSV
+                                                    <button onclick="downloadCsv()"><img
+                                                            src="{{ asset('backend/assets/icons/csv-icon.svg') }}" alt="">
+                                                        CSV
                                                         File</button>
                                                 </div>
                                             </div>
@@ -44,13 +49,14 @@
 
                                         <div class="col-lg-4">
                                             <div class="custom-date">
-                                                <div class="input-daterange input-group" >
-                                                    <div class="customDatePicker w-100"
-                                                        style="max-width: none;">
-                                                        <img src="{{asset('backend/assets/icons/dateicon.svg')}}" alt="">
+                                                <div class="input-daterange input-group">
+                                                    <div class="customDatePicker w-100" style="max-width: none;">
+                                                        <img src="{{ asset('backend/assets/icons/dateicon.svg') }}"
+                                                            alt="">
                                                         <input type="text" class="form-control" id="datepicker"
-                                                            name="fullDate" placeholder="Select Date"/>
-                                                        <img src="{{asset('backend/assets/icons/color-arrow-down.svg')}}" alt="">
+                                                            name="fullDate" placeholder="Select Date" />
+                                                        <img src="{{ asset('backend/assets/icons/color-arrow-down.svg') }}"
+                                                            alt="">
                                                     </div>
                                                 </div>
                                             </div>
@@ -87,15 +93,15 @@
 @endsection
 @section('pageScripts')
     <script type='text/javascript'>
-     CKEDITOR.replace('restaurant_description');
+        CKEDITOR.replace('restaurant_description');
         var config = {
             routes: {
                 getOrders: "{!! route('order.daily.report.restaurant') !!}",
                 getOrdersByDate: "{!! route('order.daily.report.restaurant.date') !!}",
             }
         };
-    $(function () {
-        $('.performance_li').addClass('sub-nav-active');
+        $(function() {
+            $('.performance_li').addClass('sub-nav-active');
             $('.performance_li a').siblings("ul").toggle().removeClass("d-none");
             $('.performance_li a')
                 .children("span")
@@ -104,20 +110,34 @@
                 .css("transform", "rotate(0deg)");
             $('.restaurant_li').addClass('nav-active');
 
-    var id = $('#restaurantId').val();
-    var url = '{{ route("daily.order.report.restaurant", ":id") }}';
-    url = url.replace(':id', id);
-    var table = $('#orderTable').DataTable({
-        // processing: true,
-        serverSide: true,
-        ajax: url,
-        columns: [
-            {data: 'date'},
-            {data: 'id'},
-            {data: 'amount'},
-        ]
-    });
-  });
+            var id = $('#restaurantId').val();
+            var url = '{{ route('daily.order.report.restaurant', ':id') }}';
+            url = url.replace(':id', id);
+            var table = $('#orderTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'csvHtml5',
+                        className: 'd-none',
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        className: 'd-none',
+                    },
+                ],
+                serverSide: true,
+                ajax: url,
+                columns: [{
+                        data: 'date'
+                    },
+                    {
+                        data: 'id'
+                    },
+                    {
+                        data: 'amount'
+                    },
+                ]
+            });
+        });
         // restaurant change
         $(document).on('click', '.restaurant', function() {
             var id = $(this).data('id');
@@ -137,14 +157,15 @@
                         $('#orderTable').DataTable().clear().destroy();
                         dataTable();
                         setSessionId(response.data.session_id); // set restaurant id into session
-                        setRestaurant(response.data.restaurant_name, response.data.id); // set restaurant into topbar
+                        setRestaurant(response.data.restaurant_name, response.data
+                            .id); // set restaurant into topbar
                         $('.total_orders').html(response.data.total_order);
                         $('.total_amount').html('৳ ' + bdCurrencyFormat(response.data.total_amount));
                         $('.current_date').html(response.data.current_date);
 
-                     
-    
-                        
+
+
+
                     }
                 },
                 error: function(error) {
@@ -184,7 +205,7 @@
                         $('.current_date').html(response.data.current_date);
                         $('.total_orders').html(response.data.total_order);
                         $('.total_amount').html('৳ ' + bdCurrencyFormat(response.data.total_amount));
-                    
+
 
 
                     }
@@ -204,22 +225,35 @@
         });
         // 
 
-function dataTable(){
-    var id = $('#restaurantId').val();
-    var date = $('#datepicker').val();
-    var url = '{{ route("date.wise.order.report.restaurant") }}';
-    // url = url.replace(':id', id);
-    var table = $('#orderTable').DataTable({
-        // processing: true,
-        serverSide: true,
-        ajax: url,
-        columns: [
-            {data: 'date'},
-            {data: 'id'},
-            {data: 'amount'},
-        ]
-    });
-    } 
-
+        function dataTable() {
+            var id = $('#restaurantId').val();
+            var date = $('#datepicker').val();
+            var url = '{{ route('date.wise.order.report.restaurant') }}';
+            // url = url.replace(':id', id);
+            var table = $('#orderTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'csvHtml5',
+                        className: 'd-none',
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        className: 'd-none',
+                    },
+                ],
+                serverSide: true,
+                ajax: url,
+                columns: [{
+                        data: 'date'
+                    },
+                    {
+                        data: 'id'
+                    },
+                    {
+                        data: 'amount'
+                    },
+                ]
+            });
+        }
     </script>
 @endsection

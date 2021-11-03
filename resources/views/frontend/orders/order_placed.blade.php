@@ -1,6 +1,7 @@
 @extends('layouts.frontend.master')
 @section('pageCss')
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/checkout.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
 @endsection
 @section('title')
     Order Placed
@@ -24,7 +25,7 @@
                             <h6>Thank you for ordering from Emerald Restaurants! </h6>
 
                             <p>Upon receiving your order, one of our representatives will personally <b>call you at
-                                    01827654092</b> to confirm your order.</p>
+                                    {{$contact}}</b> to confirm your order.</p>
                             <a href="{{route('frontend.customer.order')}}">View My Orders</a>
                         </div>
                     </div>
@@ -55,7 +56,7 @@
                                         <span class="itemName">{{$item->name}}</span>
                                     </div>
                                     <div>
-                                        <span class="itemPrice">Tk. {{$item->pivot->price}}</span>
+                                        <span class="itemPrice">Tk. {{currency_format($item->pivot->price)}}</span>
                                     </div>
                                 </li>
                                 @endforeach
@@ -64,13 +65,28 @@
 
                         <div class="col-12">
                             <ul class="allItemPriceBox">
-
+                                <li>
+                                    <div class="firstColumn">
+                                        VAT
+                                    </div>
+                                    <div class="secondColumn">
+                                        Tk. {{currency_format($order->vat_amount)}}
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="firstColumn">
+                                        Delivery Fee
+                                    </div>
+                                    <div class="secondColumn">
+                                        Tk. {{currency_format($order->delivery_fee)}}
+                                    </div>
+                                </li>
                                 <li>
                                     <div class="firstColumn">
                                         Grand Total
                                     </div>
                                     <div class="secondColumn">
-                                        Tk. {{ totalAmount($order->amount, 60) }}
+                                        Tk. {{ currency_format($order->amount) }}
                                     </div>
                                 </li>
                             </ul>

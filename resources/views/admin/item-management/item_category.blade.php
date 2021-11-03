@@ -32,16 +32,11 @@
                                 <div class="ms-header-text">
                                     <h4 class="mt-0 header-title">All Item Categories</h4>
                                 </div>
-
                                 <button type="button" class="btn btn-outline-purple float-right waves-effect waves-light"
                                     name="button" id="addButton" data-toggle="modal" data-target="#add"> Add
                                     New
                                 </button>
-
-
-
                             </div>
-
                             <span class="showError"></span>
                             <div class="table-responsive">
                                 <table id="categoryTable" class="table table-bordered dt-responsive nowrap"
@@ -59,9 +54,7 @@
                                                 <tr class="category{{ $category->category_id }}">
                                                     <td>{{ $category->name }}</td>
                                                     <td>{{ $category->formated_description }}...</td>
-
                                                     <td>
-
                                                         <button type='button' class='btn btn-outline-dark'
                                                             onclick='viewCategory({{ $category->category_id }})'><i
                                                                 class='fa fa-eye'></i></button>
@@ -69,8 +62,6 @@
                                                         <button type='button' name='delete' class="btn btn-outline-danger "
                                                             onclick="deleteCategory({{ $category->category_id }})"><i
                                                                 class="mdi mdi-delete "></i></button>
-
-
                                                     </td>
 
                                                 </tr>

@@ -2,6 +2,9 @@
 @section('title')
     Sign In
 @endsection
+@section('pageCss')
+<link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
+@endsection
 
 @section('content')
     <!-- Sign In -->
@@ -10,7 +13,7 @@
             <div class="col-lg-5 order-1 order-lg-0">
                 <img class="w-100 left-img" src="{{ asset('frontend/assets/images/sign up/image 19.png') }}" alt="">
             </div>
-            <div class="col-lg-7 order-0 order-lg-1">
+            <div class="col-lg-7 order-0 order-lg-1 text-center">
                 @if (session()->has('message'))
                     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
                         <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
@@ -18,7 +21,7 @@
                                 d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
                         </symbol>
                     </svg>
-                    <div class="col-md-8 p-5">
+                    <div class="d-inline-block p-5">
                         <div class="alert alert-success text-center d-flex align-items-center" role="alert">
                             <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
                                 <use xlink:href="#check-circle-fill" />
@@ -36,7 +39,7 @@
                             <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
                           </symbol>
                     </svg>
-                    <div class="col-md-8 p-5">
+                    <div class="d-inline-block p-5">
                         <div class="alert alert-warning d-flex align-items-center" role="alert">
                             <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
                             <div class="text-center h1">
@@ -74,9 +77,10 @@
                                                 <button><img src="{{ asset('frontend/assets/images/sign up/Google.svg') }}"
                                                     alt=""></button>
                                             </a>
-                                            
+                                            <a href="{{ route('login.facebook') }}">
                                             <button><img src="{{ asset('frontend/assets/images/sign up/facebook.svg') }}"
                                                     alt=""></button>
+                                                </a>
                                         </div>
                                         <h6>OR</h6>
                                     </div>
@@ -106,8 +110,10 @@
                                                 <button><img src="{{ asset('frontend/assets/images/sign up/Google.svg') }}"
                                                     alt=""></button>
                                             </a>
+                                          
                                             <button><img src="{{ asset('frontend/assets/images/sign up/facebook.svg') }}"
                                                     alt=""></button>
+                                                </a>
                                         </div>
                                         <h6>OR</h6>
                                     </div>
@@ -116,7 +122,10 @@
                                             <input class="form-control" name="email" type="text" placeholder="Your Email">
                                         </div>
                                         <div class="col-md-12">
-                                            <input class="form-control" name="name" type="text" placeholder="First Name">
+                                            <input class="form-control" name="name" type="text" placeholder="Full Name">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <input class="form-control" name="contact" type="text" placeholder="Contact Number">
                                         </div>
                                         <div class="col-12 toggleBtn">
                                             <input class="form-control loginPassword" name="password" type="password"

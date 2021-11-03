@@ -23,26 +23,31 @@
                             <div class="row pb-5">
                                 <div class="col-lg-4">
                                     <h4 class="mt-0 header-title">Monthly Report -
-                                        <span class="current_month">{{$current_month_name}},</span>
-                                        <span class="current_year">{{$year}}</span>
+                                        <span class="current_month">{{ $current_month_name }},</span>
+                                        <span class="current_year">{{ $year }}</span>
                                     </h4>
                                 </div>
                                 <div class="col-lg-8">
                                     <div class="row">
                                         <div class="col-lg-6">
-                                        </div> 
+                                        </div>
                                         <div class="col-lg-2 pr-0">
                                             <div class="dropdown">
                                                 <button class="custom-select downloadDropDown" type="button"
-                                                    id="dropdownMenuButton" data-toggle="dropdown"
-                                                    aria-haspopup="true" aria-expanded="false">
-                                                    <img src="{{asset('backend/assets/icons/download-icon.svg')}}" alt="">
+                                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                    <img src="{{ asset('backend/assets/icons/download-icon.svg') }}"
+                                                        alt="">
                                                 </button>
                                                 <div class="dropdown-menu downloadMenu"
                                                     aria-labelledby="dropdownMenuButton">
-                                                    <button><img src="{{asset('backend/assets/icons/pdf-icon.svg')}}" alt=""> PDF
+                                                    <button onclick="downloadPdf()"><img
+                                                            src="{{ asset('backend/assets/icons/pdf-icon.svg') }}" alt="">
+                                                        PDF
                                                         File</button>
-                                                    <button><img src="{{asset('backend/assets/icons/csv-icon.svg')}}" alt=""> CSV
+                                                    <button onclick="downloadCsv()"><img
+                                                            src="{{ asset('backend/assets/icons/csv-icon.svg') }}" alt="">
+                                                        CSV
                                                         File</button>
                                                 </div>
                                             </div>
@@ -51,12 +56,13 @@
                                         <div class="col-lg-4">
                                             <div class="custom-date">
                                                 <div class="input-daterange input-group" id="monthYear">
-                                                    <div class="customDatePicker w-100"
-                                                        style="max-width: none;">
-                                                        <img src="{{asset('backend/assets/icons/dateicon.svg')}}" alt="">
+                                                    <div class="customDatePicker w-100" style="max-width: none;">
+                                                        <img src="{{ asset('backend/assets/icons/dateicon.svg') }}"
+                                                            alt="">
                                                         <input type="text" class="form-control monthYear" name="monthYear"
                                                             placeholder="Select Year Month" />
-                                                        <img src="{{asset('backend/assets/icons/color-arrow-down.svg')}}" alt="">
+                                                        <img src="{{ asset('backend/assets/icons/color-arrow-down.svg') }}"
+                                                            alt="">
                                                     </div>
                                                 </div>
                                             </div>
@@ -64,7 +70,7 @@
                                     </div>
                                 </div>
                             </div>
-  
+
                             <div class="table-responsive">
                                 <table id="orderTable" class="table table-bordered dt-responsive nowrap"
                                     style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -90,8 +96,10 @@
                                     <tfoot>
                                         <tr class="table-active">
                                             <td class="col-3 font-weight-bold">TOTAL</td>
-                                            <td class="col-3 font-weight-bold">TOTAL <span class="total_orders">{{$total_order}}</span> ORDERS</td>
-                                            <td class="col-3 font-weight-bold ">TOTAL <span class="total_amount">৳ {{currency_format($total_amount)}}</span></td>
+                                            <td class="col-3 font-weight-bold">TOTAL <span
+                                                    class="total_orders">{{ $total_order }}</span> ORDERS</td>
+                                            <td class="col-3 font-weight-bold ">TOTAL <span class="total_amount">৳
+                                                    {{ currency_format($total_amount) }}</span></td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -113,23 +121,23 @@
     @include('layouts.admin.restaurant_add_modal')
 @endsection
 @section('pageScripts')
-{{-- <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    {{-- <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 <script src=" https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>  
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script> --}}
 
-<script type='text/javascript'>
- CKEDITOR.replace('restaurant_description');
+    <script type='text/javascript'>
+        CKEDITOR.replace('restaurant_description');
         var config = {
             routes: {
                 getOrdersByMonth: "{!! route('order.report.restaurant.month') !!}",
             }
         };
 
-$(function () {
-    $('.performance_li').addClass('sub-nav-active');
+        $(function() {
+            $('.performance_li').addClass('sub-nav-active');
             $('.performance_li a').siblings("ul").toggle().removeClass("d-none");
             $('.performance_li a')
                 .children("span")
@@ -137,30 +145,36 @@ $(function () {
                 .children(".mdi")
                 .css("transform", "rotate(0deg)");
             $('.restaurant_li').addClass('nav-active');
-    var id = $('#restaurantId').val();
-    var url = '{{ route("order.report.restaurant.current.month", ":id") }}';
-    url = url.replace(':id', id);
-    var table = $('#orderTable').DataTable({
-        // processing: true,
-        dom: 'Bfrtip',
-        buttons: [
-            {
-                        extend:    'csvHtml5',
-                        text:      '<img src="{{asset('backend/assets/icons/pdf-icon.svg')}}" alt=""> CSV File',
-                        titleAttr: 'CSV File',
-                        className: 'downloadMenu',
+
+            var id = $('#restaurantId').val();
+            var url = '{{ route('order.report.restaurant.current.month', ':id') }}';
+            url = url.replace(':id', id);
+            var table = $('#orderTable').DataTable({
+                // processing: true,
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'csvHtml5',
+                        className: 'd-none',
                     },
-            'pdfHtml5'
-        ],
-        serverSide: true,
-        ajax: url,
-        columns: [
-            {data: 'date'},
-            {data: 'id'},
-            {data: 'amount'},
-        ]
-     });
-  });
+                    {
+                        extend: 'pdfHtml5',
+                        className: 'd-none',
+                    },
+                ],
+                serverSide: true,
+                ajax: url,
+                columns: [{
+                        data: 'date'
+                    },
+                    {
+                        data: 'id'
+                    },
+                    {
+                        data: 'amount'
+                    },
+                ]
+            });
+        });
 
         // restaurant change
         $(document).on('click', '.restaurant', function() {
@@ -181,7 +195,8 @@ $(function () {
                         $('#orderTable').DataTable().clear().destroy();
                         dataTable();
                         setSessionId(response.data.session_id); // set restaurant id into session
-                        setRestaurant(response.data.restaurant_name, response.data.id); // set restaurant into topbar
+                        setRestaurant(response.data.restaurant_name, response.data
+                            .id); // set restaurant into topbar
                         $('.current_year').html(response.data.year);
                         $('.current_month').html(response.data.month + ',');
                         $('.total_orders').html(response.data.total_order);
@@ -267,19 +282,34 @@ $(function () {
             });
 
         }
-    function dataTable(){
-    var url = '{{ route("date.wise.order.report.restaurant") }}';
-    // url = url.replace(':id', id);
-    var table = $('#orderTable').DataTable({
-        // processing: true,
-        serverSide: true,
-        ajax: url,
-        columns: [
-            {data: 'date'},
-            {data: 'id'},
-            {data: 'amount'},
-        ]
-    });
-    } 
+
+        function dataTable() {
+            var url = '{{ route('date.wise.order.report.restaurant') }}';
+            // url = url.replace(':id', id);
+            var table = $('#orderTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'csvHtml5',
+                        className: 'd-none',
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        className: 'd-none',
+                    },
+                ],
+                serverSide: true,
+                ajax: url,
+                columns: [{
+                        data: 'date'
+                    },
+                    {
+                        data: 'id'
+                    },
+                    {
+                        data: 'amount'
+                    },
+                ]
+            });
+        }
     </script>
 @endsection

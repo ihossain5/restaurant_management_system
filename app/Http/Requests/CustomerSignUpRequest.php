@@ -23,13 +23,15 @@ class CustomerSignUpRequest extends FormRequest {
         return [
             'name'     => 'required|max:255|string',
             'email'    => 'required|email|max:100|string|unique:customers,email',
+            'contact'  => 'required|min:11|max:14',
             'password' => 'required|string|max:100',
         ];
     }
     public function messages() {
         return [
-            'name.required'  => 'name is required.',
-            'email.required' => 'Email is required',
+            'contact.required'  => 'Contact is required.',
+            'name.required'     => 'Name is required.',
+            'email.required'    => 'Email is required',
             'password.required' => 'Password is required',
         ];
     }

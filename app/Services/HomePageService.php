@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Session;
 Class HomePageService {
 
     public function popularDishes() {
-        $items = Item::where('is_available', 1)->withCount([
+        $items = Item::where('is_available', 1)->with('category','category.restaurant','category.restaurant.status')->withCount([
             'category',
             'orders',
             'orders as counted_order' => function ($query) {
@@ -99,6 +99,11 @@ Class HomePageService {
 
     private function formatPopularDishes($items) {
         foreach ($items as $item) {
+            if($item->category->restaurant->status->name == 'CLOSED'){
+                $item->closed = true;
+            }else{
+                $item->closed = false;
+            }
             if (in_array($item->category->restaurant->restaurant_id, $this->getRestaurantFromSession())) {
                 $item->disable = false;
             } else {
@@ -109,6 +114,11 @@ Class HomePageService {
 
     private function formatCombos($combos) {
         foreach ($combos as $combo) {
+            if($combo->restaurant->status->name == 'CLOSED'){
+                $combo->closed = true;
+            }else{
+                $combo->closed = false;
+            }
             if (in_array($combo->restaurant_id, $this->getRestaurantFromSession())) {
                 $combo->disable = false;
             } else {

@@ -65,13 +65,11 @@
                                                         <button type='button' class='btn btn-outline-info '
                                                             onclick='editHeroSection({{ $hero_section->home_hero_section_id }})'><i
                                                                 class='mdi mdi-pencil'></i></button>
-                                                        <button type='button' name='delete' class="btn btn-outline-danger "
+                                                        {{-- <button type='button' name='delete' class="btn btn-outline-danger "
                                                             onclick="deleteHeroSection({{ $hero_section->home_hero_section_id }})"><i
-                                                                class="mdi mdi-delete "></i></button>
-
+                                                                class="mdi mdi-delete "></i></button> --}}
 
                                                     </td>
-
                                                 </tr>
                                             @endforeach
                                         @endif
@@ -82,14 +80,8 @@
                     </div>
                 </div> <!-- end col -->
             </div> <!-- end row -->
-
-
-
-
         </div><!-- container -->
-
     </div> <!-- Page content Wrapper -->
-
 
     <!-- Add  Modal -->
     <div class="modal fade bs-example-modal-center" id="add" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
@@ -110,10 +102,6 @@
                             <label>Description</label>
                             <textarea name="description" id="" class="form-control" cols="30" rows="5"></textarea>
                         </div>
-
-
-
-
                         <div class="form-group ">
                             <label>Photo (1920 x 1080 pixels)</label>
                             <div class="custom-file">
@@ -160,8 +148,6 @@
                             <textarea name="description" id="edit_description" class="form-control" cols="30"
                                 rows="5"></textarea>
                         </div>
-
-
                         <div class="form-group ">
                             <label>Photo (1920 x 1080 pixels)</label>
                             <div class="custom-file edit_hero_section_photo">
@@ -219,11 +205,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
-                        Done
-                    </button>
-                  </div>
+                <div class="col-md-12 mt-3">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button data-toggle="modal" class="btn-custom dangerBtn  mb-3 delete_btn"><i class="mdi mdi-delete "></i>
+                            Delete
+                        </button>
+                        </div>
+                        <div class="col-md-6 text-right">
+                        <button data-dismiss="modal" class="btn btn-custom btnAccept mb-3 "> Done</button>
+                        </div>
+                    </div>
+                </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
@@ -347,9 +340,7 @@
                                 <i class='mdi mdi-pencil'></i>
                             </button>
                            
-                            <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteHeroSection(${response.data.id})">
-                                <i class="mdi mdi-delete "></i>
-                            </button></td>`)
+                     </td>`)
 
 
                         var hero_section_row = heroSectionTable.row.add(row).draw().node();
@@ -409,6 +400,7 @@
                     if (response.success == true) {
                         $('#view_heading').text(response.data.heading);
                         $('#view_description').text(response.data.description);
+                        $('.delete_btn').attr('onclick', "deleteHeroSection(" + id + ")");
                         if (response.data.pic === null) {
                             $('#view_image').removeAttr('src');
                         } else {
@@ -508,10 +500,6 @@
                             </button>
                             <button type='button' class='btn btn-outline-info' onclick='editHeroSection(${response.data.id})'>
                                 <i class='mdi mdi-pencil'></i>
-                            </button>
-                           
-                            <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteHeroSection(${response.data.id})">
-                                <i class="mdi mdi-delete "></i>
                             </button></td>
                                 `
                             );
@@ -596,6 +584,7 @@
                                         .id)
                                     .remove()
                                     .draw();
+                                    $('#viewModal').modal('hide');
                             } else {
                                 Swal.fire("Error!", "" + response.message + "", "error");
                             }

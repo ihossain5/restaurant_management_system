@@ -474,6 +474,8 @@
     }
     .dealsCard button {
         font-weight: 500;
+        font-size: 14px;
+        line-height: 18px;
     }
     .popular-dishes {
         padding: 10.8rem 0 20.5rem;

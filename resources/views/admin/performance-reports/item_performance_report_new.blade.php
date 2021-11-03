@@ -35,21 +35,21 @@
                                                 </button>
                                                 <div class="dropdown-menu downloadMenu"
                                                     aria-labelledby="dropdownMenuButton">
-                                                    <button><img src="{{ asset('backend/assets/icons/pdf-icon.svg') }}"
+                                                    <button onclick="downloadPdf()"><img src="{{ asset('backend/assets/icons/pdf-icon.svg') }}"
                                                             alt=""> PDF
                                                         File</button>
-                                                    <button><img src="{{ asset('backend/assets/icons/csv-icon.svg') }}"
+                                                    <button onclick="downloadCsv()"><img src="{{ asset('backend/assets/icons/csv-icon.svg') }}"
                                                             alt=""> CSV
                                                         File</button>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-lg-4" id="table-filter">
-                                            <select class="form-control custom-select category-drop-down">
+                                            <select class="form-control custom-select category-select category-drop-down">
                                                 <option>Select</option>
                                                 @if (!empty($restaurant->restaurant_categories))
                                                     @foreach ($restaurant->restaurant_categories as $category)
-                                                        <option value="{{ $category->name }}">{{ $category->name }}
+                                                        <option value="{{ $category->category_id }}">{{ $category->name }}
                                                         </option>
                                                     @endforeach
                                                 @endif
@@ -115,9 +115,9 @@
                                             <td class="col-3 font-weight-bold">TOTAL</td>
                                             <td class="col-3 font-weight-bold"></td>
                                             <td class="col-3 font-weight-bold">TOTAL <span
-                                                    class="total_orders">{{ $total_order }}</span> ORDERS</td>
+                                                    class="total_orders">{{$total_order}}</span> ORDERS</td>
                                             <td class="col-3 font-weight-bold ">TOTAL <span
-                                                    class="total_amount">{{ $total_amount }}</span></td>
+                                                    class="total_amount">{{$total_amount}}</span></td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -131,22 +131,17 @@
     @include('layouts.admin.restaurant_add_modal')
 @endsection
 @section('pageScripts')
-<script src="https://cdn.datatables.net/buttons/2.0.0/js/dataTables.buttons.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
     <script type='text/javascript'>
-     CKEDITOR.replace('restaurant_description');
+        CKEDITOR.replace('restaurant_description');
         var config = {
             routes: {
                 getOrdersByRange: "{!! route('order.report.item.date') !!}",
+                getItemsBycategory: "{!! route('order.item.report.by.category') !!}",
             }
         };
 
-$(function () {
-    $('.performance_li').addClass('sub-nav-active');
+        $(function() {
+            $('.performance_li').addClass('sub-nav-active');
             $('.performance_li a').siblings("ul").toggle().removeClass("d-none");
             $('.performance_li a')
                 .children("span")
@@ -154,22 +149,52 @@ $(function () {
                 .children(".mdi")
                 .css("transform", "rotate(0deg)");
             $('.restaurant_li').addClass('nav-active');
-    var id = $('#restaurantId').val();
-    var url = '{{ route("order.report.item", ":id") }}';
-    url = url.replace(':id', id);
-    var table = $('#orderTable').DataTable({
-        // processing: true,
-        serverSide: true,
-        ajax: url,
-      
-        columns: [
-            {data: 'category.name'},
-            {data: 'name'},
-            {data: 'pivot.quantity'},
-            {data: 'revenue'},
-        ]
-     });
-  });
+            var id = $('#restaurantId').val();
+            var url = '{{ route('order.report.item', ':id') }}';
+            url = url.replace(':id', id);
+            var table = $('#orderTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'csvHtml5',
+                        className: 'd-none',
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        className: 'd-none',
+                    },
+                ],
+                serverSide: true,
+                ajax: url,
+
+                columns: [{
+                        data: 'category.name'
+                    },
+                    {
+                        data: 'name'
+                    },
+                    {
+                        data: 'total_quantity'
+                    },
+                    {
+                        data: 'total_amount'
+                    },
+                ],
+                "drawCallback": function(settings) {
+                    // if (settings.json.data == '') {
+                    //     $('.total_orders').html(0);
+                    //         $('.total_amount').html(`<span class='bdt_symbol'>৳ </spam>`+0);
+                    // } else {
+                    //     $.each(settings.json.data, function(i, val) {
+                    //         console.log(val);
+                    //         $('.total_orders').html(val.total_order);
+                    //         $('.total_amount').html(`<span class='bdt_symbol'>৳ </spam>` + val
+                    //             .total_amount);
+                    //     })
+                    // }
+
+                },
+            });
+        });
 
 
         // restaurant change
@@ -200,12 +225,12 @@ $(function () {
                             $('#orderTable').DataTable().clear().draw();
                             setSessionId(response.data.session_id); // set restaurant id into session
                             setRestaurant(response.data.restaurant_name, response.data
-                            .id); // set restaurant into topbar
+                                .id); // set restaurant into topbar
                             $('.start_date').html('- ' + response.data.start_date + ' -');
                             $('.end_date').html(response.data.end_date);
                             $('.total_orders').html(response.data.total_order);
                             $('.total_amount').html('৳ ' + bdCurrencyFormat(response.data
-                            .total_amount));
+                                .total_amount));
                             $('.current_date').html(response.data.current_date);
                             if ($.trim(response.data.orders)) {
                                 $.each(response.data.orders, function(key, order) {
@@ -258,7 +283,7 @@ $(function () {
                             $('.end_date').html(response.data.end_date);
                             $('.total_orders').html(response.data.total_order);
                             $('.total_amount').html('৳ ' + bdCurrencyFormat(response.data
-                            .total_amount));
+                                .total_amount));
                             if ($.trim(response.data.orders)) {
                                 $.each(response.data.orders, function(key, order) {
                                     ordersData(order.items)
@@ -344,19 +369,69 @@ $(function () {
         //         },
         //     });
         // });
-        function dataTable(){
-    var url = '{{ route("date.wise.order.report.restaurant") }}';
-    // url = url.replace(':id', id);
-    var table = $('#orderTable').DataTable({
-        // processing: true,
-        serverSide: true,
-        ajax: url,
-        columns: [
-            {data: 'date'},
-            {data: 'id'},
-            {data: 'amount'},
-        ]
-    });
-    } 
+
+// category on change function
+    $(document).on('change', '.category-select', function() {
+            var id = $(this).val();
+            var start_date = $('#start_date').val();
+            var end_date = $('#end_date').val();
+            var restaurantId = $('#restaurantId').val();
+            if(id == ''){
+                $('#start_date').val("");
+                $('#end_date').val("");
+            }
+            var url = {
+                url: config.routes.getItemsBycategory,
+                method: "POST",
+                data: {
+                    id: id,
+                    restaurantId: restaurantId,
+                    start_date: start_date,
+                    end_date: end_date,
+                    _token: "{{ csrf_token() }}"
+                },
+                dataType: "json",};
+            $('#orderTable').DataTable().clear().destroy();
+            dataTable(url);
+        });
+
+        function dataTable(url) {
+            var table = $('#orderTable').DataTable({
+                // processing: true,
+                serverSide: true,
+                ajax: url,
+                columns: [{
+                        data: 'category.name'
+                    },
+                    {
+                        data: 'name'
+                    },
+                    {
+                        data: 'pivot.quantity'
+                    },
+                    {
+                        data: 'revenue',
+                        orderable: true,
+                        searchable: true,
+                        render: function(data, type, full, meta) {
+                            return "<span class='bdt_symbol'>৳</span>  " + data;
+                        }
+                    },
+
+                ],
+                "drawCallback": function(settings) {
+                    if(settings.json.data.length <=0){
+                        $('.total_orders').html(0);
+                        $('.total_amount').html(`<span class='bdt_symbol'>৳ </spam>`+ 0);
+                    }
+                    $.each(settings.json.data, function(i,val){
+                      $('.starting_date').html(val.start_date);
+                      $('.ending_date').html(val.end_date);
+                      $('.total_orders').html(val.total_order);
+                      $('.total_amount').html(`<span class='bdt_symbol'>৳ </spam>`+ val.total_amount);
+                    })
+                },
+            });
+        }    
     </script>
 @endsection

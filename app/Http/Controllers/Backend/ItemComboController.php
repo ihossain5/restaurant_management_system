@@ -27,7 +27,7 @@ class ItemComboController extends Controller {
             $photo_url = storeImage($photo, $path, 401, 296);
         }
         $combo->update([
-            'photo'         => $photo_url,
+            'photo' => $photo_url,
             'restaurant_id' => $request->restaurant_id,
         ]);
         foreach ($request->item as $item) {
@@ -66,8 +66,7 @@ class ItemComboController extends Controller {
             $path      = 'item-combos/';
             $photo_url = storeImage($photo, $path, 401, 296);
             $combo->update([
-                'photo'         => $photo_url,
-               
+                'photo' => $photo_url,
             ]);
         }
         $combo->items()->sync($request->item);

@@ -109,76 +109,63 @@
 
 
     <!-- view  Modal -->
-    <div class="modal fade bs-example-modal-center" id="viewModal" tabindex="-1" role="dialog"
-        aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal addModal fade" id="viewOrderModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
-                <div class="modal-header d-block">
-                    <h5 class="modal-title mt-0 text-center">Order Details</h5>
-                    <button type="button" class="close modal_close_icon" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div class="modal-body">
-                    <div class="col-xl-12 col-md-12">
-                        <div class="ms-form-group view-modal">
-                            <p class="">
-                                <strong>Order ID:</strong> <span id="view_order_id"></span><br>
-                                <strong>Customer Name:</strong> <span id="view_customer_name"></span><br>
-                                <strong>Customer Email:</strong> <span id="view_customer_email"></span><br>
-                                <strong>Customer Contact:</strong> <span id="view_customer_contact"></span><br>
-                                <button type="button" class="btn btn-outline-purple float-right waves-effect waves-light"
-                                    name="button" id="order_status">
-                                </button>
-                                <strong>Customer Address :</strong> <span id="view_customer_address"></span><br>
-
-                                <strong>Special Notes :</strong> <span id="view_notes"></span><br>
-                            </p>
-
-                        </div>
-
-                    </div>
-                    <div class="row p-3">
-                        <div class="table-responsive">
-                            <h5 class="text-center">Order Items</h5>
-                            <table class="table table-bordered dt-responsive nowrap"
-                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Unit Price</th>
-                                        <th>Quantity</th>
-                                        <th>Total Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="apeend_tbody">
-
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td class="col-3 test">Delevery Fee</td>
-                                        <td class="col-3 test"></td>
-                                        <th class="col-3"></th>
-                                        <td class="col-3 deleveryFee">asdasd </td>
-                                    </tr>
-                                    <tr class="table-active">
-                                        <td class="col-3 font-weight-bold">Total Amount</td>
-                                        <td class="col-3 test"></td>
-                                        <th class="col-3"></th>
-                                        <td class="col-3 view_total"> </td>
-                                    </tr>
-
-                                </tfoot>
-
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer view-modal-footer">
-                    <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
-                        Done
+                <div class="">
+                    <h5 class="modal-title text-center">Order Details</h5>
+                    <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
+                <div class="modal-body pt-3 orderDeta-body">
+                    <div class="row">
+                        <input type="hidden" name="order_id" id="order_id">
+                        <div class="col-12">
+                            <h4>Order ID: #<span id="view_order_id"></span></h4>
+                            <h4>Customer Name: <span id="view_customer_name"></span></h4>
+                            <h4>Customer Email: <span id="view_customer_email"></span></h4>
+                            <h4>Customer Contact: <span id="view_customer_contact"></span></h4>
+                            <h4>Customer Address: <span id="view_customer_address"></span></h4>
+                            <h4>Special Notes: <span id="view_notes"></span></h4>
+                            {{-- <button class="float-right">sadasdas</button> --}}
+                        </div>
+                        <div class="col-12 mt-3">
+                            <h4>Ordered Items</h4>
+                        </div>
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table class="table table-bordered text-center orderTable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Item Name</th>
+                                            <th scope="col">Unit Price</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Total Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="apeend_tbody">
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td>Total Amount</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="view_total"></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <button data-dismiss="modal" class="btn btn-block btn-custom btnAccept mb-3 accept_btn"> Done</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- view  Modal End -->
     @include('layouts.admin.restaurant_add_modal')
@@ -205,63 +192,32 @@
             $('.restaurant_li').addClass('nav-active');
         dataTable();
   });
-
+      
         // view single 
         function viewOrder(id) {
             $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 url: config.routes.view,
                 method: "POST",
                 data: {
                     id: id,
-                    _token: "{{ csrf_token() }}"
+                    // _token: "{{ csrf_token() }}"
                 },
                 dataType: "json",
                 success: function(response) {
                     if (response.success == true) {
-                        $('#view_order_id').text(response.data.id);
-                        $('#view_customer_name').text(response.data.is_default_name == 0 ? response.data.name :
-                            response.data.customer.name);
-                        $('#view_customer_contact').text(response.data.is_default_contact == 0 ? response.data
-                            .contact : response.data.customer.contact);
-                        $('#view_customer_address').text(response.data.is_default_address == 0 ? response.data
-                            .address : response.data.customer.address);
-                        $('#view_customer_email').text(response.data.customer.email ?? 'N/A');
-                        $('#view_notes').text(response.data.special_notes ?? 'N/A');
-
-                        if (response.data.status.name == 'Preparing') {
-                            var class_name = 'primary';
-                        } else if (response.data.status.name == 'Delivering') {
-                            var class_name = 'success';
-                        } else if (response.data.status.name == 'Completed') {
-                            var class_name = 'success';
-                        } else {
-                            var class_name = 'danger';
-                        }
-
-                        $('#order_status').attr('class', 'btn float-right btn-outline-' + class_name + ' ' +
-                            response.data.class);
-                        $('#order_status').text(response.data.status.name);
-
-                        $('.apeend_tbody').empty();
-                        $.each(response.data.items, function(key, val) {
-                            var total_price = two_decimal(val.pivot.quantity * val.pivot.price);
-                            $('.apeend_tbody').append(
-                                `<tr><td class="item_name">${val.name}</td>
-                                <td class="item_price">${'৳ ' + bdCurrencyFormat( val.pivot.price)}</td>
-                                <td class="item_quantity">${val.pivot.quantity}</td>
-                                <td class="item_total_price">${'৳ ' + bdCurrencyFormat(total_price) }</td></tr>`
-                            );
-
-                        });
+                        setOrderDetails(response);
+                        orderStatus(response.data.order_status_id, response);
+                        orderItems(response.data.orderItems);
                         $('.view_total').html('৳ ' + bdCurrencyFormat(response.data.amount));
-                        if(response.data.delivery_fee != null){
+                        if (response.data.delivery_fee != null) {
                             $('.deleveryFee').html('৳ ' + bdCurrencyFormat(response.data.delivery_fee));
-                        }else{
+                        } else {
                             $('.deleveryFee').html('৳ ' + 0);
                         }
-
-
-                        $('#viewModal').modal('show');
+                        $('#viewOrderModal').modal('show');
 
                     } //success end
 
@@ -278,6 +234,61 @@
                     }
                 },
             }); //ajax end
+        }
+
+        function setOrderDetails(response) {
+            $('#order_id').val(response.data.order_id);
+            $('#view_order_id').text(response.data.id);
+            $('#view_customer_name').text(response.data.is_default_name == 1 ? response.data.name :
+                response.data.customer.name);
+            $('#view_customer_contact').text(response.data.is_default_contact == 1 ? response.data
+                .contact : response.data.customer.contact);
+            $('#view_customer_address').text(response.data.is_default_address == 1 ? response.data
+                .address : response.data.customer.address);
+            $('#view_customer_email').text(response.data.customer.email == null ? "N/A" : response.data.customer.email);
+            $('#view_notes').text(response.data.special_notes == null ? "N/A" : response.data.special_notes);
+
+        }
+        // set order item 
+        function orderItems(orderItems) {
+            $('.apeend_tbody').empty();
+            $.each(orderItems, function(key, val) {
+                var total_price = two_decimal(val.pivot.quantity * val.pivot.price);
+                $('.apeend_tbody').append(
+                    `<tr><td class="item_name">${val.name}</td>
+                <td class="item_price">${'৳ ' + bdCurrencyFormat( val.price)}</td>
+                <td class="item_quantity">${val.pivot.quantity}</td>
+                <td class="item_total_price">${'৳ ' + bdCurrencyFormat(val.pivot.price) }</td></tr>`
+                );
+            });
+        }
+
+        //set order status
+        function orderStatus(order_status_id, response) {
+            if (order_status_id != null) {
+                if (response.data.status.name == 'Preparing') {
+                    var class_name = 'primary';
+                } else if (response.data.status.name == 'Delivering') {
+                    var class_name = 'success';
+                } else if (response.data.status.name == 'Completed') {
+                    var class_name = 'success';
+                } else {
+                    var class_name = 'danger';
+                }
+                $('#order_status').attr('class', 'btn float-right btn-outline-' + class_name + ' ' +
+                    response.data.class);
+                $('#order_status').text(response.data.status.name);
+
+                if (order_status_id == 4) {
+                    $('.deny_btn').prop('disabled', true);
+                    $('.edit_btn').prop('disabled', true);
+                } else {
+                    $('.deny_btn').prop('disabled', false);
+                    $('.edit_btn').prop('disabled', false);
+                }
+            }
+
+
         }
 
         // restaurant change
@@ -339,7 +350,7 @@
 
     function dataTable(){
     var id = $('#restaurantId').val();
-    var url = '{{ route("past.order.restaurant", ":id") }}';
+    var url = '{{ route("orders.past", ":id") }}';
     url = url.replace(':id', id);
     var table = $('.data-table').DataTable({
         // processing: true,
@@ -347,14 +358,14 @@
         ajax: url,
         columns: [
             {data: 'id'},
-            {data: 'date'},
+            {data: 'order_date'},
             { 
                 // class: (status.name == 'Delivering') ? 'txt-delivering' : (status.name == 'Completed') ? 'txt-completed': (status.name == 'Preparing') ? 'txt-preparing': 'txt-cancelled',
-                data: 'status.name'
+                data: 'status'
             },
             {data: 'customer_name'},
             {data: 'customer_contact'},
-            {data: 'customer_address'},
+            {data: 'customer_adress'},
             {data: 'amount'},
             {
                 data: 'action', 

@@ -1,14 +1,15 @@
 // Cart Toggle Js
 function cartToggle() {
-
-    if (document.getElementById('trasnparentBg').style.display !== "block") {
-        document.getElementById('cart').style.right = 0;
-        document.getElementById('trasnparentBg').style.display = "block";
-    } else {
-        document.getElementById('cart').style.right = "-802px";
-        document.getElementById('trasnparentBg').style.display = "none";
+    let cartItems = $('.cartCounter').html();
+    if(cartItems >0){
+        if (document.getElementById('trasnparentBg').style.display !== "block") {
+            document.getElementById('cart').style.right = 0;
+            document.getElementById('trasnparentBg').style.display = "block";
+        } else {
+            document.getElementById('cart').style.right = "-802px";
+            document.getElementById('trasnparentBg').style.display = "none";
+        }
     }
-
 }
 
 
@@ -118,26 +119,27 @@ $('.editBtnAcountInfo').click(function (e) {
 })
 
 
-$('.acountInfoBtn').click(function () {
-    $('.acountInfoInput').addClass('d-none');
-    $('.acountInfo').removeClass('d-none');
-    $('.editBtnAcountInfo').removeClass('d-none');
+// $('.acountInfoBtn').click(function () {
+//     $('.acountInfoInput').addClass('d-none');
+//     $('.acountInfo').removeClass('d-none');
+//     $('.editBtnAcountInfo').removeClass('d-none');
 
-    $('.info-box2').css({
-        "background": "#FFFFFF",
-        "border": "1px solid #F2F2F2",
-        "box-shadow": "4px 12px 60px rgba(0, 0, 0, 0.03)",
-        "padding": "5.6rem",
-    });
-})
+//     $('.info-box2').css({
+//         "background": "#FFFFFF",
+//         "border": "1px solid #F2F2F2",
+//         "box-shadow": "4px 12px 60px rgba(0, 0, 0, 0.03)",
+//         "padding": "5.6rem",
+//     });
+// })
 
 
 
 
 $(document).ready(function () {
         // location modal close btn
-        $('.lmbCloseBtn').hide();
+        // $('.lmbCloseBtn').hide();
         $('.addTocart').hide();
+        $('.closed').hide();
 
 })
 
