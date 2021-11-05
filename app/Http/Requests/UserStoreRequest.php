@@ -28,7 +28,7 @@ class UserStoreRequest extends FormRequest {
             'email'         => 'required|max:50|email',
             'contact'       => 'required|max:50',
             'password'      => 'required|string|min:6|confirmed',
-            // 'profile_image' => 'nullable|max:600|mimes:jpg,png,jpeg|dimensions:width=200px,height=200px',
+            'profile_image' => 'nullable|max:600|mimes:jpg,png,jpeg',
         ];
     }
     public function messages() {
@@ -39,7 +39,7 @@ class UserStoreRequest extends FormRequest {
             'password.required'        => 'Contact is required',
             'profile_image.required'   => 'Please upload your photo',
             'profile_image.max'        => 'Maximum file size is 600KB',
-            'profile_image.dimensions' => 'Photo hight & width should be 200px',
+            // 'profile_image.dimensions' => 'Photo hight & width should be 200px',
         ];
     }
 }

@@ -81,15 +81,26 @@
                                         <tr>
                                             <th>Date</th>
                                             <th>Order Id</th>
+                                            <th>Status</th>
+                                            <th>Customer Name</th>
+                                            <th>Customer Contact</th>
+                                            <th>Customer Address</th>
                                             <th>Revenue</th>
-
                                         </tr>
                                     </thead>
                                     <tbody>
 
                                     </tbody>
                                     <tfoot>
-                                        @include('layouts.admin.table_footer_order_total')
+                                        <tr class="table-active">
+                                            <td class="col-3 font-weight-bold">TOTAL</td>
+                                            <td class="col-3 font-weight-bold">TOTAL <span class="total_orders">{{$total_order}}</span> ORDERS</td>
+                                            <td class="col-3 font-weight-bold"></td>
+                                            <td class="col-3 font-weight-bold"></td>
+                                            <td class="col-3 font-weight-bold"></td>
+                                            <td class="col-3 font-weight-bold"></td>
+                                            <td class="col-3 font-weight-bold ">TOTAL <span class="total_amount">{{currency_format($total_orderAmount)}}</span></td>
+                                        </tr>
                                     </tfoot>
                                 </table>
                             </div>
@@ -127,26 +138,44 @@
                 dom: 'Bfrtip',
                 buttons: [{
                         extend: 'csvHtml5',
+                        filename: 'daily reports',
                         className: 'd-none',
                     },
                     {
                         extend: 'pdfHtml5',
+                        filename: 'daily reports',
+                        title: 'Daily Reports',
                         className: 'd-none',
                     },
                 ],
                 serverSide: true,
                 ajax: url,
-                columns: [{
-                        data: 'date'
+                columns: [
+
+                    {
+                        data: 'order_date'
                     },
                     {
                         data: 'id'
                     },
                     {
-                        data: 'amount'
+                        data: 'status'
                     },
-                ]
+                    {
+                        data: 'customer_name'
+                    },
+                    {
+                        data: 'customer_contact'
+                    },
+                    {
+                        data: 'customer_adress'
+                    },
+                    {
+                        data: 'total'
+                    },
+                ],
             });
+            hideColumn(table);
         });
 
 
@@ -273,26 +302,54 @@
                 dom: 'Bfrtip',
                 buttons: [{
                         extend: 'csvHtml5',
+                        filename: 'daily reports',
                         className: 'd-none',
                     },
                     {
                         extend: 'pdfHtml5',
+                        filename: 'daily reports',
+                        title: 'Daily Reports',
                         className: 'd-none',
                     },
                 ],
                 serverSide: true,
                 ajax: url,
-                columns: [{
-                        data: 'date'
+                columns: [
+
+                    {
+                        data: 'order_date'
                     },
                     {
                         data: 'id'
                     },
                     {
-                        data: 'amount'
+                        data: 'status'
                     },
-                ]
+                    {
+                        data: 'customer_name'
+                    },
+                    {
+                        data: 'customer_contact'
+                    },
+                    {
+                        data: 'customer_adress'
+                    },
+                    {
+                        data: 'total'
+                    },
+                ],
             });
+            hideColumn(table);
+        }
+        function hideColumn(table) {
+            let column2 = table.column(2);
+            column2.visible(false);
+            let column3 = table.column(3);
+            column3.visible(false);
+            let column4 = table.column(4);
+            column4.visible(false);
+            let column5 = table.column(5);
+            column5.visible(false);
         }
     </script>
 @endsection

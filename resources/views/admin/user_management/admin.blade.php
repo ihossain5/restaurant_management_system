@@ -10,16 +10,20 @@
             max-height: 220px;
             max-width: 467px;
         }
+
         .view_signature {
             /* max-height: 220px; */
             max-width: 467px;
         }
-        .filter_by_role{
+
+        .filter_by_role {
             width: 145px;
         }
-        #view_image{
+
+        #view_image {
             width: 100%;
         }
+
         .switch {
             position: relative;
             display: inline-block;
@@ -83,10 +87,7 @@
     </style>
 @endsection
 @section('content')
-    <div class="preloader">
-
-    </div>
-
+    <div class="preloader"></div>
     <div class="page-content-wrapper">
         <div class="container-fluid">
             <div class="row">
@@ -97,26 +98,24 @@
                                 <div class="ms-header-text">
                                     <h4 class="mt-0 header-title">All Admins</h4>
                                 </div>
-                                
-                                                                   
-                                <button type="button" class="btn btn-outline-purple float-right waves-effect waves-light"
-                                name="button" id="addButton" data-toggle="modal" data-target="#add"> Add
-                                New
-                            </button>
+                                @if (auth()->user()->is_super_admin == 1)
+                                    <button type="button"
+                                        class="btn btn-outline-purple float-right waves-effect waves-light" name="button"
+                                        id="addButton" data-toggle="modal" data-target="#add"> Add
+                                        New
+                                    </button>
+                                @endif
                             </div>
-
-                            <span class="showError"></span>
                             <table id="adminTable" class="table table-bordered dt-responsive nowrap"
                                 style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
-                                       
                                         <th>Photo</th>
                                         <th>Name</th>
                                         <th>Gender</th>
                                         <th>Email</th>
-                                        <th>Phone</th>              
-                                        <th>Active Status</th>              
+                                        <th>Phone</th>
+                                        <th>Active Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -129,39 +128,37 @@
                                                         <img class='img-fluid' src="{{ asset('images/default.png') }}"
                                                             alt="{{ $user->name }}" style='width: 60px; height: 55px;'>
                                                     @else
-                                                        <img class='img-fluid'
-                                                            src="{{ asset('images/' . $user->photo) }}"
+                                                        <img class='img-fluid' src="{{ asset('images/' . $user->photo) }}"
                                                             alt="{{ $user->name }}" style='width: 60px; height: 55px;'>
                                                     @endif
                                                 </td>
                                                 <td>{{ $user->name }}</td>
                                                 <td>{{ $user->sex ?? 'N/A' }}</td>
                                                 <td>{{ $user->email }}</td>
-                                                <td>{{ $user->contact ?? 'N/A'}}</td>
+                                                <td>{{ $user->contact ?? 'N/A' }}</td>
                                                 <td>
                                                     <label class="switch">
-                                                        <input class="is_active status{{ $user->id }}"
-                                                            type="checkbox" {{ $user->is_active == 1 ? 'checked' : '' }}
+                                                        <input class="is_active status{{ $user->id }}" type="checkbox"
+                                                            {{ $user->is_active == 1 ? 'checked' : '' }}
                                                             data-id="{{ $user->id }}">
                                                         <span class="slider round"></span>
                                                     </label>
                                                 </td>
-                                                                                               
                                                 <td>
                                                     <button type='button' class='btn btn-outline-dark'
                                                         onclick='viewAdmin({{ $user->id }})'><i
                                                             class='fa fa-eye'></i></button>
-                                                    
+                                                @if (auth()->user()->is_super_admin == 1)
                                                     <button type='button' name='delete' class="btn btn-outline-danger "
-                                                            onclick="deleteAdmin({{ $user->id }})"><i
-                                                        class="mdi mdi-delete "></i></button>
+                                                        onclick="deleteAdmin({{ $user->id }})"><i
+                                                            class="mdi mdi-delete "></i></button>
                                                 </td>
-
+                                                @endif
                                             </tr>
                                         @endforeach
                                     @endif
                                 </tbody>
-                                
+
                             </table>
 
                         </div>
@@ -210,7 +207,7 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
-    <!-- Add  Modal End -->    
+    <!-- Add  Modal End -->
     <!-- view  Modal -->
     <div class="modal fade bs-example-modal-center" id="viewModal" tabindex="-1" role="dialog"
         aria-labelledby="mySmallModalLabel" aria-hidden="true">
@@ -230,12 +227,12 @@
                                 <strong>Email:</strong> <span id="view_email"></span><br>
                                 <strong>Phone:</strong> <span id="view_phone"></span><br>
                                 <label for="name"><strong>Photo:</strong></label> <br>
-                            <img src="" id="view_image">
+                                <img src="" id="view_image">
                             </p>
                         </div>
                         <div class="form-group">
                             <div>
-                               
+
 
                             </div>
                         </div>
@@ -246,7 +243,7 @@
                     <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
                         Done
                     </button>
-                  </div>
+                </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
@@ -266,7 +263,7 @@
         var imagesUrl = '{!! URL::asset('/images/') !!}';
         // add form validation
         $(document).ready(function() {
-             
+
             $(".adminAddForm").validate({
                 rules: {
                     name: {
@@ -295,13 +292,13 @@
             });
         });
         //end
-       
 
-      $('#adminTable').DataTable({
-                "ordering": false,
-            });
 
-            $(document).on('submit', '.adminAddForm', function(event) {
+        $('#adminTable').DataTable({
+            "ordering": false,
+        });
+
+        $(document).on('submit', '.adminAddForm', function(event) {
             event.preventDefault();
             $.ajax({
                 url: config.routes.add,
@@ -312,7 +309,6 @@
                 processData: false,
                 dataType: "json",
                 success: function(response) {
-
                     if (response.success == true) {
                         var managerTable = $('#adminTable').DataTable();
                         var row = $('<tr>')
@@ -325,7 +321,7 @@
                             .append(`<td>` + response.data.contact + `</td>`)
                             .append(`<td><label class="switch">
                                             <input class="is_active status${ response.data.id}"type="checkbox"
-                                                ${response.data.is_active == 1 ? 'checked' : ''}data-id="${response.data.id}">
+                                                ${response.data.is_active == 1 ? 'checked' : ''} data-id="${response.data.id}">
                                                      <span class="slider round"></span>
                                          </label></td>`)
                             .append(`<td><button type='button' class='btn btn-outline-dark' onclick='viewAdmin(${response.data.id})'>
@@ -350,7 +346,6 @@
                             });
 
                         }
-
 
                     } else {
                         toastMixin.fire({
@@ -391,13 +386,14 @@
                         $('#view_email').text(response.data.email);
                         $('#view_gender').text(response.data.sex ?? 'N/A');
                         $('#view_phone').text(response.data.contact ?? 'N/A');
-                        $('#view_restaurant_name').text(response.data.restaurant? response.data.restaurant.name : 'N/A' );
+                        $('#view_restaurant_name').text(response.data.restaurant ? response.data.restaurant
+                            .name : 'N/A');
                         if (response.data.photo === null) {
-                            $('#view_image').attr('src','/images/default.png');
+                            $('#view_image').attr('src', '/images/default.png');
                         } else {
                             $('#view_image').attr('src', '/images/' + response.data.photo);
                         }
-                       $('#viewModal').modal('show');
+                        $('#viewModal').modal('show');
 
                     } //success end
 
@@ -406,8 +402,8 @@
         }
 
 
-    // delete 
-    function deleteAdmin(id) {
+        // delete 
+        function deleteAdmin(id) {
             // alert(id)
             Swal.fire({
                 title: 'Are you sure?',
@@ -460,7 +456,7 @@
         //end
 
 
-      // active status change function
+        // active status change function
         $(document.body).on('click', '.is_active', function() {
             var id = $(this).attr('data-id');
             Swal.fire({
@@ -511,7 +507,6 @@
                     }
                 }
             })
-        });    
-        
+        });
     </script>
 @endsection

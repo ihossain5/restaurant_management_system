@@ -178,10 +178,14 @@
         </div><!-- /.modal-dialog -->
     </div>
     <!-- view  Modal End -->
+    
+
+    <input type="hidden" name="" id="managerRestaurantId"
+    value="{{ Auth::user()->restaurant->restaurant_id }}">
 @endsection
 @section('pageScripts')
 <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-<script src="{{asset('backend/assets/js/pusher_notification.js')}}"></script>
+<script src="{{ asset('backend/assets/js/pusher_notification.js') }}"></script>
     <script type='text/javascript'>
         var config = {
             routes: {

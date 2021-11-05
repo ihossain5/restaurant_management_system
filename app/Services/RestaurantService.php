@@ -28,6 +28,10 @@ class RestaurantService {
         return $restaurants;
     }
 
+    public function findById($id){
+        return Restaurant::with('assets')->findOrFail($id);
+    }
+
     public function getDeliveryLocations(){
         return DeliveryLocation::get()->unique('name');
     }

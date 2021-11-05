@@ -30,10 +30,8 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
         $request->session()->regenerate();
-        if(Auth::user()->is_super_admin ==1 && Auth::user()->is_active == 1){
+        if(Auth::user()->is_super_admin ==1 ||Auth::user()->is_admin ==1 && Auth::user()->is_active == 1){
             return redirect()->intended(RouteServiceProvider::HOME);
-        }else if(Auth::user()->is_manager == 1){
-            return redirect()->route('manager.dashboard');
         }else{
             Auth::logout();
             return redirect()->back()->withErrors(['error' => 'Sorry! You have no permission to access this']);

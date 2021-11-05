@@ -29,6 +29,7 @@ class User extends Authenticatable {
         'is_verified',
         'google_id',
         'fb_id',
+        'is_admin',
     ];
 
     /**

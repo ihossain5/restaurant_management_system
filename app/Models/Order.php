@@ -120,9 +120,10 @@ class Order extends Model {
             ->whereDate('created_at', $date)->get();
     }
     public function getOrdersByDate($start_date, $end_date, $restaurant) {
-        return Order::with('items', 'items.category')->whereDate('orders.created_at', '>=', $start_date)
-            ->whereDate('orders.created_at', '<=', $end_date)
+        return Order::with('items', 'items.category')->whereDate('created_at', '>=', $start_date)
+            ->whereDate('created_at', '<=', $end_date)
             ->where('restaurant_id', $restaurant)
+            ->where('order_status_id', 3)
             ->get();
 
     }

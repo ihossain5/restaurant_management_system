@@ -5,10 +5,11 @@ var pusher = new Pusher("1efc814744bed7686f5e", {
 
 var channel = pusher.subscribe("my-channel");
 var id = $("#managerRestaurantId").val();
+var main_url = window.location.origin;
 
-var audio = new Audio("http://127.0.0.1:8000/backend/assets/notification.mp3");
+var audio = new Audio(main_url + "/backend/assets/notification.mp3");
 
-channel.bind("my-event", function (data) {
+channel.bind("my-event", function(data) {
     // $("#sht1").text("click from pusher bind");
 
     if (id == data.restaurant_id) {

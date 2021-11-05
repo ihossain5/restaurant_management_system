@@ -3,7 +3,7 @@
     Dashboard
 @endsection
 @section('page-header')
-    {{ Auth::user()->is_super_admin == 1 ? 'Business Overview' : 'Dashboard' }}
+    {{ Auth::user()->is_super_admin == 1 || Auth::user()->is_admin == 1  ? 'Business Overview' : 'Dashboard' }}
 @endsection
 @section('pageCss')
     <style>

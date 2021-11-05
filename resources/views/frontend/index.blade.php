@@ -2,7 +2,18 @@
 @section('pageCss')
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/home.css') }}">
+    <style>
+        .restaurant-status-txt {
+            font-family: "Roboto", sans-serif;
+            font-style: italic;
+            font-weight: 300;
+            font-size: 1.8rem;
+            line-height: 3rem;
+            text-align: center;
+            color: #DE973D;
+        }
 
+    </style>
 @endsection
 @section('title')
     Home
@@ -102,10 +113,16 @@
                                                 @endforeach
                                             @endif
                                             <h2>Tk. {{ $combo->price }}</h2>
-                                            <button
-                                            onclick="addToCart({{ $combo->combo_id }},{{ $combo->restaurant_id }},{{ $combo->combo_id }})"
-                                            class=" {{ $combo->disable == true ? 'addTocart' : 'cartBtn' }}  {{ $combo->closed == true ? 'd-none' : ' ' }}  addTocartBtnId{{ $combo->restaurant_id }}">Add
-                                            to Cart</button>
+                                            @if ($combo->disable == true)
+                                                <p class="restaurant-status-txt">Delivery is not available in this area</p>
+                                            @elseif($combo->closed == true)
+                                                <p class="restaurant-status-txt">Restaurant is closed now</p>
+                                            @else
+                                                <button
+                                                    onclick="addToCart({{ $combo->combo_id }},{{ $combo->restaurant_id }},{{ $combo->combo_id }})"
+                                                    class=" {{ $combo->disable == true ? 'addTocart' : 'cartBtn' }}  {{ $combo->closed == true ? 'd-none' : ' ' }}  addTocartBtnId{{ $combo->restaurant_id }}">Add
+                                                    to Cart</button>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -114,10 +131,16 @@
                                 <h6>{{ $combo->restaurant->name }}</h6>
                                 <h3>{{ $combo->name }}</h3>
                                 <h2 class="comboBtn">Tk. {{ $combo->price }}</h2>
-                                <button
-                                    onclick="addToCart({{ $combo->combo_id }},{{ $combo->restaurant_id }},{{ $combo->combo_id }})"
-                                    class=" {{ $combo->disable == true ? 'addTocart' : 'cartBtn' }}  {{ $combo->closed == true ? 'd-none' : ' ' }}  addTocartBtnId{{ $combo->restaurant_id }}">Add
-                                    to Cart</button>
+                                @if ($combo->disable == true)
+                                    <p class="restaurant-status-txt">Delivery is not available in the area</p>
+                                @elseif($combo->closed == true)
+                                    <p class="restaurant-status-txt">Restaurant is closed now</p>
+                                @else
+                                    <button
+                                        onclick="addToCart({{ $combo->combo_id }},{{ $combo->restaurant_id }},{{ $combo->combo_id }})"
+                                        class=" {{ $combo->disable == true ? 'addTocart' : 'cartBtn' }}  {{ $combo->closed == true ? 'd-none' : ' ' }}  addTocartBtnId{{ $combo->restaurant_id }}">Add
+                                        to Cart</button>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -153,15 +176,17 @@
                                     <h6>{{ $item->category->restaurant->name }}</h6>
                                     <h3>{{ $item->name }}</h3>
                                     <h2 class="itemBtn">Tk. {{ $item->price }}</h2>
-                                    @if ($item->closed == true)
-                                        <p>Restaurant is closed now</p>  
-                                        @else
+                                    @if ($item->disable == true)
+                                        <p class="restaurant-status-txt">Delivery is not available in the area</p>
+                                    @elseif($item->closed == true)
+                                        <p class="restaurant-status-txt">Restaurant is closed now</p>
+                                    @else
                                         <button
-                                        class="{{ $item->disable == true ? 'addTocart' : 'cartBtn' }} addTocartBtnId{{ $item->category->restaurant->restaurant_id }}"
-                                        onclick="addToCart({{ $item->item_id }},{{ $item->category->restaurant->restaurant_id }})">Add
-                                        to Cart</button>
+                                            class="{{ $item->disable == true ? 'addTocart' : 'cartBtn' }} addTocartBtnId{{ $item->category->restaurant->restaurant_id }}"
+                                            onclick="addToCart({{ $item->item_id }},{{ $item->category->restaurant->restaurant_id }})">Add
+                                            to Cart</button>
                                     @endif
-                                  
+
                                 </div>
                             </div>
                         </div>
@@ -201,6 +226,5 @@
         } else {
             locationModal.show();
         }
-
     </script>
 @endsection

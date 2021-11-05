@@ -5,8 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class MangerMiddleware
-{
+class MangerMiddleware {
     /**
      * Handle an incoming request.
      *
@@ -14,9 +13,8 @@ class MangerMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next)
-    {
-        if (auth()->user()->is_manager !=0) {
+    public function handle(Request $request, Closure $next) {
+        if (auth()->user()->is_manager != 0 && auth()->user()->is_active == 1) {
             return $next($request);
         }
         return redirect()->back()->withErrors(['error' => 'Sorry! You have no permission to access this']);

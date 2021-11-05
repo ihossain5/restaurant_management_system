@@ -29,7 +29,7 @@ $orders = ManagerDashboardController::countedOrders();
                     <h6 class="text-center user_name text-uppercase">{{ Auth::user()->name }}</h6>
                     <div class="text-center">
                         <div class="superAdminDesign">
-                            <span> {{Auth::user()->is_manager ==1 ? 'Manager' : 'Super Admin'}}</span>
+                            <span> {{(Auth::user()->is_admin ==1) ? 'Admin' : ((Auth::user()->is_admin ==1)? 'Super Admin' : 'Manager')}}</span>
                         </div>
                     </div>
             </div>
@@ -39,7 +39,7 @@ $orders = ManagerDashboardController::countedOrders();
         <div id="sidebar-menu">
             <ul>
 
-@if (Auth::user()->is_super_admin == 1)   
+@if (Auth::user()->is_super_admin == 1 || Auth::user()->is_admin ==1)   
         <li>
             <a href="{{ route('dashboard') }}" class="waves-effect"><i class="dripicons-device-desktop "></i><span>
                     Business Overview </span></a>

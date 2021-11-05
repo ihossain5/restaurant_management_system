@@ -5,6 +5,18 @@
 @section('pageCss')
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/menu.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
+    <style>
+        .restaurant-status-txt {
+            font-family: "Roboto", sans-serif;
+            font-style: italic;
+            font-weight: 300;
+    font-size: 1.8rem;
+            line-height: 3rem;
+            /* text-align: center; */
+            color: #DE973D;
+        }
+
+    </style>
 @endsection
 @section('content')
     <!-- Menu Page Carousel -->
@@ -28,7 +40,6 @@
             </div>
         </section>
     @endif
-
     <!-- Restaurent Details -->
     <section class="container-fluid restaurent-Details">
         <div class="row">
@@ -40,18 +51,24 @@
                 <img class="restaLogo" src="{{ asset('images/' . $restaurant->logo) }}" alt="">
             </div>
             <div class="col-12 restaurSubTitle text-center">
-                <p> {{ $restaurant->status_id == null ? '' : ($restaurant->status->name == 'CLOSED' ? 'Restaurant is closed now' : 'Delivery available only in Gulshan') }}
-                </p>
+                @if ($restaurant->restaurant_status_id != null && $restaurant->status->name == 'CLOSED')
+                    <p>Restaurant is closed now</p>
+                @else
+                    <p>
+                        Delivery available only in @foreach ($restaurant_locations as $location) {{ $location }},  @endforeach
+                    </p>
+                @endif
+                {{-- <p> {{ $restaurant->restaurant_status_id == null ? '' : ($restaurant->status->name == 'CLOSED' ? 'Restaurant is closed now' : 'Delivery available only in Gulshan') }}
+                </p> --}}
             </div>
             <div class="col-12 restaurDetails text-center">
                 <p>{!! $restaurant->description !!}</p>
-
                 <a id="menu" href="{{ route('frontend.about.us') }}#{{ $restaurant->restaurant_id }}">Read More</a>
             </div>
         </div>
     </section>
     <!-- Menu -->
-    {{-- <section class="container-fluid menu-section">
+    <section class="container-fluid menu-section">
         <div class="row">
             <div class="col-12">
                 <h1 class="menuTitle">Menu</h1>
@@ -114,11 +131,18 @@
                                                     </div>
                                                     <div class="col-md-6 pt-5 pt-md-0 text-start text-md-end">
                                                         <h3 class="price">Tk. {{ $item->price }}</h3>
-                                                        <button
-                                                            class="{{ $restaurant->disable == true ? 'addTocart' : 'cartBtn' }}  {{ $restaurant->status->name == 'CLOSED' ? 'd-none' : ' ' }}   menuCartBtn  addTocartBtnId{{ $item->category->restaurant->restaurant_id }}"
-                                                            onclick="addToCart({{ $item->item_id }},{{ $item->category->restaurant->restaurant_id }})">Add
-                                                            to Cart
-                                                        </button>
+                                                        @if ($restaurant->disable == true)
+                                                            <p class="restaurant-status-txt">Delivery is not available in
+                                                                this area</p>
+                                                        @elseif($restaurant->status->name == 'CLOSED')
+                                                            <p class="restaurant-status-txt">Restaurant is closed now</p>
+                                                        @else
+                                                            <button
+                                                                class="{{ $restaurant->disable == true ? 'addTocart' : 'cartBtn' }}  {{ $restaurant->status->name == 'CLOSED' ? 'd-none' : ' ' }}   menuCartBtn  addTocartBtnId{{ $item->category->restaurant->restaurant_id }}"
+                                                                onclick="addToCart({{ $item->item_id }},{{ $item->category->restaurant->restaurant_id }})">Add
+                                                                to Cart
+                                                            </button>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -133,9 +157,9 @@
                 </div>
             </div>
         </div>
-    </section> --}}
+    </section>
 
-    <section class="menu-title-wrapper">
+    {{-- <section class="menu-title-wrapper">
         <div class="container">
             <h1 class="menuTitle">Menu</h1>
         </div>
@@ -195,12 +219,18 @@
                                             </div>
                                             <div class="col-md-6 pt-5 pt-md-0 text-start text-md-end">
                                                 <h3 class="price">Tk. {{ currency_format($item->price) }}</h3>
-
+                                            
+                                                @if ($restaurant->disable == true)
+                                                <p class="restaurant-status-txt">Delivery is not available in the area</p>
+                                            @elseif($restaurant->status->name == 'CLOSED')
+                                                <p class="restaurant-status-txt">Restaurant is closed now</p>
+                                            @else
                                                 <button
                                                     class="{{ $restaurant->disable == true ? 'addTocart' : 'cartBtn' }}  {{ $restaurant->status->name == 'CLOSED' ? 'd-none' : ' ' }}   menuCartBtn  addTocartBtnId{{ $item->category->restaurant->restaurant_id }}"
                                                     onclick="addToCart({{ $item->item_id }},{{ $item->category->restaurant->restaurant_id }})">Add
                                                     to Cart
                                                 </button>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -213,12 +243,12 @@
                 <!-- category loop end -->
             @endif
         </div>
-    </section>
+    </section> --}}
 
     @include('layouts.frontend.partials.location_modal')
 @endsection
 @section('pageScripts')
-<script src="{{asset('frontend/assets/js/jquery.mousewheel.min.js')}}"></script>
+    <script src="{{ asset('frontend/assets/js/jquery.mousewheel.min.js') }}"></script>
     <script>
         $('.body').attr('data-bs-spy', 'scroll');
         $('.body').attr('data-bs-target', '#navbarMenu');
@@ -273,7 +303,7 @@
                 var navbarHeight = $('.navbar').innerHeight();
                 $('.menu-navbar-wrapper.sticky-top').css('top', `${parseFloat(navbarHeight -2)}px`)
             })
-            $(window).on('wheel', function () {
+            $(window).on('wheel', function() {
                 $('.categories').removeClass('active');
             });
         })

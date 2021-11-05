@@ -20,7 +20,6 @@ class AdminController extends Controller {
         return view('admin.login');
     }
     public function index() {
-        // dd('data');
         return view('admin.dashboard');
     }
     public function passwordChange() {
@@ -50,12 +49,13 @@ class AdminController extends Controller {
         return view('admin.profile_update', compact('user'));
     }
     public function profileUpdate(Request $request) {
+        // dd($request->all());
         $user = Auth::user();
         $this->validate($request, [
             'name'  => 'required|max:100',
             'phone' => 'required|max:20',
             'email' => 'required|max:100|email|unique:users,email,' . $user->id,
-            'image' => 'dimensions:width=200px,height=200px',
+            'image' => 'nullable|max:600|mimes:jpg,png,jpeg',
 
         ]);
         $image = $request->image;
@@ -63,24 +63,15 @@ class AdminController extends Controller {
             if ($user->image != null) {
                 File::delete(public_path('images/' . $user->image));
             }
-            $image_name = hexdec(uniqid());
-            $ext        = strtolower($image->getClientOriginalExtension());
-
-            $image_full_name = $image_name . '.' . $ext;
-            $upload_path     = 'avatar/';
-            $upload_path1    = 'images/avatar';
-            $image_url       = $upload_path . $image_full_name;
-            $success         = $image->move($upload_path1, $image_full_name);
-            // $img = Image::make($image)->resize(680, 437);
-            // $img->save($upload_path1 . $image_full_name, 60);
-
+            $path    = 'avatar/';
+            $image_url = storeImage($image, $path, 200, 200);
         } else {
-            $image_url = $user->image;
+            $image_url = $user->photo;
         }
         $user->update([
             'name'    => $request->name,
-            'image'   => $image_url,
-            'contact' => $request->contact,
+            'photo'   => $image_url,
+            'contact' => $request->phone,
             'email'   => $request->email,
 
         ]);
@@ -88,10 +79,9 @@ class AdminController extends Controller {
     }
 
     public function allAdmin() {
-        $users = User::where('is_super_admin', 1)
+        $users = User::where('is_admin', 1)
             ->where('id', '!=', auth()->user()->id)
             ->orderBy('id', 'DESC')->get();
-        // dd($users);
         return view('admin.user_management.admin', compact('users'));
     }
 
@@ -111,29 +101,37 @@ class AdminController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(AdminStoreRequest $request) {
-        $token = Str::random(30);
-        $user  = User::create($request->validated() + [
-            'password'       => $token,
-            'token'          => $token,
-            'is_super_admin' => 1,
-            'is_active'      => 1,
-        ]);
-        $maildata = [
-            'title'   => 'Geetings from Emerald',
-            'message' => 'You are invited to use Emerald. You can now register here for free',
-            'url'     => route('send.email', [$token]),
-        ];
-        Mail::to($request->email)->send(new SendMail($maildata));
-        $data              = array();
-        $data['message']   = 'Admin added successfully';
-        $data['name']      = $user->name;
-        $data['email']     = $user->email;
-        $data['contact']   = $user->contact ?? 'N/A';
-        $data['photo']     = $user->photo;
-        $data['sex']       = $user->sex ?? 'N/A';
-        $data['id']        = $user->id;
-        $data['is_active'] = $user->is_active;
-        return success($data);
+        $adminStatus = $this->adminAvailability();
+        if ($adminStatus == true) {
+            $token = Str::random(30);
+            $user  = User::create($request->validated() + [
+                'password'  => $token,
+                'token'     => $token,
+                'is_admin'  => 1,
+                'is_active' => 1,
+            ]);
+            $maildata = [
+                'title'   => 'Geetings from Emerald',
+                'message' => 'You are invited to use Emerald. You can now register here for free',
+                'url'     => route('send.email', [$token]),
+            ];
+            Mail::to($request->email)->send(new SendMail($maildata));
+            $data              = array();
+            $data['message']   = 'Admin added successfully';
+            $data['name']      = $user->name;
+            $data['email']     = $user->email;
+            $data['contact']   = $user->contact ?? 'N/A';
+            $data['photo']     = $user->photo;
+            $data['sex']       = $user->sex ?? 'N/A';
+            $data['id']        = $user->id;
+            $data['is_active'] = $user->is_active;
+            return success($data);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'You have no permission to create an admin',
+            ]);
+        }
 
     }
 
@@ -260,20 +258,28 @@ class AdminController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request) {
-        $employee = User::findOrFail($request->id);
-        if ($employee->id == auth()->user()->id) {
-            return response()->json([
-                'message' => 'You can not delete your own data',
-            ]);
-        } else {
-            $employee->delete();
-            File::delete(public_path('images/' . $employee->photo));
-            $data['message'] = 'Admin deleted successfully';
-            $data['id']      = $request->id;
+        $adminStatus = $this->adminAvailability();
+        if ($adminStatus == true) {
+            $employee = User::findOrFail($request->id);
+            if ($employee->id == auth()->user()->id) {
+                return response()->json([
+                    'message' => 'You can not delete your own data',
+                ]);
+            } else {
+                $employee->delete();
+                File::delete(public_path('images/' . $employee->photo));
+                $data['message'] = 'Admin deleted successfully';
+                $data['id']      = $request->id;
 
+                return response()->json([
+                    'success' => true,
+                    'data'    => $data,
+                ]);
+            }
+        } else {
             return response()->json([
-                'success' => true,
-                'data'    => $data,
+                'success' => false,
+                'message' => 'You have no permission to delete an admin',
             ]);
         }
 
@@ -346,5 +352,13 @@ class AdminController extends Controller {
         $data            = [];
         $data['message'] = 'Status has been updated';
         return success($data);
+    }
+
+    protected function adminAvailability() {
+        if (auth()->user()->is_super_admin == 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

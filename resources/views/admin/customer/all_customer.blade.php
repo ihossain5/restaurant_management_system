@@ -91,9 +91,37 @@
                 <div class="col-12">
                     <div class="card m-b-30">
                         <div class="card-body">
-                            <div class="d-flex justify-content-between mb-4">
-                                <div class="ms-header-text">
-                                    <h4 class="mt-0 header-title">All Customers</h4>
+                            <div class="row pb-5">
+                                <div class="col-lg-4">
+                                    <h4 class="mt-0 header-title">All Customer </h4>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="row">
+                                        <div class="col-lg-10">
+                                        </div>
+                                        <div class="col-lg-2 pr-0">
+                                            <div class="dropdown">
+                                                <button class="custom-select downloadDropDown" type="button"
+                                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                    <img src="{{ asset('backend/assets/icons/download-icon.svg') }}"
+                                                        alt="">
+                                                </button>
+                                                <div class="dropdown-menu downloadMenu"
+                                                    aria-labelledby="dropdownMenuButton">
+                                                    <button onclick="downloadPdf()"><img
+                                                            src="{{ asset('backend/assets/icons/pdf-icon.svg') }}" alt="">
+                                                        PDF
+                                                        File</button>
+                                                    <button onclick="downloadCsv()"><img
+                                                            src="{{ asset('backend/assets/icons/csv-icon.svg') }}" alt="">
+                                                        CSV
+                                                        File</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                             <table id="customerTable" class="table table-bordered dt-responsive nowrap"
@@ -187,13 +215,37 @@
                 dom: 'Bfrtip',
                 buttons: [{
                         extend: 'csvHtml5',
-                        text: '<img src="{{ asset('backend/assets/icons/pdf-icon.svg') }}" alt=""> CSV File',
                         titleAttr: 'CSV File',
-                        className: 'downloadMenu',
+                        filename: 'Customer Data',
+                        className: 'd-none',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5],
+                            charSet: "utf-8",
+                        },
+                        customizeData: function(data) {
+                            var ind = data.header.indexOf(
+                            "Phone"); // This code is to find the column name's index which you want to cast.
+                            for (var i = 0; i < data.body.length; i++) {
+                                data.body[i][ind] = '\u200C' + data.body[i][
+                                ind]; //will cast the number to string.
+                            }
+                        },
                     },
-                    'pdfHtml5'
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'Customer',
+                        filename: 'Customer Data',
+                        className: 'd-none',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5],
+                        },
+                    },
+
                 ],
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 serverSide: true,
                 ajax: url,
                 columns: [{

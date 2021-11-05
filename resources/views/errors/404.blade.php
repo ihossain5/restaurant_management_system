@@ -8,6 +8,7 @@
     404
 @endsection
 @section('pageCss')
+<link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/404.css') }}">
 @endsection
 @section('content')

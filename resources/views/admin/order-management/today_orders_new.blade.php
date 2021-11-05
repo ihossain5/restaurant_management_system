@@ -8,28 +8,81 @@
 
 @section('pageCss')
     <style>
-        .txt-preparing {
-            color: rgb(38, 38, 160);
-            font-weight: 600;
-        }
-
-        .txt-cancelled {
-            color: rgb(255, 0, 0);
-            font-weight: 600;
-        }
-
-        .txt-delivering {
-            color: rgb(189, 179, 45);
-            font-weight: 600;
-        }
-
-        .txt-completed {
-            color: rgb(6, 78, 4);
-            font-weight: 600;
-        }
-
         .view-modal p {
             line-height: 2;
+        }
+
+        .order-status-btn {
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 24px;
+            text-transform: capitalize;
+            border-radius: 5px;
+            border: 0;
+            background: transparent;
+            padding: 5px 30px;
+            display: inline-block;
+        }
+
+        .order-status-btn.preparing {
+            border: 2px solid #153289;
+            color: #153289;
+        }
+
+        .order-status-btn.cancelled {
+            border: 2px solid #ff0000;
+            color: #ff0000;
+        }
+
+        .order-status-btn.delivering {
+            border: 2px solid #b4ad06;
+            color: #b4ad06;
+        }
+
+        .order-status-btn.completed {
+            border: 2px solid #176a2d;
+            color: #176a2d;
+        }
+
+        .order-status-btn.pending {
+            border: 2px solid #DE973D;
+            color: #DE973D;
+        }
+
+        .table>tfoot>tr>td {
+            padding: 4px 12px;
+        }
+
+        .orderTable tfoot td:first-child {
+            font-weight: normal;
+        }
+
+        .orderTable tfoot tr:last-child td:first-child {
+            font-weight: bold;
+        }
+        .pending {
+            font-weight: 600;
+            color: #DE973D;
+        }
+
+        .completed {
+            color: #176a2d;
+            font-weight: 600;
+        }
+
+        .cancelled {
+            color: #ff0000;
+            font-weight: 600;
+        }
+
+        .preparing {
+            color: #153289;
+            font-weight: 600;
+        }
+
+        .delivering {
+            color: #b4ad06;
+            font-weight: 600;
         }
 
     </style>
@@ -45,13 +98,39 @@
                 <div class="col-12">
                     <div class="card m-b-30">
                         <div class="card-body">
-                            <div class="d-flex justify-content-between mb-4">
-                                <div class="ms-header-text">
+                            <div class="row pb-5">
+                                <div class="col-lg-4">
                                     <h4 class="mt-0 header-title">All Today's Order</h4>
                                 </div>
-                            </div>
+                                <div class="col-lg-8">
+                                    <div class="row">
+                                        <div class="col-lg-10">
+                                        </div>
+                                        <div class="col-lg-2 pr-0">
+                                            <div class="dropdown">
+                                                <button class="custom-select downloadDropDown" type="button"
+                                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                    <img src="{{ asset('backend/assets/icons/download-icon.svg') }}"
+                                                        alt="">
+                                                </button>
+                                                <div class="dropdown-menu downloadMenu"
+                                                    aria-labelledby="dropdownMenuButton">
+                                                    <button onclick="downloadPdf()"><img
+                                                            src="{{ asset('backend/assets/icons/pdf-icon.svg') }}" alt="">
+                                                        PDF
+                                                        File</button>
+                                                    <button onclick="downloadCsv()"><img
+                                                            src="{{ asset('backend/assets/icons/csv-icon.svg') }}" alt="">
+                                                        CSV
+                                                        File</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                            <span class="showError"></span>
+                                </div>
+                            </div>
                             <div class="table-responsive">
                                 <table id="orderTable" class="table table-bordered dt-responsive nowrap"
                                     style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -83,10 +162,6 @@
 
     </div> <!-- Page content Wrapper -->
 
-
-
-
-
     <div class="modal addModal fade" id="viewOrderModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
@@ -98,21 +173,28 @@
                 </div>
                 <div class="modal-body pt-3 orderDeta-body">
                     <div class="row">
-                        <input type="hidden" name="order_id" id="order_id">
                         <div class="col-12">
-                            <h4>Order ID: #<span id="view_order_id"></span></h4>
-                            <h4>Customer Name: <span id="view_customer_name"></span></h4>
-                            <h4>Customer Email: <span id="view_customer_email"></span></h4>
-                            <h4>Customer Contact: <span id="view_customer_contact"></span></h4>
-                            <h4>Customer Address: <span id="view_customer_address"></span></h4>
-                            <h4>Special Notes: <span id="view_notes"></span></h4>
-                            {{-- <button class="float-right">sadasdas</button> --}}
+                            <div class="row">
+                                <input type="hidden" name="order_id" id="order_id">
+                                <div class="col-12 col-md-9">
+                                    <h4>Order ID: #<span id="view_order_id"></span></h4>
+                                    <h4>Customer Name: <span id="view_customer_name"></span></h4>
+                                    <h4>Customer Email: <span id="view_customer_email"></span></h4>
+                                    <h4>Customer Contact: <span id="view_customer_contact"></span></h4>
+                                    <h4>Customer Address: <span id="view_customer_address"></span></h4>
+                                    <h4>Special Notes: <span id="view_notes"></span></h4>
+                                </div>
+                                <div class="col-12 col-md-3 text-right align-self-end">
+                                    <button id="orderStatusBtn" class="order-status-btn text-center "></button>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-12 mt-3">
                             <h4>Ordered Items</h4>
                         </div>
                         <div class="col-12">
                             <div class="table-responsive">
+
                                 <table class="table table-bordered text-center orderTable">
                                     <thead>
                                         <tr>
@@ -127,19 +209,28 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td>Total Amount</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td class="view_total"></td>
+                                            <td colspan="3">Sub Total</td>
+                                            <td>Tk <span class="subTotal"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">Vat</td>
+                                            <td>Tk <span class="vatAmount"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">Delivery Fee</td>
+                                            <td>Tk <span class="deleveryFee"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">Total Amount</td>
+                                            <td>Tk <span class="view_total">1,500</span> </td>
                                         </tr>
                                     </tfoot>
                                 </table>
                             </div>
                         </div>
 
-                        <div class="col-md-12">
-                            <button data-dismiss="modal" class="btn btn-block btn-custom btnAccept mb-3 accept_btn">
-                                Done</button>
+                        <div class="col-md-12 ">
+                            <button data-dismiss="modal" class="btn-custom btnAccept btn-block mt-2">Done</button>
                         </div>
                     </div>
                 </div>
@@ -188,11 +279,11 @@
                         setOrderDetails(response);
                         orderStatus(response.data.order_status_id, response);
                         orderItems(response.data.orderItems);
-                        $('.view_total').html('৳ ' + bdCurrencyFormat(response.data.amount));
+                        $('.view_total').html(bdCurrencyFormat(response.data.amount));
+                        $('.subTotal').html(bdCurrencyFormat(response.data.sutTotal));
+                        $('.vatAmount').html(bdCurrencyFormat(response.data.vat_amount ?? 0));
                         if (response.data.delivery_fee != null) {
-                            $('.deleveryFee').html('৳ ' + bdCurrencyFormat(response.data.delivery_fee));
-                        } else {
-                            $('.deleveryFee').html('৳ ' + 0);
+                            $('.deleveryFee').html(bdCurrencyFormat(response.data.delivery_fee));
                         }
                         $('#viewOrderModal').modal('show');
 
@@ -233,9 +324,9 @@
                 var total_price = two_decimal(val.pivot.quantity * val.pivot.price);
                 $('.apeend_tbody').append(
                     `<tr><td class="item_name">${val.name}</td>
-                <td class="item_price">${'৳ ' + bdCurrencyFormat( val.price)}</td>
+                <td class="item_price">${'TK ' + bdCurrencyFormat( val.price)}</td>
                 <td class="item_quantity">${val.pivot.quantity}</td>
-                <td class="item_total_price">${'৳ ' + bdCurrencyFormat(val.pivot.price) }</td></tr>`
+                <td class="item_total_price">${'TK ' + bdCurrencyFormat(val.pivot.price) }</td></tr>`
                 );
             });
         }
@@ -244,30 +335,23 @@
         function orderStatus(order_status_id, response) {
             if (order_status_id != null) {
                 if (response.data.status.name == 'Preparing') {
-                    var class_name = 'primary';
+                    var class_name = 'preparing';
                 } else if (response.data.status.name == 'Delivering') {
-                    var class_name = 'success';
+                    var class_name = 'delivering';
                 } else if (response.data.status.name == 'Completed') {
-                    var class_name = 'success';
+                    var class_name = 'completed';
                 } else {
-                    var class_name = 'danger';
+                    var class_name = 'cancelled';
                 }
-                $('#order_status').attr('class', 'btn float-right btn-outline-' + class_name + ' ' +
-                    response.data.class);
-                $('#order_status').text(response.data.status.name);
-
-                if (order_status_id == 4) {
-                    $('.deny_btn').prop('disabled', true);
-                    $('.edit_btn').prop('disabled', true);
-                } else {
-                    $('.deny_btn').prop('disabled', false);
-                    $('.edit_btn').prop('disabled', false);
-                }
+                $('.order-status-btn').html(response.data.status.name);
+            } else {
+                $('.order-status-btn').html('Pending');
+                var class_name = 'pending';
             }
-
+            $('#orderStatusBtn').removeClass();
+            $('#orderStatusBtn').addClass('order-status-btn text-center ' + class_name);
 
         }
-        
         // restaurant change
         $(document).on('click', '.restaurant', function() {
             var id = $(this).data('id');
@@ -312,6 +396,38 @@
             var table = $('#orderTable').DataTable({
                 // processing: true,
                 serverSide: true,
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'csvHtml5',
+                        titleAttr: 'CSV File',
+                        filename: 'today' + 's orders',
+                        className: 'd-none',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5],
+                            charSet: "utf-8",
+                        },
+                        customizeData: function(data) {
+                            var ind = data.header.indexOf(
+                                "Phone"
+                                ); // This code is to find the column name's index which you want to cast.
+                            for (var i = 0; i < data.body.length; i++) {
+                                data.body[i][ind] = '\u200C' + data.body[i][
+                                    ind
+                                ]; //will cast the number to string.
+                            }
+                        },
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'Today' + 's Orders',
+                        filename: 'today' + 's orders',
+                        className: 'd-none',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5],
+                        },
+                    },
+
+                ],
                 ajax: url,
                 columns: [{
                         data: 'id'
@@ -338,7 +454,29 @@
                         orderable: true,
                         searchable: true
                     },
-                ]
+                ],
+                "columnDefs": [{
+                    "targets": [1],
+                    "createdCell": function(td, cellData, rowData, row, col) {
+                        switch (cellData) {
+                            case "Pending":
+                                $(td).addClass('pending');
+                                break;
+                            case "Completed":
+                                $(td).addClass('completed');
+                                break;
+                            case "Cancelled":
+                                $(td).addClass('cancelled');
+                                break;
+                            case "Delivering":
+                                $(td).addClass('delivering');
+                                break;
+                            case "Preparing":
+                                $(td).addClass('preparing');
+                                break;
+                        }
+                    }
+                }],
             });
         }
     </script>

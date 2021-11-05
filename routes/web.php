@@ -234,9 +234,15 @@ Route::get('/send-email/{token}', [ManagerController::class, 'registerNewManager
 Route::post('/sign-up', [ManagerController::class, 'userSignUp'])->name('user.sign.up');
 
 //* manager routes start */
+
+Route::get('/manager', [ManagerController::class, 'login'])->name('manager.log.in');
+Route::post('/manager', [ManagerController::class, 'singIn'])->name('manager.sign.in');
+
 Route::group(['prefix' => 'manager', 'middleware' => ['auth', 'manager']], function () {
     Route::get('dashboard', [ManagerDashboardController::class, 'index'])->name('manager.dashboard');
     Route::post('update/restaurant-status', [ManagerDashboardController::class, 'updateRestaurantStatus'])->name('manager.restaurant.status.update');
+    Route::get('/profile-update', [AdminController::class, 'profile'])->name('user.profile');
+    Route::post('/profile-update', [AdminController::class, 'profileUpdate'])->name('profile.update');
 
     /* Item Routes */
     Route::get('/items', [ItemController::class, 'itemsByManager'])->name('manager.restaurant.items');

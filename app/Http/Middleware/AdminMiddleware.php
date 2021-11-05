@@ -18,10 +18,10 @@ class AdminMiddleware {
      * @return mixed
      */
     public function handle(Request $request, Closure $next) {
-        if ($this->user->is_super_admin != 0 && $this->user->is_active != 0) {
+        if ($this->user->is_super_admin != 0 || $this->user->is_admin != 0 && $this->user->is_active != 0) {
             return $next($request);
         } else {
-            abort(403);
+           return redirect()->back()->with('error','You have no permission to access this');
         }
 
     }

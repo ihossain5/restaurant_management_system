@@ -12,7 +12,8 @@ class RestaurantMenuController extends Controller
 {
     public function getRestaurant(Restaurant $restaurant){
         $locations =  DeliveryLocation::get()->unique('name');
-        $restaurant->load('assets','restaurant_categories','restaurant_categories.available_items','status');  
+        $restaurant->load('assets','restaurant_categories','restaurant_categories.available_items','status','delivery_locations');
+        $restaurant_locations= $restaurant->delivery_locations->pluck('name');  
         $images=[];
         if (Session::has('restaurantIds')){
             if (in_array($restaurant->restaurant_id, Session::get('restaurantIds')->toArray())) {
@@ -29,6 +30,6 @@ class RestaurantMenuController extends Controller
                 $images[] = $asset->pivot->asset;
             }
         }  
-        return view('frontend.restaurant.restaurant_menu', compact('restaurant','images','locations'));
+        return view('frontend.restaurant.restaurant_menu', compact('restaurant','images','locations','restaurant_locations'));
     }
 }

@@ -78,8 +78,11 @@
                                         <tr>
                                             <th>Date</th>
                                             <th>Order Id</th>
+                                            <th>Status</th>
+                                            <th>Customer Name</th>
+                                            <th>Customer Contact</th>
+                                            <th>Customer Address</th>
                                             <th>Revenue</th>
-
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -96,10 +99,12 @@
                                     <tfoot>
                                         <tr class="table-active">
                                             <td class="col-3 font-weight-bold">TOTAL</td>
-                                            <td class="col-3 font-weight-bold">TOTAL <span
-                                                    class="total_orders">{{ $total_order }}</span> ORDERS</td>
-                                            <td class="col-3 font-weight-bold ">TOTAL <span class="total_amount">৳
-                                                    {{ currency_format($total_amount) }}</span></td>
+                                            <td class="col-3 font-weight-bold">TOTAL <span class="total_orders">{{$total_order}}</span> ORDERS</td>
+                                            <td class="col-3 font-weight-bold"></td>
+                                            <td class="col-3 font-weight-bold"></td>
+                                            <td class="col-3 font-weight-bold"></td>
+                                            <td class="col-3 font-weight-bold"></td>
+                                            <td class="col-3 font-weight-bold ">TOTAL <span class="total_amount">{{currency_format($total_amount)}}</span></td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -108,26 +113,12 @@
                     </div>
                 </div> <!-- end col -->
             </div> <!-- end row -->
-
-
-
-
         </div><!-- container -->
-
     </div> <!-- Page content Wrapper -->
 
-
-
-    @include('layouts.admin.restaurant_add_modal')
+@include('layouts.admin.restaurant_add_modal')
 @endsection
 @section('pageScripts')
-    {{-- <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-<script src=" https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>  
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script> --}}
-
     <script type='text/javascript'>
         CKEDITOR.replace('restaurant_description');
         var config = {
@@ -150,30 +141,47 @@
             var url = '{{ route('order.report.restaurant.current.month', ':id') }}';
             url = url.replace(':id', id);
             var table = $('#orderTable').DataTable({
-                // processing: true,
                 dom: 'Bfrtip',
                 buttons: [{
                         extend: 'csvHtml5',
+                        filename: 'daily reports',
                         className: 'd-none',
                     },
                     {
                         extend: 'pdfHtml5',
+                        filename: 'daily reports',
+                        title: 'Daily Reports',
                         className: 'd-none',
                     },
                 ],
                 serverSide: true,
                 ajax: url,
-                columns: [{
-                        data: 'date'
+                columns: [
+
+                    {
+                        data: 'order_date'
                     },
                     {
                         data: 'id'
                     },
                     {
-                        data: 'amount'
+                        data: 'status'
                     },
-                ]
+                    {
+                        data: 'customer_name'
+                    },
+                    {
+                        data: 'customer_contact'
+                    },
+                    {
+                        data: 'customer_adress'
+                    },
+                    {
+                        data: 'total'
+                    },
+                ],
             });
+            hideColumn(table);
         });
 
         // restaurant change
@@ -290,26 +298,54 @@
                 dom: 'Bfrtip',
                 buttons: [{
                         extend: 'csvHtml5',
+                        filename: 'daily reports',
                         className: 'd-none',
                     },
                     {
                         extend: 'pdfHtml5',
+                        filename: 'daily reports',
+                        title: 'Daily Reports',
                         className: 'd-none',
                     },
                 ],
                 serverSide: true,
                 ajax: url,
-                columns: [{
-                        data: 'date'
+                columns: [
+
+                    {
+                        data: 'order_date'
                     },
                     {
                         data: 'id'
                     },
                     {
-                        data: 'amount'
+                        data: 'status'
                     },
-                ]
+                    {
+                        data: 'customer_name'
+                    },
+                    {
+                        data: 'customer_contact'
+                    },
+                    {
+                        data: 'customer_adress'
+                    },
+                    {
+                        data: 'total'
+                    },
+                ],
             });
+            hideColumn(table);
+        }
+        function hideColumn(table) {
+            let column2 = table.column(2);
+            column2.visible(false);
+            let column3 = table.column(3);
+            column3.visible(false);
+            let column4 = table.column(4);
+            column4.visible(false);
+            let column5 = table.column(5);
+            column5.visible(false);
         }
     </script>
 @endsection

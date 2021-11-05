@@ -82,7 +82,7 @@ class OrderController extends Controller {
         return DataTables::of($restaurant_orders)
             ->addIndexColumn()
             ->addColumn('status', function ($data) {
-                return $data->status == null ? 'pending' : $data->status->name;
+                return $data->status == null ? 'Pending' : $data->status->name;
             })
             ->addColumn('order_date', function ($data) {
                 return formatDate($data->created_at);

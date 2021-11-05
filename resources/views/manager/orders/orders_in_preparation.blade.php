@@ -5,11 +5,23 @@ Orders in Preparation
 @section('page-header')
      Orders in Preparation
 @endsection
-
-
 @section('pageCss')
     <style>
+        .table>tfoot>tr>td {
+            padding: 4px 12px;
+        }
 
+        .orderTable tfoot td:first-child {
+            font-weight: normal;
+        }
+
+        .orderTable tfoot tr:last-child td:first-child {
+            font-weight: bold;
+        }
+
+        .modal button {
+            cursor: pointer;
+        }
     </style>
 @endsection
 @section('content')
@@ -95,10 +107,20 @@ Orders in Preparation
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td>Total Amount</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td class="view_total"></td>
+                                            <td colspan="3">Sub Total</td>
+                                            <td>Tk <span class="subTotal"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">Vat</td>
+                                            <td>Tk <span class="vatAmount"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">Delivery Fee</td>
+                                            <td>Tk <span class="deleveryFee"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">Total Amount</td>
+                                            <td>Tk <span class="view_total"></span> </td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -271,6 +293,9 @@ Orders in Preparation
         </div>
     </div>
     <!-- order deny Modal End -->
+
+    <input type="hidden" name="" id="managerRestaurantId"
+    value="{{ Auth::user()->restaurant->restaurant_id }}">
 @endsection
 @section('pageScripts')
     <script src="{{ asset('backend/assets/js/order.js') }}"></script>
@@ -296,110 +321,110 @@ Orders in Preparation
         });
 
 
-        function viewOrder(id) {
-    $.ajax({
-        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-        url: config.routes.view,
-        method: "POST",
-        data: {
-            id: id,
-            // _token: "{{ csrf_token() }}"
-        },
-        dataType: "json",
-        success: function(response) {
-            if (response.success == true) {
-                setOrderDetails(response);
-                orderStatus(response.data.order_status_id, response);
-                orderItems(response.data.orderItems);
-                addBtnToModal(response.data.order_id);
-                $('.view_total').html('৳ ' + bdCurrencyFormat(response.data.amount));
+//     function viewOrder(id) {
+//     $.ajax({
+//         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+//         url: config.routes.view,
+//         method: "POST",
+//         data: {
+//             id: id,
+//             // _token: "{{ csrf_token() }}"
+//         },
+//         dataType: "json",
+//         success: function(response) {
+//             if (response.success == true) {
+//                 setOrderDetails(response);
+//                 orderStatus(response.data.order_status_id, response);
+//                 orderItems(response.data.orderItems);
+//                 addBtnToModal(response.data.order_id);
+//                 $('.view_total').html('৳ ' + bdCurrencyFormat(response.data.amount));
 
-                if (response.data.delivery_fee != null) {
-                    $('.deleveryFee').html('৳ ' + bdCurrencyFormat(response.data.delivery_fee));
-                } else {
-                    $('.deleveryFee').html('৳ ' + 0);
-                }
-                $('#viewOrderModal').modal('show');
+//                 if (response.data.delivery_fee != null) {
+//                     $('.deleveryFee').html('৳ ' + bdCurrencyFormat(response.data.delivery_fee));
+//                 } else {
+//                     $('.deleveryFee').html('৳ ' + 0);
+//                 }
+//                 $('#viewOrderModal').modal('show');
 
-            } //success end
+//             } //success end
 
-        },
-        error: function(error) {
-            if (error.status == 404) {
-                toastMixin.fire({
-                    icon: 'error',
-                    animation: true,
-                    title: "" + 'Data not found' + ""
-                });
+//         },
+//         error: function(error) {
+//             if (error.status == 404) {
+//                 toastMixin.fire({
+//                     icon: 'error',
+//                     animation: true,
+//                     title: "" + 'Data not found' + ""
+//                 });
 
 
-            }
-        },
-    }); //ajax end
-}
+//             }
+//         },
+//     }); //ajax end
+// }
 
 // set order item 
-function orderItems(orderItems) {
-    $('.apeend_tbody').empty();
-    $.each(orderItems, function(key, val) {
-        var total_price = two_decimal(val.pivot.quantity * val.pivot.price);
-        $('.apeend_tbody').append(
-            `<tr><td class="item_name">${val.name}</td>
-                <td class="item_price">${'৳ ' + bdCurrencyFormat( val.price)}</td>
-                <td class="item_quantity">${val.pivot.quantity}</td>
-                <td class="item_total_price">${'৳ ' + bdCurrencyFormat(val.pivot.price) }</td></tr>`
-        );
-    });
-}
+// function orderItems(orderItems) {
+//     $('.apeend_tbody').empty();
+//     $.each(orderItems, function(key, val) {
+//         var total_price = two_decimal(val.pivot.quantity * val.pivot.price);
+//         $('.apeend_tbody').append(
+//             `<tr><td class="item_name">${val.name}</td>
+//                 <td class="item_price">${'৳ ' + bdCurrencyFormat( val.price)}</td>
+//                 <td class="item_quantity">${val.pivot.quantity}</td>
+//                 <td class="item_total_price">${'৳ ' + bdCurrencyFormat(val.pivot.price) }</td></tr>`
+//         );
+//     });
+// }
 
-//set order status
-function orderStatus(order_status_id, response) {
-    if (order_status_id != null) {
-        if (response.data.status.name == 'Preparing') {
-            var class_name = 'primary';
-        } else if (response.data.status.name == 'Delivering') {
-            var class_name = 'success';
-        } else if (response.data.status.name == 'Completed') {
-            var class_name = 'success';
-        } else {
-            var class_name = 'danger';
-        }
-        $('#order_status').attr('class', 'btn float-right btn-outline-' + class_name + ' ' +
-            response.data.class);
-        $('#order_status').text(response.data.status.name);
+// //set order status
+// function orderStatus(order_status_id, response) {
+//     if (order_status_id != null) {
+//         if (response.data.status.name == 'Preparing') {
+//             var class_name = 'primary';
+//         } else if (response.data.status.name == 'Delivering') {
+//             var class_name = 'success';
+//         } else if (response.data.status.name == 'Completed') {
+//             var class_name = 'success';
+//         } else {
+//             var class_name = 'danger';
+//         }
+//         $('#order_status').attr('class', 'btn float-right btn-outline-' + class_name + ' ' +
+//             response.data.class);
+//         $('#order_status').text(response.data.status.name);
 
-        if (order_status_id == 4) {
-            $('.deny_btn').prop('disabled', true);
-            $('.edit_btn').prop('disabled', true);
-        } else {
-            $('.deny_btn').prop('disabled', false);
-            $('.edit_btn').prop('disabled', false);
-        }
-    }
+//         if (order_status_id == 4) {
+//             $('.deny_btn').prop('disabled', true);
+//             $('.edit_btn').prop('disabled', true);
+//         } else {
+//             $('.deny_btn').prop('disabled', false);
+//             $('.edit_btn').prop('disabled', false);
+//         }
+//     }
 
 
-}
+// }
 
-// set button to modal
-function addBtnToModal(order_id) {
-    $('.accept_btn').attr('onclick', "acceptOrder(" + order_id + ")")
-    $('.orderEditBtn').attr('onclick', "openEditModalAction(" + order_id + ")")
-}
+// // set button to modal
+// function addBtnToModal(order_id) {
+//     $('.accept_btn').attr('onclick', "acceptOrder(" + order_id + ")")
+//     $('.orderEditBtn').attr('onclick', "openEditModalAction(" + order_id + ")")
+// }
 
-//set order details
-function setOrderDetails(response) {
-    $('#order_id').val(response.data.order_id);
-    $('#view_order_id').text(response.data.id);
-    $('#view_customer_name').text(response.data.is_default_name == 1 ? response.data.name :
-        response.data.customer.name);
-    $('#view_customer_contact').text(response.data.is_default_contact == 1 ? response.data
-        .contact : response.data.customer.contact);
-    $('#view_customer_address').text(response.data.is_default_address == 1 ? response.data
-        .address : response.data.customer.address);
-    $('#view_customer_email').text(response.data.customer.email == null ? "N/A" : response.data.customer.email);
-    $('#view_notes').text(response.data.special_notes == null ? "N/A" : response.data.special_notes);
+// //set order details
+// function setOrderDetails(response) {
+//     $('#order_id').val(response.data.order_id);
+//     $('#view_order_id').text(response.data.id);
+//     $('#view_customer_name').text(response.data.is_default_name == 1 ? response.data.name :
+//         response.data.customer.name);
+//     $('#view_customer_contact').text(response.data.is_default_contact == 1 ? response.data
+//         .contact : response.data.customer.contact);
+//     $('#view_customer_address').text(response.data.is_default_address == 1 ? response.data
+//         .address : response.data.customer.address);
+//     $('#view_customer_email').text(response.data.customer.email == null ? "N/A" : response.data.customer.email);
+//     $('#view_notes').text(response.data.special_notes == null ? "N/A" : response.data.special_notes);
 
-}
+// }
 
 
         function acceptOrder(id) {

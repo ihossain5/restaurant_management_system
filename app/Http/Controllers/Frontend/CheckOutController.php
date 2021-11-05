@@ -45,7 +45,7 @@ class CheckOutController extends Controller {
     }
 
     public function placeOrder(OrderStoreRequest $request) {
-        // dd($request->all());
+    // dd($request->all());
         $customer_id = Auth::guard('customer')->user()->customer_id;
         $customer    = Customer::findOrFail($customer_id);
         $items       = $this->cart->allCartItems();
@@ -123,8 +123,8 @@ class CheckOutController extends Controller {
                 }
 
                 //destroy cart
-                // Cart::destroy();
-                // Session::forget('sessionRestaurantId');
+                Cart::destroy();
+                Session::forget('sessionRestaurantId');
                 Session::flash('success', 'Thanks for your order');
 
                 $newOrder = Order::where('order_status_id', null)

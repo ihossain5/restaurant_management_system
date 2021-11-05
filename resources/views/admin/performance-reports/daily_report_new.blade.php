@@ -72,6 +72,10 @@
                                         <tr>
                                             <th>Date</th>
                                             <th>Order Id</th>
+                                            <th>Status</th>
+                                            <th>Customer Name</th>
+                                            <th>Customer Contact</th>
+                                            <th>Customer Address</th>
                                             <th>Revenue</th>
                                         </tr>
                                     </thead>
@@ -79,7 +83,15 @@
 
                                     </tbody>
                                     <tfoot>
-                                        @include('layouts.admin.table_footer_order_total')
+                                        <tr class="table-active">
+                                            <td class="col-3 font-weight-bold">TOTAL</td>
+                                            <td class="col-3 font-weight-bold">TOTAL <span class="total_orders">{{$total_order}}</span> ORDERS</td>
+                                            <td class="col-3 font-weight-bold"></td>
+                                            <td class="col-3 font-weight-bold"></td>
+                                            <td class="col-3 font-weight-bold"></td>
+                                            <td class="col-3 font-weight-bold"></td>
+                                            <td class="col-3 font-weight-bold ">TOTAL <span class="total_amount">{{currency_format($total_orderAmount)}}</span></td>
+                                        </tr>
                                     </tfoot>
                                 </table>
                             </div>
@@ -111,32 +123,50 @@
             $('.restaurant_li').addClass('nav-active');
 
             var id = $('#restaurantId').val();
-            var url = '{{ route('daily.order.report.restaurant', ':id') }}';
+            var url = '{{ route('orders.daily.report', ':id') }}';
             url = url.replace(':id', id);
             var table = $('#orderTable').DataTable({
                 dom: 'Bfrtip',
                 buttons: [{
                         extend: 'csvHtml5',
+                        filename: 'monthly reports',
                         className: 'd-none',
                     },
                     {
                         extend: 'pdfHtml5',
+                        filename: 'monthly reports',
+                        title: 'Monthly Reports',
                         className: 'd-none',
                     },
                 ],
                 serverSide: true,
                 ajax: url,
-                columns: [{
-                        data: 'date'
+                columns: [
+
+                    {
+                        data: 'order_date'
                     },
                     {
                         data: 'id'
                     },
                     {
-                        data: 'amount'
+                        data: 'status'
                     },
-                ]
+                    {
+                        data: 'customer_name'
+                    },
+                    {
+                        data: 'customer_contact'
+                    },
+                    {
+                        data: 'customer_adress'
+                    },
+                    {
+                        data: 'total'
+                    },
+                ],
             });
+            hideColumn(table);
         });
         // restaurant change
         $(document).on('click', '.restaurant', function() {
@@ -160,7 +190,7 @@
                         setRestaurant(response.data.restaurant_name, response.data
                             .id); // set restaurant into topbar
                         $('.total_orders').html(response.data.total_order);
-                        $('.total_amount').html('৳ ' + bdCurrencyFormat(response.data.total_amount));
+                        $('.total_amount').html(bdCurrencyFormat(response.data.total_amount));
                         $('.current_date').html(response.data.current_date);
 
 
@@ -204,7 +234,7 @@
                         setSessionId(response.data.session_id);
                         $('.current_date').html(response.data.current_date);
                         $('.total_orders').html(response.data.total_order);
-                        $('.total_amount').html('৳ ' + bdCurrencyFormat(response.data.total_amount));
+                        $('.total_amount').html(bdCurrencyFormat(response.data.total_amount));
 
 
 
@@ -234,26 +264,55 @@
                 dom: 'Bfrtip',
                 buttons: [{
                         extend: 'csvHtml5',
+                        filename: 'monthly reports',
                         className: 'd-none',
                     },
                     {
                         extend: 'pdfHtml5',
+                        filename: 'monthly reports',
+                        title: 'Monthly Reports',
                         className: 'd-none',
                     },
                 ],
                 serverSide: true,
                 ajax: url,
-                columns: [{
-                        data: 'date'
+                columns: [
+
+                    {
+                        data: 'order_date'
                     },
                     {
                         data: 'id'
                     },
                     {
-                        data: 'amount'
+                        data: 'status'
                     },
-                ]
+                    {
+                        data: 'customer_name'
+                    },
+                    {
+                        data: 'customer_contact'
+                    },
+                    {
+                        data: 'customer_adress'
+                    },
+                    {
+                        data: 'total'
+                    },
+                ],
             });
+            hideColumn(table);
+        }
+
+        function hideColumn(table) {
+            let column2 = table.column(2);
+            column2.visible(false);
+            let column3 = table.column(3);
+            column3.visible(false);
+            let column4 = table.column(4);
+            column4.visible(false);
+            let column5 = table.column(5);
+            column5.visible(false);
         }
     </script>
 @endsection

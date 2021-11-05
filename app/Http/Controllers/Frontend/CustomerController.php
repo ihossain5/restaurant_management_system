@@ -50,8 +50,13 @@ class CustomerController extends Controller {
     }
 
     public function signOut() {
-        Auth::guard('customer')->logout();
-        return redirect()->route('frontend.index');
+        if (Auth::guard('customer')->check()) {
+            Auth::guard('customer')->logout();
+            return redirect()->route('frontend.index');
+        } else {
+            Session::flash('warning', 'Please sign in to continue');
+            return view('frontend.customer.sign_in');
+        }
     }
 
     public function customerOrders() {
@@ -59,6 +64,9 @@ class CustomerController extends Controller {
             $orders = Auth::guard('customer')->user()->orders;
             $orders->load('items', 'order_combos', 'customer', 'restaurant', 'status');
             return view('frontend.orders.my_orders', compact('orders'));
+        } else {
+            Session::flash('warning', 'Please sign in to continue');
+            return view('frontend.customer.sign_in');
         }
 
     }
@@ -77,8 +85,13 @@ class CustomerController extends Controller {
     }
 
     public function customerProfile() {
-        $customer = Auth::guard('customer')->user();
-        return view('frontend.customer.profile', compact('customer'));
+        if (Auth::guard('customer')->check()) {
+            $customer = Auth::guard('customer')->user();
+            return view('frontend.customer.profile', compact('customer'));
+        } else {
+            Session::flash('warning', 'Please sign in to continue');
+            return view('frontend.customer.sign_in');
+        }
     }
 
     public function customerProfilePhotoUpdate(Request $request) {
@@ -101,6 +114,9 @@ class CustomerController extends Controller {
                     'message' => 'Please upload a photo',
                 ]);
             }
+        } else {
+            Session::flash('warning', 'Please sign in to continue');
+            return view('frontend.customer.sign_in');
         }
     }
 

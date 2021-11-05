@@ -22,10 +22,11 @@ class OrderStoreRequest extends FormRequest {
     public function rules() {
         // $user = $this->user();
         return [
-            'name'    => 'required|max:255|string',
-            'email'   => 'required|email|max:255',
-            'address' => 'required',
-            'contact' => 'required|max:255',
+            'name'        => 'required|max:255|string',
+            'email'       => 'required|email|max:255',
+            'address'     => 'required',
+            'contact'     => 'required|max:255',
+            'instruction' => 'nullable|max:255',
 
         ];
     }

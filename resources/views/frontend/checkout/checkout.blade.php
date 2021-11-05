@@ -242,6 +242,13 @@
         var config = {
             routes: {
                 placeOrder: "{!! route('order.place') !!}",
+                addToCart: "{!! route('frontend.cart.add') !!}",
+                updateCart: "{!! route('frontend.cart.update') !!}",
+                decreaseCartQty: "{!! route('frontend.cart.decrease.quantity') !!}",
+                deleteCart: "{!! route('frontend.cart.delete') !!}",
+                getRestaurants: "{!! route('frontend.restaurant.by.location') !!}",
+                changeRestaurant: "{!! route('frontend.cart.change.restaurant') !!}",
+                addToCartRestaurant: "{!! route('frontend.cart.add.busy.restaurant') !!}",
             }
         };
         $('.contactNumber').hide();

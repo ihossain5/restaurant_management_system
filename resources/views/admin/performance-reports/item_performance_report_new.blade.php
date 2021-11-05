@@ -46,7 +46,7 @@
                                         </div>
                                         <div class="col-lg-4" id="table-filter">
                                             <select class="form-control custom-select category-select category-drop-down">
-                                                <option>Select</option>
+                                                <option value="">Select</option>
                                                 @if (!empty($restaurant->restaurant_categories))
                                                     @foreach ($restaurant->restaurant_categories as $category)
                                                         <option value="{{ $category->category_id }}">{{ $category->name }}
@@ -157,10 +157,13 @@
                 buttons: [{
                         extend: 'csvHtml5',
                         className: 'd-none',
+                        filename: 'item report',
                     },
                     {
                         extend: 'pdfHtml5',
                         className: 'd-none',
+                        filename: 'item report',
+                        title: 'Item Report',
                     },
                 ],
                 serverSide: true,
@@ -259,54 +262,27 @@
 
         // get orders by date
         $(".customDatePicker").on("change", function() {
-            var end_date = $('#end_date').val();
-            var restaurant_id = $('#restaurantId').val();
             var start_date = $('#start_date').val();
-
-            if (start_date != '' && end_date != '') {
-                $.ajax({
-                    type: "POST",
-                    url: config.routes.getOrdersByRange,
-                    data: {
-                        id: restaurant_id,
-                        start_date: start_date,
-                        end_date: end_date,
-                        _token: "{{ csrf_token() }}"
-                    },
-                    dataType: 'JSON',
-                    success: function(response) {
-                        if (response.success === true) {
-                            $('.restaurant_id').val(response.data.id);
-                            $('#orderTable').DataTable().clear().draw();
-                            setSessionId(response.data.session_id);
-                            $('.start_date').html('- ' + response.data.start_date + ' -');
-                            $('.end_date').html(response.data.end_date);
-                            $('.total_orders').html(response.data.total_order);
-                            $('.total_amount').html('৳ ' + bdCurrencyFormat(response.data
-                                .total_amount));
-                            if ($.trim(response.data.orders)) {
-                                $.each(response.data.orders, function(key, order) {
-                                    ordersData(order.items)
-                                });
-
-                            }
-
-
-                        }
-                    },
-                    error: function(error) {
-                        if (error.status == 404) {
-                            toastMixin.fire({
-                                icon: 'error',
-                                animation: true,
-                                title: "" + 'Data not found' + ""
-                            });
-
-
-                        }
-                    },
-                });
+            var end_date = $('#end_date').val();
+            var restaurantId = $('#restaurantId').val();
+            var id = $('.category-select').val();
+            if(id == ''){
+                $('#start_date').val("");
+                $('#end_date').val("");
             }
+            var url = {
+                url: config.routes.getItemsBycategory,
+                method: "POST",
+                data: {
+                    id: id,
+                    restaurantId: restaurantId,
+                    start_date: start_date,
+                    end_date: end_date,
+                    _token: "{{ csrf_token() }}"
+                },
+                dataType: "json",};
+            $('#orderTable').DataTable().clear().destroy();
+            dataTable(url);
 
         });
 

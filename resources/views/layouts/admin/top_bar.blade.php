@@ -4,7 +4,6 @@ $status = ManagerDashboardController::restaurant_status();
 @endphp
 <!-- Top Bar Start -->
        <div class="topbar">
-    
         <nav class="navbar-custom">
             <ul class="list-inline float-right mb-0">
                @if (Auth::user()->is_manager == 1)
@@ -73,9 +72,6 @@ $status = ManagerDashboardController::restaurant_status();
                 <div class="row text-center ">
                     <div class="col-12 mb-4">
                         <button class="btnOpen status_btn"data-id="1">Open</button>
-                    </div>
-                    <div class="col-12 mb-4">
-                        <button class="btnBusy status_btn"data-id="2">Busy</button>
                     </div>
                     <div class="col-12 mb-5">
                         <button class="btnClose status_btn"data-id="3">Closed</button>

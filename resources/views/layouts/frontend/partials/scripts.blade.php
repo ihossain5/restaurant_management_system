@@ -140,12 +140,13 @@
                     if (response.success == true) {
                         toastr["success"](response.data.message)
                         $('.cartItem').remove();
-                        $('.grandTotal').html(response.data.grandTotal)
+                        // $('.grandTotal').html(response.data.grandTotal)
                         $.each(response.data.items, function(key, val) {
                             appendCartItem(val);
                         });
                         appendCartTotal(response.data.subTotal, response.data.vatAmount, response.data
                             .grandTotal, response.data.deliveryCharge)
+
                         cartCounter(response.data.numberOfCartItems); // set cart counter
                     } else {
                         $('#modal_restaurant_id').val(response.data.restaurant_id);
@@ -172,7 +173,6 @@
 
         // increase cart quantity   
         function increaseQuantity(rowId) {
-            // alert('sdsd');
             var oldQty = $('.cartQty' + rowId).html();
             $.ajax({
                 url: config.routes.updateCart,
@@ -283,21 +283,22 @@
                     dataType: "json",
                     success: function(response) {
                         if (response.success == true) {
-                            $('.addTocart').hide();
-                            $('.cartBtn').hide();
-                            $('.card-overlay-box').addClass('disable-overlay');
-                            $.each(response.data.restaurants, function(i, restaurant) {
-                                console.log(restaurant.restaurant_id);
-                                $('.restaurantId' + restaurant.restaurant_id).removeClass(
-                                    'disable-overlay');
-                                $('.addTocartBtnId' + restaurant.restaurant_id).show();
-                                // $('.addTocartBtnId' + restaurant.restaurant_id).re();
-                                // $('.comboBtn').after(`<button class="addTocart addTocartBtnId${restaurant.restaurant_id}">Add to Cart</button>`)
-                            });
+                            window.location.reload();
+                            // $('.addTocart').hide();
+                            // $('.cartBtn').hide();
+                            // $('.card-overlay-box').addClass('disable-overlay');
+                            // $.each(response.data.restaurants, function(i, restaurant) {
+                            //     console.log(restaurant.restaurant_id);
+                            //     $('.restaurantId' + restaurant.restaurant_id).removeClass(
+                            //         'disable-overlay');
+                            //     $('.addTocartBtnId' + restaurant.restaurant_id).show();
+                            //     // $('.addTocartBtnId' + restaurant.restaurant_id).re();
+                            //     // $('.comboBtn').after(`<button class="addTocart addTocartBtnId${restaurant.restaurant_id}">Add to Cart</button>`)
+                            // });
 
-                            $('.lmbCloseBtn').show();
-                            $('.headerLocation').html(response.data.location_name);
-                            $('#location-modal').modal('hide');
+                            // $('.lmbCloseBtn').show();
+                            // $('.headerLocation').html(response.data.location_name);
+                            // $('#location-modal').modal('hide');
                         } //success end
                     },
                     error: function(error) {
@@ -328,7 +329,8 @@
                         $.each(response.data.items, function(key, val) {
                             appendCartItem(val);
                         });
-                        appendCartTotal(response.data.subTotal)
+                        appendCartTotal(response.data.subTotal, response.data.vatAmount, response.data
+                            .grandTotal, response.data.deliveryCharge)
                         cartCounter(response.data.numberOfCartItems); // set cart counter
                         $('#alertModal').modal('hide');
                     } else {
@@ -368,7 +370,7 @@
                             appendCartItem(val);
                         });
                         appendCartTotal(response.data.subTotal, response.data.vatAmount, response.data
-                            .grandTotal)
+                            .grandTotal, response.data.deliveryCharge)
                         cartCounter(response.data.numberOfCartItems); // set cart counter
                         $('#alertModal').modal('hide');
                     } else {

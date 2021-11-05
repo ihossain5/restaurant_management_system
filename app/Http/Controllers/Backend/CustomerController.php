@@ -12,6 +12,7 @@ use Yajra\DataTables\Facades\DataTables;
 
 class CustomerController extends Controller {
     public function index(Request $request) {
+        // dd(floatval(preg_replace('/[^\d.]/', '', "৳ 5,584,14.00")));
         $customers = Customer::all();
         foreach ($customers as $customer) {
             $customer->image         = $customer->photo == null ? 'default.png' : $customer->photo;
@@ -80,16 +81,17 @@ class CustomerController extends Controller {
     public function customerOrders(Request $request, $id) {
         // dd($request->all());
         $customer = Customer::findOrFail($id);
-
+        // dd($customer);
         $restaurant_id = Session::get('restaurant_id');
+        
         if ($restaurant_id) {
             $restaurant = Restaurant::findOrFail($restaurant_id);
         } else {
             $restaurant = Restaurant::first();
         }
-
+        // dd($restaurant);
         $restaurants = Restaurant::get();
-        $orders      = Order::where('customer_id', $id)->where('restaurant_id', $restaurant->restaurant_id)->with('customer')->latest()->get();
+        $orders      = Order::with('customer')->where('customer_id', $customer->customer_id)->where('restaurant_id', $restaurant->restaurant_id)->latest()->get();
         // dd($orders);
         if ($request->ajax()) {
             return $this->ordersData($orders);

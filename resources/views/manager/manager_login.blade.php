@@ -78,7 +78,7 @@
                             </button>
                         </div>
                     @endif
-                    <form class="form-horizontal m-t-30 loginForm" action="{{ route('login') }}" method="POST">@csrf
+                    <form class="form-horizontal m-t-30 loginForm" action="{{ route('manager.sign.in') }}" method="POST">@csrf
                         <div class="form-group">
                             <label for="username">Email</label>
                             <input type="text" name="email" class="form-control" id="username"

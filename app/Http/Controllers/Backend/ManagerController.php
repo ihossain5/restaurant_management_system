@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\ManagerStoreRequest;
 use App\Http\Requests\ManagerUpdateRequest;
 use App\Http\Requests\UserStoreRequest;
@@ -11,14 +12,27 @@ use App\Models\Restaurant;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class ManagerController extends Controller {
+    public function login() {
+        return view('manager.manager_login');
+    }
+    public function singIn(LoginRequest $request) {
+        $request->authenticate();
+        $request->session()->regenerate();
+        if (Auth::user()->is_manager == 1 && Auth::user()->is_active == 1) {
+            return redirect()->route('manager.dashboard');
+        } else {
+            Auth::logout();
+            return redirect()->back()->withErrors(['error' => 'Sorry! You have no permission to access this']);
+        }
+    }
+
     public function index() {
         $managers    = User::where('is_manager', 1)->latest()->get();
-        $restaurants = Restaurant::where('user_id',null)->get();
+        $restaurants = Restaurant::where('user_id', null)->get();
         return view('admin.user_management.restaurant_managers', compact('managers', 'restaurants'));
     }
 
@@ -46,10 +60,10 @@ class ManagerController extends Controller {
         $data['email']           = $user->email;
         $data['contact']         = $user->contact ?? 'N/A';
         $data['photo']           = $user->photo;
-        $data['sex']             = $user->sex ??'N/A';
+        $data['sex']             = $user->sex ?? 'N/A';
         $data['id']              = $user->id;
         $data['restaurant_name'] = $user->restaurant->name;
-        $data['restaurants'] = Restaurant::where('user_id',null)->get();
+        $data['restaurants']     = Restaurant::where('user_id', null)->get();
 
         return response()->json([
             'success' => true,
@@ -76,7 +90,7 @@ class ManagerController extends Controller {
         $user = User::findOrfail($request->hidden_id);
         $user->update($request->validated());
         $restaurant = Restaurant::where('restaurant_id', $request->restaurant)->first();
-        if ($restaurant->user_id != null && $restaurant->user_id !=$user->id) {
+        if ($restaurant->user_id != null && $restaurant->user_id != $user->id) {
             $data            = [];
             $data['message'] = 'Manager has already assigned';
             return response()->json([
@@ -97,10 +111,10 @@ class ManagerController extends Controller {
             $data['email']           = $user->email;
             $data['contact']         = $user->contact ?? 'N/A';
             $data['photo']           = $user->photo;
-            $data['sex']           = $user->sex ?? 'N/A';
+            $data['sex']             = $user->sex ?? 'N/A';
             $data['id']              = $user->id;
             $data['restaurant_name'] = $user->restaurant->name;
-            $data['restaurants'] = Restaurant::where('user_id',null)->get();
+            $data['restaurants']     = Restaurant::where('user_id', null)->get();
             return response()->json([
                 'success' => true,
                 'data'    => $data,
@@ -123,14 +137,13 @@ class ManagerController extends Controller {
     public function registerNewManager($token) {
         // dd($token);
         $user = User::where('token', $token)->first();
-        if($user){
+        if ($user) {
             if ($user->is_verified == 0) {
                 return view('admin.user_management.register', compact('user'));
             } else {
                 abort('404');
             }
-        }
-        else {
+        } else {
             abort('404');
         }
 
@@ -150,15 +163,15 @@ class ManagerController extends Controller {
         ]);
         if ($user) {
             Auth::login($user);
-            if(Auth::user()->is_super_admin ==1 && Auth::user()->is_active == 1){
+            if (Auth::user()->is_super_admin == 1 || Auth::user()->is_admin == 1 && Auth::user()->is_active == 1) {
                 return redirect()->route('dashboard');
-            }else if(Auth::user()->is_manager == 1){
+            } else if (Auth::user()->is_manager == 1) {
                 return redirect()->route('manager.dashboard');
-            }else{
+            } else {
                 Auth::logout();
                 return redirect()->back()->withErrors(['error' => 'Sorry! You have no permission to access this']);
             }
-            
+
         }
     }
 }
