@@ -129,13 +129,13 @@
                 dom: 'Bfrtip',
                 buttons: [{
                         extend: 'csvHtml5',
-                        filename: 'monthly reports',
+                        filename: 'daily reports',
                         className: 'd-none',
                     },
                     {
                         extend: 'pdfHtml5',
-                        filename: 'monthly reports',
-                        title: 'Monthly Reports',
+                        filename: 'daily reports',
+                        title: 'Daily Reports',
                         className: 'd-none',
                     },
                 ],
@@ -264,13 +264,13 @@
                 dom: 'Bfrtip',
                 buttons: [{
                         extend: 'csvHtml5',
-                        filename: 'monthly reports',
+                        filename: 'daily reports',
                         className: 'd-none',
                     },
                     {
                         extend: 'pdfHtml5',
-                        filename: 'monthly reports',
-                        title: 'Monthly Reports',
+                        filename: 'daily reports',
+                        title: 'Daily Reports',
                         className: 'd-none',
                     },
                 ],

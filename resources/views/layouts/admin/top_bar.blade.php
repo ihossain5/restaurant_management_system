@@ -29,7 +29,7 @@ $status = ManagerDashboardController::restaurant_status();
                        @endif
                     </a>
                     <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
-                        <a class="dropdown-item" href="{{route('user.profile')}}"><i class="dripicons-user text-muted"></i> Profile</a>
+                        <a class="dropdown-item" href="{{route(Auth::user()->is_manager == 1 ? 'manager.user.profile' : 'user.profile')}}"><i class="dripicons-user text-muted"></i> Profile</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="dripicons-exit text-muted"></i> Logout</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

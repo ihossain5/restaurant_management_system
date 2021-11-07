@@ -35,10 +35,16 @@ class AdminController extends Controller {
             if (Hash::check($data['old_password'], $currentPassword)) {
                 $userId         = Auth::User()->id;
                 $user           = User::find($userId);
-                $user->password = Hash::make($data['password']);
+                $user->password = $data['password'];
                 $user->save();
-                Auth::logout();
-                return redirect()->route('login')->with('message', 'Password change successfully. Please Login again');
+                if(Auth::user()->is_manager == 1){
+                    Auth::logout();
+                    return redirect()->route('manager.log.in')->with('message', 'Password change successfully. Please Login again');
+                }else{
+                    Auth::logout();
+                    return redirect()->route('login')->with('message', 'Password change successfully. Please Login again');
+                }
+               
             } else {
                 return back()->withErrors(['Sorry, your current password was not recognised. Please try again.']);
             }

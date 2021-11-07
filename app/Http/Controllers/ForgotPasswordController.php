@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
-class ForgotPasswordController extends Controller
-{
+class ForgotPasswordController extends Controller {
     public function showForgetPasswordForm() {
         return view('admin.forgot_password');
     }
@@ -59,10 +60,17 @@ class ForgotPasswordController extends Controller
 
         $user = User::where('email', $request->email)
             ->update(['password' => Hash::make($request->password)]);
+        //  DB::table('password_resets')->where(['email' => $request->email])->delete();
 
-        DB::table('password_resets')->where(['email' => $request->email])->delete();
 
+        if (Auth::attempt($request->only('email', 'password'))) {
+            Session::flash('success','Password has been reset successfully');
+            if (Auth::user()->is_manager == 1 && Auth::user()->is_active == 1) {
+                return redirect()->route('manager.dashboard');
+            } else {
+                return redirect()->route('dashboard');
+            }
+        }
 
-        return redirect('/')->with('success', 'Your password has been changed!');
     }
 }

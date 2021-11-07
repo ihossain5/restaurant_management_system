@@ -12,7 +12,7 @@
             </div>
             <div class="col-md-6 align-self-end">
                 <ul class="infoLink">
-                    <li><a href="about-us.html">About Us</a></li>
+                    <li><a href="{{route('frontend.about.us')}}">About Us</a></li>
                     <li><a href="{{route('frontend.contact.us')}}">Contact Us</a></li>
                 </ul>
             </div>

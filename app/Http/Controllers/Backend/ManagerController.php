@@ -12,6 +12,7 @@ use App\Models\Restaurant;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -125,9 +126,11 @@ class ManagerController extends Controller {
 
     public function destroy(Request $request) {
         $manager         = User::findOrFail($request->id)->delete();
+        Restaurant::where('user_id',$request->id)->update(['user_id'=>null]);
         $data            = [];
         $data['message'] = 'Manager deleted successfully';
         $data['id']      = $request->id;
+        $data['restaurants']     = Restaurant::where('user_id', null)->get();
         return response()->json([
             'success' => true,
             'data'    => $data,

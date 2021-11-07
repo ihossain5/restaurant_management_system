@@ -15,8 +15,6 @@
                                 <div class="ms-header-text">
                                     <h4 class="mt-0 header-title">Update Password</h4>
                                 </div>
-
-
                             </div>
                             @if ($errors->any())
                                 <div class=" mt-3">
@@ -34,9 +32,8 @@
 
                             <div class="ms-panel-body">
                                 <p class="ms-directions"></p>
-
                                 <div class="ms-panel-body">
-                                    <form method="POST" action="{{ route('password.update') }}" id="changePassword"> @csrf
+                                    <form method="POST" action="{{route(Auth::user()->is_manager == 1 ? 'manager.password.update' : 'user.profile') }}" id="changePassword"> @csrf
                                         <div class="form-group">
                                             <label for="old">Current Password</label>
                                             <input type="password" name="old_password" class="form-control" id="old">
@@ -61,10 +58,6 @@
                     </div>
                 </div> <!-- end col -->
             </div> <!-- end row -->
-
-
-
-
         </div><!-- container -->
 
     </div> <!-- Page content Wrapper -->

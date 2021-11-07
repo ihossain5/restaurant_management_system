@@ -138,13 +138,13 @@
                 dom: 'Bfrtip',
                 buttons: [{
                         extend: 'csvHtml5',
-                        filename: 'daily reports',
+                        filename: 'time range reports',
                         className: 'd-none',
                     },
                     {
                         extend: 'pdfHtml5',
-                        filename: 'daily reports',
-                        title: 'Daily Reports',
+                        filename: 'time range reports',
+                        title: 'Time Range Reports',
                         className: 'd-none',
                     },
                 ],
@@ -302,13 +302,13 @@
                 dom: 'Bfrtip',
                 buttons: [{
                         extend: 'csvHtml5',
-                        filename: 'daily reports',
+                        filename: 'time range reports',
                         className: 'd-none',
                     },
                     {
                         extend: 'pdfHtml5',
-                        filename: 'daily reports',
-                        title: 'Daily Reports',
+                        filename: 'time range reports',
+                        title: 'Time Range Reports',
                         className: 'd-none',
                     },
                 ],

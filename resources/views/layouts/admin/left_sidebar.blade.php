@@ -29,7 +29,7 @@ $orders = ManagerDashboardController::countedOrders();
                     <h6 class="text-center user_name text-uppercase">{{ Auth::user()->name }}</h6>
                     <div class="text-center">
                         <div class="superAdminDesign">
-                            <span> {{(Auth::user()->is_admin ==1) ? 'Admin' : ((Auth::user()->is_admin ==1)? 'Super Admin' : 'Manager')}}</span>
+                            <span> {{(Auth::user()->is_admin ==1) ? 'Admin' : ((Auth::user()->is_super_admin ==1)? 'Super Admin' : 'Manager')}}</span>
                         </div>
                     </div>
             </div>
@@ -49,6 +49,8 @@ $orders = ManagerDashboardController::countedOrders();
                     <span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
             <ul class="list-unstyled">
                 <li><a class="restaurant_overview" href="{{ route('restaurant.overview',[$restaurant_id]) }}">Restaurant Overview</a></li>
+                {{-- <li><a href="{{ route('location.index') }}">Location Management</a></li>
+                <li><a href="{{ route('restaurant.location.index') }}">Restaurant Location </a></li> --}}
                 <li><a href="{{ route('restaurant.index') }}">Restaurant Management</a></li>
 
 

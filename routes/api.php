@@ -25,6 +25,7 @@ Route::get('/items', [ItemController::class, 'itemApi']);
     Route::get('/managers', [ItemController::class, 'managerApi']);
 
 Route::get('/items', [OrderApiController::class, 'items']); 
+Route::get('/combos', [OrderApiController::class, 'combos']); 
 Route::get('/items/{item}/details', [OrderApiController::class, 'getItemById']); 
 Route::get('/orders', [OrderApiController::class, 'all']); 
 Route::get('/order/{order}/details', [OrderApiController::class, 'getOrderById']); 

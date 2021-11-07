@@ -70,7 +70,7 @@ class CartController extends Controller {
             $data                      = [];
             $data['message']           = 'Item has been added into cart';
             $data['items']             = $this->cartService->allCartItems();
-            $data['subTotal']          = currency_format($this->cartService->grandTotal());
+            $data['subTotal']          = $this->cartService->grandTotal();
             $data['numberOfCartItems'] = $this->cartService->numberOfCartItems();
             $data['grandTotal']        = $this->cartService->getTotalAmount();
             $data['vatAmount']         = $this->cartService->getVatAmount();

@@ -49,11 +49,6 @@
                     @endforeach
                 @endif
             </div>
-
-
-
-
-
             <!-- Performance Table -->
             <div class="row">
                 <div class="col-lg-6">

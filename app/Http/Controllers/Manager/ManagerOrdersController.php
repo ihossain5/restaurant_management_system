@@ -116,9 +116,10 @@ class ManagerOrdersController extends Controller {
             'item'  => 'required|array',
             'item*' => 'required',
         ]);
-        $order = Order::findOrFail($request->order_id);
-        $items = $request->item;
 
+        $order = Order::with('items','order_combos')->findOrFail($request->order_id);
+        // dd($order);
+        $items = $request->item;
         DB::transaction(function () use($request, $items, $order) {
             $order->update([
                 'special_notes' => $request->specialNotes ?? null,
@@ -131,7 +132,13 @@ class ManagerOrdersController extends Controller {
                 ];
     
             }
-            $order->items()->sync($updated_item, true);
+            if($order->order_combos->count()>0){
+                // dd('sdsd'); 
+                $order->order_combos()->sync($updated_item, true);
+            }else{
+                $order->items()->sync($updated_item, true);
+            }
+         
         });
         $data['message']= 'Order has been updated';
         return success($data);

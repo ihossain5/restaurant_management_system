@@ -60,7 +60,6 @@ crossorigin="anonymous"></script>
 <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
 
 <script>
-    // $(document).ready(function() {
     var config = {
         routes: {
             updateStatus: "{!! route('manager.restaurant.status.update') !!}",
@@ -247,15 +246,6 @@ crossorigin="anonymous"></script>
         }
     });
 
-
-
-
-
-
-
-    // alert(audio);
-
-
     function downloadPdf() {
         $('.buttons-pdf').click();
     }
@@ -263,5 +253,14 @@ crossorigin="anonymous"></script>
     function downloadCsv() {
         $('.buttons-csv').click();
     }
-// });
+
+        <?php if (session()->has('success')): ?>
+        toastMixin.fire({
+                        icon: 'success',
+                        animation: true,
+                        title: "Password has been reset successfully"
+                    });
+
+        <?php endif; ?>
+        
 </script>

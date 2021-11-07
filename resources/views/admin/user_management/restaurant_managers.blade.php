@@ -146,9 +146,9 @@
                                                     <button type='button' class='btn btn-outline-info '
                                                         onclick='editManager({{ $manager->id }})'><i
                                                             class='mdi mdi-pencil'></i></button>
-                                                    <button type='button' name='delete' class="btn btn-outline-danger "
+                                                    {{-- <button type='button' name='delete' class="btn btn-outline-danger "
                                                         onclick="deleteManager({{ $manager->id }})"><i
-                                                            class="mdi mdi-delete "></i></button>
+                                                            class="mdi mdi-delete "></i></button> --}}
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -285,10 +285,17 @@
                     </div>
 
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
-                        Done
-                    </button>
+                <div class="col-md-12 mt-5">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button data-toggle="modal" class="btn-custom dangerBtn  mb-3 delete_btn"><i class="mdi mdi-delete "></i>
+                            Delete
+                        </button>
+                        </div>
+                        <div class="col-md-6 text-right">
+                        <button data-dismiss="modal" class="btn btn-custom btnAccept mb-3 "> Done</button>
+                        </div>
+                    </div>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -421,20 +428,15 @@
                             .append(`<td>` + response.data.sex + `</td>`)
                             .append(`<td>` + response.data.email + `</td>`)
                             .append(`<td>` + response.data.contact + `</td>`)
-
-
                             .append(`<td><button type='button' class='btn btn-outline-dark' onclick='viewManager(${response.data.id})'>
                                 <i class='fa fa-eye'></i>
                             </button>
                             <button type='button' class='btn btn-outline-info' onclick='editManager(${response.data.id})'>
                                 <i class='mdi mdi-pencil'></i>
-                            </button>
-                           
-                            <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteManager(${response.data.id})">
-                                <i class="mdi mdi-delete "></i>
-                            </button></td>`)
-
-
+                            </button>`)
+                            // <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteManager(${response.data.id})">
+                            //     <i class="mdi mdi-delete "></i>
+                            // </button></td>
                         var manager_row = managerTable.row.add(row).draw().node();
                         $('#managerTable tbody').prepend(row);
                         $(manager_row).addClass('manager' + response.data.id + '');
@@ -451,8 +453,8 @@
                         }
                         $('.restaurant_select_box').empty();
                         $('.restaurant_select_box').append(
-                                `<option value="" class="restaurantName"></option>`
-                            );
+                            `<option value="" class="restaurantName"></option>`
+                        );
                         $.each(response.data.restaurants, function(i, restaurant) {
                             $('.restaurant_select_box').append(
                                 `<option value="${restaurant.restaurant_id}">${restaurant.name}</option>`
@@ -505,7 +507,7 @@
                             alert('sds');
                             $('.role_div').hide();
                         }
-
+                        $('.delete_btn').attr('onclick', "deleteManager(" + id + ")");
                         $('#view_name').text(response.data.name);
                         $('#view_email').text(response.data.email);
                         $('#view_gender').text(response.data.sex ?? 'N/A');
@@ -655,12 +657,11 @@
                             </button>
                             <button type='button' class='btn btn-outline-info' onclick='editManager(${response.data.id})'>
                                 <i class='mdi mdi-pencil'></i>
-                            </button>
-                           
-                            <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteManager(${response.data.id})">
-                                <i class="mdi mdi-delete "></i>
-                            </button></td>
-                                `
+                            </button>`                       
+                            // <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteManager(${response.data.id})">
+                            //     <i class="mdi mdi-delete "></i>
+                            // </button></td>
+                                
                             );
                             $('#edit_modal').modal('hide');
                             toastMixin.fire({
@@ -746,6 +747,16 @@
                                     icon: 'success',
                                     animation: true,
                                     title: "" + response.data.message + ""
+                                });
+                                $('#edit_modal').modal('show');
+                                $('.restaurant_select_box').empty();
+                                $('.restaurant_select_box').append(
+                                    `<option value="" class="restaurantName"></option>`
+                                );
+                                $.each(response.data.restaurants, function(i, restaurant) {
+                                    $('.restaurant_select_box').append(
+                                        `<option value="${restaurant.restaurant_id}">${restaurant.name}</option>`
+                                    );
                                 });
                             }
                         },

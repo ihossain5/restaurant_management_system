@@ -10,10 +10,12 @@ use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\HomeHeroSectionController;
 use App\Http\Controllers\Backend\ItemComboController;
 use App\Http\Controllers\Backend\ItemController;
+use App\Http\Controllers\Backend\LocationController;
 use App\Http\Controllers\Backend\ManagerController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\OrderPerformanceController;
 use App\Http\Controllers\Backend\RestaurantController;
+use App\Http\Controllers\Backend\RestaurantLocationController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\Frontend\AboutUsController as FrontendAboutUsController;
 use App\Http\Controllers\Frontend\CartController;
@@ -47,7 +49,8 @@ use Illuminate\Support\Facades\Route;
 
 require __DIR__ . '/auth.php';
 
-Route::group(['prefix' => 'admin', 'middleware' => ['auth','admin']], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/password-update', [AdminController::class, 'passwordChange'])->name('password.change');
     Route::post('/password-update', [AdminController::class, 'updatePassword'])->name('password.update');
@@ -202,7 +205,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admin']], function (
         Route::post('/restaurant-past-orders', [OrderController::class, 'getPastOrdersByRestaurant'])->name('order.past.restaurant');
     }); //* order route end */
 
-
     //* customer route start */
     Route::group(['prefix' => 'customers'], function () {
         Route::get('/', [CustomerController::class, 'index'])->name('customer.index');
@@ -214,18 +216,33 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admin']], function (
         Route::post('/delete', [ManagerController::class, 'destroy'])->name('restaurant.manager.delete');
     }); //* customer route end */
 
-    Route::get('test-orders', [OrderController::class, 'getAllOrders'])->name('order.test');
-    Route::get('orders', [OrderController::class, 'orders'])->name('orders.all');
+    //* location route start */
+    Route::group(['prefix' => 'locations'], function () {
+        Route::get('/', [LocationController::class, 'index'])->name('location.index');
+        Route::post('/store', [LocationController::class, 'store'])->name('location.store');
+        Route::get('/edit/{location}', [LocationController::class, 'edit'])->name('location.edit');
+        Route::post('/update', [LocationController::class, 'update'])->name('location.update');
+        Route::post('/delete', [LocationController::class, 'destroy'])->name('location.destroy');
+    }); //* location route end */
+
+    //* restaurant location route start */
+    Route::group(['prefix' => 'restaurant-locations'], function () {
+        Route::get('/', [RestaurantLocationController::class, 'index'])->name('restaurant.location.index');
+        Route::post('/store', [RestaurantLocationController::class, 'store'])->name('restaurant.location.store');
+        Route::get('/edit/{location}', [RestaurantLocationController::class, 'edit'])->name('restaurant.location.edit');
+        Route::post('/update', [RestaurantLocationController::class, 'update'])->name('restaurant.location.update');
+        Route::post('/delete', [RestaurantLocationController::class, 'destroy'])->name('restaurant.location.destroy');
+    }); //* restaurant location route end */
 
 });
 
-Route::group(['prefix' => 'admin'], function () {
+// Route::group(['prefix' => 'admin'], function () {
 //* password reset start */
-    Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forgot.password');
-    Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
-    Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
-    Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
-});
+Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forgot.password');
+Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
+Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
+Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
+// });
 
 Route::get('/super-admin', [UserController::class, 'superAdmin']);
 Route::post('/make/super/admin', [UserController::class, 'makeSuperAdmin'])->name('is.superadmin');
@@ -241,8 +258,10 @@ Route::post('/manager', [ManagerController::class, 'singIn'])->name('manager.sig
 Route::group(['prefix' => 'manager', 'middleware' => ['auth', 'manager']], function () {
     Route::get('dashboard', [ManagerDashboardController::class, 'index'])->name('manager.dashboard');
     Route::post('update/restaurant-status', [ManagerDashboardController::class, 'updateRestaurantStatus'])->name('manager.restaurant.status.update');
-    Route::get('/profile-update', [AdminController::class, 'profile'])->name('user.profile');
-    Route::post('/profile-update', [AdminController::class, 'profileUpdate'])->name('profile.update');
+    Route::get('/profile-update', [AdminController::class, 'profile'])->name('manager.user.profile');
+    Route::post('/profile-update', [AdminController::class, 'profileUpdate'])->name('manager.profile.update');
+    Route::get('/password-update', [AdminController::class, 'passwordChange'])->name('manager.password.change');
+    Route::post('/password-update', [AdminController::class, 'updatePassword'])->name('manager.password.update');
 
     /* Item Routes */
     Route::get('/items', [ItemController::class, 'itemsByManager'])->name('manager.restaurant.items');
@@ -316,7 +335,6 @@ Route::get('auth/facebook/callback', [CustomerLoginController::class, 'handleFac
 // Google login
 Route::get('login/google', [CustomerLoginController::class, 'redirectToGoogle'])->name('login.google');
 Route::get('login/google/callback', [CustomerLoginController::class, 'handleGoogleCallback']);
-
 
 Route::get('/clear-cache', function () {
 
