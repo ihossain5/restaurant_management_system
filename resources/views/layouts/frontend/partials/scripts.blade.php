@@ -115,17 +115,22 @@
             // "hideMethod": "fadeOut"
         }
         // add to cart
+        var locationId = $('.locationId').val();
+
         function addToCart(item_id, restaurant_id, combo_id) {
             var combo_id = combo_id || '';
+
             if (combo_id == '') {
                 var data = {
                     item_id: item_id,
+                    locationId: locationId,
                     restaurant_id: restaurant_id,
                     _token: "{{ csrf_token() }}"
                 };
             } else {
                 var data = {
                     item_id: item_id,
+                    locationId: locationId,
                     restaurant_id: restaurant_id,
                     combo_id: combo_id,
                     _token: "{{ csrf_token() }}"
@@ -152,6 +157,7 @@
                         $('#modal_restaurant_id').val(response.data.restaurant_id);
                         $('#modal_combo_id').val(response.data.combo_id);
                         $('#modal_item_id').val(response.data.item_id);
+                        $('#modal_location_id').val(response.data.location_id);
                         $('.alertMessage').html(response.data.message);
                         if (response.data.status == 'BUSY') {
                             $('#alertModalForm').removeClass('cartChangeForm');
@@ -171,14 +177,17 @@
             }); //ajax end
         }
 
+        var delivery_fee = $('.delivery-charge').html();
         // increase cart quantity   
         function increaseQuantity(rowId) {
             var oldQty = $('.cartQty' + rowId).html();
+           
             $.ajax({
                 url: config.routes.updateCart,
                 method: "POST",
                 data: {
                     rowId: rowId,
+                    delivery_fee: delivery_fee,
                     _token: "{{ csrf_token() }}"
                 },
                 dataType: "json",
@@ -215,6 +224,7 @@
                     method: "POST",
                     data: {
                         rowId: rowId,
+                        delivery_fee: delivery_fee,
                         _token: "{{ csrf_token() }}"
                     },
                     dataType: "json",
@@ -245,6 +255,7 @@
                 method: "POST",
                 data: {
                     rowId: rowId,
+                    delivery_fee: delivery_fee,
                     _token: "{{ csrf_token() }}"
                 },
                 dataType: "json",

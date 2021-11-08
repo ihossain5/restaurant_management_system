@@ -17,7 +17,7 @@ class ManagerOrdersController extends Controller {
     }
     public function newOrders(Request $request) {
         $restaurant = Auth::user()->restaurant;
-        $new_orders = $this->order->todayOrdersByRestaurantId($restaurant->restaurant_id);
+        $new_orders = $this->order->todayNewOrdersByRestaurantId($restaurant->restaurant_id);
         if ($request->ajax()) {
             return $this->dataTable($new_orders);
         }
@@ -117,30 +117,39 @@ class ManagerOrdersController extends Controller {
             'item*' => 'required',
         ]);
 
-        $order = Order::with('items','order_combos')->findOrFail($request->order_id);
+        $order = Order::with('items', 'order_combos')->findOrFail($request->order_id);
         // dd($order);
-        $items = $request->item;
-        DB::transaction(function () use($request, $items, $order) {
+        $items      = $request->item;
+        $comboItems = $request->comboItem;
+        DB::transaction(function () use ($request, $items, $order, $comboItems) {
             $order->update([
                 'special_notes' => $request->specialNotes ?? null,
-                'amount'        => $request->totalAmount,
+                'amount'        => formatAmount($request->totalAmount),
+                'vat_amount'    => formatAmount($request->vatAmount),
             ]);
-            foreach ($items as $item) {
-                $updated_item[$item['item_id']] = [
-                    'quantity' => $item['quantity'],
-                    'price'    => formatAmount($item['individualTotal']),
-                ];
-    
-            }
-            if($order->order_combos->count()>0){
-                // dd('sdsd'); 
-                $order->order_combos()->sync($updated_item, true);
-            }else{
+            if ($items) {
+                foreach ($items as $item) {
+                    $updated_item[$item['item_id']] = [
+                        'quantity' => $item['quantity'],
+                        'price'    => formatAmount($item['individualTotal']),
+                    ];
+
+                }
                 $order->items()->sync($updated_item, true);
             }
-         
+            if ($comboItems) {
+                foreach ($comboItems as $comboItem) {
+                    $combo_item[$comboItem['item_id']] = [
+                        'quantity' => $comboItem['quantity'],
+                        'price'    => formatAmount($comboItem['individualTotal']),
+                    ];
+
+                }
+                $order->order_combos()->sync($combo_item, true);
+            }
+
         });
-        $data['message']= 'Order has been updated';
+        $data['message'] = 'Order has been updated';
         return success($data);
     }
 

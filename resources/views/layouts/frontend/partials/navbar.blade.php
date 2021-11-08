@@ -23,6 +23,7 @@
             <div class="navbar-location-select-box d-none d-lg-block">
                 <button type="button" class="navbar-modal-show-btn" data-bs-toggle="modal" data-bs-target="#location-modal">
                     <span class="headerLocation">{{session()->get('location_name') ?? 'Select '}}</span>
+                    <input type="hidden" class="locationId" value="{{session()->get('location_id')}}">
                 </button>
             </div>
             <div class="collapse navbar-collapse" id="navbar">

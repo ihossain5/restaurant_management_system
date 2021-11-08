@@ -202,6 +202,7 @@
                                         <div class="secondColumn">
                                             Tk. {{ $deliveryCharge }}
                                         </div>
+                                        <input type="hidden" name="deliveryCharge" value="{{$deliveryCharge}}">
                                     </li>
                                     <li>
                                         <div class="firstColumn">

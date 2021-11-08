@@ -12,7 +12,8 @@ class CartComposer {
     protected $deliveryCharge;
     protected $subTotal;
 
-    public function __construct(CartService $cart) {
+    public function __construct() {
+        $cart                 = new CartService(10, session()->get('delivery_charge'));
         $this->totalAmount    = $cart->getTotalAmount();
         $this->vatAMount      = $cart->getVatAmount();
         $this->deliveryCharge = $cart->deliveryCharge;

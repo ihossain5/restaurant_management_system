@@ -54,10 +54,18 @@ class Order extends Model {
     public static function todayOrdersByRestaurantId($restaurant) {
         return Order::with('items', 'items.category')->where('restaurant_id', $restaurant)
             ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            ->where('orders.order_status_id', 3)
+            ->with('customer')
+            ->get();
+    }
+    public static function todayNewOrdersByRestaurantId($restaurant) {
+        return Order::with('items', 'items.category')->where('restaurant_id', $restaurant)
+            ->whereDate('orders.created_at', DB::raw('CURDATE()'))
             ->where('orders.order_status_id', null)
             ->with('customer')
             ->get();
     }
+
     public function todaysRevenue() {
         return $this->whereDate('created_at', DB::raw('CURDATE()'))
             ->where('order_status_id', 3)

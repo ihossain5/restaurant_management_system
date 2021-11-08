@@ -162,103 +162,180 @@
                     </button>
                 </div>
                 <div class="modal-body pt-3 orderDeta-body">
+                    <form id="orderEditForm">@csrf
                     <div class="row">
-                        <form id="orderEditForm">@csrf
-                            <div class="col-12">
-                                <h4>Order ID: <span class="orderId">#</span>
-                                    <input type="hidden" name="order_id" class="orderIdInput">
-                                </h4>
-                                <h4>Customer Name: <span class="customerName"></span></h4>
-                                <h4>Customer Email: <span class="customerEmail"></span></h4>
-                                <h4>Customer Contact: <span class="customerContact"></span></h4>
-                                <h4>Customer Address: <span class="customerAddress"></span></h4>
-                                <h4 class="mt-3">Special Notes</h4>
+                        <div class="col-12">
+                            <h4>Order ID: <span class="orderId">#</span>
+                                <input type="hidden" name="order_id" class="orderIdInput">
+                            </h4>
+                            <h4>Customer Name: <span class="customerName"></span></h4>
+                            <h4>Customer Email: <span class="customerEmail"></span></h4>
+                            <h4>Customer Contact: <span class="customerContact"></span></h4>
+                            <h4>Customer Address: <span class="customerAddress"></span></h4>
+                            <h4 class="mt-3">Special Notes</h4>
+                        </div>
+                        <div class="col-12">
+                            <input type="text" class="form-control specialInput specialNotes">
+                        </div>
+                        <div class="col-12 mt-3">
+                            <h4>Ordered Items</h4>
+                        </div>
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table class="table table-bordered text-center orderTable editOrderTable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Item Name</th>
+                                            <th scope="col">Unit Price</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Total Price</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- <tr>
+                                            <td>
+                                                <select class="itemSelect" name="itemName">
+                                                    <option value="">Item Name</option>
+                                                    <option value="1">Burger</option>
+                                                    <option value="2">Pizza</option>
+                                                </select>
+                                            </td>
+                                            <td>Tk <span>500</span>
+                                                <input type="hidden">
+                                            </td>
+                                            <td>
+                                                <button type="button" class="incBtn"><img
+                                                        src="assets/clarity_minus-line.svg" alt=""></button>
+                                                <span>1</span>
+                                                <input type="hidden">
+                                                <button type="button" class="incBtn"><img
+                                                        src="assets/carbon_add.svg" alt=""></button>
+                                            </td>
+                                            <td>Tk <span>1,000</span>
+                                                <input type="hidden">
+                                            </td>
+                                            <td>
+                                                <button class="delBtn"><img src="assets/ic_baseline-delete.svg"
+                                                        alt=""></button>
+                                            </td>
+                                        </tr> -->
+
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5" class="text-right"
+                                                style="background-color: transparent; border: none;">
+                                                <button onclick="add_row_edit()" type="button"
+                                                    class="btn-custom btnEdit"><img src="{{ asset('backend/assets/icons/carbon_add.svg') }}"
+                                                        alt="">
+                                                    Add Item</button>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
                             </div>
-                            <div class="col-12">
-                                <input type="text" class="form-control specialInput specialNotes" name="specialNotes">
+                        </div>
+
+                        <div class="col-12 mt-3">
+                            <h4>Ordered Combos</h4>
+                        </div>
+                        <div class="col-12">
+                            <div class="table-responsive">
+
+                                <table class="table table-bordered text-center orderTable editOrderComboTable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Item Name</th>
+                                            <th scope="col">Unit Price</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Total Price</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- <tr>
+                                            <td>
+                                                <select class="itemSelect" name="itemName">
+                                                    <option value="">Item Name</option>
+                                                    <option value="1">Burger</option>
+                                                    <option value="2">Pizza</option>
+                                                </select>
+                                            </td>
+                                            <td>Tk <span>500</span>
+                                                <input type="hidden">
+                                            </td>
+                                            <td>
+                                                <button type="button" class="incBtn"><img
+                                                        src="assets/clarity_minus-line.svg" alt=""></button>
+                                                <span>1</span>
+                                                <input type="hidden">
+                                                <button type="button" class="incBtn"><img
+                                                        src="assets/carbon_add.svg" alt=""></button>
+                                            </td>
+                                            <td>Tk <span>1,000</span>
+                                                <input type="hidden">
+                                            </td>
+                                            <td>
+                                                <button class="delBtn"><img src="assets/ic_baseline-delete.svg"
+                                                        alt=""></button>
+                                            </td>
+                                        </tr> -->
+
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5" class="text-right"
+                                                style="background-color: transparent; border: none;">
+                                                <button onclick="add_row_combo_edit()" type="button"
+                                                    class="btn-custom btnEdit"><img src="{{ asset('backend/assets/icons/carbon_add.svg') }}"
+                                                        alt="">
+                                                    Add Combo</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">Sub total</td>
+                                            <td colspan="2">Tk <span class="subTotalAmount">0.00</span>
+                                                <input type="hidden" name="totalAmount" class="subTotalAmountInput">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">VAT</td>
+                                            <td colspan="2">Tk <span class="vatAmount">0.00</span>
+                                                <input type="hidden" name="vatAmount" class="vatAmountInput">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">Delivery Fee</td>
+                                            <td colspan="2">Tk <span class="deliveryAmount">0.00</span>
+                                                <input type="hidden" class="deliveryAmountInput">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">Total Amount</td>
+                                            <td colspan="2">Tk <span class="totalAmount">0.00</span>
+                                                <input type="hidden" class="totalAmountInput">
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
                             </div>
-                            <div class="col-12 mt-3">
-                                <h4>Ordered Items</h4>
-                            </div>
-                            <div class="col-12">
-                                <div class="table-responsive">
-
-                                    <table class="table table-bordered text-center orderTable editOrderTable">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Item Name</th>
-                                                <th scope="col">Unit Price</th>
-                                                <th scope="col">Quantity</th>
-                                                <th scope="col">Total Price</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            <!-- <tr>
-                                                <td>
-                                                    <select class="itemSelect" name="itemName">
-                                                        <option value="">Item Name</option>
-                                                        <option value="1">Burger</option>
-                                                        <option value="2">Pizza</option>
-                                                    </select>
-                                                </td>
-                                                <td>Tk <span>500</span>
-                                                    <input type="hidden">
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="incBtn"><img
-                                                            src="assets/clarity_minus-line.svg" alt=""></button>
-                                                    <span>1</span>
-                                                    <input type="hidden">
-                                                    <button type="button" class="incBtn"><img
-                                                            src="assets/carbon_add.svg" alt=""></button>
-                                                </td>
-                                                <td>Tk <span>1,000</span>
-                                                    <input type="hidden">
-                                                </td>
-                                                <td>
-                                                    <button class="delBtn"><img src="assets/ic_baseline-delete.svg"
-                                                            alt=""></button>
-                                                </td>
-                                            </tr> -->
-
-
-                                        </tbody>
-
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="5" class="text-right"
-                                                    style="background-color: transparent; border: none;">
-                                                    <button onclick="add_row_edit()" type="button"
-                                                        class="btn-custom btnEdit"><img
-                                                            src="{{ asset('backend/assets/icons/carbon_add.svg') }}" alt="">
-                                                        Add Item</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="3">Total Amount</td>
-                                                <td colspan="2">Tk <span class="totalAmount">1,500</span>
-                                                    <input type="hidden" name="totalAmount" class="totalAmountInput">
-                                                </td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-
-
-                            <div class="col-12 text-right">
-                                <button class="btn-custom btnAccept" type="submit"><img
-                                        src="{{ asset('backend/assets/icons/icon-park-outline_correct.svg') }}" alt="">
-                                    Save</button>
-                            </div>
-                        </form>
+                        </div>
+                        <div class="col-12 text-right">
+                            <button  class="btn-custom btnAccept" type="submit"><img
+                                    src="{{ asset('backend/assets/icons/icon-park-outline_correct.svg') }}" alt=""> Save</button>
+                        </div>
+                    
                     </div>
+                </form>
                 </div>
             </div>
         </div>
     </div>
+
+
 
     <!-- order cancel  Modal -->
     <div class="modal addModal fade" id="orderCancelModal" tabindex="-1" aria-hidden="true">

@@ -8,6 +8,7 @@
             <input type="hidden" name="combo_id" id="modal_combo_id">
             <input type="hidden" name="restaurant_id" id="modal_restaurant_id">
             <input type="hidden" name="item_id" id="modal_item_id">
+            <input type="hidden" name="locationId" id="modal_location_id">
             <div class="modal-footer">
                 <button type="button" class="alert-modal-btn" data-bs-dismiss="modal">cancle</button>
                 <button type="submit" class="alert-modal-btn fill">continue</button>

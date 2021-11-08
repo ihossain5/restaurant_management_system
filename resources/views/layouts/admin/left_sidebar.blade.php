@@ -11,7 +11,7 @@ $orders = ManagerDashboardController::countedOrders();
     <div class="topbar-left">
         <div class="">
             <a href="{{ route(Auth::user()->is_manager == 1 ? 'manager.dashboard' : 'dashboard') }}" class="logo">
-                <h6 class="text-center">App Logo</h6>
+                {{-- <h6 class="text-center">{{auth()->user()->restaurant->name ?? ''}}</h6> --}}
             </a>
         </div>
         <div class=" card sidebar_user_card m-b-20">

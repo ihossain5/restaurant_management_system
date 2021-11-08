@@ -8,7 +8,7 @@ Class CartService {
     public $vat;
     public $deliveryCharge;
 
-    public function __construct($vat = 10, $deliveryCharge = 60) {
+    public function __construct($vat =0, $deliveryCharge =0) {
         $this->vat            = $vat;
         $this->deliveryCharge = $this->getRoundAmount($deliveryCharge);
     }
@@ -18,6 +18,7 @@ Class CartService {
             ->associate('App\Models\Item');
         return true;
     }
+
     public function addComboToCart($combo) {
         Cart::add([
             'id'      => $combo->combo_id,
