@@ -93,4 +93,6 @@ class OrderService {
     public function totalAmountOfOrders($orders) {
         return $orders->sum('amount');
     }
+
+
 }
