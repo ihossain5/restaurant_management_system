@@ -21,13 +21,13 @@ class CustomerSignInRequest extends FormRequest {
      */
     public function rules() {
         return [
-            'email' => 'required|email|max:100|string',
-            'password' => 'required|string|max:100',
+            'email'    => 'required|email|max:100|string',
+            'password' => 'required|string|max:100|min:6',
         ];
     }
     public function messages() {
         return [
-            'email.required' => 'Email is required',
+            'email.required'    => 'Email is required',
             'password.required' => 'Password is required',
         ];
     }

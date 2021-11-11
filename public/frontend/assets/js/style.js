@@ -1,10 +1,18 @@
 // Cart Toggle Js
+let cartItems = $('.cartCounter').html();
+if(cartItems ==0){
+    $('.cartItems').attr('title','Cart is empty');
+}else{
+    $('.cartItems').removeAttr('title');
+}
+
 function cartToggle() {
     let cartItems = $('.cartCounter').html();
     if(cartItems >0){
         if (document.getElementById('trasnparentBg').style.display !== "block") {
             document.getElementById('cart').style.right = 0;
             document.getElementById('trasnparentBg').style.display = "block";
+           
         } else {
             document.getElementById('cart').style.right = "-802px";
             document.getElementById('trasnparentBg').style.display = "none";
@@ -145,4 +153,21 @@ $(document).ready(function () {
 
 $('.navbar-toggler').on('click', function() {
     $('body').toggleClass('active');
+})
+
+
+// Carousel slide drag change
+$(".carousel").swipe({
+    swipe: function (event, direction, distance, duration, fingerCount, fingerData) {
+        if (direction == 'left') $(this).carousel('next');
+        if (direction == 'right') $(this).carousel('prev');
+    },
+    allowPageScroll: "vertical"
+});
+
+
+// Enable Tooltip
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
 })

@@ -21,32 +21,46 @@ class CustomerController extends Controller {
     }
     public function signIn(CustomerSignInRequest $request) {
         // dd($request->all());
+        $previous_url = url()->previous();
         $credentials = $request->only('email', 'password');
         if (Auth::guard('customer')->attempt($credentials)) {
-            Session::flash('message', 'Successfully logged in');
-            return success('ssdsd');
+            if(Auth::guard('customer')->user()->is_banned == 1){
+                Auth::guard('customer')->logout();
+                return response()->json([
+                    'success'=>false,
+                    'message'=> 'Sorry! You have no permission to access this',
+                ]);
+            }else{
+                Session::flash('message', 'Successfully logged in');
+                if($previous_url == route('frontend.chekout')){
+                    $data['url']= route('frontend.chekout');
+                }else{
+                    $data['url']= route('frontend.index');
+                }
+              
+                return success($data);
+            }
+
         } else {
             return response()->json([
                 'success' => false,
                 'message' => 'This credentials does not match with our record',
             ]);
         }
-        // if ($customer) {
-        //     Session::flash('message','sadsdsdsdsd');
-        //     return success('ssdsd');
-        // } else {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'This credentials does not match with our record',
-        //     ]);
-        // }
+
     }
     public function signUp(CustomerSignUpRequest $request) {
         // dd($request->all());
+        $previous_url = url()->previous();
         $customer = Customer::create($request->validated());
         $data     = Auth::guard('customer')->login($customer);
         Session::flash('message', 'Successfully logged in');
-        return success($customer);
+        if($previous_url == route('frontend.chekout')){
+            $data['url']= route('frontend.chekout');
+        }else{
+            $data['url']= route('frontend.index');
+        }
+        return success($data);
     }
 
     public function signOut() {
@@ -58,6 +72,8 @@ class CustomerController extends Controller {
             return view('frontend.customer.sign_in');
         }
     }
+
+
 
     public function customerOrders() {
         if (Auth::guard('customer')->check()) {
@@ -123,7 +139,7 @@ class CustomerController extends Controller {
     public function customerDeliveryInfoUpdate(Request $request) {
         $validator = Validator::make($request->all(), [
             'address' => 'required|max:1000',
-            'contact' => 'required|numeric',
+            'contact' => 'required|max:11|min:11',
         ]);
         if ($validator->fails()) {
             $data          = array();

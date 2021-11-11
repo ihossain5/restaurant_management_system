@@ -44,15 +44,19 @@ $orders = ManagerDashboardController::countedOrders();
             <a href="{{ route('dashboard') }}" class="waves-effect"><i class="dripicons-device-desktop "></i><span>
                     Business Overview </span></a>
         </li>
+        <li class="has_sub user_li">
+            <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-user"></i><span> Location Management <span
+                        class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
+            <ul class="list-unstyled">
+                <li><a href="{{ route('location.index') }}">Location </a></li>
+                <li><a href="{{ route('restaurant.location.index') }}">Restaurant Location </a></li>
+            </ul>
+        </li>
         <li class="has_sub restaurant_li">
             <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-device-desktop"></i><span>My Restaurant
                     <span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
             <ul class="list-unstyled">
                 <li><a class="restaurant_overview" href="{{ route('restaurant.overview',[$restaurant_id]) }}">Restaurant Overview</a></li>
-                {{-- <li><a href="{{ route('location.index') }}">Location Management</a></li>
-                <li><a href="{{ route('restaurant.location.index') }}">Restaurant Location </a></li> --}}
-                <li><a href="{{ route('restaurant.index') }}">Restaurant Management</a></li>
-
 
                 <li class="has_multi_sub orders">
                     <a href="javascript:void(0);" class="waves-effect">
@@ -65,6 +69,7 @@ $orders = ManagerDashboardController::countedOrders();
                         <li><a class="past_order_link" href="{{ route('orders.past',[$restaurant_id]) }}"><i class="fa fa-cutlery"></i>Past Orders</a></li>
                     </ul>
                 </li>
+
                 <li class="has_multi_sub items_li">
                     <a href="javascript:void(0);" class="waves-effect">
                         <span>
@@ -103,10 +108,12 @@ $orders = ManagerDashboardController::countedOrders();
                 <li><a href="{{ route('restaurant.manager') }}">Restaurant Managers</a></li>
             </ul>
         </li>
+
         <li class="has_sub">
             <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-web"></i><span>Website
                     Content<span class="float-right"><i class="mdi mdi-chevron-right"></i></span> </span></a>
             <ul class="list-unstyled">
+                <li><a href="{{ route('restaurant.index') }}">Restaurant Management</a></li>
                 <li><a href="{{ route('home.hero.section') }}">Home Hero Section</a></li>
                 <li><a href="{{ route('about.us') }}">About Us</a></li>
                 <li><a href="{{ route('contact.us') }}">Contact Us</a></li>

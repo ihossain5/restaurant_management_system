@@ -18,7 +18,12 @@ use Illuminate\Support\Str;
 
 class ManagerController extends Controller {
     public function login() {
-        return view('manager.manager_login');
+        if(!Auth::check()){
+            return view('manager.manager_login');
+        }else{
+            return redirect()->route('manager.dashboard');
+        }
+       
     }
     public function singIn(LoginRequest $request) {
         $request->authenticate();

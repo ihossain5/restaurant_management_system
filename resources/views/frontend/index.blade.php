@@ -68,7 +68,11 @@
                                     <div class="card-overlay-content">
                                         <div class="card-ovelay-inner">
                                             <img src="{{ 'images/' . $restaurant->logo }}" alt="">
-                                            <p>**Delivery available only in Gulshan</p>
+                                            <p>**Delivery available only in 
+                                                @foreach ($restaurant->delivery_locations as $location)
+                                                {{ $location->name }} @if (!$loop->last),@endif 
+                                              @endforeach
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -88,7 +92,7 @@
         <div class="deals-section-header">
             <div class="row pb-5">
                 <div class="col-md-6">
-                    <h2 class="carouselTitle">Deals Only Found Here</h2>
+                    <h2 class="carouselTitle">Website-exclusive Offers</h2>
                 </div>
                 <div class="col-md-6 text-start text-md-end">
                     <div class="dots-div dots d-none dealsDot">
@@ -114,7 +118,7 @@
                                             @endif
                                             <h2>Tk. {{ $combo->price }}</h2>
                                             @if ($combo->disable == true)
-                                                <p class="restaurant-status-txt">Delivery is not available in this area</p>
+                                                <p class="restaurant-status-txt">Delivery is not available in your selected area.</p>
                                             @elseif($combo->closed == true)
                                                 <p class="restaurant-status-txt">Restaurant is closed now</p>
                                             @else
@@ -132,7 +136,7 @@
                                 <h3>{{ $combo->name }}</h3>
                                 <h2 class="comboBtn">Tk. {{ $combo->price }}</h2>
                                 @if ($combo->disable == true)
-                                    <p class="restaurant-status-txt">Delivery is not available in the area</p>
+                                    <p class="restaurant-status-txt">Delivery is not available in your selected area.</p>
                                 @elseif($combo->closed == true)
                                     <p class="restaurant-status-txt">Restaurant is closed now</p>
                                 @else
@@ -153,7 +157,7 @@
         <div class="popular-section-header">
             <div class="row pb-5">
                 <div class="col-md-6">
-                    <h2 class="carouselTitle">Popular Dishes</h2>
+                    <h2 class="carouselTitle">Customer Favourites</h2>
                 </div>
                 <div class="col-md-6 text-start text-md-end">
                     <div class="dots-div2 dots popularDot d-none">
@@ -177,7 +181,7 @@
                                     <h3>{{ $item->name }}</h3>
                                     <h2 class="itemBtn">Tk. {{ $item->price }}</h2>
                                     @if ($item->disable == true)
-                                        <p class="restaurant-status-txt">Delivery is not available in the area</p>
+                                        <p class="restaurant-status-txt">Delivery is not available in your selected area.</p>
                                     @elseif($item->closed == true)
                                         <p class="restaurant-status-txt">Restaurant is closed now</p>
                                     @else

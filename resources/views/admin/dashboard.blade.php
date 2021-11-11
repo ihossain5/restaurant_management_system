@@ -3,7 +3,7 @@
     Dashboard
 @endsection
 @section('page-header')
-    {{ Auth::user()->is_super_admin == 1 || Auth::user()->is_admin == 1  ? 'Business Overview' : 'Dashboard' }}
+    {{ Auth::user()->is_super_admin == 1 || Auth::user()->is_admin == 1 ? 'Business Overview' : 'Dashboard' }}
 @endsection
 @section('pageCss')
     <style>
@@ -28,23 +28,25 @@
                 @if (!empty($restaurants))
                     @foreach ($restaurants as $restaurant)
                         <div class="col-12 col-md-6 col-lg-3">
-                            <div class="card m-b-30 card-body dashboardCard">
-                                <div class="card-content">
-                                    <h4>{{ $restaurant->name }}</h4>
-                                    <h6>{{ $restaurant->address }}</h6>
-                                    <h2>{{ currency_format($restaurant->revenue) }}</h2>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <p><img src="{{ asset('backend/assets/icons/tick.svg') }}"
-                                                    alt="">{{ $restaurant->completed_orders }}</p>
-                                        </div>
-                                        <div class="col-6 text-right">
-                                            <p><img src="{{ asset('backend/assets/icons/cross.svg') }}"
-                                                    alt="">{{ $restaurant->cancelled_orders }}</p>
+                            <a href="{{ route('restaurant.overview', [$restaurant->restaurant_id]) }}">
+                                <div class="card m-b-30 card-body dashboardCard">
+                                    <div class="card-content">
+                                        <h4>{{ $restaurant->name }}</h4>
+                                        {{-- <h6>{{ $restaurant->address }}</h6> --}}
+                                        <h2>{{ currency_format($restaurant->revenue) }}</h2>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <p><img src="{{ asset('backend/assets/icons/tick.svg') }}"
+                                                        alt="">{{ $restaurant->completed_orders }}</p>
+                                            </div>
+                                            <div class="col-6 text-right">
+                                                <p><img src="{{ asset('backend/assets/icons/cross.svg') }}"
+                                                        alt="">{{ $restaurant->cancelled_orders }}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     @endforeach
                 @endif
@@ -57,16 +59,16 @@
                         <div class="table-responsive scrollTable b-0 pt-4 pl-4 pr-5">
                             <table class="table performTable">
                                 <tbody>
-                                    @if (!empty($orders))
-                                        @foreach ($orders as $key => $order)
+                                    @if (!empty($bestRestaurants))
+                                        @foreach ($bestRestaurants as $key => $restaurant)
                                             <tr>
                                                 <th class="srNo text-left" scope="row">{{ $loop->iteration }}</th>
                                                 <td class="shopInfo">
-                                                    <h5>{{ $order->restaurant->name }}</h5>
-                                                    <h6>{{ $order->restaurant->address }}</h6>
+                                                    <h5>{{ $restaurant->name }}</h5>
+                                                    {{-- <h6>{{ $order->restaurant->address }}</h6> --}}
                                                 </td>
-                                                <td class="sellPrice">{{ $order->total_amount }}</td>
-                                                <td class="sellQty">{{ $order->completed }}</td>
+                                                <td class="sellPrice">{{ $restaurant->restaurant_orders_sum_amount == null ? 0 : $restaurant->restaurant_orders_sum_amount }}</td>
+                                                <td class="sellQty">{{ $restaurant->restaurant_orders_count }}</td>
                                             </tr>
                                         @endforeach
                                     @endif
@@ -82,8 +84,8 @@
                             <table class="table performTable">
                                 <tbody>
                                     @if (!empty($items))
-                                        @foreach ($items as $item)
-                                            @if ($item->completed_orders->count() > 0)
+                                        @foreach ($items->take(10) as $item)
+                                            {{-- @if ($item->completed_orders->count() > 0) --}}
                                                 <tr>
                                                     <th class="srNo text-left" scope="row">{{ $loop->iteration }}</th>
                                                     <td class="shopInfo">
@@ -95,7 +97,7 @@
                                                         <h6>{{ $item->orders_sum_amount }}</h6>
                                                     </td>
                                                 </tr>
-                                            @endif
+                                            {{-- @endif --}}
                                         @endforeach
                                     @endif
                                 </tbody>

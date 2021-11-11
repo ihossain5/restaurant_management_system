@@ -55,9 +55,25 @@ class CustomerLoginController extends Controller {
     }
 
     protected function redirectCustomer(){
-        Session::flash('message', 'Successfully logged in');
-        return redirect()->to(session()->get('previous_url'));
-        session()->forget('previous_url');
+        if(Auth::guard('customer')->user()->is_banned == 1){
+            Auth::guard('customer')->logout();
+            return redirect()->route('frontend.customer.sign.in')->with('error','Sorry! You have no permission to access this');
+            // return response()->json([
+            //     'success'=>false,
+            //     'message'=> 'Sorry! You have no permission to access this',
+            // ]);
+        }else{
+            Session::flash('message', 'Successfully logged in');
+            if(session()->get('previous_url') == route('frontend.chekout')){
+                $url= route('frontend.chekout');
+            }else{
+                $url= route('frontend.index');
+            }
+            session()->forget('previous_url');
+            return redirect()->to($url);
+            
+        }
+      
     }
 
 }

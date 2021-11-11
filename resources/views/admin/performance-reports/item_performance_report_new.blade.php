@@ -35,11 +35,13 @@
                                                 </button>
                                                 <div class="dropdown-menu downloadMenu"
                                                     aria-labelledby="dropdownMenuButton">
-                                                    <button onclick="downloadPdf()"><img src="{{ asset('backend/assets/icons/pdf-icon.svg') }}"
-                                                            alt=""> PDF
+                                                    <button onclick="downloadPdf()"><img
+                                                            src="{{ asset('backend/assets/icons/pdf-icon.svg') }}" alt="">
+                                                        PDF
                                                         File</button>
-                                                    <button onclick="downloadCsv()"><img src="{{ asset('backend/assets/icons/csv-icon.svg') }}"
-                                                            alt=""> CSV
+                                                    <button onclick="downloadCsv()"><img
+                                                            src="{{ asset('backend/assets/icons/csv-icon.svg') }}" alt="">
+                                                        CSV
                                                         File</button>
                                                 </div>
                                             </div>
@@ -49,7 +51,8 @@
                                                 <option value="">Select</option>
                                                 @if (!empty($restaurant->restaurant_categories))
                                                     @foreach ($restaurant->restaurant_categories as $category)
-                                                        <option value="{{ $category->category_id }}">{{ $category->name }}
+                                                        <option value="{{ $category->category_id }}">
+                                                            {{ $category->name }}
                                                         </option>
                                                     @endforeach
                                                 @endif
@@ -114,10 +117,12 @@
                                         <tr class="table-active">
                                             <td class="col-3 font-weight-bold">TOTAL</td>
                                             <td class="col-3 font-weight-bold"></td>
-                                            <td class="col-3 font-weight-bold">TOTAL <span
-                                                    class="total_orders">{{$total_order}}</span> ORDERS</td>
+                                            <td class="col-3 font-weight-bold"></td>
+                                            {{-- <td class="col-3 font-weight-bold">TOTAL 
+                                                <span class="total_orders">{{ $total_order }}</span> ORDERS
+                                            </td> --}}
                                             <td class="col-3 font-weight-bold ">TOTAL <span
-                                                    class="total_amount">{{$total_amount}}</span></td>
+                                                    class="total_amount">{{ $total_amount }}</span></td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -266,7 +271,7 @@
             var end_date = $('#end_date').val();
             var restaurantId = $('#restaurantId').val();
             var id = $('.category-select').val();
-            if(id == ''){
+            if (id == '') {
                 $('#start_date').val("");
                 $('#end_date').val("");
             }
@@ -280,7 +285,8 @@
                     end_date: end_date,
                     _token: "{{ csrf_token() }}"
                 },
-                dataType: "json",};
+                dataType: "json",
+            };
             $('#orderTable').DataTable().clear().destroy();
             dataTable(url);
 
@@ -346,13 +352,13 @@
         //     });
         // });
 
-// category on change function
-    $(document).on('change', '.category-select', function() {
+        // category on change function
+        $(document).on('change', '.category-select', function() {
             var id = $(this).val();
             var start_date = $('#start_date').val();
             var end_date = $('#end_date').val();
             var restaurantId = $('#restaurantId').val();
-            if(id == ''){
+            if (id == '') {
                 $('#start_date').val("");
                 $('#end_date').val("");
             }
@@ -366,7 +372,8 @@
                     end_date: end_date,
                     _token: "{{ csrf_token() }}"
                 },
-                dataType: "json",};
+                dataType: "json",
+            };
             $('#orderTable').DataTable().clear().destroy();
             dataTable(url);
         });
@@ -396,18 +403,19 @@
 
                 ],
                 "drawCallback": function(settings) {
-                    if(settings.json.data.length <=0){
+                    if (settings.json.data.length <= 0) {
                         $('.total_orders').html(0);
-                        $('.total_amount').html(`<span class='bdt_symbol'>৳ </spam>`+ 0);
+                        $('.total_amount').html(`<span class='bdt_symbol'>৳ </spam>` + 0);
                     }
-                    $.each(settings.json.data, function(i,val){
-                      $('.starting_date').html(val.start_date);
-                      $('.ending_date').html(val.end_date);
-                      $('.total_orders').html(val.total_order);
-                      $('.total_amount').html(`<span class='bdt_symbol'>৳ </spam>`+ val.total_amount);
+                    $.each(settings.json.data, function(i, val) {
+                        $('.starting_date').html(val.start_date);
+                        $('.ending_date').html(val.end_date);
+                        $('.total_orders').html(val.total_order);
+                        $('.total_amount').html(`<span class='bdt_symbol'>৳ </spam>` + val
+                        .total_amount);
                     })
                 },
             });
-        }    
+        }
     </script>
 @endsection

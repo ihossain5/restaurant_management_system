@@ -59,6 +59,16 @@ class OrderService {
             ->whereYear('created_at', $year)
             ->get();
     }
+    /**
+     * Get last month completed orders
+     */
+    public function lastMonthCompletedOrders($restaurant_id) {
+        return Order::with('customer', 'status','items','items.category')->where('restaurant_id', $restaurant_id)
+            ->whereMonth('created_at', Carbon::now()->subMonth()->month)
+            ->whereYear('created_at', now()->year)
+            ->where('order_status_id', '=', 3)
+            ->get();
+    }
 
     protected function orderStatusClass($order) {
         if ($order->status != null) {

@@ -3,24 +3,27 @@
 namespace App\Services;
 
 use App\Events\MyEvent;
-use App\Models\Combo;
 use App\Models\Customer;
 use App\Models\Order;
 use Carbon\Carbon;
-use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Session;
 
 Class CheckoutService extends CartService {
 
-    public function __construct() {
-        parent::__construct(10, session()->get('delivery_charge'));
+    public $deliveryFee;
+
+    public function __construct($deliveryFee) {
+        $this->deliveryFee = $deliveryFee;
+        parent::__construct(10, $this->deliveryFee);
     }
 
     // public function storeOrder($setDefaultAddress, $contact, $address, $setDefaultContact, $name, $email, $restaurant_id, $instruction) {
     public function storeOrder($request) {
+        // return $this->deliveryCharge;
         $order = new Order();
         DB::transaction(function () use ($request, $order) {
             if ($request->setDefaultAddress != null) {
@@ -53,7 +56,7 @@ Class CheckoutService extends CartService {
         Cart::destroy();
         Session::forget('sessionRestaurantId');
         return $order;
-       
+
     }
 
     public function getMaxId($restaurant_id) {
@@ -84,22 +87,21 @@ Class CheckoutService extends CartService {
         return Customer::findOrFail(Auth::guard('customer')->user()->customer_id);
     }
 
-    protected function sendNotificationToManager($restaurant_id){
+    protected function sendNotificationToManager($restaurant_id) {
         event(new MyEvent($this->numberOfNewOrders($restaurant_id), $restaurant_id));
     }
 
-    public function numberOfNewOrders($restaurant_id){
+    public function numberOfNewOrders($restaurant_id) {
         return Order::where('order_status_id', null)
-         ->where('restaurant_id', $restaurant_id)
-         ->whereDate('created_at', Carbon::now())
-         ->count();
-     }
+            ->where('restaurant_id', $restaurant_id)
+            ->whereDate('created_at', Carbon::now())
+            ->count();
+    }
 
     protected function storeItems($order) {
         // insert into pivot table
         foreach ($this->allCartItems() as $item) {
             if (Arr::exists($item->options, 'combo_id')) {
-                $combo = Combo::findOrFail($item->id);
                 $order->order_combos()->attach([$item->id => [
                     'quantity' => $item->qty,
                     'price'    => formatAmount($item->subtotal),

@@ -78,7 +78,7 @@ class ManagerOrdersController extends Controller {
         $data['id']                   = $order->order_id;
         $data['message']              = 'Order has accepted';
         $data['order_in_preparation'] = count($this->order->ordersInPreparationByRestaurant($order->restaurant_id));
-        $data['new_order']            = count($this->order->todayOrdersByRestaurantId($order->restaurant_id));
+        $data['new_order']            = count($this->order->todayNewOrdersByRestaurantId($order->restaurant_id));
         return success($data);
         // foreach($new_orders as $new_order){
         //     $new_order->order_in_preparation = count($this->order->ordersInPreparationByRestaurant($order->restaurant_id));
@@ -113,8 +113,8 @@ class ManagerOrdersController extends Controller {
     public function updateOrder(Request $request) {
         // dd($request->all());
         $this->validate($request, [
-            'item'  => 'required|array',
-            'item*' => 'required',
+            // 'item'  => 'required|array',
+            // 'item*' => 'required',
         ]);
 
         $order = Order::with('items', 'order_combos')->findOrFail($request->order_id);
@@ -127,6 +127,7 @@ class ManagerOrdersController extends Controller {
                 'amount'        => formatAmount($request->totalAmount),
                 'vat_amount'    => formatAmount($request->vatAmount),
             ]);
+
             if ($items) {
                 foreach ($items as $item) {
                     $updated_item[$item['item_id']] = [
@@ -136,7 +137,10 @@ class ManagerOrdersController extends Controller {
 
                 }
                 $order->items()->sync($updated_item, true);
+            }else{
+                $order->items()->detach();
             }
+
             if ($comboItems) {
                 foreach ($comboItems as $comboItem) {
                     $combo_item[$comboItem['item_id']] = [
@@ -146,6 +150,8 @@ class ManagerOrdersController extends Controller {
 
                 }
                 $order->order_combos()->sync($combo_item, true);
+            }else{
+                $order->order_combos()->detach();
             }
 
         });

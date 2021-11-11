@@ -168,7 +168,7 @@ Orders in Preparation
                             <h4 class="mt-3">Special Notes</h4>
                         </div>
                         <div class="col-12">
-                            <input type="text" class="form-control specialInput specialNotes">
+                            <input type="text" name="specialNotes" class="form-control specialInput specialNotes">
                         </div>
                         <div class="col-12 mt-3">
                             <h4>Ordered Items</h4>
@@ -291,7 +291,7 @@ Orders in Preparation
                                         <tr>
                                             <td colspan="3">Sub total</td>
                                             <td colspan="2">Tk <span class="subTotalAmount">0.00</span>
-                                                <input type="hidden" name="totalAmount" class="subTotalAmountInput">
+                                                <input type="hidden" class="subTotalAmountInput">
                                             </td>
                                         </tr>
                                         <tr>
@@ -309,7 +309,7 @@ Orders in Preparation
                                         <tr>
                                             <td colspan="3">Total Amount</td>
                                             <td colspan="2">Tk <span class="totalAmount">0.00</span>
-                                                <input type="hidden" class="totalAmountInput">
+                                                <input type="hidden" name="totalAmount" class="totalAmountInput">
                                             </td>
                                         </tr>
                                     </tfoot>
@@ -327,6 +327,7 @@ Orders in Preparation
             </div>
         </div>
     </div>
+
 <!-- view  Modal End -->
     <!-- order deny  Modal -->
     <div class="modal addModal fade" id="orderCancelModal" tabindex="-1" aria-hidden="true">

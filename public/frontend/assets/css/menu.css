@@ -84,13 +84,14 @@
     margin-top   : 3.4rem;
     margin-bottom: 3.4rem;
 }
+
 .restaurSubTitle p {
-    font-family   : 'Roboto', sans-serif;
-    font-weight   : 300;
-    font-size     : 2.4rem;
-    line-height   : 3.8rem;
-    font-style: italic;
-    color: #91B110;
+    font-family  : 'Roboto', sans-serif;
+    font-weight  : 300;
+    font-size    : 2.4rem;
+    line-height  : 3.8rem;
+    font-style   : italic;
+    color        : #91B110;
     margin-bottom: 2rem;
 }
 
@@ -121,8 +122,117 @@
 
 
 /* Menu CSS */
-.menu-section {
-    padding: 5.7rem 5% 20.2rem 5%;
+.menu-title-wrapper {
+    padding-top: 5.8rem;
+}
+
+.menu-navbar-wrapper.sticky-top {
+    background   : #ffffff;
+    border-bottom: 1px solid #DDDDDD;
+    z-index      : 10;
+}
+#menuNavbar {
+    width: 100%;
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+
+.scroll-x-navbar::-webkit-scrollbar {
+    display: none;
+}
+
+.scroll-x-navbar {
+    display           : flex;
+    flex-wrap         : initial;
+    overflow-x        : auto;
+    padding: 0 2rem;
+    margin-bottom     : 0;
+    -ms-overflow-style: none;
+    scrollbar-width   : none;
+}
+
+.scroll-x-navbar .nav-link {
+    font-family   : 'Roboto', sans-serif;
+    font-size     : 1.8rem;
+    line-height   : 2.1rem;
+    font-weight   : 400;
+    color         : #858585;
+    text-transform: capitalize;
+    padding       : 2.4rem 0;
+    white-space   : nowrap;
+    position      : relative;
+    margin        : 0 2rem;
+    display: block;
+}
+
+.scroll-x-navbar .nav-link.active::before {
+    content   : '';
+    position  : absolute;
+    left      : 0;
+    right     : 0;
+    bottom    : 0;
+    height    : 2px;
+    width     : 100%;
+    background: #53A0BC;
+    z-index   : 2;
+}
+
+.scroll-x-navbar.nav-pills .nav-link.active,
+.scroll-x-navbar.nav-pills .show>.nav-link {
+    color           : #000000;
+    background-color: transparent;
+}
+
+.scrollspy-menu-content {
+    position       : relative;
+    overflow-y     : auto;
+    overflow-x     : hidden;
+    scroll-behavior: smooth;
+    padding-bottom : 12rem;
+}
+
+.scrollspy-menu-content .container .categories:first-child {
+    padding-top: 4rem;
+}
+
+.scrollspy-menu-content .container .categories:not(:first-child) {
+    padding-top: 6rem;
+}
+
+/* horizontal scroll menu next / prev icon  */
+.owl-carousel .owl-nav button.owl-next, .owl-carousel .owl-nav button.owl-prev {
+    font-size: 28px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+}
+.owl-carousel .owl-nav button.owl-next {
+    right: 0;
+}
+.owl-carousel .owl-nav button.owl-prev {
+    left: 0;
+}
+.owl-carousel .owl-nav button.owl-next.disabled, .owl-carousel .owl-nav button.owl-prev.disabled {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.categories {
+    transition: padding .4s ease-in-out;
+}
+
+.categories>.categories-active-height {
+    height    : auto;
+    transition: all .4s ease-in-out;
+}
+
+.categories:first-child.active>.categories-active-height {
+    height: 15.6rem;
+}
+
+.categories.active>.categories-active-height {
+    height: 13.6rem;
 }
 
 .menuTitle {
@@ -135,110 +245,32 @@
     margin-bottom : 4rem;
 }
 
-.categories.active {
-    padding-top: 14rem !important;
-}
+
 .categoriesTitle {
-    font-family  : 'Roboto', sans-serif;
-    font-weight  : 300;
-    font-size    : 3.2rem;
-    line-height  : 3.8rem;
-    color        : #000000;
-    margin-bottom: 2.5rem;
-    padding: 0 1rem;
+    font-family   : 'Roboto', sans-serif;
+    font-weight   : 300;
+    font-size     : 3.2rem;
+    line-height   : 3.8rem;
+    color         : #000000;
+    text-transform: capitalize;
+    margin-bottom : 2.5rem;
+    padding       : 0 1rem;
 }
 
 .sideCategories {
     position: relative;
 }
 
-.sideCategories li:first-child::before {
-    content         : '';
-    position        : absolute;
-    top             : 3.5rem;
-    right           : -1.8rem;
-    bottom          : 0;
-    margin          : auto;
-    height          : 80%;
-    width           : .2rem;
-    background-color: #355D6C;
-}
-
-.sideCategories li:last-child::before {
-    content         : '';
-    position        : absolute;
-    top             : -3.5rem;
-    right           : -1.8rem;
-    bottom          : 0;
-    margin          : auto;
-    height          : 80%;
-    width           : .2rem;
-    background-color: #355D6C;
-}
-
-.sideCategories li::before {
-    content         : '';
-    position        : absolute;
-    top             : 0;
-    right           : -1.8rem;
-    bottom          : 0;
-    margin          : auto;
-    height          : 100%;
-    width           : .2rem;
-    background-color: #355D6C;
-}
-
-
-
-
-.sideCategories li {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 300;
-    font-size  : 2rem;
-    line-height: 2.3rem;
-    color      : #1A1A1A;
-    text-align : right;
-    position   : relative;
-    padding    : 2rem 0;
-    cursor     : pointer;
-}
-
-.sideCategories li a {
-    text-decoration: none;
-    color          : #1A1A1A;
-
-}
-
-
-
-.sideCategories li::after {
-    content         : '';
-    position        : absolute;
-    top             : 0;
-    right           : -2.4rem;
-    bottom          : 0;
-    margin          : auto;
-    height          : 1.5rem;
-    width           : 1.5rem;
-    border-radius   : 50%;
-    background-color: #355D6C;
-
-}
-
-
-.sideCatSticky {
-    position: sticky;
-    top     : 13rem;
-}
-
-
-.menu-container {
-    padding-left: 11.4rem;
-    padding-top : 1rem;
-}
-
-
 /* Item CSS */
+.menuItem {
+    border-bottom : 1px solid #DDDDDD;
+    padding-bottom: 4.8rem;
+    padding-top   : 4.8rem;
+}
+
+.menuItem:last-child {
+    border-bottom: none;
+}
 
 .item {
     padding: 1.8rem;
@@ -304,16 +336,18 @@
 
 .item-content {
     padding-left: 3.2rem;
+    display        : flex;
+    justify-content: space-between;
 }
 
 
 .price {
-    font-family  : "Anko-PersonalUse-Bold";
-    font-size    : 2.8rem;
-    line-height  : 3.6rem;
-    color        : #1A1A1A;
-    padding-right: 2.3rem;
-    margin-bottom: 1.5rem;
+    font-family     : "Anko-PersonalUse-Bold" !important;
+    font-size       : 2.8rem;
+    line-height     : 3.6rem;
+    color           : #1A1A1A;
+    margin-bottom   : 1.5rem;
+    text-align      : center;
 }
 
 .cartBtn {
@@ -333,43 +367,74 @@
     color           : white;
 }
 
-
 @media (max-width: 767.98px) {
-    
+
+    .menuContainer {
+        padding-left : 2.4rem;
+        padding-right: 2.4rem;
+    }
+
+    .item-content {
+        display: block;
+    }
+
+    .price {
+        text-align: left;
+        margin-top: 16px;
+    }
+
+    .item-content p {
+        margin-top: 16px;
+    }
+
 }
+
+
 @media (max-width: 575.98px) {
     .restaurDetails p {
-        font-size: 15px;
+        font-size  : 15px;
         line-height: 32px;
     }
+
     .restaurDetails a {
-        font-size: 16px;
+        font-size  : 16px;
         line-height: 19px;
-        padding: 16px 32px;
+        padding    : 16px 32px;
     }
+
     .item-content {
-        padding-left: 1rem;
+        padding-left: 1.6rem;
     }
+
     .item-content h3 {
-        font-size: 22px;
+        font-size  : 18px;
         line-height: 24px;
     }
+
     .item-content ul li {
-        font-size: 16px;
-        line-height: 19px;
-        margin-top: 8px;
+        font-size  : 14px;
+        line-height: 16px;
+        margin-top : 8px;
     }
+
     .item-content p {
-        font-size: 15px;
-        line-height: 24px;
-        margin-top: 1rem;
+        font-size  : 14px;
+        line-height: 22px;
+        margin-top : 1rem;
     }
+
     .price {
         margin-bottom: 8px;
-        font-size: 20px;
-        line-height: 26px;
+        font-size    : 18px;
+        line-height  : 23px;
     }
+
     .cartBtn {
+        font-size: 14px;
         font-weight: 500;
+    }
+
+    .scroll-x-navbar .nav-link {
+        font-size: 16px;
     }
 }

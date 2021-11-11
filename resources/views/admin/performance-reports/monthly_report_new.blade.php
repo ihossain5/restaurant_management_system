@@ -7,13 +7,10 @@
 @endsection
 @section('pageCss')
     <style>
-
-
     </style>
 @endsection
 @section('content')
     <div class="preloader"></div>
-
     <div class="page-content-wrapper">
         <div class="container-fluid">
             <div class="row">
@@ -99,10 +96,11 @@
                                     <tfoot>
                                         <tr class="table-active">
                                             <td class="col-3 font-weight-bold">TOTAL</td>
+                                           
+                                            <td class="col-3 font-weight-bold"></td>
+                                            <td class="col-3 font-weight-bold"></td>
+                                            <td class="col-3 font-weight-bold"></td>
                                             <td class="col-3 font-weight-bold">TOTAL <span class="total_orders">{{$total_order}}</span> ORDERS</td>
-                                            <td class="col-3 font-weight-bold"></td>
-                                            <td class="col-3 font-weight-bold"></td>
-                                            <td class="col-3 font-weight-bold"></td>
                                             <td class="col-3 font-weight-bold"></td>
                                             <td class="col-3 font-weight-bold ">TOTAL <span class="total_amount">{{currency_format($total_amount)}}</span></td>
                                         </tr>
@@ -181,7 +179,7 @@
                     },
                 ],
             });
-            hideColumn(table);
+            // hideColumn(table);
         });
 
         // restaurant change
@@ -247,7 +245,7 @@
                         $('.restaurant_id').val(response.data.id);
                         $('#orderTable').DataTable().clear().destroy();
                         setSessionId(response.data.session_id);
-                        dataTable();
+                        monthlyDataTable();
                         $('.current_year').html(response.data.year);
                         $('.current_month').html(response.data.month + ',');
                         $('.total_orders').html(response.data.total_order);
@@ -274,22 +272,6 @@
         });
 
 
-        // 
-        function ordersData(orders) {
-            var orderTable = $('#orderTable').DataTable();
-            $.each(orders, function(key, val) {
-                var trDOM = orderTable.row.add([
-                    "" + val.date + "",
-                    "" + val.id + "",
-                    "" + '৳ ' + bdCurrencyFormat(val.amount) + "",
-                    `   <button type='button' class='btn btn-outline-dark' onclick='viewOrder(${val.order_id})'>
-                                                <i class='fa fa-eye'></i>
-                                            </button>`
-                ]).draw().node();
-                $(trDOM).addClass('order' + val.order_id + '');
-            });
-
-        }
 
         function dataTable() {
             var url = '{{ route('date.wise.order.report.restaurant') }}';
@@ -335,8 +317,56 @@
                     },
                 ],
             });
-            hideColumn(table);
+            // hideColumn(table);
         }
+
+        function monthlyDataTable() {
+            var route = '{{ route('order.report.month') }}';
+            // url = url.replace(':id', id);
+            var table = $('#orderTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'csvHtml5',
+                        filename: 'monthly reports',
+                        className: 'd-none',
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        filename: 'monthly reports',
+                        title: 'Monthly Reports',
+                        className: 'd-none',
+                    },
+                ],
+                serverSide: true,
+                ajax: route,
+                columns: [
+
+                    {
+                        data: 'order_date'
+                    },
+                    {
+                        data: 'id'
+                    },
+                    {
+                        data: 'status'
+                    },
+                    {
+                        data: 'customer_name'
+                    },
+                    {
+                        data: 'customer_contact'
+                    },
+                    {
+                        data: 'customer_adress'
+                    },
+                    {
+                        data: 'total'
+                    },
+                ],
+            });
+            // hideColumn(table);
+        }
+        
         function hideColumn(table) {
             let column2 = table.column(2);
             column2.visible(false);

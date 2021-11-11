@@ -1,5 +1,6 @@
 <aside class="cart" id="cart">
     <h1 id="cartName">my cart</h1>
+    <h2 class="mb-3 cartRestaurantName">{{$restaurant_name}}</h2>
     @foreach (Cart::content() as $cart)
         <div class="cartItem d-flex justify-content-between cartRow{{ $cart->rowId }}">
             <div>

@@ -254,13 +254,6 @@ crossorigin="anonymous"></script>
         $('.buttons-csv').click();
     }
 
-        <?php if (session()->has('success')): ?>
-        toastMixin.fire({
-                        icon: 'success',
-                        animation: true,
-                        title: "Password has been reset successfully"
-                    });
 
-        <?php endif; ?>
         
 </script>

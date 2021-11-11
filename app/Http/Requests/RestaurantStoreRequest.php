@@ -28,8 +28,8 @@ class RestaurantStoreRequest extends FormRequest {
             'description' => 'required|max:10000|string',
             'address'     => 'required|max:10000|string',
             'logo'        => 'nullable|max:300|image|mimes:png,jpg,jpeg,svg',
-            'location'   => 'required|array',
-            "location.*" => "required|string|distinct",
+            // 'location'   => 'required|array',
+            // "location.*" => "required|string|distinct",
         ];
     }
     public function messages() {

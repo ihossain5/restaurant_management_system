@@ -113,7 +113,7 @@
                                         <th>Photo</th>
                                         <th>Restaurant Name</th>
                                         <th>Name</th>
-                                        <th>Sex</th>
+                                        <th>Gender</th>
                                         <th>Email</th>
                                         <th>Phone</th>
                                         <th>Action</th>

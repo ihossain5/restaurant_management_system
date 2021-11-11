@@ -107,9 +107,10 @@
                                     </tbody>
                                     <tfoot>
                                         <tr class="table-active">
-                                            <td class="col-3 font-weight-bold">TOTAL</td>
                                             <td class="col-3 font-weight-bold"></td>
-                                            <td class="col-3 font-weight-bold">TOTAL <span class="total_orders"></span> ORDERS</td>
+                                            <td class="col-3 font-weight-bold"></td>
+                                            <td class="col-3 font-weight-bold"></td>
+                                            {{-- <td class="col-3 font-weight-bold">TOTAL <span class="total_orders"></span> ORDERS</td> --}}
                                             <td class="col-3 font-weight-bold ">TOTAL <span class="total_amount"></span></td>
                                         </tr>
                                     </tfoot>
@@ -219,8 +220,19 @@
             if(id == ''){
                 $('.start_date').val("");
                 $('.end_date').val("");
-            }
-            var url = {
+                var url = {
+                url: config.routes.getItems,
+                method: "POST",
+                data: {
+                    id: id,
+                    start_date: '',
+                    end_date: '',
+                    _token: "{{ csrf_token() }}"
+                },
+                dataType: "json",};
+                
+            }else{
+                var url = {
                 url: config.routes.getItems,
                 method: "POST",
                 data: {
@@ -230,6 +242,8 @@
                     _token: "{{ csrf_token() }}"
                 },
                 dataType: "json",};
+            }
+
             $('#orderTable').DataTable().clear().destroy();
             dataTable(url);
         });
@@ -267,7 +281,7 @@
                         data: 'name'
                     },
                     {
-                        data: 'pivot.quantity'
+                        data: 'quantity'
                     },
                     {
                         data: 'revenue',
@@ -287,7 +301,7 @@
                     $.each(settings.json.data, function(i,val){
                       $('.starting_date').html(val.start_date);
                       $('.ending_date').html(val.end_date);
-                      $('.total_orders').html(val.total_order);
+                    //   $('.total_orders').html(val.total_order);
                       $('.total_amount').html(`<span class='bdt_symbol'>৳ </spam>`+ val.total_amount);
                     })
                 },

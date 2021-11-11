@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Combo;
 use App\Models\Item;
+use App\Models\Order;
 use App\Models\Restaurant;
 use App\Models\RestaurantDeliveryLocation;
 use App\Services\CartService;
@@ -80,6 +81,7 @@ class CartController extends Controller {
             $data['grandTotal']        = $cartService->getTotalAmount();
             $data['vatAmount']         = $cartService->getVatAmount();
             $data['deliveryCharge']    = $cartService->deliveryCharge;
+            $data['restaurant_name']    = $restaurant->name;
             return success($data);
         }
 
@@ -102,11 +104,11 @@ class CartController extends Controller {
             }
         }
         if ($request->combo_id != null) {
-           
             $cart = $this->addComboCart($request->combo_id);
         } else {
             $cart = $this->addItemCart($request->item_id);
         }
+   
         Session::put('sessionRestaurantId', $request->restaurant_id);
         $data                      = [];
         $data['message']           = 'Item has been added into cart';
@@ -128,9 +130,10 @@ class CartController extends Controller {
         if ($request->combo_id != null) {
             $cartService->addComboToCart($this->findComboById($request->combo_id));
         } else {
-             $cartService->addToCart($this->findItemById($request->item_id));
+            $cartService->addToCart($this->findItemById($request->item_id));
         }
         Session::put('sessionRestaurantId', $request->restaurant_id); // put new restaurant id
+        $restaurant = Restaurant::with('status')->findOrFail($request->restaurant_id);
 
         $data                      = [];
         $data['message']           = 'Item has been added into cart';
@@ -140,6 +143,7 @@ class CartController extends Controller {
         $data['grandTotal']        = $cartService->getTotalAmount();
         $data['vatAmount']         = $cartService->getVatAmount();
         $data['deliveryCharge']    = $cartService->deliveryCharge;
+        $data['restaurant_name']    = $restaurant->name;
         return success($data);
     }
 
@@ -147,13 +151,13 @@ class CartController extends Controller {
         // dd($request->all());
         $cartService = $this->cartObject($request->delivery_fee);
         $cartService->increaseCartQty($request->rowId);
-        return success($this->cartTotal($cartService,$request->rowId));
+        return success($this->cartTotal($cartService, $request->rowId));
     }
 
     public function decreaseCartQuantity(Request $request) {
         $cartService = $this->cartObject($request->delivery_fee);
         $cartService->decreaseCartQty($request->rowId);
-        return success($this->cartTotal($cartService,$request->rowId));
+        return success($this->cartTotal($cartService, $request->rowId));
     }
 
     public function deleteCart(Request $request) {
@@ -175,7 +179,37 @@ class CartController extends Controller {
         return success($data);
     }
 
-    protected function cartTotal($cartService,$rowId) {
+    public function repeatOrder(Request $request) {
+        $order       = Order::with('items', 'order_combos')->findOrFail($request->id);
+        $deliveryFee = $this->getDeliveryFee($order->restaurant_id, $request->locationId);
+        $cartService = $this->cartObject($deliveryFee);
+        // dd($order);
+        if (count($order->order_combos) > 0) {
+            foreach ($order->order_combos as $combo) {
+                $cart = $cartService->repeatOrderToComboCart($this->findComboById($combo->combo_id) ,$combo->pivot->quantity);
+            }
+        }
+
+        if (count($order->items) > 0) {
+            foreach ($order->items as $item) {
+                $cart = $cartService->repeatOrderToItemCart($this->findItemById($item->item_id),$item->pivot->quantity);
+            }
+        }
+        Session::put('sessionRestaurantId', $order->restaurant_id);
+        $restaurant = Restaurant::with('status')->findOrFail($order->restaurant_id);
+        $data                      = [];
+        $data['message']           = 'Item has been added into cart';
+        $data['items']             = $cartService->allCartItems();
+        $data['subTotal']          = $cartService->grandTotal();
+        $data['numberOfCartItems'] = $cartService->numberOfCartItems();
+        $data['grandTotal']        = $cartService->getTotalAmount();
+        $data['vatAmount']         = $cartService->getVatAmount();
+        $data['deliveryCharge']    = $cartService->deliveryCharge;
+        $data['restaurant_name']    = $restaurant->name;
+        return success($data);
+    }
+
+    protected function cartTotal($cartService, $rowId) {
         $data                      = [];
         $data['grandTotal']        = $cartService->grandTotal();
         $data['numberOfCartItems'] = $cartService->numberOfCartItems();

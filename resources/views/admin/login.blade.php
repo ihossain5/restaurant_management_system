@@ -40,7 +40,6 @@
                 <h3 class="text-center m-0">
                     <a href="" class="logo logo-admin">
                         <img src="{{asset('frontend/assets/images/Home/logo 2.svg')}}" alt="Emerald Restaurent logo">
-                        {{-- <h5>Admin Dashboard</h5> --}}
                     </a>
                 </h3>
 

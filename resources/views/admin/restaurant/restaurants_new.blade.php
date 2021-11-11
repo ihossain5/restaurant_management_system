@@ -10,7 +10,7 @@
             cursor: not-allowed;
             box-shadow: none;
         }
-
+/* 
         .mdi-plus {
             font-size: 25px;
             position: absolute;
@@ -24,9 +24,8 @@
             cursor: pointer;
             position: absolute;
             margin: 10px -10px;
-            /* border: 1px solid #f24734; */
             color: #f24734;
-        }
+        } */
 
         .close_icon_edit_form {
             font-size: 25px;
@@ -66,10 +65,10 @@
         .restaurant_image img {
             width: 100%;
         }
-        .add_row_btn{
+        /* .add_row_btn{
             padding:  3px 25px;
             margin-right:40px;
-        }
+        } */
 
         .switch {
             position: relative;
@@ -166,7 +165,7 @@
                                             <th>Description</th>
                                             <th>Contact</th>
                                             <th>Email</th>
-                                            <th>Address</th>
+                                            {{-- <th>Address</th> --}}
                                             <th>Active Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -186,7 +185,7 @@
                                                     <td>{{ $restaurant->formated_description }}...</td>
                                                     <td>{{ $restaurant->contact }}</td>
                                                     <td>{{ $restaurant->email }}</td>
-                                                    <td>{{ $restaurant->formated_address }}</td>
+                                                    {{-- <td>{{ $restaurant->formated_address }}</td> --}}
                                                     <td>
                                                         <label class="switch">
                                                             <input class="is_active status{{ $restaurant->restaurant_id }}"
@@ -267,6 +266,15 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Facebook URL</label>
+                                    <input type="text" class="form-control" name="facebook_link"
+                                        placeholder="Type facebook url" />
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label>Description</label>
                             <textarea name="description" id="description" class="form-control" cols="30" rows="3"></textarea>
@@ -275,7 +283,7 @@
                             <label>Address</label>
                             <textarea name="address" id="address" class="form-control" cols="30" rows="3"></textarea>
                         </div>
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label>Select Delivery Locations</label>
                             <select name="location[]" class="form-control location-select-box" id="" multiple="multiple">
                                 @if (!empty($locations))
@@ -285,7 +293,7 @@
                                 @endif
                             </select>
                             <label id="location[]-error" class="error mt-2 text-danger" for="location[]"></label>
-                        </div>
+                        </div> --}}
                         <div class="form-group">
                             <label>Logo</label>
                             <div class="custom-file">
@@ -393,6 +401,15 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Facebook URL</label>
+                                    <input type="text" class="form-control" name="facebook_link" id="edit_facebook_link"
+                                        placeholder="Type facebook url" />
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label>Description</label>
                             <textarea name="description" class="form-control" id="edit_description" cols="30"
@@ -402,7 +419,7 @@
                             <label>Address</label>
                             <textarea name="address" class="form-control" id="edit_address" cols="30" rows="3"></textarea>
                         </div>
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label>Select Delivery Locations</label>
                             <select name="location[]" class="form-control location-select-box" id="edit_location_select_box" multiple="multiple">
                                 @if (!empty($locations))
@@ -412,7 +429,7 @@
                                 @endif
                             </select>
                             <label id="location[]-error" class="error mt-2 text-danger" for="location[]"></label>
-                        </div>
+                        </div> --}}
                         <div class="form-group">
                             <label>Logo</label>
                             <div class="custom-file edit_logo">
@@ -543,11 +560,6 @@
                         </div>
                     </div>
                 </div>
-                {{-- <div class="modal-footer">
-                    <button type="submit" data-dismiss="modal" class="btn btn-success waves-effect waves-light">
-                        Done
-                    </button>
-                  </div> --}}
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
@@ -579,6 +591,15 @@
 
         var imagesUrl = '{!! URL::asset('/images/') !!}/';
         $(document).ready(function() {
+            // $('.restaurants').addClass('sub-nav-active');
+            // $('.restaurants a').siblings("ul").toggle().removeClass("d-none");
+            // $('.restaurants a')
+            //     .children("span")
+            //     .children("span")
+            //     .children(".mdi")
+            //     .css("transform", "rotate(0deg)");
+            // $('.restaurant_li').addClass('nav-active');
+
             $('#restaurantTable').DataTable({
                 "ordering": false,
             });
@@ -604,7 +625,7 @@
                     'asset[][asset]': {
                             required: true
                             },
-                    "location[]": "required",
+                    // "location[]": "required",
                     type: {
                         required: true,
                         maxlength: 100,
@@ -634,7 +655,7 @@
                     name: {
                         required: 'Please insert restaurant name',
                     },
-                    "location[]": "Please select a location",
+                    // "location[]": "Please select a location",
                     type: {
                         required: 'Please insert restaurant type',
                     },
@@ -752,7 +773,7 @@
                             .append(`<td>` + response.data.description + `...</td>`)
                             .append(`<td>` + response.data.contact + `</td>`)
                             .append(`<td>` + response.data.email + `</td>`)
-                            .append(`<td>` + response.data.address + `</td>`)
+                            // .append(`<td>` + response.data.address + `</td>`)
                             .append(`<td><label class="switch">
                                             <input class="is_active status${ response.data.id}"type="checkbox" checked
                                                 data-id="${response.data.id}">
@@ -763,9 +784,7 @@
                                         </button>
                                         <button type='button' class='btn btn-outline-info' onclick='editRestaurant(${response.data.id})'>
                                             <i class='mdi mdi-pencil'></i>
-                                        </button>  <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteRestaurant(${response.data.id})">
-                                            <i class="mdi mdi-delete "></i>
-                                        </button></td>
+                                 </td>
                            
                          `)
                         var restaurant_row = restaurantTable.row.add(row).draw().node();
@@ -920,6 +939,7 @@
                         $('#edit_type').val(response.data.type)
                         $('#edit_contact').val(response.data.contact)
                         $('#edit_email').val(response.data.email)
+                        $('#edit_facebook_link').val(response.data.facebook_link ?? '')
                         $('#edit_address').val(response.data.address)
 
                         $('#edit_description').val(response.data.description)
@@ -1056,8 +1076,7 @@
                                 <td>${response.data.type}</td>
                                 <td>${response.data.description}...</td>
                                 <td>${response.data.contact}</td>
-                                <td>${response.data.email}</td>
-                                <td>${response.data.address}</td>   
+                                <td>${response.data.email}</td> 
                                 <td>
                                     <label class="switch">
                                         <input class="is_available status${ response.data.id}"type="checkbox"
@@ -1070,9 +1089,6 @@
                             </button>
                             <button type='button' class='btn btn-outline-info' onclick='editRestaurant(${response.data.id})'>
                                 <i class='mdi mdi-pencil'></i>
-                            </button>
-                            <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteRestaurant(${response.data.id})">
-                                <i class="mdi mdi-delete "></i>
                             </button>
                            
                             </td>

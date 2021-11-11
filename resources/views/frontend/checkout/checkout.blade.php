@@ -5,6 +5,15 @@
 @section('pageCss')
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/checkout.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
+    <style>
+        .specialLimit{
+            color: #DE973D;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: 1.8rem;
+        }
+    </style>
 @endsection
 @section('content')
     <!-- Header Images -->
@@ -129,7 +138,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <h1>Payment Options</h1>
-                                <p>Dear patrons, please be informed at the moment we only accept <b>Cash on delivery.</b>
+                                <p>Dear patrons, please be informed that currently we only accept <b>Cash on delivery.</b>
                                 </p>
                             </div>
                         </div>
@@ -161,16 +170,18 @@
                                     <!-- Cart Item -->
                                     @foreach (Cart::content() as $cart)
                                         {{-- <input type="hidden" name="cartId" value="{{$cart->rowId}}"> --}}
-                                        <li>
+                                        <li class="itemRow{{$cart->rowId}}">
                                             <div>
-                                                <span class="itmQuantity">{{ $cart->qty }}X</span>
+                                                <input type="hidden" name="item[{{$cart->id}}][quantity]" id="" value="{{ $cart->qty }}">
+                                                <span class="itmQuantity"> <span class="itmQuantity{{$cart->rowId}}">{{ $cart->qty }}</span>X</span>
                                             </div>
                                             <div>
+                                                <input type="hidden" name="item[{{$cart->id}}][name]" id="" value="{{ $cart->name }}">
                                                 <span class="itemName">{{ $cart->name }}</span>
                                             </div>
                                             <div>
-                                                <span class="itemPrice">Tk.
-                                                    {{ currency_format($cart->subtotal) }}</span>
+                                                <span class="itemPrice">Tk. <span class="itemPrice{{$cart->rowId}}">{{ currency_format($cart->subtotal) }}</span>
+                                                    </span>
                                             </div>
                                         </li>
                                     @endforeach
@@ -184,7 +195,7 @@
                                             Sub Total
                                         </div>
                                         <div class="secondColumn">
-                                            Tk. {{ Cart::subtotal() }}
+                                            Tk. <span class="subTotal">{{ Cart::subtotal() }}</span> 
                                         </div>
                                     </li>
                                     <li>
@@ -192,7 +203,7 @@
                                             VAT
                                         </div>
                                         <div class="secondColumn">
-                                            Tk. {{ $vatAMount }}
+                                            Tk. <span class="vat-amount">{{ $vatAMount }}</span> 
                                         </div>
                                     </li>
                                     <li>
@@ -200,7 +211,7 @@
                                             Delivery Fee
                                         </div>
                                         <div class="secondColumn">
-                                            Tk. {{ $deliveryCharge }}
+                                            Tk. <span class="delivery-charge">{{ $deliveryCharge }}</span> 
                                         </div>
                                         <input type="hidden" name="deliveryCharge" value="{{$deliveryCharge}}">
                                     </li>
@@ -209,11 +220,12 @@
                                             Grand Total
                                         </div>
                                         <div class="secondColumn">
-                                            Tk. {{ $totalAmount }}
+                                            Tk. <span class="grandTotal">{{ $totalAmount }}</span> 
                                         </div>
                                     </li>
                                 </ul>
                             </div>
+                            <span class="specialLimit">**Max 100 character</span>
                             <div class="col-12">
                                 <textarea class="form-control specInstruction" name="instruction" cols="30" rows="3"
                                     placeholder="Special Instructions"></textarea>

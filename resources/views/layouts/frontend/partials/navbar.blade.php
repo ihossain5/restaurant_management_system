@@ -13,7 +13,8 @@
                 <a class="navbar-brand d-block" href="{{route('frontend.index')}}"><img src="{{asset('frontend/assets/images/Logos/logo-new.png')}}" alt="Emerald Logo"></a>
             </div>
             <div class="navbar-cart d-lg-none">
-                <div onclick="cartToggle()" class="position-relative" style="cursor: pointer;" aria-current="page">
+                <div onclick="cartToggle()" class="position-relative cartItems" style="cursor: pointer;" aria-current="page" data-bs-toggle="tooltip" data-bs-placement="left"
+                >
                     <img src="{{asset('frontend/assets/images/Home/cart.svg')}}" alt="emerald cart">
                     <div class="cart-counter">
                         <span class="cartCounter">{{count(Cart::content())}}</span>
@@ -23,7 +24,7 @@
             <div class="navbar-location-select-box d-none d-lg-block">
                 <button type="button" class="navbar-modal-show-btn" data-bs-toggle="modal" data-bs-target="#location-modal">
                     <span class="headerLocation">{{session()->get('location_name') ?? 'Select '}}</span>
-                    <input type="hidden" class="locationId" value="{{session()->get('location_id')}}">
+                    <input type="hidden" name="locationId" class="locationId" value="{{session()->get('location_id')}}">
                 </button>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -56,7 +57,8 @@
                         </li>
                         @endif
                         <li class="nav-item">
-                            <div onclick="cartToggle()" class="nav-link  position-relative" style="cursor: pointer;"
+                            <div onclick="cartToggle()" id="cartItems" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                             class="nav-link  position-relative cartItems" style="cursor: pointer;"
                                 aria-current="page">
                                 <img src="{{asset('frontend/assets/images/Home/cart.svg')}}" alt="emerald cart">
                                 <div class="cart-counter">

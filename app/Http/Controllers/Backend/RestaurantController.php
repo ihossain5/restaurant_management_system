@@ -8,8 +8,8 @@ use App\Models\AssetRestaurant;
 use App\Models\DeliveryLocation;
 use App\Models\Restaurant;
 use App\Services\RestaurantService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
 
@@ -28,15 +28,16 @@ class RestaurantController extends Controller {
             $logo_url = storeImage($logo, $path, 128, 128);
         }
         $restaurant = Restaurant::create([
-            'name'        => $request->name,
-            'type'        => $request->type,
-            'contact'     => $request->contact,
-            'email'       => $request->email,
-            'description' => $request->description,
-            'address'     => $request->address,
-            'logo'        => $logo_url,
+            'name'          => $request->name,
+            'type'          => $request->type,
+            'contact'       => $request->contact,
+            'email'         => $request->email,
+            'description'   => $request->description,
+            'address'       => $request->address,
+            'facebook_link' => $request->facebook_link,
+            'logo'          => $logo_url,
         ]);
-        $restaurant->delivery_locations()->attach($request->location);
+        // $restaurant->delivery_locations()->attach($request->location);
 
         $restaurant_assets = $request->asset;
 
@@ -54,9 +55,9 @@ class RestaurantController extends Controller {
         $data['email']       = $restaurant->email;
         $data['id']          = $restaurant->restaurant_id;
 
-        foreach ($restaurant->assets as $image) {
-            $data['image'] = $image->pivot->asset;
-        }
+        // foreach ($restaurant->assets as $image) {
+        //     $data['image'] = $image->pivot->asset;
+        // }
         foreach ($restaurant->assets as $image) {
             $data['image']     = $image->pivot->asset;
             $data['file_type'] = File::extension($image->pivot->asset);
@@ -99,15 +100,16 @@ class RestaurantController extends Controller {
             $logo_url = $restaurant->logo;
         }
         $restaurant->update([
-            'name'        => $request->name,
-            'type'        => $request->type,
-            'contact'     => $request->contact,
-            'email'       => $request->email,
-            'description' => $request->description,
-            'address'     => $request->address,
-            'logo'        => $logo_url,
+            'name'          => $request->name,
+            'type'          => $request->type,
+            'contact'       => $request->contact,
+            'email'         => $request->email,
+            'description'   => $request->description,
+            'address'       => $request->address,
+            'facebook_link' => $request->facebook_link,
+            'logo'          => $logo_url,
         ]);
-        $restaurant->delivery_locations()->sync($request->location);
+        // $restaurant->delivery_locations()->sync($request->location);
 
         $restaurant_assets     = $request->asset;
         $restaurant_new_assets = $request->new_asset;
@@ -146,7 +148,7 @@ class RestaurantController extends Controller {
         }
 
         $description         = substr($restaurant->description, 0, 25);
-        $address         = substr($restaurant->address, 0, 25);
+        $address             = substr($restaurant->address, 0, 25);
         $data                = array();
         $data['message']     = 'Restaurant updated successfully';
         $data['name']        = $restaurant->name;
@@ -402,7 +404,7 @@ class RestaurantController extends Controller {
         $cancelledOrders     = $this->cancelledOrders($id);
 
         $restaurant = Restaurant::with(['restaurant_orders' => function ($query) {
-            $query->whereDate('orders.created_at', DB::raw('CURDATE()'))->get();
+            $query->whereDate('orders.created_at', Carbon::now())->get();
         }])->find($id);
         $total_revenue = $restaurant->restaurant_orders->sum('amount');
         return view('admin.restaurant.restaurant_overview', compact(
@@ -420,7 +422,7 @@ class RestaurantController extends Controller {
         $cancelledOrders     = $this->cancelledOrders($request->id);
 
         $restaurant = Restaurant::with(['restaurant_orders' => function ($query) {
-            $query->whereDate('orders.created_at', DB::raw('CURDATE()'))->get();
+            $query->whereDate('orders.created_at', Carbon::now())->get();
         }])->find($request->id);
         $total_revenue = $restaurant->restaurant_orders->sum('amount');
 
@@ -444,7 +446,7 @@ class RestaurantController extends Controller {
 
     public function newOrders($id) {
         $restaurant = Restaurant::with(['restaurant_orders' => function ($query) {
-            $query->whereDate('orders.created_at', DB::raw('CURDATE()'))->get();
+            $query->whereDate('orders.created_at', Carbon::now())->get();
         }])->find($id);
         // dd();
         $count = count($restaurant->restaurant_orders);
@@ -452,7 +454,7 @@ class RestaurantController extends Controller {
     }
     public function ordersInPreparation($id) {
         $restaurant = Restaurant::with(['restaurant_orders' => function ($query) {
-            $query->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            $query->whereDate('orders.created_at', Carbon::now())
                 ->where('orders.order_status_id', 1)->get();
         }])->find($id);
         $count = count($restaurant->restaurant_orders);
@@ -460,7 +462,7 @@ class RestaurantController extends Controller {
     }
     public function ordersInDelivery($id) {
         $restaurant = Restaurant::with(['restaurant_orders' => function ($query) {
-            $query->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            $query->whereDate('orders.created_at', Carbon::now())
                 ->where('orders.order_status_id', 2)->get();
         }])->find($id);
         $count = count($restaurant->restaurant_orders);
@@ -468,7 +470,7 @@ class RestaurantController extends Controller {
     }
     public function completedOrders($id) {
         $restaurant = Restaurant::with(['restaurant_orders' => function ($query) {
-            $query->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            $query->whereDate('orders.created_at', Carbon::now())
                 ->where('orders.order_status_id', 3);
         }])->find($id);
         $count = count($restaurant->restaurant_orders);
@@ -476,7 +478,7 @@ class RestaurantController extends Controller {
     }
     public function cancelledOrders($id) {
         $restaurant = Restaurant::with(['restaurant_orders' => function ($query) {
-            $query->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            $query->whereDate('orders.created_at', Carbon::now())
                 ->where('orders.order_status_id', 4)->get();
         }])->find($id);
         $count = count($restaurant->restaurant_orders);

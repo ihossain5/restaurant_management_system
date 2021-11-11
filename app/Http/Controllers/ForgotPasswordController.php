@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ForgotPasswordMail;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -28,16 +29,21 @@ class ForgotPasswordController extends Controller {
             'token'      => $token,
             'created_at' => Carbon::now(),
         ]);
+        $maildata = [
+            'title'   => 'Hello',
+            'message' => 'You are receiving this email because we are received a password reset request for your account',
+            'url'     => route('reset.password.get', [$token]),
+        ];
 
-        Mail::send('password_reset_mail', ['token' => $token], function ($message) use ($request) {
-            $message->to($request->email);
-            $message->subject('Reset Password');
-        });
+        Mail::to($request->email)->send(new ForgotPasswordMail($maildata));
 
         return back()->with('success', 'We have e-mailed your password reset link!');
     }
     public function showResetPasswordForm($token) {
-        return view('admin.recover_password', ['token' => $token]);
+        $user = DB::table('password_resets')
+        ->where('token', $token)
+        ->first();
+        return view('admin.recover_password', compact('user'));
     }
     public function submitResetPasswordForm(Request $request) {
         // dd($request->all());
@@ -60,7 +66,7 @@ class ForgotPasswordController extends Controller {
 
         $user = User::where('email', $request->email)
             ->update(['password' => Hash::make($request->password)]);
-        //  DB::table('password_resets')->where(['email' => $request->email])->delete();
+         DB::table('password_resets')->where(['email' => $request->email])->delete();
 
 
         if (Auth::attempt($request->only('email', 'password'))) {

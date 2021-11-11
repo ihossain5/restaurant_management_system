@@ -5,6 +5,11 @@
 @section('pageCss')
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/contact-us.css') }}">
+    <style>
+        .inner-content p >a{
+            color: inherit;
+        }
+    </style>
 @endsection
 @section('content')
     <section class="contact-us">
@@ -41,6 +46,17 @@
                                                     src="{{ asset('frontend/assets/images/email.png') }}" alt="mail-box" />
                                             </p>
                                             <p>{{ $restaurant->email }}</p>
+                                        </li>
+                                        <li>
+                                            <p class="icon">
+                                                <img class="img-fluid"
+                                                    src="{{ asset('frontend/assets/images/fb.png') }}" alt="mail-box" />
+                                            </p>
+                                            <p>
+                                                <a href="{{ $restaurant->facebook_link}}" target="blank">
+                                                    {{ $restaurant->facebook_link ?? 'N/A' }}
+                                                </a>
+                                            </p>
                                         </li>
                                     </ul>
                                 </div>

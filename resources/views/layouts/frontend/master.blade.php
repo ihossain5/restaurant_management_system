@@ -17,6 +17,7 @@
     @include('layouts.frontend.partials.footer')
     
     @include('layouts.frontend.partials.modals.cartAlert-modal')
+    @include('layouts.frontend.partials.modals.locationAlertModal')
 
     @include('layouts.frontend.partials.scripts')
     @yield('pageScripts')

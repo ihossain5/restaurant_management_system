@@ -18,12 +18,30 @@ Class CartService {
             ->associate('App\Models\Item');
         return true;
     }
+    public function repeatOrderToItemCart($item ,$qty) {
+        Cart::add($item->item_id, $item->name, $qty, $item->price)
+            ->associate('App\Models\Item');
+        return true;
+    }
 
     public function addComboToCart($combo) {
         Cart::add([
             'id'      => $combo->combo_id,
             'name'    => $combo->name,
             'qty'     => 1,
+            'price'   => $combo->price,
+            'options' => [
+                'combo_id' => $combo->combo_id ?? '',
+            ],
+        ])->associate('App\Models\Combo');
+        return true;
+    }
+
+    public function repeatOrderToComboCart($combo, $qty) {
+        Cart::add([
+            'id'      => $combo->combo_id,
+            'name'    => $combo->name,
+            'qty'     => $qty,
             'price'   => $combo->price,
             'options' => [
                 'combo_id' => $combo->combo_id ?? '',

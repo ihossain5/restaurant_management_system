@@ -36,17 +36,13 @@
 
         <div class="card">
             <div class="card-body">
-                <h3 class="text-center m-0">Admin Dashboard</h3>
                 <h3 class="text-center m-0">
                     <a href="" class="logo logo-admin">
-                        {{-- <img src="{{asset('backend/assets/images/logo_dark.png')}}" height="30"
-                            alt="logo"> --}}
-                            {{-- <h5>Quotation Builder</h5> --}}
-                        </a>
+                        <img src="{{asset('frontend/assets/images/Home/logo 2.svg')}}" alt="Emerald Restaurent logo">
+                    </a>
                 </h3>
 
                 <div class="p-3">
-                    <h4 class="text-muted font-18 m-b-5 text-center">Welcome Back !</h4>
                     <p class="text-muted text-center">Reset your password.</p>
 
                     @if ($errors->any())
@@ -73,15 +69,10 @@
             @endif
 
                     <form class="form-horizontal m-t-30 loginForm" action="{{route('reset.password.post')}}" method="POST">@csrf
-                        <input type="hidden" name="token" value="{{ $token }}">
-                        {{-- <div class="form-group">
-                            <label for="username">Email</label>
-                            <input type="text" name="email" class="form-control" id="username" placeholder="Enter username">
-                        </div> --}}
-
+                        <input type="hidden" name="token" value="{{ $user->token }}">
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" name="email" class="form-control" id="email" placeholder="Enter email">
+                            <input type="email" name="email" class="form-control" id="email" placeholder="Enter email" value="{{$user->email}}">
                         </div>
                         <div class="form-group">
                             <label for="userpassword">Password</label>
@@ -91,7 +82,6 @@
                             <label for="password_confirmation">Password Confirmation</label>
                             <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" placeholder="confirm password">
                         </div>
-
 
                         <div class="form-group row m-t-20">
                             <div class="col-sm-6 text-right">

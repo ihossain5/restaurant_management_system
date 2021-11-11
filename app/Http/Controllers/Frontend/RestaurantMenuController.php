@@ -30,6 +30,7 @@ class RestaurantMenuController extends Controller
                 $images[] = $asset->pivot->asset;
             }
         }  
-        return view('frontend.restaurant.restaurant_menu', compact('restaurant','images','locations','restaurant_locations'));
+        // return view('frontend.restaurant.restaurant_menu', compact('restaurant','images','locations','restaurant_locations'));
+        return view('frontend.restaurant.restaurant_menu_new', compact('restaurant','images','locations','restaurant_locations'));
     }
 }

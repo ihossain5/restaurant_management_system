@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class ManagerDashboardController extends Controller {
     public $order;
@@ -33,36 +33,36 @@ class ManagerDashboardController extends Controller {
         return success($restaurant->status->name);
     }
     public static function restaurant_status() {
-        if(Auth::user()->is_manager == 1){
+        if (Auth::user()->is_manager == 1) {
             return Auth::user()->restaurant->status->name;
         }
-        
+
     }
     public static function countedOrders() {
-        if(Auth::user()->is_manager == 1){
+        if (Auth::user()->is_manager == 1) {
             $restaurant = Auth::user()->restaurant;
             $new_order  = Order::where('restaurant_id', $restaurant->restaurant_id)
-                ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+                ->whereDate('orders.created_at', Carbon::now())
                 ->where('orders.order_status_id', null)
                 ->count();
-    
+
             $ordersInPreparation = Order::where('restaurant_id', $restaurant->restaurant_id)
-                ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+                ->whereDate('orders.created_at', Carbon::now())
                 ->where('orders.order_status_id', 1)
                 ->count();
             $ordersInDelivery = Order::where('restaurant_id', $restaurant->restaurant_id)
-                ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+                ->whereDate('orders.created_at', Carbon::now())
                 ->where('orders.order_status_id', 2)
                 ->count();
             $completedOrder = Order::where('restaurant_id', $restaurant->restaurant_id)
-                ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+                ->whereDate('orders.created_at', Carbon::now())
                 ->where('orders.order_status_id', 3)
                 ->count();
             $cancelledOrder = Order::where('restaurant_id', $restaurant->restaurant_id)
-                ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+                ->whereDate('orders.created_at', Carbon::now())
                 ->where('orders.order_status_id', 4)
                 ->count();
-    
+
             $data = [
                 'new_order'           => $new_order,
                 'ordersInPreparation' => $ordersInPreparation,

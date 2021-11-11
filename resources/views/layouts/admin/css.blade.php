@@ -29,5 +29,25 @@
         crossorigin="anonymous" />
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
+        .mdi-plus {
+            font-size: 25px;
+            position: absolute;
+            margin-left: -61px;
+            cursor: pointer;
+            border: 1px solid;
+        }
 
+        .close_icon_add_form {
+            font-size: 25px;
+            cursor: pointer;
+            position: absolute;
+            margin: 10px -10px;
+            /* border: 1px solid #f24734; */
+            color: #f24734;
+        }
+
+        .add_row_btn {
+            padding: 3px 25px;
+            margin-right: 40px;
+        }
     </style>

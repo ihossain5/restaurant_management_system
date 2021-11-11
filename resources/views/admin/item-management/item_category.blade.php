@@ -18,9 +18,7 @@
     </style>
 @endsection
 @section('content')
-    <div class="preloader">
-
-    </div>
+    <div class="preloader"></div>
 
     <div class="page-content-wrapper">
         <div class="container-fluid">
@@ -58,10 +56,10 @@
                                                         <button type='button' class='btn btn-outline-dark'
                                                             onclick='viewCategory({{ $category->category_id }})'><i
                                                                 class='fa fa-eye'></i></button>
-
+{{-- 
                                                         <button type='button' name='delete' class="btn btn-outline-danger "
                                                             onclick="deleteCategory({{ $category->category_id }})"><i
-                                                                class="mdi mdi-delete "></i></button>
+                                                                class="mdi mdi-delete "></i></button> --}}
                                                     </td>
 
                                                 </tr>
@@ -180,6 +178,9 @@
                     <button id="editBtn" type="button" data-dismiss="modal"
                         class="btn btn-block btn-primary waves-effect waves-light" onclick="editCategory()">
                         Edit
+                    </button>
+                    <button type="button" onclick="deleteCategory()" class="btn btn-block delete_btn btn-danger waves-effect waves-light">
+                        Delete
                     </button>
                     <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
                         Done
@@ -303,10 +304,7 @@
                             .append(`<td><button type='button' class='btn btn-outline-dark' onclick='viewCategory(${response.data.category_id})'>
                                 <i class='fa fa-eye'></i>
                             </button>
-                         
-                            <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteCategory(${response.data.category_id})">
-                                <i class="mdi mdi-delete "></i>
-                            </button></td>`)
+                         </td>`)
 
 
                         var category_row = categoryTable.row.add(row).draw().node();
@@ -367,6 +365,7 @@
                         $('#view_name').text(response.data.name);
                         $('#view_description').text(response.data.description);
                         $('#editBtn').attr('onClick', `editCategory(${response.data.category_id});`);
+                        $('.delete_btn').attr('onClick', `deleteCategory(${response.data.category_id});`);
                         $('#viewModal').modal('show');
 
                     } //success end
@@ -440,11 +439,6 @@
                                   
                                 <td><button type='button' class='btn btn-outline-dark' onclick='viewCategory(${response.data.category_id})'>
                                 <i class='fa fa-eye'></i>
-                            </button>
-
-                           
-                            <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteCategory(${response.data.category_id})">
-                                <i class="mdi mdi-delete "></i>
                             </button></td>
                                 `
                             );
@@ -502,7 +496,7 @@
             // alert(id)
             Swal.fire({
                 title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                text: "All of items under this category will also be deleted",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -529,6 +523,7 @@
                                         .id)
                                     .remove()
                                     .draw();
+                                    $('#viewModal').modal('hide');
                             } else {
                                 Swal.fire("Error!", "" + response.message + "", "error");
                             }

@@ -8,6 +8,8 @@
 
 @section('pageCss')
     <style>
+
+
         .view-modal p {
             line-height: 2;
         }
@@ -60,6 +62,7 @@
         .orderTable tfoot tr:last-child td:first-child {
             font-weight: bold;
         }
+
         .pending {
             font-weight: 600;
             color: #DE973D;
@@ -409,7 +412,7 @@
                         customizeData: function(data) {
                             var ind = data.header.indexOf(
                                 "Phone"
-                                ); // This code is to find the column name's index which you want to cast.
+                            ); // This code is to find the column name's index which you want to cast.
                             for (var i = 0; i < data.body.length; i++) {
                                 data.body[i][ind] = '\u200C' + data.body[i][
                                     ind

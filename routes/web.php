@@ -23,6 +23,7 @@ use App\Http\Controllers\Frontend\CheckOutController;
 use App\Http\Controllers\Frontend\ContactUsController as FrontendContactUsController;
 use App\Http\Controllers\Frontend\CustomerController as FrontendCustomerController;
 use App\Http\Controllers\Frontend\CustomerLoginController;
+use App\Http\Controllers\Frontend\ForgotPasswordController as FrontendForgotPasswordController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\RestaurantMenuController;
 use App\Http\Controllers\Manager\ManagerDashboardController;
@@ -137,6 +138,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::post('/time-range/reports', [OrderPerformanceController::class, 'timeRangeReportsByRestaurant'])->name('order.report.restaurant.date.range');
         Route::get('/{id}/monthly-reports', [OrderPerformanceController::class, 'currentMonthReportsByRestaurant'])->name('order.report.restaurant.current.month');
         Route::post('monthly-reports', [OrderPerformanceController::class, 'monthlyOrdersReportByRestaurant'])->name('order.report.restaurant.month');
+        Route::get('month-report', [OrderPerformanceController::class, 'monthlyReport'])->name('order.report.month');
         Route::get('/{id}/item/performance-reports', [OrderPerformanceController::class, 'itemReportsByRestaurant'])->name('order.report.item');
         Route::post('item/performance-reports', [OrderPerformanceController::class, 'itemReportsByDate'])->name('order.report.item.date');
         Route::post('category-item/performance-reports', [OrderPerformanceController::class, 'itemReportsByCategory'])->name('order.item.report.by.category');
@@ -248,7 +250,7 @@ Route::get('/super-admin', [UserController::class, 'superAdmin']);
 Route::post('/make/super/admin', [UserController::class, 'makeSuperAdmin'])->name('is.superadmin');
 
 Route::get('/send-email/{token}', [ManagerController::class, 'registerNewManager'])->name('send.email');
-Route::post('/sign-up', [ManagerController::class, 'userSignUp'])->name('user.sign.up');
+Route::post('/user/sign-up', [ManagerController::class, 'userSignUp'])->name('user.sign.up');
 
 //* manager routes start */
 
@@ -288,14 +290,18 @@ Route::group(['prefix' => 'manager', 'middleware' => ['auth', 'manager']], funct
     /* Performance report routes */
     Route::get('/daily-sales-report', [ManagerOrderPerformanceController::class, 'dailyReports'])->name('manager.daily.sales.report');
     Route::post('/daily-sales-report/by-date', [ManagerOrderPerformanceController::class, 'dailyReportsByDate'])->name('manager.daily.report.by.date');
-    Route::get('/item-performance-report', [ManagerOrderPerformanceController::class, 'itemPerformanceReport'])->name('manager.item.performance.report');
+    // Route::get('/item-performance-report', [ManagerOrderPerformanceController::class, 'itemPerformanceReport'])->name('manager.item.performance.report');
     Route::post('/item-performance-report', [ManagerOrderPerformanceController::class, 'itemPerformanceReportByDate'])->name('manager.item.performance.by.date');
+
+    Route::get('/item-performance-report', [ManagerOrderPerformanceController::class, 'itemPerformanceReportByRestaurant'])->name('manager.item.performance.report');
 
 });
 
 //* frontend routes start */
 Route::get('/', [HomeController::class, 'index'])->name('frontend.index');
-Route::post('/', [HomeController::class, 'getRestaurantsByLocation'])->name('frontend.restaurant.by.location');
+// Route::post('/', [HomeController::class, 'getRestaurantsByLocation'])->name('frontend.restaurant.by.location');
+// 
+Route::get('/get/{id}/location', [HomeController::class, 'getRestaurantsByLocation'])->name('frontend.restaurant.by.location');
 
 Route::get('/restaurant/{restaurant}/menu', [RestaurantMenuController::class, 'getRestaurant'])->name('frontend.restaurant.menu');
 Route::get('/about-us', [FrontendAboutUsController::class, 'index'])->name('frontend.about.us');
@@ -310,10 +316,19 @@ Route::post('/delete-cart', [CartController::class, 'deleteCart'])->name('fronte
 Route::post('/add-cart', [CartController::class, 'changeRestautantToCart'])->name('frontend.cart.change.restaurant');
 Route::post('/add-cart-restaurant', [CartController::class, 'addToCartBusyRestaurant'])->name('frontend.cart.add.busy.restaurant');
 
+Route::post('/add-cart-repeat-order', [CartController::class, 'repeatOrder'])->name('frontend.customer.order.repeat');
+
 /* customer sign in */
-Route::post('/customer-sign-in', [FrontendCustomerController::class, 'signIn'])->name('customer.sign.in');
-Route::post('/customer-sign-up', [FrontendCustomerController::class, 'signUp'])->name('customer.sign.up');
-Route::post('/customer-sign-out', [FrontendCustomerController::class, 'signOut'])->name('cusetomer.sign.out');
+Route::post('/sign-in', [FrontendCustomerController::class, 'signIn'])->name('customer.sign.in');
+Route::post('/sign-up', [FrontendCustomerController::class, 'signUp'])->name('customer.sign.up');
+Route::post('/sign-out', [FrontendCustomerController::class, 'signOut'])->name('cusetomer.sign.out');
+
+/* customer forgot passwod */
+Route::get('/forgot-password', [FrontendForgotPasswordController::class, 'forgotPassword'])->name('customer.forgot.password');
+Route::post('/forgot-password', [FrontendForgotPasswordController::class, 'submitForgetPasswordForm'])->name('customer.forgot.password.form');
+Route::get('/password-reset/{token}', [FrontendForgotPasswordController::class, 'resetPassword'])->name('customer.reset.password');
+Route::post('/password-reset', [FrontendForgotPasswordController::class, 'submitResetPassword'])->name('customer.reset.password.form');
+/* customer forgot passwod */
 
 /* customer profile */
 Route::get('/profile', [FrontendCustomerController::class, 'customerProfile'])->name('customer.profile');

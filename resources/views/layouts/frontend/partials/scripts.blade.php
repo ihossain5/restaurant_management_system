@@ -2,12 +2,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
         integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <!-- Bootstrap Js -->
+    <script src="{{ asset('frontend/assets/bootstrap-5.1.0/popper.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/bootstrap-5.1.0/bootstrap.min.js') }}"></script>
 
 
     <!-- Owl-Carousel -->
     <script src="{{ asset('frontend/assets/OwlCarousel2-2.3.4/owl.carousel.min.js') }}"></script>
+    <!-- swipe Js -->
+    <script src='//cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.4/jquery.touchSwipe.min.js'></script>
 
     <!-- Custom Js -->
     <script src="{{ asset('frontend/assets/js/style.js') }}"></script>
@@ -17,6 +21,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"></script>
 
+
     <script>
         var config = {
             routes: {
@@ -24,7 +29,6 @@
                 updateCart: "{!! route('frontend.cart.update') !!}",
                 decreaseCartQty: "{!! route('frontend.cart.decrease.quantity') !!}",
                 deleteCart: "{!! route('frontend.cart.delete') !!}",
-                getRestaurants: "{!! route('frontend.restaurant.by.location') !!}",
                 changeRestaurant: "{!! route('frontend.cart.change.restaurant') !!}",
                 addToCartRestaurant: "{!! route('frontend.cart.add.busy.restaurant') !!}",
             }
@@ -38,6 +42,22 @@
         $(document).ajaxComplete(function() {
             $('.main_loader').addClass('d-none');
         });
+
+        function locationChange() {
+            $('#location-modal').modal('hide');
+            $('#locationAlertModal').modal('show');
+            var val = $('#select_id').val();
+            var url = '{{ route('frontend.restaurant.by.location', ':id') }}';
+            url = url.replace(':id', val);
+            $('.locationModalhref').attr("href", url);
+        }
+
+        function changeLocation() {
+            var val = $('#select_id').val();
+            var url = '{{ route('frontend.restaurant.by.location', ':id') }}';
+            url = url.replace(':id', val);
+            window.location.href = url;
+        }
 
 
         // Deales Carousel
@@ -143,9 +163,11 @@
                 dataType: "json",
                 success: function(response) {
                     if (response.success == true) {
+                        $('.location-submitBtn').attr('onclick','locationChange()');
+                        $('.cartItems').removeAttr('data-bs-original-title');
                         toastr["success"](response.data.message)
                         $('.cartItem').remove();
-                        // $('.grandTotal').html(response.data.grandTotal)
+                        $('.cartRestaurantName').html(response.data.restaurant_name)
                         $.each(response.data.items, function(key, val) {
                             appendCartItem(val);
                         });
@@ -181,7 +203,7 @@
         // increase cart quantity   
         function increaseQuantity(rowId) {
             var oldQty = $('.cartQty' + rowId).html();
-           
+
             $.ajax({
                 url: config.routes.updateCart,
                 method: "POST",
@@ -193,6 +215,7 @@
                 dataType: "json",
                 success: function(response) {
                     if (response.success == true) {
+                        var newQty = parseInt(oldQty) + 1;
                         // toastr["success"](response.data.message)
                         $('.grandTotal').html(response.data.grandTotal)
                         $('.subTotal').html(response.data.grandTotal)
@@ -201,6 +224,8 @@
                         $('.vat-amount').html(response.data.vatAmount)
                         $('.delivary-charge').html(response.data.deliveryCharge)
                         $('.cartQty' + rowId).html(++oldQty);
+                        $('.itmQuantity' + rowId).html(newQty);
+                        $('.itemPrice' + rowId).html(response.data.price)
                         cartCounter(response.data.numberOfCartItems); // set cart counter
                     } //success end
                 },
@@ -215,7 +240,6 @@
         // decrease cart quantity   
         function decreaseQuantity(rowId) {
             var oldQty = $('.cartQty' + rowId).html();
-
             if (oldQty == 1) {
                 toastr["info"]('Quantity can not be less than 1')
             } else {
@@ -230,12 +254,15 @@
                     dataType: "json",
                     success: function(response) {
                         if (response.success == true) {
+                            var newQty = parseInt(oldQty) - 1;
                             $('.cartQty' + rowId).html(--oldQty);
+                            $('.itmQuantity' + rowId).html(newQty);
                             $('.subTotal').html(response.data.grandTotal)
                             $('.grandTotal').html(response.data.totalAmount)
                             $('.vat-amount').html(response.data.vatAmount)
                             $('.delivary-charge').html(response.data.deliveryCharge)
                             $('.itemTotal' + rowId).html(response.data.price)
+                            $('.itemPrice' + rowId).html(response.data.price)
                             cartCounter(response.data.numberOfCartItems); // set cart counter
                         } //success end
                     },
@@ -266,8 +293,16 @@
                         $('.grandTotal').html(response.data.totalAmount)
                         $('.vat-amount').html(response.data.vatAmount)
                         $('.delivery-charge').html(response.data.deliveryCharge)
+                        $('.itemPrice' + rowId).html(response.data.price)
                         $('.cartRow' + rowId).remove();
+                        $('.itemRow' + rowId).remove();
                         cartCounter(response.data.numberOfCartItems); // set cart counter
+                        if (response.data.numberOfCartItems == 0) {
+                            $('.location-submitBtn').attr('onclick','changeLocation()');
+                          
+                            $('.cartItems').attr('data-bs-original-title','Cart is empty');
+                            $('.cartRestaurantName').empty();
+                        }
                     } //success end
                 },
                 error: function(error) {
@@ -336,6 +371,7 @@
                     if (response.success == true) {
                         toastr["success"](response.data.message)
                         $('.cartItem').remove();
+                        $('.cartRestaurantName').html(response.data.restaurant_name)
                         $('.grandTotal').html(response.data.grandTotal)
                         $.each(response.data.items, function(key, val) {
                             appendCartItem(val);
@@ -377,6 +413,7 @@
                         toastr["success"](response.data.message)
                         $('.cartItem').remove();
                         $('.grandTotal').html(response.data.grandTotal)
+                        $('.cartRestaurantName').html(response.data.restaurant_name)
                         $.each(response.data.items, function(key, val) {
                             appendCartItem(val);
                         });
@@ -417,7 +454,7 @@
         }
 
         function appendCartItem(val) {
-            $('#cartName').after(
+            $('.cartRestaurantName').after(
                 `<div class="cartItem d-flex justify-content-between cartRow${val.rowId}">
                     <div>
                         <p>${val.name}</p>

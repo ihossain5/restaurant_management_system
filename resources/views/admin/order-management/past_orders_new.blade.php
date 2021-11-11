@@ -3,10 +3,12 @@
     Past Orders
 @endsection
 @section('restaurant_list')
-@include('layouts.admin.restaurant_drop-down')
+    @include('layouts.admin.restaurant_drop-down')
 @endsection
 @section('pageCss')
     <style>
+
+
         .view-modal p {
             line-height: 2;
         }
@@ -22,58 +24,73 @@
             padding: 5px 30px;
             display: inline-block;
         }
+
         .order-status-btn.preparing {
             border: 2px solid #153289;
             color: #153289;
         }
+
         .order-status-btn.cancelled {
             border: 2px solid #ff0000;
             color: #ff0000;
         }
+
         .order-status-btn.delivering {
             border: 2px solid #b4ad06;
             color: #b4ad06;
         }
+
         .order-status-btn.completed {
             border: 2px solid #176a2d;
             color: #176a2d;
         }
+
         .order-status-btn.pending {
             border: 2px solid #DE973D;
             color: #DE973D;
         }
+
         .table>tfoot>tr>td {
-            padding: 4px 12px;          
+            padding: 4px 12px;
         }
+
         .orderTable tfoot td:first-child {
             font-weight: normal;
         }
+
         .orderTable tfoot tr:last-child td:first-child {
             font-weight: bold;
         }
-        td .cancelled{
+
+        td .cancelled {
             color: #ff0000;
         }
-        .pending{
+
+        .pending {
             font-weight: 600;
             color: #DE973D;
         }
-        .completed{
+
+        .completed {
             color: #176a2d;
             font-weight: 600;
         }
-        .cancelled{
+
+        .cancelled {
             color: #ff0000;
             font-weight: 600;
         }
-        .preparing{
+
+        .preparing {
             color: #153289;
             font-weight: 600;
         }
-        .delivering{
+
+        .delivering {
             color: #b4ad06;
             font-weight: 600;
         }
+
     </style>
 @endsection
 @section('content')
@@ -236,88 +253,88 @@
         </div>
     </div> --}}
 
-    
-        <div class="modal addModal fade" id="viewOrderModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
-                    <div class="">
-                        <h5 class="modal-title text-center">Order Details</h5>
-                        <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body pt-3 orderDeta-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="row">
-                                 <input type="hidden" name="order_id" id="order_id">
-                                    <div class="col-12 col-md-9">
-                                        <h4>Order ID: #<span id="view_order_id"></span></h4>
-                                        <h4>Customer Name: <span id="view_customer_name"></span></h4>
-                                        <h4>Customer Email: <span id="view_customer_email"></span></h4>
-                                        <h4>Customer Contact: <span id="view_customer_contact"></span></h4>
-                                        <h4>Customer Address: <span id="view_customer_address"></span></h4>
-                                        <h4>Special Notes: <span id="view_notes"></span></h4>
-                                    </div>
-                                    <div class="col-12 col-md-3 text-right align-self-end">
-                                        <button id="orderStatusBtn" class="order-status-btn text-center "></button>
-                                    </div>
+
+    <div class="modal addModal fade" id="viewOrderModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="">
+                    <h5 class="modal-title text-center">Order Details</h5>
+                    <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pt-3 orderDeta-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <input type="hidden" name="order_id" id="order_id">
+                                <div class="col-12 col-md-9">
+                                    <h4>Order ID: #<span id="view_order_id"></span></h4>
+                                    <h4>Customer Name: <span id="view_customer_name"></span></h4>
+                                    <h4>Customer Email: <span id="view_customer_email"></span></h4>
+                                    <h4>Customer Contact: <span id="view_customer_contact"></span></h4>
+                                    <h4>Customer Address: <span id="view_customer_address"></span></h4>
+                                    <h4>Special Notes: <span id="view_notes"></span></h4>
+                                </div>
+                                <div class="col-12 col-md-3 text-right align-self-end">
+                                    <button id="orderStatusBtn" class="order-status-btn text-center "></button>
                                 </div>
                             </div>
-                            <div class="col-12 mt-3">
-                                <h4>Ordered Items</h4>
-                            </div>
-                            <div class="col-12">
-                                <div class="table-responsive">
+                        </div>
+                        <div class="col-12 mt-3">
+                            <h4>Ordered Items</h4>
+                        </div>
+                        <div class="col-12">
+                            <div class="table-responsive">
 
-                                    <table class="table table-bordered text-center orderTable">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Item Name</th>
-                                                <th scope="col">Unit Price</th>
-                                                <th scope="col">Quantity</th>
-                                                <th scope="col">Total Price</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="apeend_tbody">
-  
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="3">Sub Total</td>
-                                                <td>Tk <span class="subTotal"></span></td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="3">Vat</td>
-                                                <td>Tk <span class="vatAmount"></span></td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="3">Delivery Fee</td>
-                                                <td>Tk <span class="deleveryFee"></span></td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="3">Total Amount</td>
-                                                <td>Tk <span class="view_total">1,500</span> </td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
+                                <table class="table table-bordered text-center orderTable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Item Name</th>
+                                            <th scope="col">Unit Price</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Total Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="apeend_tbody">
 
-                            <div class="col-md-12 ">
-                                <button data-dismiss="modal" class="btn-custom btnAccept btn-block mt-2">Done</button>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="3">Sub Total</td>
+                                            <td>Tk <span class="subTotal"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">Vat</td>
+                                            <td>Tk <span class="vatAmount"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">Delivery Fee</td>
+                                            <td>Tk <span class="deleveryFee"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">Total Amount</td>
+                                            <td>Tk <span class="view_total">1,500</span> </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
                             </div>
+                        </div>
+
+                        <div class="col-md-12 ">
+                            <button data-dismiss="modal" class="btn-custom btnAccept btn-block mt-2">Done</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     <!-- view  Modal End -->
     @include('layouts.admin.restaurant_add_modal')
 @endsection
 @section('pageScripts')
     <script type='text/javascript'>
-     CKEDITOR.replace('restaurant_description');
+        CKEDITOR.replace('restaurant_description');
         var config = {
             routes: {
                 view: "{!! route('order.show') !!}",
@@ -326,8 +343,8 @@
         };
 
 
-    $(function () {
-        $('.orders').addClass('sub-nav-active');
+        $(function() {
+            $('.orders').addClass('sub-nav-active');
             $('.orders a').siblings("ul").toggle().removeClass("d-none");
             $('.orders a')
                 .children("span")
@@ -335,9 +352,9 @@
                 .children(".mdi")
                 .css("transform", "rotate(0deg)");
             $('.restaurant_li').addClass('nav-active');
-        dataTable();
-  });
-      
+            dataTable();
+        });
+
         // view single 
         function viewOrder(id) {
             $.ajax({
@@ -356,9 +373,9 @@
                         setOrderDetails(response);
                         orderStatus(response.data.order_status_id, response);
                         orderItems(response.data.orderItems);
-                        $('.view_total').html( bdCurrencyFormat(response.data.amount));
-                        $('.subTotal').html( bdCurrencyFormat(response.data.sutTotal));
-                        $('.vatAmount').html( bdCurrencyFormat(response.data.vat_amount ?? 0));
+                        $('.view_total').html(bdCurrencyFormat(response.data.amount));
+                        $('.subTotal').html(bdCurrencyFormat(response.data.sutTotal));
+                        $('.vatAmount').html(bdCurrencyFormat(response.data.vat_amount ?? 0));
                         if (response.data.delivery_fee != null) {
                             $('.deleveryFee').html(bdCurrencyFormat(response.data.delivery_fee));
                         }
@@ -421,7 +438,7 @@
                     var class_name = 'cancelled';
                 }
                 $('.order-status-btn').html(response.data.status.name);
-            }else{
+            } else {
                 $('.order-status-btn').html('Pending');
                 var class_name = 'pending';
             }
@@ -446,7 +463,8 @@
                         $('.restaurant_id').val(response.data.id);
                         $('#orderTable').DataTable().clear().destroy();
                         setSessionId(response.data.session_id); // set restaurant id into session
-                        setRestaurant(response.data.restaurant_name, response.data.id); // set restaurant into topbar
+                        setRestaurant(response.data.restaurant_name, response.data
+                        .id); // set restaurant into topbar
                         // if ($.trim(response.data.orders)) {
                         //     var orderTable = $('#orderTable').DataTable();
                         //     $.each(response.data.orders, function(key, val) {
@@ -462,13 +480,13 @@
                         //             .customer.address + "",
                         //             "" + val.amount + "",
                         //             `   <button type='button' class='btn btn-outline-dark' onclick='viewOrder(${val.order_id})'>
-                        //                         <i class='fa fa-eye'></i>
-                        //                     </button>`
+                    //                         <i class='fa fa-eye'></i>
+                    //                     </button>`
                         //         ]).draw().node();
                         //         $(trDOM).addClass('order' + val.order_id + '');
                         //     });
                         // }
-                        
+
                         dataTable();
 
                     }
@@ -487,30 +505,32 @@
             });
         });
 
-    function dataTable(){
-    var id = $('#restaurantId').val();
-    var url = '{{ route("orders.past", ":id") }}';
-    url = url.replace(':id', id);
-    var d = new Date();
-    var table = $('.data-table').DataTable({
-        // processing: true,
-        serverSide: true,
-        dom: 'Bfrtip',
+        function dataTable() {
+            var id = $('#restaurantId').val();
+            var url = '{{ route('orders.past', ':id') }}';
+            url = url.replace(':id', id);
+            var d = new Date();
+            var table = $('.data-table').DataTable({
+                // processing: true,
+                serverSide: true,
+                dom: 'Bfrtip',
                 buttons: [{
                         extend: 'csvHtml5',
                         titleAttr: 'CSV File',
                         filename: 'past orders',
                         className: 'd-none',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5,6],
+                            columns: [0, 1, 2, 3, 4, 5, 6],
                             charSet: "utf-8",
                         },
                         customizeData: function(data) {
                             var ind = data.header.indexOf(
-                            "Phone"); // This code is to find the column name's index which you want to cast.
+                                "Phone"
+                                ); // This code is to find the column name's index which you want to cast.
                             for (var i = 0; i < data.body.length; i++) {
                                 data.body[i][ind] = '\u200C' + data.body[i][
-                                ind]; //will cast the number to string.
+                                    ind
+                                ]; //will cast the number to string.
                             }
                         },
                     },
@@ -520,56 +540,65 @@
                         filename: 'past orders',
                         className: 'd-none',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5,6],
+                            columns: [0, 1, 2, 3, 4, 5, 6],
                         },
                     },
 
                 ],
-        ajax: url,
-        "columnDefs": [
-{
-        "targets": [2],
-        "createdCell": function(td, cellData, rowData, row, col) {
-            switch(cellData) {
-            case "Pending":
-                $(td).addClass('pending');
-                break;
-            case "Completed":
-                $(td).addClass('completed');
-                break;
-            case "Cancelled":
-                $(td).addClass('cancelled');
-                break;
-            case "Delivering":
-                $(td).addClass('delivering');
-                break;
-            case "Preparing":
-                $(td).addClass('preparing');
-                break;
-            }
+                ajax: url,
+                "columnDefs": [{
+                    "targets": [2],
+                    "createdCell": function(td, cellData, rowData, row, col) {
+                        switch (cellData) {
+                            case "Pending":
+                                $(td).addClass('pending');
+                                break;
+                            case "Completed":
+                                $(td).addClass('completed');
+                                break;
+                            case "Cancelled":
+                                $(td).addClass('cancelled');
+                                break;
+                            case "Delivering":
+                                $(td).addClass('delivering');
+                                break;
+                            case "Preparing":
+                                $(td).addClass('preparing');
+                                break;
+                        }
+                    }
+                }],
+                columns: [{
+                        data: 'id'
+                    },
+                    {
+                        data: 'order_date'
+                    },
+                    {
+                        // class: (status == 'Delivering') ? 'delivering' : (status == 'Completed') ? 'completed': (status == 'Preparing') ? 'preparing': (status == 'Cancelled') ? 'cancelled' : 'pending' ,
+                        class: `${status}`,
+                        data: 'status',
+                    },
+                    {
+                        data: 'customer_name'
+                    },
+                    {
+                        data: 'customer_contact'
+                    },
+                    {
+                        data: 'customer_adress'
+                    },
+                    {
+                        data: 'amount'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: true,
+                        searchable: true
+                    },
+                ]
+            });
         }
-    }
-],
-        columns: [
-            {data: 'id'},
-            {data: 'order_date'},
-            { 
-                // class: (status == 'Delivering') ? 'delivering' : (status == 'Completed') ? 'completed': (status == 'Preparing') ? 'preparing': (status == 'Cancelled') ? 'cancelled' : 'pending' ,
-                class: `${status}`,
-                data: 'status',
-            },
-            {data: 'customer_name'},
-            {data: 'customer_contact'},
-            {data: 'customer_adress'},
-            {data: 'amount'},
-            {
-                data: 'action', 
-                name: 'action', 
-                orderable: true, 
-                searchable: true
-            },
-        ]
-    });
-    }    
     </script>
 @endsection

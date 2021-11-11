@@ -125,13 +125,19 @@ class OrderPerformanceController extends Controller {
     }
 
     public function monthlyOrdersReportByRestaurant(Request $request) {
+        // dd($request->all());
         $date       = explode('-', $request->date);
         $month      = str_replace(' ', ' ', $date[0]);
         $year       = $date[1];
+
         $orders     = $this->orderService->getOrdersByMonth($month, $year, $request->id);
+
         $restaurant = $this->restaurantService->findById($request->id);
         setSession($request->id);
-        Session::put('orders', $restaurant->restaurant_orders);
+        if(Session::has('monthly_orders')){
+            Session::forget('monthly_orders');
+        }
+        Session::put('monthly_orders', $orders);
         $formated_date           = Carbon::createFromDate($year, $month, 1);
         $data                    = [];
         $data['id']              = $request->id;
@@ -143,6 +149,15 @@ class OrderPerformanceController extends Controller {
         $data['year']            = Carbon::parse($formated_date)->format('y');
         $data['session_id']      = Session::get('restaurant_id');
         return success($data);
+    }
+
+    public function monthlyReport() {
+        if(Session::has('monthly_orders')){
+            $orders =  Session::get('monthly_orders');
+            return $this->dataTable($orders);
+        }
+
+     
     }
     // monthly report end
     public function itemReportsByRestaurant(Request $request, $id) {

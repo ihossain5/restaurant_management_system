@@ -164,7 +164,7 @@
                         </div>
 
                         <div class="col-lg-6 pt-5 pt-lg-0 text-start text-md-end">
-                            <button data-bs-dismiss="modal" class="repateOrderBtn">Repeat Order</button>
+                            <button  class="repateOrderBtn">Repeat Order</button>
                         </div>
                     </div>
 
@@ -179,6 +179,7 @@
            var config = {
             routes: {
                 viewOrder: "{!! route('frontend.customer.order.detail') !!}",
+                repeatOrder: "{!! route('frontend.customer.order.repeat') !!}",
                 addToCart: "{!! route('frontend.cart.add') !!}",
                 updateCart: "{!! route('frontend.cart.update') !!}",
                 decreaseCartQty: "{!! route('frontend.cart.decrease.quantity') !!}",
@@ -211,6 +212,7 @@
                                     <div class="orderPrice">Tk ${val.pivot.price}</div>
                                 </li>`);
                         });
+                        $('.repateOrderBtn').attr('onclick', "repeatOrder(" + response.data.order_id + ")");
                         $('.orderId').html(response.data.orderID);
                         $('.date').html(response.data.date);
                         $('.subtotal').html(response.data.subtotal);
@@ -230,5 +232,40 @@
                 },
             }); //ajax end
         }
+
+    function repeatOrder (id){
+        var location_id = $('.locationId').val();
+        $.ajax({
+                url: config.routes.repeatOrder,
+                method: "POST",
+                data: {
+                    id: id,
+                    locationId: location_id,
+                    _token: "{{ csrf_token() }}"
+                },
+                dataType: "json",
+                success: function(response) {
+                    if (response.success == true) {
+                        toastr["success"](response.data.message)
+                        $('.cartItem').remove();
+                        $('.cartRestaurantName').html(response.data.restaurant_name)
+                        $.each(response.data.items, function(key, val) {
+                            appendCartItem(val);
+                        });
+                        appendCartTotal(response.data.subTotal, response.data.vatAmount, response.data
+                            .grandTotal, response.data.deliveryCharge)
+
+                        cartCounter(response.data.numberOfCartItems); 
+                        $('#orderViewModal').modal('hide');
+
+                    } //success end
+                },
+                error: function(error) {
+                    if (error.status == 404) {
+                        toastr["error"]('Data not found')
+                    }
+                },
+            }); //ajax end
+    }    
     </script>
 @endsection

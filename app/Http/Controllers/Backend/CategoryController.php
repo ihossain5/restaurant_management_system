@@ -60,7 +60,9 @@ class CategoryController extends Controller {
     }
 
     public function destroy(Request $request) {
-        $category        = Category::findOrFail($request->id)->delete();
+        $category        = Category::with('items')->findOrFail($request->id);
+        $category->items()->delete();
+        $category->delete();
         $data            = [];
         $data['id']      = $request->id;
         $data['message'] = 'Category deleted successfully';

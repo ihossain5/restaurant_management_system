@@ -2,30 +2,30 @@
 
 namespace App\View\Composers;
 
+use App\Models\Restaurant;
 use App\Services\CartService;
 use Illuminate\View\View;
 
-class CartComposer {
-
-    protected $totalAmount;
-    protected $vatAMount;
-    protected $deliveryCharge;
-    protected $subTotal;
+class CartComposer extends CartService {
 
     public function __construct() {
-        $cart                 = new CartService(10, session()->get('delivery_charge'));
-        $this->totalAmount    = $cart->getTotalAmount();
-        $this->vatAMount      = $cart->getVatAmount();
-        $this->deliveryCharge = $cart->deliveryCharge;
-        $this->subTotal       = $cart->grandTotal();
+        parent::__construct(10, session()->get('delivery_charge'));
     }
 
     public function compose(View $view) {
         $view->with([
-            'totalAmount'    => $this->totalAmount,
-            'vatAMount'      => $this->vatAMount,
-            'deliveryCharge' => $this->deliveryCharge,
-            'subTotal'       => $this->subTotal,
+            'totalAmount'     => $this->getTotalAmount(),
+            'vatAMount'       => $this->getVatAmount(),
+            'deliveryCharge'  => $this->deliveryCharge,
+            'subTotal'        => $this->grandTotal(),
+            'restaurant_name' => $this->getRestaurantName(),
         ]);
+    }
+
+    protected function getRestaurantName() {
+        if(session()->has('sessionRestaurantId')){
+            $restaurant = Restaurant::findOrFail(session()->get('sessionRestaurantId'));
+            return $restaurant->name;
+        }
     }
 }

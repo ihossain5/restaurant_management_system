@@ -27,6 +27,8 @@ class OrderStoreRequest extends FormRequest {
             'address'     => 'required',
             'contact'     => 'required|max:255',
             'instruction' => 'nullable|max:255',
+            'item'        => 'required|array',
+            'item*'       => 'required',
 
         ];
     }
@@ -36,6 +38,7 @@ class OrderStoreRequest extends FormRequest {
             'email.required'   => 'Email is required',
             'address.required' => 'Please insert address',
             'contact.required' => 'Please insert contact',
+            'item.required'    => 'Please add item in your cart',
         ];
     }
 }

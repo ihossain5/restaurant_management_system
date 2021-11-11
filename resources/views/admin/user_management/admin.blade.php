@@ -148,12 +148,8 @@
                                                     <button type='button' class='btn btn-outline-dark'
                                                         onclick='viewAdmin({{ $user->id }})'><i
                                                             class='fa fa-eye'></i></button>
-                                                @if (auth()->user()->is_super_admin == 1)
-                                                    <button type='button' name='delete' class="btn btn-outline-danger "
-                                                        onclick="deleteAdmin({{ $user->id }})"><i
-                                                            class="mdi mdi-delete "></i></button>
+
                                                 </td>
-                                                @endif
                                             </tr>
                                         @endforeach
                                     @endif
@@ -237,15 +233,25 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="col-md-12 mt-5">
+                    <div class="row">
+                        @if (auth()->user()->is_super_admin == 1)
+                            <div class="col-md-6">
+                                <button data-toggle="modal" class="btn-custom dangerBtn  mb-3 delete_btn"><i
+                                        class="mdi mdi-delete "></i>
+                                    Delete
+                                </button>
+                        @endif
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <button data-dismiss="modal" class="btn btn-custom btnAccept mb-3 accept_btn"> Done</button>
+                    </div>
+                </div>
+            </div>
 
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
-                        Done
-                    </button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
     </div>
     <!-- view  Modal End -->
 @endsection
@@ -327,10 +333,7 @@
                             .append(`<td><button type='button' class='btn btn-outline-dark' onclick='viewAdmin(${response.data.id})'>
                                 <i class='fa fa-eye'></i>
                             </button>
-                           
-                            <button type='button'  name='delete' class="btn btn-outline-danger"onclick="deleteAdmin(${response.data.id})">
-                                <i class="mdi mdi-delete "></i>
-                            </button></td>`)
+                           </td>`)
 
                         var manager_row = managerTable.row.add(row).draw().node();
                         $('#adminTable tbody').prepend(row);
@@ -386,6 +389,7 @@
                         $('#view_email').text(response.data.email);
                         $('#view_gender').text(response.data.sex ?? 'N/A');
                         $('#view_phone').text(response.data.contact ?? 'N/A');
+                        $('.delete_btn').attr('onclick', "deleteAdmin(" + id + ")");
                         $('#view_restaurant_name').text(response.data.restaurant ? response.data.restaurant
                             .name : 'N/A');
                         if (response.data.photo === null) {

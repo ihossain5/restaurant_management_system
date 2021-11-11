@@ -36,10 +36,10 @@
 
         <div class="card">
             <div class="card-body">
-
                 <h3 class="text-center m-0">
-                    Admin Dashboard
-                    <!-- <a href="index.html" class="logo logo-admin"><img src="assets/images/logo_dark.png" height="30" alt="logo"></a> -->
+                    <a href="" class="logo logo-admin">
+                        <img src="{{asset('frontend/assets/images/Home/logo 2.svg')}}" alt="Emerald Restaurent logo">
+                    </a>
                 </h3>
 
                 <div class="p-3">

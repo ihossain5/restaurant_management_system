@@ -727,7 +727,7 @@ body.active .nav-overlay {
 .signInContainer {
     max-width: 43.9rem;
     width: 100%;
-    min-height: 93.5rem;
+    min-height: 101.5rem;
     margin: auto;
     padding-top: 4.7rem;
     padding-bottom: 10rem;
@@ -1070,6 +1070,28 @@ body.active .nav-overlay {
     padding: 15px 15px 15px 42px !important;
     width: 340px !important;
     box-shadow: none !important;
+}
+
+
+.tooltip-inner {
+    font-size: 1.6rem;
+    padding  : 1rem 2rem;
+}
+
+.location-submitBtn {
+    font-size       : 2.0rem;
+    padding         : .6rem 2rem .2rem 2rem;
+    border-radius   : .4rem;
+    background-color: transparent;
+    border          : 1px solid #383838;
+    text-transform  : uppercase;
+    color           : #383838;
+}
+
+.location-submitBtn:hover {
+    background-color: #91B110;
+    border-color    : #91B110;
+    color           : white;
 }
 
 /* `xxl` applies to x-large devices (large desktops, less than 1400px) */

@@ -53,21 +53,21 @@ class Order extends Model {
 
     public static function todayOrdersByRestaurantId($restaurant) {
         return Order::with('items', 'items.category')->where('restaurant_id', $restaurant)
-            ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            ->whereDate('orders.created_at', Carbon::now())
             ->where('orders.order_status_id', 3)
             ->with('customer')
             ->get();
     }
     public static function todayNewOrdersByRestaurantId($restaurant) {
         return Order::with('items', 'items.category')->where('restaurant_id', $restaurant)
-            ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            ->whereDate('orders.created_at', Carbon::now())
             ->where('orders.order_status_id', null)
             ->with('customer')
             ->get();
     }
 
     public function todaysRevenue() {
-        return $this->whereDate('created_at', DB::raw('CURDATE()'))
+        return $this->whereDate('created_at', Carbon::now())
             ->where('order_status_id', 3)
             ->sum('amount');
     }
@@ -84,47 +84,48 @@ class Order extends Model {
     }
     public function todayOrdersInPreparationByRestaurantId($restaurant) {
         return Order::where('restaurant_id', $restaurant)
-            ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            ->whereDate('orders.created_at', Carbon::now())
             ->where('orders.order_status_id', 1)->get();
 
         // return Restaurant::with(['restaurant_orders' => function ($query) {
-        //     $query->whereDate('orders.created_at', DB::raw('CURDATE()'))
+        //     $query->whereDate('orders.created_at', Carbon::now())
         //         ->where('orders.order_status_id', 1)->get();
         // }])->find($id);
 
     }
     public function todayOrdersInDeliveryByRestaurantId($restaurant) {
         return Order::where('restaurant_id', $restaurant)
-            ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            ->whereDate('orders.created_at', Carbon::now())
             ->where('orders.order_status_id', 2)->get();
         // return Restaurant::with(['restaurant_orders' => function ($query) {
-        //     $query->whereDate('orders.created_at', DB::raw('CURDATE()'))
+        //     $query->whereDate('orders.created_at', Carbon::now())
         //         ->where('orders.order_status_id', 2)->get();
         // }])->find($id);
     }
     public function ordersInPreparationByRestaurant($restaurant) {
         return Order::where('restaurant_id', $restaurant)
-            ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            ->whereDate('orders.created_at', Carbon::now())
             ->where('orders.order_status_id', 1)->get();
     }
     public function ordersInDeliveryByRestaurant($restaurant) {
         return Order::where('restaurant_id', $restaurant)
-            ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            ->whereDate('orders.created_at', Carbon::now())
             ->where('orders.order_status_id', 2)->get();
     }
     public function CompletedOrdersByRestaurant($restaurant) {
         return Order::where('restaurant_id', $restaurant)
-            ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            ->whereDate('orders.created_at', Carbon::now())
             ->where('orders.order_status_id', 3)->get();
     }
     public function cancelledOrdersByRestaurant($restaurant) {
         return Order::where('restaurant_id', $restaurant)
-            ->whereDate('orders.created_at', DB::raw('CURDATE()'))
+            ->whereDate('orders.created_at', Carbon::now())
             ->where('orders.order_status_id', 4)->get();
     }
 
     public function ordersByDate($date, $restaurant) {
         return Order::where('restaurant_id', $restaurant)
+            ->where('order_status_id', 3)
             ->whereDate('created_at', $date)->get();
     }
     public function getOrdersByDate($start_date, $end_date, $restaurant) {
