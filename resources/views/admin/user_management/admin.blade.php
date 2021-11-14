@@ -429,6 +429,7 @@
                         dataType: 'JSON',
                         success: function(response) {
                             if (response.success === true) {
+                                $('#viewModal').modal('hide');
                                 $('#adminTable').DataTable().row('.admin' + response.data.id)
                                     .remove()
                                     .draw();

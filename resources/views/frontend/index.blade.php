@@ -223,6 +223,7 @@
         var locationModal = new bootstrap.Modal(document.getElementById('location-modal'), {
             keyboard: false
         })
+       
 
         locationID = document.getElementById("select_id").value;
         if (locationID != '') {

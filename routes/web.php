@@ -139,8 +139,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/{id}/monthly-reports', [OrderPerformanceController::class, 'currentMonthReportsByRestaurant'])->name('order.report.restaurant.current.month');
         Route::post('monthly-reports', [OrderPerformanceController::class, 'monthlyOrdersReportByRestaurant'])->name('order.report.restaurant.month');
         Route::get('month-report', [OrderPerformanceController::class, 'monthlyReport'])->name('order.report.month');
-        Route::get('/{id}/item/performance-reports', [OrderPerformanceController::class, 'itemReportsByRestaurant'])->name('order.report.item');
-        Route::post('item/performance-reports', [OrderPerformanceController::class, 'itemReportsByDate'])->name('order.report.item.date');
+        Route::get('/{id}/item/performance-reports', [OrderPerformanceController::class, 'itemPerformanceReportByRestaurant'])->name('order.report.item');
+        Route::post('item/performance-reports', [OrderPerformanceController::class, 'orderItemsPerFormanceReport'])->name('order.items.report');
+        // Route::post('item/performance-reports', [OrderPerformanceController::class, 'itemReportsByDate'])->name('order.report.item.date');
         Route::post('category-item/performance-reports', [OrderPerformanceController::class, 'itemReportsByCategory'])->name('order.item.report.by.category');
 
     }); //* Restaurant route end */
@@ -291,7 +292,7 @@ Route::group(['prefix' => 'manager', 'middleware' => ['auth', 'manager']], funct
     Route::get('/daily-sales-report', [ManagerOrderPerformanceController::class, 'dailyReports'])->name('manager.daily.sales.report');
     Route::post('/daily-sales-report/by-date', [ManagerOrderPerformanceController::class, 'dailyReportsByDate'])->name('manager.daily.report.by.date');
     // Route::get('/item-performance-report', [ManagerOrderPerformanceController::class, 'itemPerformanceReport'])->name('manager.item.performance.report');
-    Route::post('/item-performance-report', [ManagerOrderPerformanceController::class, 'itemPerformanceReportByDate'])->name('manager.item.performance.by.date');
+    Route::post('/item-performance-report', [ManagerOrderPerformanceController::class, 'orderItemsPerFormanceReport'])->name('manager.item.performance.by.date');
 
     Route::get('/item-performance-report', [ManagerOrderPerformanceController::class, 'itemPerformanceReportByRestaurant'])->name('manager.item.performance.report');
 

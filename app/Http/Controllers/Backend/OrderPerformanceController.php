@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Restaurant;
 use App\Services\OrderService;
 use App\Services\RestaurantService;
@@ -126,15 +127,15 @@ class OrderPerformanceController extends Controller {
 
     public function monthlyOrdersReportByRestaurant(Request $request) {
         // dd($request->all());
-        $date       = explode('-', $request->date);
-        $month      = str_replace(' ', ' ', $date[0]);
-        $year       = $date[1];
+        $date  = explode('-', $request->date);
+        $month = str_replace(' ', ' ', $date[0]);
+        $year  = $date[1];
 
-        $orders     = $this->orderService->getOrdersByMonth($month, $year, $request->id);
+        $orders = $this->orderService->getOrdersByMonth($month, $year, $request->id);
 
         $restaurant = $this->restaurantService->findById($request->id);
         setSession($request->id);
-        if(Session::has('monthly_orders')){
+        if (Session::has('monthly_orders')) {
             Session::forget('monthly_orders');
         }
         Session::put('monthly_orders', $orders);
@@ -152,12 +153,11 @@ class OrderPerformanceController extends Controller {
     }
 
     public function monthlyReport() {
-        if(Session::has('monthly_orders')){
-            $orders =  Session::get('monthly_orders');
+        if (Session::has('monthly_orders')) {
+            $orders = Session::get('monthly_orders');
             return $this->dataTable($orders);
         }
 
-     
     }
     // monthly report end
     public function itemReportsByRestaurant(Request $request, $id) {
@@ -186,6 +186,147 @@ class OrderPerformanceController extends Controller {
         // return view('admin.performance-reports.item_performance_report', compact('restaurant', 'restaurants', 'total_order', 'total_amount'));
         return view('admin.performance-reports.item_performance_report_new', compact('restaurant', 'restaurants', 'total_order', 'total_amount'));
     }
+
+    public function itemPerformanceReportByRestaurant($id) {
+        $restaurants = Restaurant::get();
+        $year        = date('Y');
+        $month       = Carbon::now()->subMonth()->month;
+        $monthName   = Carbon::now()->subMonth()->format('F, Y');
+        $restaurant  = Restaurant::with('restaurant_categories')->findOrFail($id);
+
+        $orders = Order::with('items', 'items.category')->where('restaurant_id', $restaurant->restaurant_id)
+            ->whereYear('created_at', '=', $year)
+            ->whereMonth('created_at', '=', $month)
+            ->where('order_status_id', 3)->get();
+
+        $newItems = [];
+        $total    = 0;
+        foreach ($orders as $order) {
+            foreach ($order->items as $item) {
+                $total += $item->pivot->price;
+                $newItems[] = $item;
+            }
+        }
+
+        $categories = $restaurant->restaurant_categories;
+        return view('admin.performance-reports.item_performance_report', compact('restaurant', 'restaurants', 'newItems', 'total', 'monthName', 'categories'));
+
+        // return view('admin.performance-reports.item_performance_report', compact('newItems', 'total', 'monthName', 'categories'));
+    }
+
+    public function orderItemsPerFormanceReport(Request $request) {
+        // dd($request->all());
+        $restaurant = Restaurant::findOrFail($request->restaurant_id);
+        if ($request->category_id == null && $request->start_date == null && $request->end_date == null) {
+            $year      = date('Y');
+            $month     = Carbon::now()->subMonth()->month;
+            $monthName = Carbon::now()->subMonth()->format('F, Y');
+
+            $orders = Order::with('items', 'items.category')->where('restaurant_id', $restaurant->restaurant_id)
+                ->whereYear('created_at', '=', $year)
+                ->whereMonth('created_at', '=', $month)
+                ->where('order_status_id', 3)->get();
+
+            $newItems = [];
+            $total    = 0;
+            foreach ($orders as $order) {
+                foreach ($order->items as $item) {
+                    $total += $item->pivot->price;
+                    $newItems[] = $item;
+                }
+            }
+            $data['total']      = $total;
+            $data['items']      = $newItems;
+            $data['monthName']  = $monthName;
+            $data['session_id'] = Session::get('restaurant_id');
+            $data['restaurant_id'] = $restaurant->restaurant_id;
+            $data['restaurant_name'] = $restaurant->name;
+
+            return success($data);
+
+        } else if ($request->start_date == null && $request->end_date == null) {
+            $category  = Category::findOrFail($request->category_id);
+            $year      = date('Y');
+            $month     = Carbon::now()->subMonth()->month;
+            $monthName = Carbon::now()->subMonth()->format('F, Y');
+
+            $orders = Order::with('items', 'items.category')->where('restaurant_id', $restaurant->restaurant_id)
+                ->whereYear('created_at', '=', $year)
+                ->whereMonth('created_at', '=', $month)
+                ->where('order_status_id', 3)->get();
+
+            $newItems = [];
+            $total    = 0;
+            foreach ($orders as $order) {
+                foreach ($order->items as $item) {
+                    if ($category->category_id == $item->category->category_id) {
+                        $total += $item->pivot->price;
+                        $newItems[] = $item;
+                    }
+                }
+            }
+            $data['total']      = $total;
+            $data['items']      = $newItems;
+            $data['monthName']  = $monthName;
+            $data['session_id'] = Session::get('restaurant_id');
+            $data['restaurant_id'] = $restaurant->restaurant_id;
+            $data['restaurant_name'] = $restaurant->name;
+
+            return success($data);
+
+        } else if ($request->category_id == null && $request->start_date != null && $request->end_date != null) {
+            $start_date = Carbon::parse($request->start_date)->format('y-m-d');
+            $end_date   = Carbon::parse($request->end_date)->format('y-m-d');
+
+            $orders = $this->orderService->getCompletedOrdersByDateRange($start_date, $end_date, $restaurant->restaurant_id);
+
+            $newItems = [];
+            $total    = 0;
+            foreach ($orders as $order) {
+                foreach ($order->items as $item) {
+                    $total += $item->pivot->price;
+                    $newItems[] = $item;
+                }
+            }
+            $data['total']      = $total;
+            $data['items']      = $newItems;
+            $data['start_date'] = formatDate($request->start_date);
+            $data['end_date']   = formatDate($request->end_date);
+            $data['session_id'] = Session::get('restaurant_id');
+            $data['restaurant_id'] = $restaurant->restaurant_id;
+            $data['restaurant_name'] = $restaurant->name;
+
+            return success($data);
+
+        } else {
+            $start_date = Carbon::parse($request->start_date)->format('y-m-d');
+            $end_date   = Carbon::parse($request->end_date)->format('y-m-d');
+            $category   = Category::findOrFail($request->category_id);
+
+            $orders = $this->orderService->getCompletedOrdersByDateRange($start_date, $end_date, $restaurant->restaurant_id);
+            // dd($orders);
+            $newItems = [];
+            $total    = 0;
+            foreach ($orders as $order) {
+                foreach ($order->items as $item) {
+                    if ($category->category_id == $item->category->category_id) {
+                        $total += $item->pivot->price;
+                        $newItems[] = $item;
+                    }
+                }
+            }
+            $data['total']      = $total;
+            $data['items']      = $newItems;
+            $data['start_date'] = formatDate($request->start_date);
+            $data['end_date']   = formatDate($request->end_date);
+            $data['session_id'] = Session::get('restaurant_id');
+            $data['restaurant_id'] = $restaurant->restaurant_id;
+            $data['restaurant_name'] = $restaurant->name;
+            return success($data);
+
+        }
+    }
+
     public function itemReportsByDate(Request $request) {
         // dd($request->all());
         $start_date              = Carbon::parse($request->start_date)->format('y-m-d');
@@ -259,7 +400,7 @@ class OrderPerformanceController extends Controller {
                     $item['total_quantity'] = $item->pivot->quantity;
                     $item['revenue']        = $item->pivot->price;
                     $total += $item->pivot->price;
-                    $item['total_order'] = count($orders);
+                    $item['total_order']  = count($orders);
                     $item['total_amount'] = $order->items->sum('pivot.price');
                 }
             }
@@ -268,7 +409,6 @@ class OrderPerformanceController extends Controller {
         return DataTables::of($items)
             ->addIndexColumn()
             ->make(true);
-
 
     }
 

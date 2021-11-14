@@ -748,7 +748,7 @@
                                     animation: true,
                                     title: "" + response.data.message + ""
                                 });
-                                $('#edit_modal').modal('show');
+                                $('#viewModal').modal('hide');
                                 $('.restaurant_select_box').empty();
                                 $('.restaurant_select_box').append(
                                     `<option value="" class="restaurantName"></option>`

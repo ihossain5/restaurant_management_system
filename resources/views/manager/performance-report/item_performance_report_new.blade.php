@@ -6,7 +6,6 @@
 
 @section('pageCss')
     <style>
-
         .view-modal p {
             line-height: 2;
         }
@@ -26,9 +25,9 @@
                         <div class="card-body">
                             <div class="row pb-5">
                                 <div class="col-lg-4">
-                                    <h4 class="mt-0 header-title">Item Performance Report - 
-                                        <span class="starting_date"></span> -
-                                        <span class="ending_date"></span> 
+                                    <h4 class="mt-0 header-title">Item Performance Report - {{ $monthName }}
+                                        {{-- <span class="starting_date"></span> -
+                                        <span class="ending_date"></span> --}}
                                     </h4>
                                 </div>
                                 <div class="col-lg-8">
@@ -50,7 +49,8 @@
                                             <div class="custom-date">
                                                 <div class="input-daterange input-group" id="date-range">
                                                     <div class="customDatePicker">
-                                                        <img src="{{ asset('backend/assets/icons/dateicon.svg') }}" alt="">
+                                                        <img src="{{ asset('backend/assets/icons/dateicon.svg') }}"
+                                                            alt="">
                                                         <input type="text" class="form-control start_date date" name="start"
                                                             placeholder="Start Date" />
                                                         <img src="{{ asset('backend/assets/icons/color-arrow-down.svg') }}"
@@ -58,7 +58,8 @@
                                                     </div>
 
                                                     <div class="customDatePicker">
-                                                        <img src="{{ asset('backend/assets/icons/dateicon.svg') }}" alt="">
+                                                        <img src="{{ asset('backend/assets/icons/dateicon.svg') }}"
+                                                            alt="">
                                                         <input type="text" class="form-control end_date date" name="end"
                                                             placeholder="End Date" />
                                                         <img src="{{ asset('backend/assets/icons/color-arrow-down.svg') }}"
@@ -85,6 +86,17 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @if (!empty($newItems))
+                                            @foreach ($newItems as $item)
+                                                <tr class="item{{ $item->item_id }}">
+                                                    <td>{{ $item->category->name }}</td>
+                                                    <td>{{ $item->name }}</td>
+                                                    <td>{{ $item->pivot->quantity }}</td>
+                                                    <td>{{ currency_format($item->pivot->price)  }}</td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+
                                     </tbody>
                                     <tfoot>
                                         <tr class="table-active">
@@ -92,7 +104,8 @@
                                             <td class="col-3 font-weight-bold"></td>
                                             <td class="col-3 font-weight-bold"></td>
                                             {{-- <td class="col-3 font-weight-bold">TOTAL <span class="total_orders"></span> ORDERS</td> --}}
-                                            <td class="col-3 font-weight-bold ">TOTAL <span class="total_amount"></span></td>
+                                            <td class="col-3 font-weight-bold ">TOTAL <span
+                                                    class="total_amount">{{ currency_format($total) }}</span></td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -103,127 +116,87 @@
             </div> <!-- end row -->
         </div><!-- container -->
     </div> <!-- Page content Wrapper -->
-    <!-- view  Modal -->
-    <div class="modal fade bs-example-modal-center" id="viewModal" tabindex="-1" role="dialog"
-        aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md">
-            <div class="modal-content">
-                <div class="modal-header d-block">
-                    <h5 class="modal-title mt-0 text-center">Order Details</h5>
-                    <button type="button" class="close modal_close_icon" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div class="modal-body">
-                    <div class="col-xl-12 col-md-12">
-                        <div class="ms-form-group view-modal">
-                            <p class="pb-3">
-                                <strong>Order ID:</strong> <span id="view_order_id"></span><br>
-                                <strong>Customer Name:</strong> <span id="view_customer_name"></span><br>
-                                <strong>Customer Email:</strong> <span id="view_customer_email"></span><br>
-                                <strong>Customer Contact:</strong> <span id="view_customer_contact"></span><br>
-                                <button type="button" class="btn btn-outline-purple float-right waves-effect waves-light"
-                                    name="button" id="order_status">
-                                </button>
-                                <strong>Customer Address :</strong> <span id="view_customer_address"></span><br>
-                                <strong>Special Notes :</strong> <span id="view_notes"></span><br>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="row p-3">
-                        <div class="table-responsive">
-                            <h5 class="text-center">Order Items</h5>
-                            <table class="table table-bordered dt-responsive nowrap"
-                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Unit Price</th>
-                                        <th>Quantity</th>
-                                        <th>Total Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="apeend_tbody">
 
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td class="col-3 test">Delevery Fee</td>
-                                        <td class="col-3 test"></td>
-                                        <th class="col-3"></th>
-                                        <td class="col-3 deleveryFee">asdasd </td>
-                                    </tr>
-                                    <tr class="table-active">
-                                        <td class="col-3 font-weight-bold">Total Amount</td>
-                                        <td class="col-3 test"></td>
-                                        <th class="col-3"></th>
-                                        <td class="col-3 view_total"> </td>
-                                    </tr>
 
-                                </tfoot>
-
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer view-modal-footer">
-                    <button type="submit" data-dismiss="modal" class="btn btn-block btn-success waves-effect waves-light">
-                        Done
-                    </button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div>
-    <!-- view  Modal End -->
-
-    <input type="hidden" name="" id="managerRestaurantId"
-    value="{{ Auth::user()->restaurant->restaurant_id }}">
+    <input type="hidden" name="" id="managerRestaurantId" value="{{ Auth::user()->restaurant->restaurant_id }}">
 @endsection
 @section('pageScripts')
-<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-<script src="{{ asset('backend/assets/js/pusher_notification.js') }}"></script>
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script src="{{ asset('backend/assets/js/pusher_notification.js') }}"></script>
     <script type='text/javascript'>
         var config = {
             routes: {
-                view: "{!! route('order.show') !!}",
                 getItems: "{!! route('manager.item.performance.by.date') !!}",
             }
         };
 
 
 
-    // category on change function
-    $(document).on('change', '.category-select', function() {
+        // category on change function
+        $(document).on('change', '.category-select', function() {
             var id = $(this).val();
             var start_date = $('.start_date').val();
             var end_date = $('.end_date').val();
-            if(id == ''){
-                $('.start_date').val("");
-                $('.end_date').val("");
-                var url = {
+
+            $.ajax({
                 url: config.routes.getItems,
                 method: "POST",
                 data: {
-                    id: id,
-                    start_date: '',
-                    end_date: '',
-                    _token: "{{ csrf_token() }}"
-                },
-                dataType: "json",};
-                
-            }else{
-                var url = {
-                url: config.routes.getItems,
-                method: "POST",
-                data: {
-                    id: id,
+                    category_id: id,
                     start_date: start_date,
                     end_date: end_date,
                     _token: "{{ csrf_token() }}"
                 },
-                dataType: "json",};
-            }
+                dataType: "json",
+                success: function(response) {
+                    if (response.success == true) {
+                        $('#orderTable').DataTable().clear().draw();
+                        $('.total_amount').html(bdCurrencyFormat(response.data.total));
+                        $('.header-title').empty();
+                        if (response.data.start_date) {
+                            $('.header-title').append(
+                                ` <h4 class="mt-0 header-title">Item Performance Report - 
+                                        <span class="starting_date">${response.data.start_date}</span> -
+                                        <span class="ending_date">${response.data.end_date}</span> 
+                                    </h4>`
+                            )
+                        } else if (response.data.monthName) {
+                            $('.header-title').append(
+                                ` <h4 class="mt-0 header-title">
+                                    Item Performance Report - ${response.data.monthName}
+                                    </h4>`
+                            )
+                        }
+                        if ($.trim(response.data.items)) {
+                            var orderTable = $('#orderTable').DataTable();
+                            $.each(response.data.items, function(key, val) {
+                                var trDOM = orderTable.row.add([
+                                    "" + val.category.name + "",
+                                    "" + val.name + "",
+                                    "" + val.pivot.quantity + "",
+                                    "" + val.pivot.price + "",
+                                ]).draw().node();
+                                $(trDOM).addClass('item' + val.item_id + '');
+                            });
+                        }
 
-            $('#orderTable').DataTable().clear().destroy();
-            dataTable(url);
+                    } //success end
+
+                },
+                error: function(error) {
+                    if (error.status == 404) {
+                        toastMixin.fire({
+                            icon: 'error',
+                            animation: true,
+                            title: "" + 'Data not found' + ""
+                        });
+
+
+                    }
+                },
+            }); //ajax end
+
+
         });
 
         // get orders by date
@@ -231,21 +204,66 @@
             var start_date = $('.start_date').val();
             var end_date = $('.end_date').val();
             var id = $('.category-select').val();
-       
-            var url = {
+
+            $.ajax({
                 url: config.routes.getItems,
                 method: "POST",
                 data: {
-                    id: id,
+                    category_id: id,
                     start_date: start_date,
                     end_date: end_date,
                     _token: "{{ csrf_token() }}"
                 },
-                dataType: "json",};
-            $('#orderTable').DataTable().clear().destroy();
-            dataTable(url);
+                dataType: "json",
+                success: function(response) {
+                    if (response.success == true) {
+                        $('#orderTable').DataTable().clear().draw();
+                        $('.total_amount').html(bdCurrencyFormat(response.data.total));
+                        $('.header-title').empty();
+                        if (response.data.start_date) {
+                            $('.header-title').append(
+                                ` <h4 class="mt-0 header-title">Item Performance Report - 
+                                        <span class="starting_date">${response.data.start_date}</span> -
+                                        <span class="ending_date">${response.data.end_date}</span> 
+                                    </h4>`
+                            )
+                        } else if (response.data.monthName) {
+                            $('.header-title').append(
+                                ` <h4 class="mt-0 header-title">
+                                    Item Performance Report - ${response.data.monthName}
+                                    </h4>`
+                            )
+                        }
+                        if ($.trim(response.data.items)) {
+                            var orderTable = $('#orderTable').DataTable();
+                            $.each(response.data.items, function(key, val) {
+                                var trDOM = orderTable.row.add([
+                                    "" + val.category.name + "",
+                                    "" + val.name + "",
+                                    "" + val.pivot.quantity + "",
+                                    "" + val.pivot.price + "",
+                                ]).draw().node();
+                                $(trDOM).addClass('item' + val.item_id + '');
+                            });
+                        }
+
+                    } //success end
+
+                },
+                error: function(error) {
+                    if (error.status == 404) {
+                        toastMixin.fire({
+                            icon: 'error',
+                            animation: true,
+                            title: "" + 'Data not found' + ""
+                        });
+
+
+                    }
+                },
+            }); //ajax end
+
         });
         // 
-
     </script>
 @endsection

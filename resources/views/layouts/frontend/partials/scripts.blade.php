@@ -59,6 +59,11 @@
             window.location.href = url;
         }
 
+        $(document).on('click', '.navbar-modal-show-btn', function() {
+            var locationId = $('.locationId').val();
+            $('#select_id').val(locationId);
+        });
+
 
         // Deales Carousel
         $(document).ready(function() {
@@ -163,8 +168,9 @@
                 dataType: "json",
                 success: function(response) {
                     if (response.success == true) {
-                        $('.location-submitBtn').attr('onclick','locationChange()');
-                        $('.cartItems').removeAttr('data-bs-original-title');
+                        $('.location-submitBtn').attr('onclick', 'locationChange()');
+                        removeTooltip();
+
                         toastr["success"](response.data.message)
                         $('.cartItem').remove();
                         $('.cartRestaurantName').html(response.data.restaurant_name)
@@ -298,9 +304,10 @@
                         $('.itemRow' + rowId).remove();
                         cartCounter(response.data.numberOfCartItems); // set cart counter
                         if (response.data.numberOfCartItems == 0) {
-                            $('.location-submitBtn').attr('onclick','changeLocation()');
-                          
-                            $('.cartItems').attr('data-bs-original-title','Cart is empty');
+                            $('.location-submitBtn').attr('onclick', 'changeLocation()');
+
+                            // $('#cartItems').attr('title', 'Cart is empty');
+                            $('#cartItems').attr('data-bs-original-title', 'Cart is empty');
                             $('.cartRestaurantName').empty();
                         }
                     } //success end
@@ -369,6 +376,7 @@
                 dataType: "json",
                 success: function(response) {
                     if (response.success == true) {
+                        removeTooltip();
                         toastr["success"](response.data.message)
                         $('.cartItem').remove();
                         $('.cartRestaurantName').html(response.data.restaurant_name)
@@ -448,6 +456,12 @@
 
             });
         });
+
+        //remove tooltip
+        function removeTooltip() {
+            $('.cartItems').removeAttr('title');
+            $('.cartItems').removeAttr('data-bs-original-title');
+        }
 
         function cartCounter(number) {
             $('.cartCounter').html(number);

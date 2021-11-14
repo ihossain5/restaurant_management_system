@@ -22,7 +22,7 @@
                             <div class="col-9">
                                 <div class="select-box">
                                     <select class="w-100" aria-label="Default select example" id="select_id">
-                                        <option selected>Select Location</option>
+                                        <option value="">Select Location</option>
                                         @if (!empty($locations))
                                             @foreach ($locations as $location)
                                                 <option value="{{ $location->delivery_location_id }}"

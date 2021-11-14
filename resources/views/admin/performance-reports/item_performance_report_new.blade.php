@@ -154,6 +154,7 @@
                 .children(".mdi")
                 .css("transform", "rotate(0deg)");
             $('.restaurant_li').addClass('nav-active');
+            
             var id = $('#restaurantId').val();
             var url = '{{ route('order.report.item', ':id') }}';
             url = url.replace(':id', id);
