@@ -53,7 +53,7 @@
                                                     src="{{ asset('frontend/assets/images/fb.png') }}" alt="mail-box" />
                                             </p>
                                             <p>
-                                                <a href="{{ $restaurant->facebook_link}}" target="blank">
+                                                <a href="{{ $restaurant->facebook_link}}" target="_blank">
                                                     {{ $restaurant->facebook_link ?? 'N/A' }}
                                                 </a>
                                             </p>

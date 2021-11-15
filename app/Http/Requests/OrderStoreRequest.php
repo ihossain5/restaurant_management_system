@@ -25,7 +25,7 @@ class OrderStoreRequest extends FormRequest {
             'name'        => 'required|max:255|string',
             'email'       => 'required|email|max:255',
             'address'     => 'required',
-            'contact'     => 'required|max:255',
+            'contact'     => 'required|max:11|min:11',
             'instruction' => 'nullable|max:255',
             'item'        => 'required|array',
             'item*'       => 'required',

@@ -307,7 +307,8 @@
                             $('.location-submitBtn').attr('onclick', 'changeLocation()');
 
                             // $('#cartItems').attr('title', 'Cart is empty');
-                            $('#cartItems').attr('data-bs-original-title', 'Cart is empty');
+                            // $('#cartItems').attr('data-bs-original-title', 'Cart is empty');
+                            $('.cartItems').attr('data-bs-original-title','Cart is empty');
                             $('.cartRestaurantName').empty();
                         }
                     } //success end

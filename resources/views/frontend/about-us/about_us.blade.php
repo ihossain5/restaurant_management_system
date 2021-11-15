@@ -13,6 +13,9 @@
             color: #383838;
             font-family: 'Roboto', sans-serif;
         }
+        .logo-wrapper img{
+            width: 120px;
+        }
 
     </style>
 @endsection
@@ -102,7 +105,7 @@
                         <div class="col-lg-6 order-2 order-lg-1">
                             <div class="left-box">
                                 <div class="indCompLogo">
-                                    <img style="max-width: 12.2rem;" src="{{ asset('images/' . $restaurant->logo) }}"
+                                    <img src="{{ asset('images/' . $restaurant->logo) }}"
                                         alt="">
                                 </div>
                                 <p class="compDescrip">{!! $restaurant->description !!}</p>

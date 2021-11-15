@@ -330,7 +330,7 @@ body.active .nav-overlay {
 
 .navbar-location-select-box .navbar-modal-show-btn {
     width: 100%;
-    min-width: 300px;
+    min-width: 450px;
     position: relative;
     border: 0;
     border-bottom: 1px solid #dddddd;

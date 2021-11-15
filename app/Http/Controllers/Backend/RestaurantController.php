@@ -25,7 +25,7 @@ class RestaurantController extends Controller {
         $logo = $request->logo;
         if ($logo) {
             $path     = 'restaurant-logo/';
-            $logo_url = storeImage($logo, $path, 128, 128);
+            $logo_url = storeImage($logo, $path, 250, 250);
         }
         $restaurant = Restaurant::create([
             'name'          => $request->name,
@@ -95,7 +95,7 @@ class RestaurantController extends Controller {
         if ($logo) {
             deleteImage($restaurant->logo);
             $path     = 'restaurant-logo/';
-            $logo_url = storeImage($logo, $path, 128, 128);
+            $logo_url = storeImage($logo, $path, 250, 250);
         } else {
             $logo_url = $restaurant->logo;
         }

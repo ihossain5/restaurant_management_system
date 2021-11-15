@@ -47,7 +47,7 @@
     <section class="container-fluid restaurent-Details">
         <div class="row">
             <div class="col-12 text-center social-link">
-                <a href="#"><img src="{{ asset('frontend/assets/images/Menu/facebook-circular-logo 1.svg') }}" alt=""></a>
+                <a href="{{ $restaurant->facebook_link}}"  target="_blank"><img src="{{ asset('frontend/assets/images/Menu/facebook-circular-logo 1.svg') }}" alt=""></a>
                 <a href="#"><img src="{{ asset('frontend/assets/images/Menu/instagram 1.svg') }}" alt=""></a>
             </div>
             <div class="col-12 text-center">
@@ -58,10 +58,10 @@
                     <p>Restaurant is closed now</p>
                 @else
                     <p>
-                        Delivery available only in
-                         @foreach ($restaurant_locations as $location)
+                        Delivery available only in  {{ $restaurant->location }} 
+                         {{-- @foreach ($restaurant_locations as $location)
                           {{ $location }} @if (!$loop->last),@endif 
-                        @endforeach
+                        @endforeach --}}
                     </p>
                 @endif
                 {{-- <p> {{ $restaurant->restaurant_status_id == null ? '' : ($restaurant->status->name == 'CLOSED' ? 'Restaurant is closed now' : 'Delivery available only in Gulshan') }}
@@ -86,11 +86,11 @@
                 <ul class="scroll-x-navbar nav-pills sideCategories owl-carousel">
                     @if (!empty($restaurant->restaurant_categories))
                         @foreach ($restaurant->restaurant_categories as $category)
-                            @if (count($category->items) > 0)
+                            @if (count($category->available_items) > 0)
                                 <li class="nav-item">
                                     <a href="#category{{ $category->category_id }}"
                                         class="nav-link">{{ $category->name }}
-                                        ({{ $category->items->count() }})</a>
+                                        ({{ $category->available_items->count() }})</a>
                                 </li>
                             @endif
                         @endforeach
@@ -106,14 +106,14 @@
             @if (!empty($restaurant->restaurant_categories))
                 @foreach ($restaurant->restaurant_categories as $category)
                     <!-- category loop start -->
-                    @if (count($category->items) > 0)
+                    @if (count($category->available_items) > 0)
                         <div class="row categories" id="category{{ $category->category_id }}">
                             <div class="categories-active-height"></div>
                             <h1 class="categoriesTitle">{{ $category->name }}</h1>
                             <!-- item if condition start -->
-                            @if (!empty($category->items))
+                            @if (!empty($category->available_items))
                                 <!-- item loop start -->
-                                @foreach ($category->items as $item)
+                                @foreach ($category->available_items as $item)
                                     <div class="col-12 menuItem">
                                         <div class="row">
                                             <div class="col-4 col-md-2">

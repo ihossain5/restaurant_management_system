@@ -60,7 +60,10 @@ class CategoryController extends Controller {
     }
 
     public function destroy(Request $request) {
-        $category        = Category::with('items')->findOrFail($request->id);
+        $category        = Category::with('items','items.orders')->findOrFail($request->id);
+        foreach($category->items as $item){
+            $item->orders()->delete();
+        }
         $category->items()->delete();
         $category->delete();
         $data            = [];

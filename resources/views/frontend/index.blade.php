@@ -41,7 +41,7 @@
                             <img src="{{ asset('images/' . $slider->pic) }}" class="d-block w-100" alt="...">
                             <div class="carousel-caption d-md-block">
                                 <h1>{{ $slider->description }}</h1>
-                                <a href="#">Order Now!</a>
+                                <a href="{{route('frontend.about.us')}}">Order Now!</a>
                             </div>
                         </div>
                     @endforeach
@@ -68,10 +68,14 @@
                                     <div class="card-overlay-content">
                                         <div class="card-ovelay-inner">
                                             <img src="{{ 'images/' . $restaurant->logo }}" alt="">
-                                            <p>**Delivery available only in 
+                                            {{-- <p>**Delivery available only in 
                                                 @foreach ($restaurant->delivery_locations as $location)
-                                                {{ $location->name }} @if (!$loop->last),@endif 
+                                                {{ $lrestaurant->location->name }} @if (!$loop->last),@endif 
                                               @endforeach
+                                            </p> --}}
+                                            <p>**Delivery available only in 
+                                                {{ $restaurant->location }} 
+        
                                             </p>
                                         </div>
                                     </div>

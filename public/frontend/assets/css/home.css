@@ -137,10 +137,11 @@
 }
 
 .card-overlay-content img {
-    width: 100%;
+    /* width: 100%;
     max-width: 20rem;
     height: 100%;
-    max-height: 8.4rem;
+    max-height: 8.4rem; */
+    max-width: 120px;
     margin-bottom: 4rem;
 }
 
@@ -431,7 +432,8 @@
         margin: 0 auto;
     }
     .card-overlay-content img {
-        max-width: 18rem;
+        /* max-width: 18rem; */
+        max-width: 13rem;
         margin-bottom: 4rem;
     }
 

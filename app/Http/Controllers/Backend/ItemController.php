@@ -94,6 +94,7 @@ class ItemController extends Controller {
         foreach ($item->item_assets as $asset) {
             deleteImage($asset->pivot->asset);
         }
+        $item->orders()->delete();
         $item->delete();
         $data['message'] = 'Item deleted successfully';
         $data['id']      = $request->id;

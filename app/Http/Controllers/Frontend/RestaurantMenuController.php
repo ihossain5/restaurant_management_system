@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Session;
 class RestaurantMenuController extends Controller
 {
     public function getRestaurant(Restaurant $restaurant){
-        $locations =  DeliveryLocation::get()->unique('name');
+        $locations =  DeliveryLocation::orderBy('name','ASC')->get()->unique('name');
         $restaurant->load('assets','restaurant_categories','restaurant_categories.available_items','status','delivery_locations');
         $restaurant_locations= $restaurant->delivery_locations->pluck('name');  
         $images=[];

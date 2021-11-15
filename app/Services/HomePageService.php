@@ -36,7 +36,7 @@ Class HomePageService {
     }
 
     public function getDeliveryLocations() {
-        return DeliveryLocation::get()->unique('name');
+        return DeliveryLocation::orderBy('name','ASC')->get()->unique('name');
     }
 
     public function heroSlider() {
@@ -44,7 +44,7 @@ Class HomePageService {
     }
 
     public function restaurants() {
-        $restaurants = Restaurant::with('assets')->where('is_open', 1)->latest()->get();
+        $restaurants = Restaurant::with('assets','delivery_locations')->where('is_open', 1)->latest()->get();
         $this->formatRestaurant($restaurants);
         return $restaurants;
     }

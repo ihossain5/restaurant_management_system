@@ -13,7 +13,7 @@ class AboutUsController extends Controller
     public function index(){
         $about = AboutUs::first();
         $restaurants = Restaurant::with('assets')->get();
-        $locations =  DeliveryLocation::get()->unique('name');
+        $locations =  DeliveryLocation::orderBy('name','ASC')->get()->unique('name');
         foreach ($restaurants as $restaurant) {
             $strip_text  = strip_tags($restaurant->description);
             $result      = preg_replace('/<(\w+)[^>]*>/', '<$1>', $strip_text);
