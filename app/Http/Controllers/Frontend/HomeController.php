@@ -30,6 +30,7 @@ class HomeController extends Controller {
         $location              = $this->homePageService->getRestaurantByLocation($id);
         if(count(Cart::content())>0){
             Cart::destroy();
+            Session::forget('sessionRestaurantId'); // forget old restaurant id
         }
         $data['restaurants']   = $location->restaurants;
         $data['location_name'] = $location->name;

@@ -161,6 +161,7 @@ class CartController extends Controller {
     }
 
     public function deleteCart(Request $request) {
+        // dd($request->all());
         $cartService = $this->cartObject($request->delivery_fee);
         Cart::remove($request->rowId);
         $cartItems = $cartService->numberOfCartItems();

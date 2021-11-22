@@ -205,9 +205,10 @@
             }); //ajax end
         }
 
-        var delivery_fee = $('.delivery-charge').html();
+      
         // increase cart quantity   
         function increaseQuantity(rowId) {
+            var delivery_fee = $('.delivery-charge').html();
             var oldQty = $('.cartQty' + rowId).html();
 
             $.ajax({
@@ -246,6 +247,7 @@
         // decrease cart quantity   
         function decreaseQuantity(rowId) {
             var oldQty = $('.cartQty' + rowId).html();
+            var delivery_fee = $('.delivery-charge').html();
             if (oldQty == 1) {
                 toastr["info"]('Quantity can not be less than 1')
             } else {
@@ -283,6 +285,7 @@
         }
 
         function deleteCart(rowId) {
+            var delivery_fee = $('.delivery-charge').html();
             $.ajax({
                 url: config.routes.deleteCart,
                 method: "POST",
