@@ -196,12 +196,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     Route::group(['prefix' => 'orders'], function () {
         Route::get('restaurant/{id}/today-orders', [OrderController::class, 'getTodayOrders'])->name('orders.today');
         Route::get('restaurant/{id}/past-orders', [OrderController::class, 'getPastOrders'])->name('orders.past');
-        //  Route::get('/{id}', [CategoryController::class, 'index'])->name('item.category');
-        Route::post('/store', [CategoryController::class, 'store'])->name('item.category.store');
-        Route::post('/edit', [CategoryController::class, 'edit'])->name('item.category.edit');
         Route::post('/show', [OrderController::class, 'show'])->name('order.show');
-        Route::post('/update', [CategoryController::class, 'update'])->name('item.category.update');
-        Route::post('/delete', [CategoryController::class, 'destroy'])->name('item.category.delete');
+
         Route::post('/restaurant-orders', [OrderController::class, 'getOrdersByRestaurant'])->name('order.restaurant');
         Route::get('/today/{id}', [OrderController::class, 'todayOrders'])->name('today.order.restaurant');
         Route::get('/past/{id}', [OrderController::class, 'pastOrders'])->name('past.order.restaurant');
@@ -216,7 +212,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('{id}/all-order/', [CustomerController::class, 'customerOrders'])->name('customer.orders');
         Route::post('/orders', [CustomerController::class, 'customerOrderByRestaurant'])->name('customer.order.restaurant');
         Route::get('/order', [CustomerController::class, 'getOrders'])->name('customer.order');
-        Route::post('/delete', [ManagerController::class, 'destroy'])->name('restaurant.manager.delete');
     }); //* customer route end */
 
     //* location route start */
