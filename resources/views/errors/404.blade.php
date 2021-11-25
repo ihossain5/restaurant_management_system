@@ -23,4 +23,6 @@
     </div>
 </section>
 
+@include('layouts.frontend.partials.location_modal')
+
 @endsection

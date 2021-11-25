@@ -59,6 +59,15 @@
             window.location.href = url;
         }
 
+   $(document).on('change','.deliveryLocation',function(){
+       var value = $(this).val();
+       if(value == ''){
+        $('.location-submitBtn').prop('disabled',true)
+       }else{
+        $('.location-submitBtn').prop('disabled',false)
+       }
+   });
+
         $(document).on('click', '.navbar-modal-show-btn', function() {
             var locationId = $('.locationId').val();
             $('#select_id').val(locationId);

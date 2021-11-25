@@ -21,7 +21,7 @@
                         <div class="row align-items-center">
                             <div class="col-9">
                                 <div class="select-box">
-                                    <select class="w-100" aria-label="Default select example" id="select_id">
+                                    <select class="w-100 deliveryLocation"  aria-label="Default select example" id="select_id">
                                         <option value="">Select Location</option>
                                         @if (!empty($locations))
                                             @foreach ($locations as $location)
